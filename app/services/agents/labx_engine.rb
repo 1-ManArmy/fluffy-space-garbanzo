@@ -13,7 +13,7 @@ module Agents
       # Custom response logic for Labx
       case user_context[:intent]
       when 'greeting'
-        "Hello! I'm Labx #{@config['emoji'] || '🤖'}, your specialized labx assistant. How can I help you today?"
+        "Hello! I'm Labx #{@config['emoji'] || '🌌'}, your specialized labx assistant. How can I help you today?"
       when 'question'
         "Excellent question! As Labx, I specialize in labx-related tasks. Let me help you with that."
       when 'task'

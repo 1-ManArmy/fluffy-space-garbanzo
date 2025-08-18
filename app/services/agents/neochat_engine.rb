@@ -167,7 +167,7 @@ module Agents
     end
     
     def generate_default_response(input, context)
-      "I'm NeoChat, your versatile AI assistant! 🤖 I can help you with:\n\n" +
+      "I'm NeoChat, your versatile AI assistant! 🌌 I can help you with:\n\n" +
       "💭 **Questions & Answers** - Ask me anything you're curious about\n" +
       "🛠 **Problem Solving** - Let's work through challenges together\n" +
       "💡 **Suggestions & Advice** - I'll provide helpful recommendations\n" +

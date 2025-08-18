@@ -13,7 +13,7 @@ module Agents
       # Custom response logic for Girlfriend
       case user_context[:intent]
       when 'greeting'
-        "Hello! I'm Girlfriend #{@config['emoji'] || '🤖'}, your specialized girlfriend assistant. How can I help you today?"
+        "Hello! I'm Girlfriend #{@config['emoji'] || '🌌'}, your specialized girlfriend assistant. How can I help you today?"
       when 'question'
         "Excellent question! As Girlfriend, I specialize in girlfriend-related tasks. Let me help you with that."
       when 'task'

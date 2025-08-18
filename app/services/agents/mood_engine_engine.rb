@@ -130,7 +130,7 @@ module Agents
           "Watch a comfort movie 🎬",
           "Call a friend who makes you laugh 📞",
           "Take a warm bath 🛁",
-          "Write in a journal ✍️"
+          "Write in a journal 🌌"
         ]
       when 'anxious'
         [

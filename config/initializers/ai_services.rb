@@ -60,7 +60,7 @@ if missing_keys.any? && Rails.env.production?
   puts "Missing keys: #{missing_keys.keys.join(', ')}"
 else
   puts '✅ AI Services Configuration Loaded Successfully'
-  puts "🤖 OpenAI: #{ENV['OPENAI_API_KEY'].present? ? 'Configured' : 'Missing'}"
+  puts "🌌 OpenAI: #{ENV['OPENAI_API_KEY'].present? ? 'Configured' : 'Missing'}"
   puts "🧠 Google AI: #{ENV['GOOGLE_AI_API_KEY'].present? ? 'Configured' : 'Missing'}"
   puts "🎬 RunwayML: #{ENV['RUNWAYML_API_KEY'].present? ? 'Configured' : 'Missing'}"
 end

@@ -13,7 +13,7 @@ module Agents
       # Custom response logic for Personax
       case user_context[:intent]
       when 'greeting'
-        "Hello! I'm Personax #{@config['emoji'] || '🤖'}, your specialized personax assistant. How can I help you today?"
+        "Hello! I'm Personax #{@config['emoji'] || '🌌'}, your specialized personax assistant. How can I help you today?"
       when 'question'
         "Excellent question! As Personax, I specialize in personax-related tasks. Let me help you with that."
       when 'task'

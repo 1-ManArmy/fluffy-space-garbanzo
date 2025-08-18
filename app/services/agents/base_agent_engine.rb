@@ -46,7 +46,7 @@ module Agents
     def generate_agent_response(input, user_context)
       # Base response generation - can be overridden by specific agent engines
       agent_personality = @personality.sample(3).join(', ')
-      agent_emoji = @config['emoji'] || '🤖'
+      agent_emoji = @config['emoji'] || '🌌'
       
       case user_context[:intent]
       when 'greeting'
@@ -64,9 +64,9 @@ module Agents
     
     def generate_greeting_response
       greetings = [
-        "Hello! I'm #{@agent_name} #{@config['emoji'] || '🤖'}, ready to help!",
+        "Hello! I'm #{@agent_name} #{@config['emoji'] || '🌌'}, ready to help!",
         "Greetings! #{@agent_name} here, what can I assist you with today?",
-        "Hi there! #{@agent_name} at your service #{@config['emoji'] || '🤖'}",
+        "Hi there! #{@agent_name} at your service #{@config['emoji'] || '🌌'}",
         "Welcome! I'm #{@agent_name}, your AI assistant. How can I help?"
       ]
       greetings.sample
@@ -82,11 +82,11 @@ module Agents
     
     def generate_casual_response(input, user_context)
       personality_traits = @personality.sample(2).join(' and ')
-      "Thanks for chatting with me! I'm #{@agent_name}, and I tend to be #{personality_traits}. #{@config['emoji'] || '🤖'} What's on your mind?"
+      "Thanks for chatting with me! I'm #{@agent_name}, and I tend to be #{personality_traits}. #{@config['emoji'] || '🌌'} What's on your mind?"
     end
     
     def generate_default_response(input, user_context)
-      "I'm #{@agent_name} #{@config['emoji'] || '🤖'}, your #{@agent_type.humanize} assistant. I noticed you said: '#{input.truncate(50)}'. How can I help you with that? My specializations include #{@agent.specializations.sample(3).join(', ')}."
+      "I'm #{@agent_name} #{@config['emoji'] || '🌌'}, your #{@agent_type.humanize} assistant. I noticed you said: '#{input.truncate(50)}'. How can I help you with that? My specializations include #{@agent.specializations.sample(3).join(', ')}."
     end
     
     def detect_input_type(input)

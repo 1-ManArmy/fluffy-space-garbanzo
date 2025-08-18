@@ -175,32 +175,194 @@ module Agents
     end
 
     def process_voice_input(user, audio_data, context = {})
-      # Process voice input through voice processor
-      transcription = @voice_processor.transcribe(audio_data)
+      Rails.logger.info "[MemoraEngine] Processing voice input for user #{user.id}"
 
-      # Analyze intent from voice
-      voice_intent = @voice_processor.analyze_intent(transcription, audio_data)
+      # Use VoiceProcessor to convert speech to text
+      voice_result = components[:voice_processor].transcribe(audio_data)
 
-      # Store as voice memory with audio signature
-      voice_memory = store_memory(user, transcription[:text], {
-        source: 'voice',
-        audio_signature: audio_data[:signature],
-        emotional_tone: voice_intent[:emotion],
-        confidence: transcription[:confidence]
-      }.merge(context))
+      return error_response('Voice transcription failed') unless voice_result[:success]
+
+      # Store voice metadata
+      voice_metadata = {
+        audio_length: voice_result[:duration],
+        confidence: voice_result[:confidence],
+        language: voice_result[:language],
+        voice_analysis: voice_result[:analysis]
+      }
+
+      # Process the transcribed text as regular input
+      process_input(user, voice_result[:text], context.merge(
+                                                 voice: true,
+                                                 voice_metadata:
+                                               ))
+    end
+
+    def process_file_input(user, file_data, context = {})
+      Rails.logger.info "[MemoraEngine] Processing file input for user #{user.id}"
+
+      begin
+        file_content = extract_file_content(file_data)
+        return error_response('Failed to extract file content') unless file_content[:success]
+
+        # Generate file metadata
+        file_metadata = {
+          filename: file_data[:filename],
+          file_type: file_data[:content_type],
+          file_size: file_data[:size],
+          upload_time: Time.current,
+          content_length: file_content[:text]&.length || 0,
+          processing_method: file_content[:method]
+        }
+
+        # Store file reference in memory with extracted content
+        memory_data = {
+          content: "File uploaded: #{file_data[:filename]}",
+          file_content: file_content[:text],
+          file_metadata:,
+          keywords: generate_file_keywords(file_content[:text], file_data[:filename])
+        }
+
+        # Process as memory with file context
+        store_memory(user, memory_data[:content], context.merge(
+                                                    file: true,
+                                                    file_data: memory_data,
+                                                    memory_type: 'file'
+                                                  ))
+      rescue StandardError => e
+        Rails.logger.error "[MemoraEngine] File processing error: #{e.message}"
+        error_response("File processing failed: #{e.message}")
+      end
+    end
+
+    def extract_file_content(file_data)
+      case file_data[:content_type]
+      when 'application/pdf'
+        extract_pdf_content(file_data)
+      when %r{^text/}
+        extract_text_content(file_data)
+      when 'application/json'
+        extract_json_content(file_data)
+      else
+        { success: false, error: "Unsupported file type: #{file_data[:content_type]}" }
+      end
+    end
+
+    def extract_pdf_content(file_data)
+      require 'pdf-reader'
+
+      reader = PDF::Reader.new(StringIO.new(file_data[:content]))
+      text_content = []
+
+      reader.pages.each do |page|
+        text_content << page.text
+      end
+
+      combined_text = text_content.join("\n\n")
 
       {
         success: true,
-        transcription: transcription[:text],
-        confidence: transcription[:confidence],
-        emotional_tone: voice_intent[:emotion],
-        memory_stored: voice_memory[:success],
-        voice_features: {
-          tone_detected: voice_intent[:tone],
-          urgency_level: voice_intent[:urgency],
-          personal_markers: voice_intent[:personal_markers]
+        text: combined_text,
+        method: 'pdf_reader',
+        pages: reader.page_count,
+        metadata: {
+          pages: reader.page_count,
+          info: reader.info
         }
       }
+    rescue StandardError => e
+      Rails.logger.error "[MemoraEngine] PDF extraction error: #{e.message}"
+      { success: false, error: "PDF extraction failed: #{e.message}" }
+    end
+
+    def extract_text_content(file_data)
+      text = file_data[:content].force_encoding('UTF-8')
+
+      {
+        success: true,
+        text:,
+        method: 'direct_text',
+        encoding: text.encoding.name
+      }
+    rescue StandardError => e
+      Rails.logger.error "[MemoraEngine] Text extraction error: #{e.message}"
+      { success: false, error: "Text extraction failed: #{e.message}" }
+    end
+
+    def extract_json_content(file_data)
+      json_data = JSON.parse(file_data[:content])
+      text_representation = json_data.to_s
+
+      {
+        success: true,
+        text: text_representation,
+        method: 'json_parse',
+        structure: json_data.class.name
+      }
+    rescue StandardError => e
+      Rails.logger.error "[MemoraEngine] JSON extraction error: #{e.message}"
+      { success: false, error: "JSON extraction failed: #{e.message}" }
+    end
+
+    def generate_file_keywords(content, filename)
+      return [] unless content.present?
+
+      keywords = []
+
+      # Extract filename-based keywords
+      name_parts = File.basename(filename, '.*').split(/[-_\s]/)
+      keywords.concat(name_parts.select { |part| part.length > 2 })
+
+      # Extract content-based keywords (simple approach)
+      words = content.scan(/\b[a-zA-Z]{3,}\b/).map(&:downcase).uniq
+      common_words = %w[the and or but for with this that from have been will would could should]
+      content_keywords = words.reject { |word| common_words.include?(word) }
+
+      # Take top frequent words
+      word_freq = content_keywords.tally
+      top_keywords = word_freq.sort_by { |_, count| -count }.first(10).map(&:first)
+
+      keywords.concat(top_keywords)
+      keywords.uniq.compact
+    end
+
+    def search_file_memories(user, query, file_type = nil)
+      Rails.logger.info "[MemoraEngine] Searching file memories for user #{user.id}"
+
+      # Search memories with file context
+      file_memories = user.agent_memories
+                          .where(agent_type: 'memora')
+                          .where("context->>'file' = 'true'")
+
+      # Filter by file type if specified
+      if file_type.present?
+        file_memories = file_memories.where("context->'file_data'->'file_metadata'->>'file_type' LIKE ?",
+                                            "%#{file_type}%")
+      end
+
+      # Search in file content and metadata
+      if query.present?
+        file_memories = file_memories.where(
+          "content ILIKE ? OR context->'file_data'->>'file_content' ILIKE ? OR context->'file_data'->'file_metadata'->>'filename' ILIKE ?",
+          "%#{query}%", "%#{query}%", "%#{query}%"
+        )
+      end
+
+      # Format results
+      memories = file_memories.order(created_at: :desc).limit(20).map do |memory|
+        file_data = memory.context&.dig('file_data') || {}
+        {
+          id: memory.id,
+          content: memory.content,
+          filename: file_data.dig('file_metadata', 'filename'),
+          file_type: file_data.dig('file_metadata', 'file_type'),
+          file_size: file_data.dig('file_metadata', 'file_size'),
+          upload_time: file_data.dig('file_metadata', 'upload_time'),
+          keywords: file_data['keywords'],
+          created_at: memory.created_at
+        }
+      end
+
+      success_response("Found #{memories.length} file memories", { memories: })
     end
 
     def get_memory_stats(user = nil)

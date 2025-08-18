@@ -215,7 +215,7 @@
           { name: 'C#', icon: '🔷', expertise: '91%' },
           { name: 'PHP', icon: '🐘', expertise: '89%' },
           { name: 'Swift', icon: '🍎', expertise: '86%' },
-          { name: 'Kotlin', icon: '🤖', expertise: '88%' }
+          { name: 'Kotlin', icon: '🌌', expertise: '88%' }
         ] %>
         
         <% languages.each do |lang| %>
@@ -420,7 +420,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
   function sendMessage(message) {
     // Show typing indicator
-    addMessageToTerminal('system', '🤖 CodeMaster is analyzing...');
+    addMessageToTerminal('system', '🌌 CodeMaster is analyzing...');
     
     fetch('/codemaster/chat', {
       method: 'POST',

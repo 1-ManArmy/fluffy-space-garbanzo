@@ -13,7 +13,7 @@ module Agents
       # Custom response logic for Vocamind
       case user_context[:intent]
       when 'greeting'
-        "Hello! I'm Vocamind #{@config['emoji'] || '🤖'}, your specialized vocamind assistant. How can I help you today?"
+        "Hello! I'm Vocamind #{@config['emoji'] || '🌌'}, your specialized vocamind assistant. How can I help you today?"
       when 'question'
         "Excellent question! As Vocamind, I specialize in vocamind-related tasks. Let me help you with that."
       when 'task'

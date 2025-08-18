@@ -1,4 +1,4 @@
-# 🤖 OneLastAI - Enterprise AI Agent Network Platform
+# 🌌 OneLastAI - Enterprise AI Agent Network Platform
 
 <div align="center">
 
@@ -32,7 +32,7 @@ OneLastAI is an enterprise-grade AI agent network that brings together 24 specia
 
 ---
 
-## 🤖 **AI Agent Network**
+## 🌌 **AI Agent Network**
 
 <table>
   <tr>

@@ -270,7 +270,7 @@ module Agents
         # Analyze provided writing sample
         analysis = analyze_writing_sample(content)
         
-        response = "Let me take a look at your writing! ✍️\n\n"
+        response = "Let me take a look at your writing! 🌌\n\n"
         response += "**Analysis:**\n"
         response += "- Word count: #{analysis[:word_count]}\n"
         response += "- Paragraphs: #{analysis[:paragraph_count]}\n"

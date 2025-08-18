@@ -13,7 +13,7 @@ module Agents
       # Custom response logic for Documind
       case user_context[:intent]
       when 'greeting'
-        "Hello! I'm Documind #{@config['emoji'] || '🤖'}, your specialized documind assistant. How can I help you today?"
+        "Hello! I'm Documind #{@config['emoji'] || '🌌'}, your specialized documind assistant. How can I help you today?"
       when 'question'
         "Excellent question! As Documind, I specialize in documind-related tasks. Let me help you with that."
       when 'task'

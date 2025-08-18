@@ -412,7 +412,7 @@ class VocamindController < ApplicationController
             "• **Academic:** Lectures, discussions, presentations\n" \
             "• **Travel:** Airport, hotel, tourist activities\n" \
             "• **Cultural:** Local customs, informal conversations\n\n" \
-            "🤖 **AI Conversation Partners:**\n" \
+            "🌌 **AI Conversation Partners:**\n" \
             "• Native speaker voice models\n" \
             "• Adaptive difficulty levels\n" \
             "• Real-time conversation flow\n" \

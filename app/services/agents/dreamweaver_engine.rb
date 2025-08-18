@@ -13,7 +13,7 @@ module Agents
       # Custom response logic for Dreamweaver
       case user_context[:intent]
       when 'greeting'
-        "Hello! I'm Dreamweaver #{@config['emoji'] || '🤖'}, your specialized dreamweaver assistant. How can I help you today?"
+        "Hello! I'm Dreamweaver #{@config['emoji'] || '🌌'}, your specialized dreamweaver assistant. How can I help you today?"
       when 'question'
         "Excellent question! As Dreamweaver, I specialize in dreamweaver-related tasks. Let me help you with that."
       when 'task'

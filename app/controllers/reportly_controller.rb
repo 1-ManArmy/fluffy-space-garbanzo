@@ -340,7 +340,7 @@ class ReportlyController < ApplicationController
 
   def handle_automated_reporting_request(_message)
     {
-      text: "🤖 **Reportly Automated Reporting Engine**\n\n" \
+      text: "🌌 **Reportly Automated Reporting Engine**\n\n" \
             "Intelligent automated reporting with scheduling, customization, and delivery automation:\n\n" \
             "⚡ **Automation Features:**\n" \
             "• **Smart Scheduling:** Flexible timing and frequency configuration\n" \
@@ -435,7 +435,7 @@ class ReportlyController < ApplicationController
     {
       text: "🔮 **Reportly Predictive Analytics Engine**\n\n" \
             "Advanced predictive modeling with AI-powered forecasting and scenario planning:\n\n" \
-            "🤖 **Predictive Capabilities:**\n" \
+            "🌌 **Predictive Capabilities:**\n" \
             "• **Machine Learning Models:** Advanced algorithms for accurate forecasting\n" \
             "• **Time Series Analysis:** Trend, seasonality, and cycle prediction\n" \
             "• **Regression Modeling:** Multi-variable relationship analysis\n" \

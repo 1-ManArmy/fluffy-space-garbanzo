@@ -238,7 +238,7 @@ class DatasphereController < ApplicationController
 
   def handle_machine_learning_request(_message)
     {
-      text: "🤖 **DataSphere Machine Learning Laboratory**\n\n" \
+      text: "🌌 **DataSphere Machine Learning Laboratory**\n\n" \
             "Advanced machine learning with cutting-edge algorithms and intelligent automation:\n\n" \
             "🌌 **ML Capabilities:**\n" \
             "• **Supervised Learning:** Classification and regression with state-of-the-art algorithms\n" \
@@ -426,7 +426,7 @@ class DatasphereController < ApplicationController
     {
       text: "🌐 **DataSphere Advanced Data Science Ready**\n\n" \
             "Your comprehensive data science and machine learning platform! Here's what I offer:\n\n" \
-            "🤖 **Core Capabilities:**\n" \
+            "🌌 **Core Capabilities:**\n" \
             "• Advanced machine learning with cutting-edge algorithms\n" \
             "• Comprehensive statistical analysis and hypothesis testing\n" \
             "• Intelligent data processing and quality assurance\n" \

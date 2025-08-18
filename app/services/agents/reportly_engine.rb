@@ -13,7 +13,7 @@ module Agents
       # Custom response logic for Reportly
       case user_context[:intent]
       when 'greeting'
-        "Hello! I'm Reportly #{@config['emoji'] || '🤖'}, your specialized reportly assistant. How can I help you today?"
+        "Hello! I'm Reportly #{@config['emoji'] || '🌌'}, your specialized reportly assistant. How can I help you today?"
       when 'question'
         "Excellent question! As Reportly, I specialize in reportly-related tasks. Let me help you with that."
       when 'task'

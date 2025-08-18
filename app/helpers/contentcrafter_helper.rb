@@ -61,7 +61,7 @@ module ContentcrafterHelper
     when 'ad_copy'
       '📢'
     when 'agent_intro'
-      '🤖'
+      '🌌'
     when 'script'
       '🎬'
     when 'social_media'
@@ -71,7 +71,7 @@ module ContentcrafterHelper
     when 'technical_doc'
       '📋'
     when 'creative_writing'
-      '✍️'
+      '🌌'
     when 'press_release'
       '📰'
     when 'product_description'
@@ -124,7 +124,7 @@ module ContentcrafterHelper
       'contentcrafter' => '📝'
     }
     
-    icons = agents.map { |agent| agent_icons[agent.to_s] || '🤖' }
+    icons = agents.map { |agent| agent_icons[agent.to_s] || '🌌' }
     "Fusion: #{icons.join(' + ')}"
   end
   

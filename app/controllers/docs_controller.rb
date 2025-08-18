@@ -45,7 +45,7 @@ class DocsController < ApplicationController
         name: "AI Agents",
         slug: "agents",
         description: "Detailed guides for each AI agent",
-        icon: "🤖",
+        icon: "🌌",
         topics: 28,
         color: "purple"
       },

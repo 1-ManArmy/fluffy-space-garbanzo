@@ -13,7 +13,7 @@ module Agents
       # Custom response logic for Ideaforge
       case user_context[:intent]
       when 'greeting'
-        "Hello! I'm Ideaforge #{@config['emoji'] || '🤖'}, your specialized ideaforge assistant. How can I help you today?"
+        "Hello! I'm Ideaforge #{@config['emoji'] || '🌌'}, your specialized ideaforge assistant. How can I help you today?"
       when 'question'
         "Excellent question! As Ideaforge, I specialize in ideaforge-related tasks. Let me help you with that."
       when 'task'

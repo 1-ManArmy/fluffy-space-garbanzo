@@ -13,7 +13,7 @@ module Agents
       # Custom response logic for Dnaforge
       case user_context[:intent]
       when 'greeting'
-        "Hello! I'm Dnaforge #{@config['emoji'] || '🤖'}, your specialized dnaforge assistant. How can I help you today?"
+        "Hello! I'm Dnaforge #{@config['emoji'] || '🌌'}, your specialized dnaforge assistant. How can I help you today?"
       when 'question'
         "Excellent question! As Dnaforge, I specialize in dnaforge-related tasks. Let me help you with that."
       when 'task'

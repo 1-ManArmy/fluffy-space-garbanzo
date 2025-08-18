@@ -147,7 +147,7 @@ module MemoraHelper
       'neochat' => '💬'
     }
 
-    synced_icons = agents.map { |agent| agent_icons[agent.to_s] || '🤖' }
+    synced_icons = agents.map { |agent| agent_icons[agent.to_s] || '🌌' }
     "Synced: #{synced_icons.join(' ')}"
   end
 
@@ -265,7 +265,7 @@ module MemoraHelper
     return [] unless context_data
 
     indicators = []
-    indicators << "🤖 #{context_data[:agent_context]}" if context_data[:agent_context]
+    indicators << "🌌 #{context_data[:agent_context]}" if context_data[:agent_context]
     indicators << "😊 #{context_data[:mood_context]}" if context_data[:mood_context]
     indicators << "🕐 #{context_data[:time_context]}" if context_data[:time_context]
 
