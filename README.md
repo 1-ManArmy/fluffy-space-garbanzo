@@ -60,7 +60,7 @@ OneLastAI is an enterprise-grade AI agent network that brings together 24 specia
     </td>
     <td>
       • 🎬 <strong>CineGen</strong> - Video production<br>
-      • ✍️ <strong>ContentCrafter</strong> - Content creation<br>
+      • 🌌 <strong>ContentCrafter</strong> - Content creation<br>
       • 🌟 <strong>DreamWeaver</strong> - Creative ideation<br>
       • 💡 <strong>IdeaForge</strong> - Innovation catalyst<br>
       • 📝 <strong>AIBlogster</strong> - Blog generation<br>

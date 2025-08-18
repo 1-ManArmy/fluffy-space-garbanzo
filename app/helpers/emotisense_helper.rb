@@ -103,7 +103,7 @@ module EmotisenseHelper
       'mindfulness' => '🧘‍♀️',
       'nature' => '🌿',
       'music' => '🎵',
-      'writing' => '✍️'
+      'writing' => '🌌'
     }
     icons[suggestion_type.to_s] || '💡'
   end

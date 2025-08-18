@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ContentCrafter - Professional AI Content Studio | OneLast.AI</title>
+  
+  <%= csrf_meta_tags if defined?(csrf_meta_tags) %>
+  <%= csp_meta_tag if defined?(csp_meta_tag) %>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'JetBrains Mono', 'Courier New', monospace;
+      background: linear-gradient(135deg, #0d1b2a 0%, #1b263b 25%, #415a77 50%, #1b263b 75%, #0d1b2a 100%);
+      color: #a8dadc;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+      animation: backgroundShift 25s ease-in-out infinite;
+    }
+
+    @keyframes backgroundShift {
+      0%, 100% { filter: hue-rotate(0deg) brightness(1); }
+      25% { filter: hue-rotate(15deg) brightness(1.1); }
+      50% { filter: hue-rotate(-10deg) brightness(0.9); }
+      75% { filter: hue-rotate(20deg) brightness(1.05); }
+    }
+    
+    /* Terminal scanlines effect */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        transparent 50%, 
+        rgba(168, 218, 220, 0.02) 50%
+      );
+      background-size: 100% 3px;
+      pointer-events: none;
+      z-index: 1000;
+      animation: scanlines 0.08s linear infinite;
+    }
+    
+    @keyframes scanlines {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(3px); }
+    }
+
+    /* Floating writing particles */
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        radial-gradient(2px 2px at 20px 30px, rgba(168, 218, 220, 0.3), transparent),
+        radial-gradient(2px 2px at 40px 70px, rgba(241, 250, 238, 0.3), transparent),
+        radial-gradient(1px 1px at 90px 40px, rgba(69, 90, 120, 0.4), transparent),
+        radial-gradient(1px 1px at 130px 80px, rgba(27, 38, 59, 0.3), transparent),
+        radial-gradient(2px 2px at 160px 30px, rgba(65, 90, 119, 0.3), transparent);
+      background-repeat: repeat;
+      background-size: 200px 100px;
+      animation: floatParticles 30s linear infinite;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    @keyframes floatParticles {
+      0% { transform: translateY(100vh) rotate(0deg); }
+      100% { transform: translateY(-100vh) rotate(360deg); }
+    }
+
+    /* ContentCrafter Navigation - Standalone */
+    .contentcrafter-nav {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 3000;
+      background: rgba(13, 27, 42, 0.95);
+      border: 2px solid #a8dadc;
+      border-radius: 12px;
+      backdrop-filter: blur(15px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+    
+    .contentcrafter-dropdown {
+      position: relative;
+    }
+    
+    .contentcrafter-menu-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1rem;
+      background: transparent;
+      border: none;
+      color: #a8dadc;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: inherit;
+    }
+    
+    .contentcrafter-menu-btn:hover {
+      color: #f1faee;
+      transform: scale(1.05);
+    }
+    
+    .contentcrafter-dropdown-menu {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      min-width: 250px;
+      background: rgba(13, 27, 42, 0.98);
+      border: 2px solid #a8dadc;
+      border-radius: 12px;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px);
+      transition: all 0.3s ease;
+      margin-top: 0.5rem;
+    }
+    
+    .contentcrafter-dropdown-menu.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+    
+    .contentcrafter-menu-header {
+      padding: 1rem;
+      border-bottom: 1px solid rgba(168, 218, 220, 0.3);
+      text-align: center;
+    }
+    
+    .contentcrafter-menu-title {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: #f1faee;
+      margin-bottom: 0.25rem;
+    }
+    
+    .contentcrafter-menu-subtitle {
+      font-size: 0.8rem;
+      color: #a8dadc;
+      opacity: 0.8;
+    }
+    
+    .contentcrafter-menu-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      color: #a8dadc;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      border-bottom: 1px solid rgba(168, 218, 220, 0.1);
+      cursor: pointer;
+    }
+    
+    .contentcrafter-menu-item:hover {
+      background: rgba(168, 218, 220, 0.1);
+      color: #f1faee;
+      transform: translateX(5px);
+    }
+    
+    .contentcrafter-menu-item:last-child {
+      border-bottom: none;
+      border-radius: 0 0 10px 10px;
+    }
+    
+    /* Main Container */
+    .contentcrafter-container {
+      display: flex;
+      min-height: 100vh;
+      position: relative;
+      z-index: 2;
+    }
+    
+    /* Left Panel - Content Tools */
+    .left-panel {
+      width: 320px;
+      background: linear-gradient(180deg, rgba(13, 27, 42, 0.95) 0%, rgba(27, 38, 59, 0.9) 100%);
+      border-right: 2px solid #a8dadc;
+      backdrop-filter: blur(15px);
+      padding: 1.5rem;
+      overflow-y: auto;
+      max-height: 100vh;
+      box-shadow: 0 0 30px rgba(168, 218, 220, 0.2);
+    }
+    
+    /* Right Panel - Format Tools */
+    .right-panel {
+      width: 320px;
+      background: linear-gradient(180deg, rgba(13, 27, 42, 0.95) 0%, rgba(27, 38, 59, 0.9) 100%);
+      border-left: 2px solid #a8dadc;
+      backdrop-filter: blur(15px);
+      padding: 1.5rem;
+      overflow-y: auto;
+      max-height: 100vh;
+      box-shadow: 0 0 30px rgba(168, 218, 220, 0.2);
+    }
+    
+    /* Center Panel - Main Interface */
+    .center-panel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+      position: relative;
+      background: radial-gradient(ellipse at center, rgba(168, 218, 220, 0.05) 0%, rgba(0, 0, 0, 0.2) 70%);
+    }
+
+    /* Grid overlay */
+    .center-panel::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: 
+        linear-gradient(rgba(168, 218, 220, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(168, 218, 220, 0.1) 1px, transparent 1px);
+      background-size: 20px 20px;
+      opacity: 0.3;
+      animation: gridPulse 15s ease-in-out infinite;
+    }
+
+    @keyframes gridPulse {
+      0%, 100% { opacity: 0.3; transform: scale(1); }
+      50% { opacity: 0.1; transform: scale(1.02); }
+    }
+    
+    /* Feature Cards */
+    .feature-card {
+      background: linear-gradient(135deg, rgba(168, 218, 220, 0.1) 0%, rgba(27, 38, 59, 0.3) 100%);
+      border: 1px solid rgba(168, 218, 220, 0.3);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(168, 218, 220, 0.1), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .feature-card:hover::before {
+      left: 100%;
+    }
+    
+    .feature-card:hover {
+      transform: translateY(-5px) scale(1.02);
+      border-color: #a8dadc;
+      box-shadow: 0 10px 30px rgba(168, 218, 220, 0.4);
+      background: linear-gradient(135deg, rgba(168, 218, 220, 0.2) 0%, rgba(27, 38, 59, 0.4) 100%);
+    }
+    
+    .card-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      display: block;
+      filter: drop-shadow(0 0 10px currentColor);
+    }
+    
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: #a8dadc;
+      margin-bottom: 0.5rem;
+      text-shadow: 0 0 5px rgba(168, 218, 220, 0.5);
+    }
+    
+    .card-description {
+      font-size: 0.9rem;
+      color: #78909c;
+      opacity: 0.9;
+      line-height: 1.4;
+    }
+    
+    /* Hero Section */
+    .hero-section {
+      position: relative;
+      z-index: 3;
+      text-align: center;
+    }
+    
+    .hero-logo {
+      font-size: 5rem;
+      margin-bottom: 1rem;
+      animation: contentPulse 3s ease-in-out infinite;
+      filter: drop-shadow(0 0 20px #a8dadc);
+    }
+
+    @keyframes contentPulse {
+      0%, 100% { transform: scale(1) rotate(0deg); filter: drop-shadow(0 0 20px #a8dadc); }
+      25% { transform: scale(1.05) rotate(2deg); filter: drop-shadow(0 0 25px #f1faee); }
+      50% { transform: scale(1.1) rotate(-1deg); filter: drop-shadow(0 0 30px #415a77); }
+      75% { transform: scale(1.05) rotate(1deg); filter: drop-shadow(0 0 25px #1b263b); }
+    }
+    
+    .hero-title {
+      font-size: 3.5rem;
+      font-weight: 800;
+      background: linear-gradient(45deg, #a8dadc, #f1faee, #415a77, #1b263b);
+      background-size: 300% 300%;
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradientFlow 4s ease-in-out infinite;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 30px rgba(168, 218, 220, 0.5);
+    }
+
+    @keyframes gradientFlow {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+    
+    .hero-tagline {
+      font-size: 1.3rem;
+      color: #78909c;
+      margin-bottom: 1.5rem;
+      opacity: 0.9;
+      font-weight: 300;
+    }
+    
+    .hero-description {
+      font-size: 1rem;
+      line-height: 1.6;
+      color: #a8dadc;
+      margin-bottom: 2rem;
+      max-width: 600px;
+      opacity: 0.8;
+    }
+
+    /* Hero Stats */
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .stat-item {
+      background: linear-gradient(135deg, rgba(168, 218, 220, 0.1) 0%, rgba(0, 0, 0, 0.3) 100%);
+      border: 1px solid rgba(168, 218, 220, 0.3);
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+      min-width: 140px;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+    }
+
+    .stat-item:hover {
+      transform: translateY(-3px);
+      border-color: #a8dadc;
+      box-shadow: 0 8px 25px rgba(168, 218, 220, 0.3);
+    }
+
+    .stat-value {
+      display: block;
+      font-size: 2.2rem;
+      font-weight: bold;
+      color: #a8dadc;
+      text-shadow: 0 0 10px currentColor;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+      font-size: 0.9rem;
+      color: #78909c;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* Hero Action Button */
+    .hero-action {
+      background: linear-gradient(135deg, #a8dadc 0%, #f1faee 50%, #415a77 100%);
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 25px;
+      color: #0d1b2a;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 1.5rem;
+      position: relative;
+      z-index: 10;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .hero-action:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 10px 30px rgba(168, 218, 220, 0.6);
+      filter: brightness(1.1);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .contentcrafter-container {
+        flex-direction: column;
+      }
+      
+      .left-panel,
+      .right-panel {
+        width: 100%;
+        max-height: none;
+        order: 2;
+      }
+      
+      .center-panel {
+        order: 1;
+        min-height: 60vh;
+      }
+      
+      .hero-title {
+        font-size: 2.5rem;
+      }
+      
+      .hero-stats {
+        gap: 1rem;
+      }
+    }
+
+    /* Content Creation Indicators */
+    .content-indicator {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      background: #a8dadc;
+      border-radius: 50%;
+      animation: floatContent 3s ease-in-out infinite;
+      opacity: 0.7;
+    }
+
+    @keyframes floatContent {
+      0%, 100% { transform: translateY(0) scale(1); opacity: 0.7; }
+      50% { transform: translateY(-20px) scale(1.2); opacity: 1; }
+    }
+
+    .content-indicator:nth-child(1) { top: 20%; left: 10%; animation-delay: 0s; background: #a8dadc; }
+    .content-indicator:nth-child(2) { top: 30%; right: 15%; animation-delay: 0.5s; background: #f1faee; }
+    .content-indicator:nth-child(3) { bottom: 25%; left: 20%; animation-delay: 1s; background: #415a77; }
+    .content-indicator:nth-child(4) { bottom: 40%; right: 10%; animation-delay: 1.5s; background: #1b263b; }
+    .content-indicator:nth-child(5) { top: 50%; left: 5%; animation-delay: 2s; background: #78909c; }
+    .content-indicator:nth-child(6) { top: 60%; right: 5%; animation-delay: 2.5s; background: #457b9d; }
+
+    /* Panel Headers */
+    .panel-header {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(168, 218, 220, 0.3);
+    }
+
+    .panel-title {
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: #a8dadc;
+      margin-bottom: 0.5rem;
+      text-shadow: 0 0 10px rgba(168, 218, 220, 0.5);
+    }
+
+    .panel-subtitle {
+      font-size: 0.9rem;
+      color: #78909c;
+      opacity: 0.8;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- ContentCrafter Navigation -->
+  <div class="contentcrafter-nav">
+    <div class="contentcrafter-dropdown">
+      <button class="contentcrafter-menu-btn" onclick="toggleContentCrafterMenu()">
+        🌌 ContentCrafter
+        <span style="transform: rotate(90deg);">▶</span>
+      </button>
+      <div class="contentcrafter-dropdown-menu" id="contentcrafter-menu">
+        <div class="contentcrafter-menu-header">
+          <div class="contentcrafter-menu-title">ContentCrafter Studio</div>
+          <div class="contentcrafter-menu-subtitle">Professional AI Content Creation</div>
+        </div>
+        <div class="contentcrafter-menu-item" onclick="startContentChat()">
+          <span>💬</span> Content Chat
+        </div>
+        <div class="contentcrafter-menu-item" onclick="openCopywritingStudio()">
+          <span>📝</span> Copywriting Studio
+        </div>
+        <div class="contentcrafter-menu-item" onclick="openContentStrategy()">
+          <span>📊</span> Content Strategy
+        </div>
+        <div class="contentcrafter-menu-item" onclick="openSEOOptimizer()">
+          <span>🔍</span> SEO Optimizer
+        </div>
+        <div class="contentcrafter-menu-item" onclick="openFormatGenerator()">
+          <span>🔄</span> Format Generator
+        </div>
+        <div class="contentcrafter-menu-item" onclick="openBrandVoice()">
+          <span>🎭</span> Brand Voice Lab
+        </div>
+        <div class="contentcrafter-menu-item" onclick="openContentAnalytics()">
+          <span>📈</span> Content Analytics
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Content Indicators -->
+  <div class="content-indicator"></div>
+  <div class="content-indicator"></div>
+  <div class="content-indicator"></div>
+  <div class="content-indicator"></div>
+  <div class="content-indicator"></div>
+  <div class="content-indicator"></div>
+
+  <div class="contentcrafter-container">
+    <!-- Left Panel - Content Creation Tools -->
+    <div class="left-panel">
+      <div class="panel-header">
+        <div class="panel-title">🌌 Writing Studio</div>
+        <div class="panel-subtitle">Professional content creation tools</div>
+      </div>
+
+      <div class="feature-card" onclick="startBlogWriting()">
+        <span class="card-icon">📰</span>
+        <div class="card-title">Blog & Articles</div>
+        <div class="card-description">Create engaging blog posts, articles, and long-form content with SEO optimization</div>
+      </div>
+
+      <div class="feature-card" onclick="startCopywriting()">
+        <span class="card-icon">💼</span>
+        <div class="card-title">Marketing Copy</div>
+        <div class="card-description">High-converting sales copy, ad copy, email campaigns, and landing page content</div>
+      </div>
+
+      <div class="feature-card" onclick="startSocialContent()">
+        <span class="card-icon">📱</span>
+        <div class="card-title">Social Media</div>
+        <div class="card-description">Platform-optimized social media posts, captions, threads, and viral content</div>
+      </div>
+    </div>
+
+    <!-- Center Panel - Hero Section -->
+    <div class="center-panel">
+      <div class="hero-section">
+        <div class="hero-logo">🌌</div>
+        <h1 class="hero-title">ContentCrafter</h1>
+        <p class="hero-tagline">Professional AI Content Studio</p>
+        <p class="hero-description">
+          Advanced AI-powered content creation for every writing need. From blog posts to marketing copy, 
+          social media content to SEO optimization - create compelling content that converts and engages.
+        </p>
+
+        <div class="hero-stats">
+          <div class="stat-item">
+            <span class="stat-value" id="content-count"><%=@agent_stats[:total_conversations] || 0 %></span>
+            <span class="stat-label">Content Created</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value">96.8%</span>
+            <span class="stat-label">Quality Score</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value">< 2.1s</span>
+            <span class="stat-label">Generation</span>
+          </div>
+        </div>
+
+        <button class="hero-action" onclick="startContentChat()">
+          Start Creating Content
+        </button>
+      </div>
+    </div>
+
+    <!-- Right Panel - Format & Optimization Tools -->
+    <div class="right-panel">
+      <div class="panel-header">
+        <div class="panel-title">🚀 Optimization Hub</div>
+        <div class="panel-subtitle">Content enhancement & distribution</div>
+      </div>
+
+      <div class="feature-card" onclick="openSEOOptimization()">
+        <span class="card-icon">🔍</span>
+        <div class="card-title">SEO Optimization</div>
+        <div class="card-description">Keyword research, content optimization, and search ranking strategies</div>
+      </div>
+
+      <div class="feature-card" onclick="openMultiFormat()">
+        <span class="card-icon">🔄</span>
+        <div class="card-title">Format Adaptation</div>
+        <div class="card-description">Transform content across multiple formats and platforms automatically</div>
+      </div>
+
+      <div class="feature-card" onclick="openContentAnalytics()">
+        <span class="card-icon">📊</span>
+        <div class="card-title">Performance Analytics</div>
+        <div class="card-description">Content performance tracking, optimization insights, and strategy development</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chat Interface Modal (Initially Hidden) -->
+  <div id="content-chat-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 4000; backdrop-filter: blur(10px);">
+    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 900px; background: linear-gradient(135deg, rgba(13, 27, 42, 0.95) 0%, rgba(27, 38, 59, 0.9) 100%); border: 2px solid #a8dadc; border-radius: 20px; padding: 2rem; backdrop-filter: blur(15px);">
+      
+      <!-- Chat Header -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid rgba(168, 218, 220, 0.3);">
+        <div>
+          <h2 style="color: #a8dadc; font-size: 1.8rem; margin-bottom: 0.5rem;">🌌 ContentCrafter Studio</h2>
+          <p style="color: #78909c; font-size: 0.9rem;">Describe your content needs and I'll craft compelling content for you</p>
+        </div>
+        <button onclick="closeContentChat()" style="background: #e63946; border: none; border-radius: 50%; width: 40px; height: 40px; color: white; font-size: 1.2rem; cursor: pointer; transition: all 0.3s ease;">×</button>
+      </div>
+
+      <!-- Chat Messages -->
+      <div id="chat-messages" style="height: 350px; overflow-y: auto; margin-bottom: 1.5rem; padding: 1rem; background: rgba(0, 0, 0, 0.3); border-radius: 10px; border: 1px solid rgba(168, 218, 220, 0.2);">
+        <div style="color: #78909c; text-align: center; padding: 2rem;">
+          👋 Hello! I'm ContentCrafter, your professional AI writing partner. What content would you like me to create today?
+        </div>
+      </div>
+
+      <!-- Content Analysis Panel -->
+      <div id="content-analysis" style="background: rgba(168, 218, 220, 0.1); border: 1px solid rgba(168, 218, 220, 0.3); border-radius: 10px; padding: 1rem; margin-bottom: 1.5rem; display: none;">
+        <h4 style="color: #a8dadc; margin-bottom: 0.5rem;">🌌 Content Analysis</h4>
+        <div id="content-results" style="color: #78909c; font-size: 0.9rem;"></div>
+      </div>
+
+      <!-- Chat Input -->
+      <div style="display: flex; gap: 1rem;">
+        <input type="text" id="content-input" placeholder="Describe your content needs: blog post about AI, sales email for SaaS, social media campaign..." style="flex: 1; padding: 1rem; background: rgba(0, 0, 0, 0.5); border: 1px solid rgba(168, 218, 220, 0.3); border-radius: 10px; color: #a8dadc; font-size: 1rem;" onkeypress="if(event.key==='Enter') sendContentMessage()">
+        <button onclick="sendContentMessage()" style="background: linear-gradient(135deg, #a8dadc, #f1faee); border: none; border-radius: 10px; padding: 1rem 2rem; color: #0d1b2a; font-weight: bold; cursor: pointer; transition: all 0.3s ease;">Create</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ContentCrafter Navigation Functions
+    function toggleContentCrafterMenu() {
+      const menu = document.getElementById('contentcrafter-menu');
+      menu.classList.toggle('active');
+    }
+
+    // Close menu when clicking outside
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.contentcrafter-nav')) {
+        document.getElementById('contentcrafter-menu').classList.remove('active');
+      }
+    });
+
+    // Chat functionality
+    function startContentChat() {
+      document.getElementById('content-chat-modal').style.display = 'block';
+      document.getElementById('content-input').focus();
+      toggleContentCrafterMenu(); // Close dropdown
+    }
+
+    function closeContentChat() {
+      document.getElementById('content-chat-modal').style.display = 'none';
+    }
+
+    function sendContentMessage() {
+      const input = document.getElementById('content-input');
+      const message = input.value.trim();
+      
+      if (!message) return;
+      
+      // Add user message to chat
+      addMessageToChat('user', message);
+      
+      // Clear input
+      input.value = '';
+      
+      // Show loading
+      addMessageToChat('ai', '🌌 Crafting your content...', true);
+      
+      // Send to ContentCrafter AI
+      fetch('/contentcrafter/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': document.querySelector('[name="csrf-token"]').content
+        },
+        body: JSON.stringify({ message: message })
+      })
+      .then(response => response.json())
+      .then(data => {
+        // Remove loading message
+        const messages = document.getElementById('chat-messages');
+        if (messages.lastChild) {
+          messages.removeChild(messages.lastChild);
+        }
+        
+        // Add AI response
+        addMessageToChat('ai', data.response);
+        
+        // Show content analysis
+        if (data.content_analysis) {
+          showContentAnalysis(data.content_analysis);
+        }
+        
+        // Update stats
+        updateStats();
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        const messages = document.getElementById('chat-messages');
+        if (messages.lastChild) {
+          messages.removeChild(messages.lastChild);
+        }
+        addMessageToChat('ai', 'Sorry, I encountered a technical issue. Please try again.');
+      });
+    }
+
+    function addMessageToChat(sender, message, isLoading = false) {
+      const messagesDiv = document.getElementById('chat-messages');
+      const messageDiv = document.createElement('div');
+      
+      const senderColor = sender === 'user' ? '#415a77' : '#a8dadc';
+      const senderIcon = sender === 'user' ? '👤' : '🌌';
+      const bgColor = sender === 'user' ? 'rgba(65, 90, 119, 0.1)' : 'rgba(168, 218, 220, 0.1)';
+      
+      messageDiv.style.cssText = `
+        margin-bottom: 1rem;
+        padding: 1rem;
+        background: ${bgColor};
+        border-radius: 10px;
+        border-left: 3px solid ${senderColor};
+        ${isLoading ? 'animation: pulse 1.5s ease-in-out infinite;' : ''}
+      `;
+      
+      messageDiv.innerHTML = `
+        <div style="color: ${senderColor}; font-weight: bold; margin-bottom: 0.5rem; font-size: 0.9rem;">
+          ${senderIcon} ${sender === 'user' ? 'You' : 'ContentCrafter'}
+        </div>
+        <div style="color: #78909c; line-height: 1.5; white-space: pre-wrap;">${message}</div>
+      `;
+      
+      messagesDiv.appendChild(messageDiv);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+
+    function showContentAnalysis(analysis) {
+      const analysisDiv = document.getElementById('content-analysis');
+      const resultsDiv = document.getElementById('content-results');
+      
+      resultsDiv.innerHTML = `
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+          <div>
+            <strong>Content Type:</strong><br>
+            ${analysis.content_type || 'General Content'}
+          </div>
+          <div>
+            <strong>Quality Score:</strong><br>
+            ${analysis.quality_score || 'Excellent'}/100
+          </div>
+          <div>
+            <strong>Readability:</strong><br>
+            ${analysis.readability || 'Professional'}
+          </div>
+        </div>
+      `;
+      
+      analysisDiv.style.display = 'block';
+    }
+
+    function updateStats() {
+      const countElement = document.getElementById('content-count');
+      const current = parseInt(countElement.textContent) || 0;
+      countElement.textContent = current + 1;
+    }
+
+    // Feature card functions
+    function startBlogWriting() {
+      startContentChat();
+      setTimeout(() => {
+        document.getElementById('content-input').value = 'I need a comprehensive blog post about ';
+        document.getElementById('content-input').focus();
+      }, 500);
+    }
+
+    function startCopywriting() {
+      startContentChat();
+      setTimeout(() => {
+        document.getElementById('content-input').value = 'Create high-converting sales copy for ';
+        document.getElementById('content-input').focus();
+      }, 500);
+    }
+
+    function startSocialContent() {
+      startContentChat();
+      setTimeout(() => {
+        document.getElementById('content-input').value = 'Generate engaging social media content for ';
+        document.getElementById('content-input').focus();
+      }, 500);
+    }
+
+    function openCopywritingStudio() {
+      alert('🔜 Advanced Copywriting Studio coming soon! Use the chat for copywriting needs.');
+    }
+
+    function openContentStrategy() {
+      alert('🔜 Content Strategy Planner coming soon! Use the chat for strategy development.');
+    }
+
+    function openSEOOptimizer() {
+      alert('🔜 SEO Optimization Suite coming soon! Use the chat for SEO content.');
+    }
+
+    function openFormatGenerator() {
+      alert('🔜 Multi-Format Generator coming soon! Use the chat for format adaptation.');
+    }
+
+    function openBrandVoice() {
+      alert('🔜 Brand Voice Laboratory coming soon! Use the chat for brand voice development.');
+    }
+
+    function openContentAnalytics() {
+      alert('🔜 Content Analytics Dashboard coming soon! Use the chat for performance insights.');
+    }
+
+    function openSEOOptimization() {
+      openSEOOptimizer();
+    }
+
+    function openMultiFormat() {
+      openFormatGenerator();
+    }
+
+    // Close modal when clicking outside
+    document.getElementById('content-chat-modal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeContentChat();
+      }
+    });
+
+    // Initialize
+    console.log('🌌 ContentCrafter Enhanced Interface v2.0 - Professional Content Studio Ready');
+    
+    // Add some dynamic content indicators
+    setInterval(() => {
+      const indicators = document.querySelectorAll('.content-indicator');
+      indicators.forEach(indicator => {
+        const colors = ['#a8dadc', '#f1faee', '#415a77', '#1b263b', '#78909c', '#457b9d'];
+        indicator.style.background = colors[Math.floor(Math.random() * colors.length)];
+      });
+    }, 5000);
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeContentChat();
+      }
+    });
+  </script>
+
+  <style>
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+  </style>
+</body>
+</html>

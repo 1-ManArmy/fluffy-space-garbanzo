@@ -3,12 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ContentCrafter - AI Content Creation Studio | onelastai.com</title>
+  <title>ContentCrafter - Professional AI Content Studio | OneLast.AI</title>
   
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
   
-  <!-- Custom ContentCrafter Styles -->
   <style>
     * {
       margin: 0;
@@ -17,25 +16,266 @@
     }
     
     body {
-      font-family: 'Consolas', 'Monaco', 'Lucida Console', monospace;
-      background: linear-gradient(135deg, #0a1a0a 0%, #2e1a1a 50%, #213e16 100%);
-      color: #4ade80;
+      font-family: 'JetBrains Mono', 'Courier New', monospace;
+      background: linear-gradient(135deg, #0d1b2a 0%, #1b263b 25%, #415a77 50%, #1b263b 75%, #0d1b2a 100%);
+      color: #a8dadc;
       min-height: 100vh;
       overflow-x: hidden;
-      padding-top: 0; /* ContentCrafter has its own menu, no global menu needed */
+      position: relative;
+      animation: backgroundShift 25s ease-in-out infinite;
+    }
+
+    @keyframes backgroundShift {
+      0%, 100% { filter: hue-rotate(0deg) brightness(1); }
+      25% { filter: hue-rotate(15deg) brightness(1.1); }
+      50% { filter: hue-rotate(-10deg) brightness(0.9); }
+      75% { filter: hue-rotate(20deg) brightness(1.05); }
     }
     
-    /* Hide global menu for terminal interface */
-    .global-menu-bar {
-      display: none !important;
+    /* Terminal scanlines effect */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        transparent 50%, 
+        rgba(168, 218, 220, 0.02) 50%
+      );
+      background-size: 100% 3px;
+      pointer-events: none;
+      z-index: 1000;
+      animation: scanlines 0.08s linear infinite;
     }
     
+    @keyframes scanlines {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(3px); }
+    }
+
+    /* Sticky Header Bar */
+    .header-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 70px;
+      background: linear-gradient(135deg, rgba(13, 27, 42, 0.95) 0%, rgba(27, 38, 59, 0.9) 100%);
+      border-bottom: 2px solid #a8dadc;
+      backdrop-filter: blur(15px);
+      z-index: 3000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .header-title {
+      color: #a8dadc;
+      font-size: 1.5rem;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* Navigation Container */
+    .nav-container {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      position: relative;
+    }
+
+    /* Primary Menu (Right Arrow) */
+    .primary-menu {
+      position: relative;
+      z-index: 3100;
+    }
+
+    .primary-menu-btn {
+      background: linear-gradient(135deg, #a8dadc, #f1faee);
+      border: none;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      color: #0d1b2a;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 15px rgba(168, 218, 220, 0.4);
+    }
+
+    .primary-menu-btn:hover {
+      transform: scale(1.1) rotate(90deg);
+      box-shadow: 0 6px 25px rgba(168, 218, 220, 0.6);
+    }
+
+    .primary-menu-dropdown {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      min-width: 200px;
+      background: rgba(13, 27, 42, 0.98);
+      border: 2px solid #a8dadc;
+      border-radius: 12px;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px);
+      transition: all 0.3s ease;
+      margin-top: 1rem;
+      z-index: 3200;
+    }
+
+    .primary-menu-dropdown.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .primary-menu-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      color: #a8dadc;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      border-bottom: 1px solid rgba(168, 218, 220, 0.1);
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    .primary-menu-item:hover {
+      background: rgba(168, 218, 220, 0.1);
+      color: #f1faee;
+      transform: translateX(5px);
+    }
+
+    .primary-menu-item:last-child {
+      border-bottom: none;
+      border-radius: 0 0 10px 10px;
+    }
+
+    /* ContentCrafter Agent Navigation */
+    .contentcrafter-nav {
+      position: relative;
+      z-index: 3000;
+      transition: all 0.3s ease;
+    }
+
+    .contentcrafter-nav.hidden-behind-primary {
+      z-index: 2900;
+      opacity: 0.3;
+      pointer-events: none;
+    }
+    
+    .contentcrafter-dropdown {
+      position: relative;
+    }
+    
+    .contentcrafter-menu-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1rem;
+      background: rgba(13, 27, 42, 0.95);
+      border: 2px solid #a8dadc;
+      border-radius: 12px;
+      color: #a8dadc;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: inherit;
+      backdrop-filter: blur(15px);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+    
+    .contentcrafter-menu-btn:hover {
+      color: #f1faee;
+      transform: scale(1.05);
+    }
+    
+    .contentcrafter-dropdown-menu {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      min-width: 250px;
+      background: rgba(13, 27, 42, 0.98);
+      border: 2px solid #a8dadc;
+      border-radius: 12px;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px);
+      transition: all 0.3s ease;
+      margin-top: 0.5rem;
+    }
+    
+    .contentcrafter-dropdown-menu.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+    
+    .contentcrafter-menu-header {
+      padding: 1rem;
+      border-bottom: 1px solid rgba(168, 218, 220, 0.3);
+      text-align: center;
+    }
+    
+    .contentcrafter-menu-title {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: #f1faee;
+      margin-bottom: 0.25rem;
+    }
+    
+    .contentcrafter-menu-subtitle {
+      font-size: 0.8rem;
+      color: #a8dadc;
+      opacity: 0.8;
+    }
+    
+    .contentcrafter-menu-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      color: #a8dadc;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      border-bottom: 1px solid rgba(168, 218, 220, 0.1);
+      cursor: pointer;
+    }
+    
+    .contentcrafter-menu-item:hover {
+      background: rgba(168, 218, 220, 0.1);
+      color: #f1faee;
+      transform: translateX(5px);
+    }
+    
+    .contentcrafter-menu-item:last-child {
+      border-bottom: none;
+      border-radius: 0 0 10px 10px;
+    }
+
     /* Hero Section */
     .hero-section {
-      padding: 4rem 2rem;
+      padding: 8rem 2rem 4rem; /* Added top padding for sticky header */
       text-align: center;
-      background: radial-gradient(ellipse at center, rgba(74, 222, 128, 0.1) 0%, rgba(0, 0, 0, 0.3) 70%);
-      border-bottom: 2px solid #4ade80;
+      background: radial-gradient(ellipse at center, rgba(168, 218, 220, 0.1) 0%, rgba(0, 0, 0, 0.3) 70%);
+      border-bottom: 2px solid #a8dadc;
       position: relative;
     }
     
@@ -46,8 +286,11 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="%2300d4ff" stroke-width="0.5" opacity="0.3"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
-      opacity: 0.2;
+      background-image: 
+        linear-gradient(rgba(168, 218, 220, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(168, 218, 220, 0.1) 1px, transparent 1px);
+      background-size: 20px 20px;
+      opacity: 0.3;
       animation: gridMove 20s linear infinite;
     }
     
@@ -64,7 +307,7 @@
     .agent-logo {
       font-size: 4rem;
       margin-bottom: 1rem;
-      text-shadow: 0 0 20px #4ade80;
+      text-shadow: 0 0 20px #a8dadc;
       animation: pulse 2s infinite;
     }
     
@@ -77,8 +320,8 @@
       font-size: 3rem;
       font-weight: bold;
       margin-bottom: 0.5rem;
-      text-shadow: 0 0 10px #4ade80;
-      background: linear-gradient(45deg, #4ade80, #ffffff);
+      text-shadow: 0 0 10px #a8dadc;
+      background: linear-gradient(45deg, #a8dadc, #f1faee);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -86,7 +329,7 @@
     
     .agent-tagline {
       font-size: 1.2rem;
-      color: #b3b3b3;
+      color: #78909c;
       margin-bottom: 2rem;
       opacity: 0.9;
     }
@@ -94,7 +337,7 @@
     .agent-description {
       max-width: 600px;
       margin: 0 auto 2rem;
-      color: #cccccc;
+      color: #a8dadc;
       line-height: 1.6;
       font-size: 1rem;
     }
@@ -108,8 +351,8 @@
     }
     
     .stat-item {
-      background: rgba(0, 212, 255, 0.1);
-      border: 1px solid #4ade80;
+      background: rgba(168, 218, 220, 0.1);
+      border: 1px solid #a8dadc;
       border-radius: 8px;
       padding: 1rem;
       min-width: 120px;
@@ -119,389 +362,278 @@
     .stat-value {
       font-size: 1.5rem;
       font-weight: bold;
-      color: #4ade80;
+      color: #a8dadc;
       display: block;
     }
     
     .stat-label {
       font-size: 0.8rem;
-      color: #b3b3b3;
+      color: #78909c;
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
-    
-    /* Terminal Section */
-    .terminal-section {
-      padding: 2rem;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-    
-    .terminal-header {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-    
-    .terminal-title {
-      font-size: 1.5rem;
-      color: #4ade80;
-      margin-bottom: 0.5rem;
-    }
-    
-    .terminal-subtitle {
-      color: #b3b3b3;
-      font-size: 0.9rem;
-    }
-    
-    .terminal-container {
-      background: #000000;
-      border: 2px solid #4ade80;
-      border-radius: 12px;
-      box-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
-      overflow: hidden;
-      position: relative;
-    }
-    
-    .terminal-titlebar {
-      background: linear-gradient(90deg, #4ade80 0%, #0099cc 100%);
-      padding: 0.75rem 1rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    
-    .terminal-button {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: #ff5f56;
-    }
-    
-    .terminal-button.yellow { background: #ffbd2e; }
-    .terminal-button.green { background: #27ca3f; }
-    
-    .terminal-title-text {
-      margin-left: 1rem;
-      color: #000;
+
+    /* Start Creating Button */
+    .hero-action {
+      background: linear-gradient(135deg, #a8dadc 0%, #f1faee 50%, #415a77 100%);
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 25px;
+      color: #0d1b2a;
+      font-size: 1.1rem;
       font-weight: bold;
-      font-size: 0.9rem;
-    }
-    
-    .terminal-output {
-      height: 400px;
-      padding: 1rem;
-      overflow-y: auto;
-      background: #000000;
-      color: #00ff00;
-      font-family: 'Consolas', 'Monaco', monospace;
-      font-size: 14px;
-      line-height: 1.4;
-    }
-    
-    .terminal-output::-webkit-scrollbar {
-      width: 8px;
-    }
-    
-    .terminal-output::-webkit-scrollbar-track {
-      background: #1a1a1a;
-    }
-    
-    .terminal-output::-webkit-scrollbar-thumb {
-      background: #4ade80;
-      border-radius: 4px;
-    }
-    
-    .terminal-output::-webkit-scrollbar-thumb:hover {
-      background: #00a8cc;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 2rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
 
-    /* Sticky Menu Bar */
-    .menu-bar {
+    .hero-action:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 10px 30px rgba(168, 218, 220, 0.6);
+      filter: brightness(1.1);
+    }
+
+    /* Chat Interface Modal */
+    .chat-modal {
+      display: none;
       position: fixed;
       top: 0;
       left: 0;
-      right: 0;
-      background: linear-gradient(90deg, #0a0a0a 0%, #1a1a2e 50%, #0a0a0a 100%);
-      border-bottom: 2px solid #4ade80;
-      box-shadow: 0 2px 10px rgba(0, 212, 255, 0.3);
-      z-index: 1000;
-      padding: 0.5rem 1rem;
-      font-family: 'Consolas', 'Monaco', monospace;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.9);
+      z-index: 4000;
+      backdrop-filter: blur(10px);
     }
 
-    .menu-items {
+    .chat-container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90%;
+      max-width: 900px;
+      background: linear-gradient(135deg, rgba(13, 27, 42, 0.95) 0%, rgba(27, 38, 59, 0.9) 100%);
+      border: 2px solid #a8dadc;
+      border-radius: 20px;
+      padding: 2rem;
+      backdrop-filter: blur(15px);
+    }
+
+    .chat-header {
       display: flex;
-      gap: 0;
+      justify-content: space-between;
       align-items: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(168, 218, 220, 0.3);
     }
 
-    .menu-item {
-      position: relative;
-      display: inline-block;
+    .chat-title {
+      color: #a8dadc;
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
     }
 
-    .menu-button {
-      background: transparent;
-      border: 1px solid transparent;
-      color: #4ade80;
-      padding: 0.5rem 1rem;
+    .chat-subtitle {
+      color: #78909c;
+      font-size: 0.9rem;
+    }
+
+    .close-btn {
+      background: #e63946;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      color: white;
+      font-size: 1.2rem;
       cursor: pointer;
-      font-family: inherit;
-      font-size: 14px;
-      transition: all 0.2s ease;
+      transition: all 0.3s ease;
+    }
+
+    .close-btn:hover {
+      transform: scale(1.1);
+    }
+
+    .chat-messages {
+      height: 350px;
+      overflow-y: auto;
+      margin-bottom: 1.5rem;
+      padding: 1rem;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 10px;
+      border: 1px solid rgba(168, 218, 220, 0.2);
+    }
+
+    .chat-messages::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .chat-messages::-webkit-scrollbar-track {
+      background: rgba(168, 218, 220, 0.1);
+    }
+
+    .chat-messages::-webkit-scrollbar-thumb {
+      background: #a8dadc;
       border-radius: 4px;
     }
 
-    .menu-button:hover {
-      background: rgba(0, 212, 255, 0.1);
-      border-color: #4ade80;
-      box-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
-    }
-
-    .menu-button.active {
-      background: rgba(0, 212, 255, 0.2);
-      border-color: #4ade80;
-    }
-
-    /* Terminal-style Dropdown */
-    .dropdown {
-      position: absolute;
-      top: 100%;
-      left: 0;
-      background: #000000;
-      border: 2px solid #4ade80;
-      border-radius: 8px;
-      box-shadow: 0 5px 20px rgba(0, 212, 255, 0.4);
-      min-width: 250px;
-      max-height: 400px;
-      overflow-y: auto;
-      opacity: 0;
-      visibility: hidden;
-      transform: translateY(-10px);
-      transition: all 0.3s ease;
-      z-index: 1001;
-    }
-
-    .dropdown.active {
-      opacity: 1;
-      visibility: visible;
-      transform: translateY(0);
-    }
-
-    .dropdown-header {
-      background: linear-gradient(90deg, #4ade80 0%, #0099cc 100%);
-      color: #000;
-      padding: 0.5rem 1rem;
-      font-weight: bold;
-      font-size: 12px;
-      border-bottom: 1px solid #4ade80;
-    }
-
-    /* Linux Tree Structure */
-    .tree-container {
-      padding: 0.5rem;
-      color: #00ff00;
-      font-family: 'Consolas', 'Monaco', monospace;
-      font-size: 12px;
-      line-height: 1.3;
-    }
-
-    .tree-item {
-      position: relative;
-      padding: 0.2rem 0;
-      cursor: pointer;
-      transition: background 0.2s ease;
-    }
-
-    .tree-item:hover {
-      background: rgba(0, 255, 0, 0.1);
-    }
-
-    .tree-item.expandable {
-      position: relative;
-    }
-
-    .tree-item.expandable::before {
-      content: "├── ";
-      color: #4ade80;
-    }
-
-    .tree-item.last::before {
-      content: "└── ";
-      color: #4ade80;
-    }
-
-    .tree-item.folder::after {
-      content: "/";
-      color: #ffff00;
-    }
-
-    .tree-item.executable {
-      color: #00ff00;
-      font-weight: bold;
-    }
-
-    .tree-item.config {
-      color: #ff9900;
-    }
-
-    .tree-item.link {
-      color: #ff00ff;
-    }
-
-    .tree-children {
-      margin-left: 1.5rem;
-      border-left: 1px solid #333;
-      padding-left: 0.5rem;
-      display: none;
-    }
-
-    .tree-children.expanded {
-      display: block;
-    }
-
-    .tree-children .tree-item::before {
-      content: "├── ";
-      color: #4ade80;
-    }
-
-    .tree-children .tree-item:last-child::before {
-      content: "└── ";
-      color: #4ade80;
-    }
-
-    /* Sub-menu arrow */
-    .has-submenu::after {
-      content: " ▶";
-      color: #ffff00;
-      font-size: 10px;
-      margin-left: 0.5rem;
-    }
-
-    .tree-item.expanded .has-submenu::after {
-      content: " ▼";
-    }
-    
-    .terminal-message {
+    .message {
       margin-bottom: 1rem;
-      display: block;
-    }
-    
-    .user-message {
-      color: #4ade80;
-    }
-    
-    .user-message::before {
-      content: '$ ';
-      color: #00ff00;
-      font-weight: bold;
-    }
-    
-    .agent-message {
-      color: #ffffff;
-      margin-left: 2rem;
-      white-space: pre-wrap;
-      word-wrap: break-word;
-    }
-    
-    .timestamp {
-      color: #666666;
-      font-size: 12px;
-      margin-left: 1rem;
-    }
-    
-    .terminal-input-container {
-      background: #111111;
-      border-top: 1px solid #333333;
       padding: 1rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
+      border-radius: 10px;
+      animation: fadeIn 0.3s ease;
     }
-    
-    .terminal-prompt {
-      color: #00ff00;
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .message.user {
+      background: rgba(65, 90, 119, 0.2);
+      border-left: 3px solid #415a77;
+      margin-left: 2rem;
+    }
+
+    .message.ai {
+      background: rgba(168, 218, 220, 0.1);
+      border-left: 3px solid #a8dadc;
+      margin-right: 2rem;
+    }
+
+    .message-header {
       font-weight: bold;
-      flex-shrink: 0;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
     }
-    
-    .terminal-input {
+
+    .message.user .message-header {
+      color: #415a77;
+    }
+
+    .message.ai .message-header {
+      color: #a8dadc;
+    }
+
+    .message-content {
+      color: #78909c;
+      line-height: 1.5;
+      white-space: pre-wrap;
+    }
+
+    .chat-input-area {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .chat-input {
       flex: 1;
-      background: transparent;
-      border: none;
-      color: #4ade80;
+      padding: 1rem;
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(168, 218, 220, 0.3);
+      border-radius: 10px;
+      color: #a8dadc;
+      font-size: 1rem;
       font-family: inherit;
-      font-size: 14px;
+      resize: none;
+      min-height: 60px;
+    }
+
+    .chat-input:focus {
       outline: none;
-      padding: 0.5rem;
+      border-color: #a8dadc;
     }
-    
-    .terminal-input::placeholder {
-      color: #666666;
-    }
-    
-    .send-button {
-      background: linear-gradient(45deg, #4ade80, #0099cc);
+
+    .send-btn {
+      background: linear-gradient(135deg, #a8dadc, #f1faee);
       border: none;
-      border-radius: 6px;
-      color: #000;
-      padding: 0.5rem 1rem;
+      border-radius: 10px;
+      padding: 1rem 2rem;
+      color: #0d1b2a;
       font-weight: bold;
       cursor: pointer;
       transition: all 0.3s ease;
       font-family: inherit;
     }
-    
-    .send-button:hover {
+
+    .send-btn:hover {
       transform: translateY(-2px);
-      box-shadow: 0 4px 15px rgba(0, 212, 255, 0.4);
+      box-shadow: 0 5px 15px rgba(168, 218, 220, 0.4);
     }
-    
-    .send-button:active {
-      transform: translateY(0);
-    }
-    
-    .loading {
+
+    .send-btn:disabled {
       opacity: 0.6;
-      pointer-events: none;
+      cursor: not-allowed;
+      transform: none;
     }
-    
+
     .typing-indicator {
-      color: #00ff00;
       display: none;
+      color: #a8dadc;
+      font-style: italic;
+      padding: 1rem;
     }
-    
+
     .typing-indicator.active {
       display: block;
     }
-    
+
     .typing-indicator::after {
       content: '...';
       animation: typing 1.5s infinite;
     }
-    
+
     @keyframes typing {
       0%, 60% { content: '...'; }
       20% { content: '.'; }
       40% { content: '..'; }
     }
-    
+
     /* Welcome message */
     .welcome-message {
-      color: #00ff00;
-      margin-bottom: 1rem;
+      color: #78909c;
+      text-align: center;
+      padding: 2rem;
+      font-style: italic;
     }
-    
-    .system-info {
-      color: #666666;
-      font-size: 12px;
-      margin-bottom: 1rem;
-    }
-    
+
     /* Responsive */
     @media (max-width: 768px) {
+      .header-bar {
+        padding: 0 1rem;
+      }
+      
+      .header-title {
+        font-size: 1.2rem;
+      }
+      
+      .nav-container {
+        gap: 0.5rem;
+      }
+      
+      .primary-menu-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+      }
+      
+      .contentcrafter-menu-btn {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.9rem;
+      }
+      
+      .primary-menu-dropdown,
+      .contentcrafter-dropdown-menu {
+        min-width: 180px;
+        right: -0.5rem;
+      }
+      
       .hero-section {
-        padding: 2rem 1rem;
+        padding: 6rem 1rem 2rem;
       }
       
       .agent-title {
@@ -511,542 +643,379 @@
       .agent-stats {
         gap: 1rem;
       }
-      
-      .terminal-section {
+
+      .chat-container {
+        width: 95%;
         padding: 1rem;
       }
-      
-      .terminal-output {
-        height: 300px;
+
+      .chat-messages {
+        height: 250px;
+      }
+
+      .chat-input-area {
+        flex-direction: column;
       }
     }
   </style>
 </head>
 
 <body>
-  <!-- Sticky Menu Bar -->
-  <nav class="menu-bar">
-    <div class="menu-items">
-      <div class="menu-item">
-        <button class="menu-button" onclick="toggleDropdown('file-menu')">File</button>
-        <div id="file-menu" class="dropdown">
-          <div class="dropdown-header">File Operations</div>
-          <div class="tree-container">
-            <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
-              conversations
-              <div class="tree-children">
-                <div class="tree-item executable" onclick="newConversation()">new_chat.sh</div>
-                <div class="tree-item config" onclick="loadHistory()">history.log</div>
-                <div class="tree-item config" onclick="exportChat()">export.json</div>
-                <div class="tree-item last config" onclick="clearHistory()">clear.sh</div>
-              </div>
+  <!-- Sticky Header Bar -->
+  <div class="header-bar">
+    <div class="header-title">
+      ✍️ ContentCrafter Studio
+    </div>
+    
+    <div class="nav-container">
+      <!-- ContentCrafter Agent Navigation -->
+      <div class="contentcrafter-nav" id="contentcrafter-nav">
+        <div class="contentcrafter-dropdown">
+          <button class="contentcrafter-menu-btn" onclick="toggleContentCrafterMenu()">
+            ✍️ ContentCrafter
+            <span style="transform: rotate(90deg);">▶</span>
+          </button>
+          <div class="contentcrafter-dropdown-menu" id="contentcrafter-menu">
+            <div class="contentcrafter-menu-header">
+              <div class="contentcrafter-menu-title">ContentCrafter Studio</div>
+              <div class="contentcrafter-menu-subtitle">Professional AI Content Creation</div>
             </div>
-            <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
-              settings
-              <div class="tree-children">
-                <div class="tree-item config" onclick="openSettings()">config.yml</div>
-                <div class="tree-item config" onclick="openPreferences()">preferences.ini</div>
-                <div class="tree-item last link" onclick="openThemes()">themes.conf → /usr/share/themes/</div>
-              </div>
+            <div class="contentcrafter-menu-item" onclick="startContentChat()">
+              <span>💬</span> Content Chat
             </div>
-            <div class="tree-item last executable" onclick="exitChat()">exit.sh</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="menu-item">
-        <button class="menu-button" onclick="toggleDropdown('features-menu')">Features</button>
-        <div id="features-menu" class="dropdown">
-          <div class="dropdown-header">AI Capabilities</div>
-          <div class="tree-container">
-            <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
-              intelligence
-              <div class="tree-children">
-                <div class="tree-item executable" onclick="setMode('question')">question_answering.py</div>
-                <div class="tree-item executable" onclick="setMode('creative')">creative_writing.py</div>
-                <div class="tree-item executable" onclick="setMode('problem')">problem_solving.py</div>
-                <div class="tree-item last executable" onclick="setMode('analysis')">data_analysis.py</div>
-              </div>
+            <div class="contentcrafter-menu-item" onclick="openCopywritingStudio()">
+              <span>📝</span> Copywriting Studio
             </div>
-            <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
-              tools
-              <div class="tree-children">
-                <div class="tree-item executable" onclick="openCodeGen()">code_generator.sh</div>
-                <div class="tree-item executable" onclick="openTranslator()">translator.py</div>
-                <div class="tree-item executable" onclick="openSummarizer()">summarizer.rb</div>
-                <div class="tree-item last config" onclick="openCalculator()">calculator.js</div>
-              </div>
+            <div class="contentcrafter-menu-item" onclick="openContentStrategy()">
+              <span>📊</span> Content Strategy
             </div>
-            <div class="tree-item last folder has-submenu" onclick="toggleSubmenu(this)">
-              memory
-              <div class="tree-children">
-                <div class="tree-item config" onclick="showMemory()">context.db</div>
-                <div class="tree-item last link" onclick="showKnowledge()">knowledge_base.sqlite → /var/lib/neochat/</div>
-              </div>
+            <div class="contentcrafter-menu-item" onclick="openSEOOptimizer()">
+              <span>🔍</span> SEO Optimizer
+            </div>
+            <div class="contentcrafter-menu-item" onclick="openFormatGenerator()">
+              <span>🔄</span> Format Generator
+            </div>
+            <div class="contentcrafter-menu-item" onclick="openBrandVoice()">
+              <span>🎭</span> Brand Voice Lab
+            </div>
+            <div class="contentcrafter-menu-item" onclick="openContentAnalytics()">
+              <span>📈</span> Content Analytics
             </div>
           </div>
         </div>
       </div>
 
-      <div class="menu-item">
-        <button class="menu-button" onclick="toggleDropdown('agents-menu')">Agents</button>
-        <div id="agents-menu" class="dropdown">
-          <div class="dropdown-header">Agent Network</div>
-          <div class="tree-container">
-            <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
-              active
-              <div class="tree-children">
-                <div class="tree-item executable config">neochat.service ● running</div>
-                <div class="tree-item last link" onclick="switchAgent('mood')">mood_engine.agent → /agents/mood/</div>
-              </div>
-            </div>
-            <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
-              available
-              <div class="tree-children">
-                <div class="tree-item executable" onclick="switchAgent('rapstar')">rapstar_ai.agent</div>
-                <div class="tree-item executable" onclick="switchAgent('storyteller')">storyteller.agent</div>
-                <div class="tree-item executable" onclick="switchAgent('zen')">zen_agent.agent</div>
-                <div class="tree-item last config" onclick="createAgent()">custom.template</div>
-              </div>
-            </div>
-            <div class="tree-item last folder has-submenu" onclick="toggleSubmenu(this)">
-              network
-              <div class="tree-children">
-                <div class="tree-item config">agents.onelastai.com</div>
-                <div class="tree-item config">cluster.status</div>
-                <div class="tree-item last link">api.endpoint → https://api.onelastai.com/</div>
-              </div>
-            </div>
+      <!-- Primary Menu (Right Arrow) -->
+      <div class="primary-menu">
+        <button class="primary-menu-btn" onclick="togglePrimaryMenu()">
+          ▶
+        </button>
+        <div class="primary-menu-dropdown" id="primary-menu">
+          <div class="primary-menu-item" onclick="goToHome()">
+            <span>🏠</span> Home
           </div>
-        </div>
-      </div>
-
-      <div class="menu-item">
-        <button class="menu-button" onclick="toggleDropdown('help-menu')">Help</button>
-        <div id="help-menu" class="dropdown">
-          <div class="dropdown-header">Documentation & Support</div>
-          <div class="tree-container">
-            <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
-              docs
-              <div class="tree-children">
-                <div class="tree-item config" onclick="showDocs('getting-started')">getting_started.md</div>
-                <div class="tree-item config" onclick="showDocs('commands')">commands.txt</div>
-                <div class="tree-item config" onclick="showDocs('api')">api_reference.html</div>
-                <div class="tree-item last config" onclick="showDocs('examples')">examples.json</div>
-              </div>
-            </div>
-            <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
-              support
-              <div class="tree-children">
-                <div class="tree-item link" onclick="openSupport()">github.com/onelastai/neochat</div>
-                <div class="tree-item link" onclick="openDiscord()">discord.gg/onelastai</div>
-                <div class="tree-item last config" onclick="reportBug()">bug_report.template</div>
-              </div>
-            </div>
-            <div class="tree-item last executable" onclick="showAbout()">about.sh</div>
+          <div class="primary-menu-item" onclick="goToAgents()">
+            <span>🤖</span> Agents
+          </div>
+          <div class="primary-menu-item" onclick="goToProfile()">
+            <span>👤</span> Profile
           </div>
         </div>
       </div>
     </div>
-  </nav>
+  </div>
 
   <!-- Hero Section -->
   <section class="hero-section">
     <div class="hero-content">
-      <div class="agent-logo">✍️</div>
+      <div class="agent-logo">🌌</div>
       <h1 class="agent-title">ContentCrafter</h1>
-      <p class="agent-tagline">Your professional content creation partner for any writing task</p>
+      <p class="agent-tagline">Professional AI Content Studio</p>
       <p class="agent-description">
-        I am ContentCrafter, your specialized AI writing assistant. Whether you need blog posts, 
-        articles, social media content, marketing copy, or creative writing, I craft compelling 
-        content that engages your audience and achieves your goals.
+        Advanced AI-powered content creation for every writing need. From blog posts to marketing copy, 
+        social media content to SEO optimization - create compelling content that converts and engages.
       </p>
       
       <div class="agent-stats">
         <div class="stat-item">
           <span class="stat-value"><%= @agent_stats[:total_conversations] %></span>
-          <span class="stat-label">Conversations</span>
+          <span class="stat-label">Content Created</span>
         </div>
         <div class="stat-item">
           <span class="stat-value"><%= @agent_stats[:average_rating] %></span>
-          <span class="stat-label">Rating</span>
+          <span class="stat-label">Quality Score</span>
         </div>
         <div class="stat-item">
           <span class="stat-value"><%= @agent_stats[:response_time] %></span>
-          <span class="stat-label">Response Time</span>
+          <span class="stat-label">Generation Time</span>
         </div>
       </div>
+
+      <button class="hero-action" onclick="startContentChat()">
+        Start Creating Content
+      </button>
     </div>
   </section>
 
-  <!-- Terminal Section -->
-  <section class="terminal-section">
-    <div class="terminal-header">
-      <h2 class="terminal-title">✍️ ContentCrafter Studio</h2>
-      <p class="terminal-subtitle">Professional AI content creation workspace - describe your content needs</p>
-    </div>
-    
-    <div class="terminal-container">
-      <div class="terminal-titlebar">
-        <div class="terminal-button"></div>
-        <div class="terminal-button yellow"></div>
-        <div class="terminal-button green"></div>
-        <span class="terminal-title-text">contentcrafter@studio:~$</span>
+  <!-- Chat Interface Modal -->
+  <div id="content-chat-modal" class="chat-modal">
+    <div class="chat-container">
+      <!-- Chat Header -->
+      <div class="chat-header">
+        <div>
+          <h2 class="chat-title">🌌 ContentCrafter Studio</h2>
+          <p class="chat-subtitle">Describe your content needs and I'll craft compelling content for you</p>
+        </div>
+        <button onclick="closeContentChat()" class="close-btn">×</button>
       </div>
-      
-      <div class="terminal-output" id="terminal-output">
+
+      <!-- Chat Messages -->
+      <div id="chat-messages" class="chat-messages">
         <div class="welcome-message">
-╔══════════════════════════════════════════════════════════════════╗
-║                    Welcome to ContentCrafter                    ║
-║               Professional AI Content Studio                    ║
-╚══════════════════════════════════════════════════════════════════╝
-
-<div class="system-info">System: ContentCrafter v1.0 | Status: Online | Agent ID: <%= @agent.id %>
-<%= Time.current.strftime("Date: %Y-%m-%d %H:%M:%S") %> | Session: Active</div>
-
-<span style="color: #4ade80;">Welcome! I'm ContentCrafter, your professional writing assistant.</span>
-
-I can help you create:
-• � Blog posts & articles
-• 💼 Marketing copy & sales content
-• � Social media posts & captions
-• 📧 Email campaigns & newsletters
-• � Creative writing & storytelling
-• 🎯 SEO-optimized content
-
-Describe your content needs and I'll craft something amazing!
-
-        </div>
-        
-        <div class="typing-indicator" id="typing-indicator">
-          ContentCrafter is crafting
+          👋 Hello! I'm ContentCrafter, your professional AI writing partner.<br>
+          What content would you like me to create today?
         </div>
       </div>
-      
-      <div class="terminal-input-container">
-        <span class="terminal-prompt">contentcrafter@studio:~$ </span>
-        <input 
-          type="text" 
-          class="terminal-input" 
-          id="user-input"
-          placeholder="Type your message here..."
-          autocomplete="off"
-        >
-        <button class="send-button" id="send-button">Send</button>
+
+      <!-- Typing Indicator -->
+      <div id="typing-indicator" class="typing-indicator">
+        🌌 ContentCrafter is writing
+      </div>
+
+      <!-- Chat Input -->
+      <div class="chat-input-area">
+        <textarea 
+          id="content-input" 
+          class="chat-input"
+          placeholder="Describe your content needs: blog post about AI, sales email for SaaS, social media campaign..."
+          rows="3"
+        ></textarea>
+        <button onclick="sendContentMessage()" id="send-button" class="send-btn">Create</button>
       </div>
     </div>
-  </section>
+  </div>
 
   <script>
-    // Menu System Functions
-    function toggleDropdown(menuId) {
-      // Close all other dropdowns first
-      const allDropdowns = document.querySelectorAll('.dropdown');
-      allDropdowns.forEach(dropdown => {
-        if (dropdown.id !== menuId) {
-          dropdown.classList.remove('active');
+    // Primary Menu Functions
+    function togglePrimaryMenu() {
+      const primaryMenu = document.getElementById('primary-menu');
+      const contentCrafterNav = document.getElementById('contentcrafter-nav');
+      const isActive = primaryMenu.classList.contains('active');
+      
+      if (!isActive) {
+        // Opening primary menu - hide agent menu behind it
+        primaryMenu.classList.add('active');
+        contentCrafterNav.classList.add('hidden-behind-primary');
+        // Close agent menu if open
+        document.getElementById('contentcrafter-menu').classList.remove('active');
+      } else {
+        // Closing primary menu - show agent menu again
+        primaryMenu.classList.remove('active');
+        contentCrafterNav.classList.remove('hidden-behind-primary');
+      }
+    }
+
+    // ContentCrafter Navigation Functions
+    function toggleContentCrafterMenu() {
+      const menu = document.getElementById('contentcrafter-menu');
+      const primaryMenuDropdown = document.getElementById('primary-menu');
+      
+      // Don't open if primary menu is active
+      if (primaryMenuDropdown.classList.contains('active')) {
+        return;
+      }
+      
+      menu.classList.toggle('active');
+    }
+
+    // Close menus when clicking outside
+    document.addEventListener('click', function(e) {
+      const primaryMenu = document.querySelector('.primary-menu');
+      const contentCrafterNav = document.querySelector('.contentcrafter-nav');
+      
+      // Handle primary menu
+      if (!primaryMenu.contains(e.target)) {
+        const primaryDropdown = document.getElementById('primary-menu');
+        const contentCrafterNavElement = document.getElementById('contentcrafter-nav');
+        
+        if (primaryDropdown.classList.contains('active')) {
+          primaryDropdown.classList.remove('active');
+          contentCrafterNavElement.classList.remove('hidden-behind-primary');
         }
+      }
+      
+      // Handle ContentCrafter menu
+      if (!contentCrafterNav.contains(e.target)) {
+        document.getElementById('contentcrafter-menu').classList.remove('active');
+      }
+    });
+
+    // Primary Menu Item Functions
+    function goToHome() {
+      window.location.href = '/';
+    }
+
+    function goToAgents() {
+      window.location.href = '/';
+    }
+
+    function goToProfile() {
+      alert('🔜 Profile page coming soon!');
+    }
+
+    // Chat functionality
+    function startContentChat() {
+      document.getElementById('content-chat-modal').style.display = 'block';
+      document.getElementById('content-input').focus();
+      toggleContentCrafterMenu(); // Close dropdown
+    }
+
+    function closeContentChat() {
+      document.getElementById('content-chat-modal').style.display = 'none';
+    }
+
+    function sendContentMessage() {
+      const input = document.getElementById('content-input');
+      const sendButton = document.getElementById('send-button');
+      const message = input.value.trim();
+      
+      if (!message) return;
+      
+      // Add user message to chat
+      addMessageToChat('user', message);
+      
+      // Clear input and disable
+      input.value = '';
+      input.disabled = true;
+      sendButton.disabled = true;
+      sendButton.textContent = 'Creating...';
+      
+      // Show typing indicator
+      showTypingIndicator(true);
+      
+      // Send to ContentCrafter AI
+      fetch('/contentcrafter/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({ message: message })
+      })
+      .then(response => response.json())
+      .then(data => {
+        // Hide typing indicator
+        showTypingIndicator(false);
+        
+        // Add AI response
+        if (data.response) {
+          addMessageToChat('ai', data.response);
+        } else {
+          addMessageToChat('ai', 'I apologize, but I encountered an issue generating your content. Please try again.');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        showTypingIndicator(false);
+        addMessageToChat('ai', 'Sorry, I encountered a technical issue. Please try again.');
+      })
+      .finally(() => {
+        // Re-enable input
+        input.disabled = false;
+        sendButton.disabled = false;
+        sendButton.textContent = 'Create';
+        input.focus();
       });
-      
-      // Toggle the target dropdown
-      const dropdown = document.getElementById(menuId);
-      dropdown.classList.toggle('active');
-      
-      // Toggle active state on menu button
-      const button = dropdown.previousElementSibling;
-      button.classList.toggle('active');
     }
 
-    function toggleSubmenu(element) {
-      const children = element.querySelector('.tree-children');
-      if (children) {
-        children.classList.toggle('expanded');
-        element.classList.toggle('expanded');
+    function addMessageToChat(sender, message) {
+      const messagesDiv = document.getElementById('chat-messages');
+      const messageDiv = document.createElement('div');
+      
+      messageDiv.className = `message ${sender}`;
+      
+      const senderIcon = sender === 'user' ? '👤' : '🌌';
+      const senderName = sender === 'user' ? 'You' : 'ContentCrafter';
+      
+      messageDiv.innerHTML = `
+        <div class="message-header">
+          ${senderIcon} ${senderName}
+        </div>
+        <div class="message-content">${escapeHtml(message)}</div>
+      `;
+      
+      messagesDiv.appendChild(messageDiv);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+
+    function showTypingIndicator(show) {
+      const indicator = document.getElementById('typing-indicator');
+      if (show) {
+        indicator.classList.add('active');
+      } else {
+        indicator.classList.remove('active');
       }
     }
 
-    // Close dropdowns when clicking outside
-    document.addEventListener('click', (e) => {
-      if (!e.target.closest('.menu-item')) {
-        const allDropdowns = document.querySelectorAll('.dropdown');
-        const allButtons = document.querySelectorAll('.menu-button');
-        
-        allDropdowns.forEach(dropdown => {
-          dropdown.classList.remove('active');
-        });
-        
-        allButtons.forEach(button => {
-          button.classList.remove('active');
-        });
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // Menu functions - temporary alerts for coming soon features
+    function openCopywritingStudio() {
+      alert('🔜 Advanced Copywriting Studio coming soon! Use the chat for copywriting needs.');
+    }
+
+    function openContentStrategy() {
+      alert('🔜 Content Strategy Planner coming soon! Use the chat for strategy development.');
+    }
+
+    function openSEOOptimizer() {
+      alert('🔜 SEO Optimization Suite coming soon! Use the chat for SEO content.');
+    }
+
+    function openFormatGenerator() {
+      alert('🔜 Multi-Format Generator coming soon! Use the chat for format adaptation.');
+    }
+
+    function openBrandVoice() {
+      alert('🔜 Brand Voice Laboratory coming soon! Use the chat for brand voice development.');
+    }
+
+    function openContentAnalytics() {
+      alert('🔜 Content Analytics Dashboard coming soon! Use the chat for performance insights.');
+    }
+
+    // Close modal when clicking outside
+    document.getElementById('content-chat-modal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeContentChat();
       }
     });
 
-    // Menu Action Functions
-    function newConversation() {
-      if (window.terminal) {
-        window.terminal.addMessage('system', '$ ./new_chat.sh\nStarting new conversation session...\nConversation cleared. How can I help you today?');
-        window.terminal.output.innerHTML = '';
-        window.terminal.focusInput();
+    // Keyboard shortcuts and events
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeContentChat();
+        // Close both menus
+        document.getElementById('primary-menu').classList.remove('active');
+        document.getElementById('contentcrafter-menu').classList.remove('active');
+        document.getElementById('contentcrafter-nav').classList.remove('hidden-behind-primary');
       }
-    }
-
-    function loadHistory() {
-      if (window.terminal) {
-        window.terminal.addMessage('system', '$ cat history.log\nLoading conversation history...\n[Feature coming soon - conversation persistence]');
-      }
-    }
-
-    function exportChat() {
-      if (window.terminal) {
-        const chatData = {
-          timestamp: new Date().toISOString(),
-          agent: 'neochat',
-          messages: []
-        };
-        
-        const blob = new Blob([JSON.stringify(chatData, null, 2)], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `neochat-export-${Date.now()}.json`;
-        a.click();
-        URL.revokeObjectURL(url);
-        
-        window.terminal.addMessage('system', '$ ./export.json\nExporting conversation data...\nChat exported successfully!');
-      }
-    }
-
-    function clearHistory() {
-      if (window.terminal && confirm('Clear all conversation history? This cannot be undone.')) {
-        window.terminal.output.innerHTML = '';
-        window.terminal.addMessage('system', '$ ./clear.sh\nClearing conversation history...\nHistory cleared successfully!');
-      }
-    }
-
-    function openSettings() {
-      if (window.terminal) {
-        window.terminal.addMessage('system', '$ nano config.yml\nOpening NeoChat configuration...\n[Settings panel coming soon]');
-      }
-    }
-
-    function openPreferences() {
-      if (window.terminal) {
-        window.terminal.addMessage('system', '$ vim preferences.ini\nOpening user preferences...\n[Preferences panel coming soon]');
-      }
-    }
-
-    function openThemes() {
-      if (window.terminal) {
-        window.terminal.addMessage('system', '$ ls /usr/share/themes/\nAvailable themes:\n├── matrix-green\n├── cyber-blue\n├── neon-purple\n└── classic-amber\n[Theme switching coming soon]');
-      }
-    }
-
-    function exitChat() {
-      if (confirm('Exit NeoChat? Any unsaved conversation will be lost.')) {
-        window.location.href = '/';
-      }
-    }
-
-    function setMode(mode) {
-      if (window.terminal) {
-        const modeMessages = {
-          question: '$ python3 question_answering.py\nActivating Q&A mode...\nReady to answer your questions!',
-          creative: '$ python3 creative_writing.py\nActivating creative mode...\nReady for creative tasks and brainstorming!',
-          problem: '$ python3 problem_solving.py\nActivating problem-solving mode...\nReady to tackle complex problems!',
-          analysis: '$ python3 data_analysis.py\nActivating analysis mode...\nReady for data analysis and insights!'
-        };
-        
-        window.terminal.addMessage('system', modeMessages[mode] || 'Mode activated');
-      }
-    }
-
-    function switchAgent(agentType) {
-      if (confirm(`Switch to ${agentType} agent? This will redirect to a new agent session.`)) {
-        // This would redirect to the appropriate agent subdomain/path
-        window.terminal.addMessage('system', `$ systemctl switch-agent ${agentType}\nSwitching to ${agentType} agent...\n[Agent switching coming soon]`);
-      }
-    }
-
-    function createAgent() {
-      if (window.terminal) {
-        window.terminal.addMessage('system', '$ cp custom.template my_agent.py\nCreating custom agent...\n[Custom agent creation coming soon]');
-      }
-    }
-
-    function showDocs(docType) {
-      if (window.terminal) {
-        const docs = {
-          'getting-started': 'Welcome to ContentCrafter!\n\nBasic Commands:\n- Type your message and press Enter\n- Use the menu for advanced features\n- Export conversations as JSON\n',
-          'commands': 'Available Commands:\n- /help - Show this help\n- /clear - Clear conversation\n- /export - Export chat\n- /mode [type] - Switch AI mode\n',
-          'api': 'NeoChat API Reference:\n\nEndpoints:\n- POST /chat - Send message\n- GET /status - Agent status\n- GET /history - Chat history\n',
-          'examples': '{\n  "examples": [\n    {"input": "Hello", "output": "Hello! How can I help?"},\n    {"input": "What is AI?", "output": "AI explanation..."}\n  ]\n}'
-        };
-        
-        window.terminal.addMessage('system', `$ cat ${docType}.md\n${docs[docType] || 'Documentation not found'}`);
-      }
-    }
-
-    function openSupport() {
-      window.open('https://github.com/onelastai/neochat', '_blank');
-    }
-
-    function openDiscord() {
-      window.open('https://discord.gg/onelastai', '_blank');
-    }
-
-    function reportBug() {
-      if (window.terminal) {
-        window.terminal.addMessage('system', '$ nano bug_report.template\nOpening bug report template...\n[Bug reporting system coming soon]');
-      }
-    }
-
-    function showAbout() {
-      if (window.terminal) {
-        window.terminal.addMessage('system', `$ ./about.sh
-╔══════════════════════════════════════╗
-║              NeoChat v1.0            ║
-║                                      ║
-║     AI Conversation Terminal         ║
-║     Built by onelastai.com          ║
-║                                      ║
-║  • Intelligent conversation AI       ║
-║  • Terminal-style interface          ║
-║  • Multi-modal capabilities          ║
-║  • Real-time responses              ║
-║                                      ║
-║  © 2025 onelastai.com               ║
-╚══════════════════════════════════════╝`);
-      }
-    }
-
-    // Terminal Chat Functionality
-    class NeoChatTerminal {
-      constructor() {
-        this.output = document.getElementById('terminal-output');
-        this.input = document.getElementById('user-input');
-        this.sendButton = document.getElementById('send-button');
-        this.typingIndicator = document.getElementById('typing-indicator');
-        
-        this.setupEventListeners();
-        this.focusInput();
-      }
-      
-      setupEventListeners() {
-        this.input.addEventListener('keypress', (e) => {
-          if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            this.sendMessage();
-          }
-        });
-        
-        this.sendButton.addEventListener('click', () => {
-          this.sendMessage();
-        });
-        
-        // Auto-focus input when clicking anywhere on terminal
-        this.output.addEventListener('click', () => {
-          this.input.focus();
-        });
-      }
-      
-      focusInput() {
-        this.input.focus();
-      }
-      
-      async sendMessage() {
-        const message = this.input.value.trim();
-        if (!message) return;
-        
-        // Display user message
-        this.addMessage('user', message);
-        this.input.value = '';
-        
-        // Show loading state
-        this.setLoading(true);
-        this.showTyping(true);
-        
-        try {
-          const response = await fetch('/chat', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'X-CSRF-Token': document.querySelector('[name="csrf-token"]').getAttribute('content')
-            },
-            body: JSON.stringify({ message: message })
-          });
-          
-          const data = await response.json();
-          
-          if (data.success) {
-            this.addMessage('agent', data.response, data.timestamp);
-          } else {
-            this.addMessage('error', data.error || 'Sorry, there was an error processing your message.');
-          }
-        } catch (error) {
-          console.error('Chat error:', error);
-          this.addMessage('error', 'Connection error. Please check your internet and try again.');
-        } finally {
-          this.setLoading(false);
-          this.showTyping(false);
-          this.focusInput();
-        }
-      }
-      
-      addMessage(type, content, timestamp = null) {
-        const messageDiv = document.createElement('div');
-        messageDiv.className = 'terminal-message';
-        
-        const time = timestamp || new Date().toLocaleTimeString();
-        
-        if (type === 'user') {
-          messageDiv.innerHTML = `<span class="user-message">${this.escapeHtml(content)}</span><span class="timestamp">[${time}]</span>`;
-        } else if (type === 'agent') {
-          messageDiv.innerHTML = `<div class="agent-message">${this.escapeHtml(content)}</div><span class="timestamp">[${time}]</span>`;
-        } else if (type === 'error') {
-          messageDiv.innerHTML = `<div class="agent-message" style="color: #ff6b6b;">❌ ${this.escapeHtml(content)}</div>`;
-        }
-        
-        this.output.appendChild(messageDiv);
-        this.scrollToBottom();
-      }
-      
-      setLoading(isLoading) {
-        this.sendButton.disabled = isLoading;
-        this.input.disabled = isLoading;
-        
-        if (isLoading) {
-          this.sendButton.textContent = 'Sending...';
-          this.sendButton.classList.add('loading');
-        } else {
-          this.sendButton.textContent = 'Send';
-          this.sendButton.classList.remove('loading');
-        }
-      }
-      
-      showTyping(show) {
-        if (show) {
-          this.typingIndicator.classList.add('active');
-          this.scrollToBottom();
-        } else {
-          this.typingIndicator.classList.remove('active');
-        }
-      }
-      
-      scrollToBottom() {
-        this.output.scrollTop = this.output.scrollHeight;
-      }
-      
-      escapeHtml(text) {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
-      }
-    }
-    
-    // Initialize terminal when page loads
-    document.addEventListener('DOMContentLoaded', () => {
-      window.terminal = new NeoChatTerminal();
     });
+
+    // Handle enter key in textarea
+    document.getElementById('content-input').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendContentMessage();
+      }
+    });
+
+    // Initialize
+    console.log('🌌 ContentCrafter Professional Interface v3.0 - Ready');
   </script>
 </body>
 </html>

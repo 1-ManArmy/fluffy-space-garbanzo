@@ -401,7 +401,7 @@ class LabxController < ApplicationController
     {
       text: "📚 **LabX Scientific Documentation Center**\n\n" \
             "Professional scientific documentation with publication excellence:\n\n" \
-            "✍️ **Documentation Suite:**\n" \
+            "🌌 **Documentation Suite:**\n" \
             "• **Research Papers:** Manuscript preparation and publication support\n" \
             "• **Technical Reports:** Comprehensive research documentation\n" \
             "• **Grant Proposals:** Funding application and proposal writing\n" \
