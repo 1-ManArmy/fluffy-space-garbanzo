@@ -5,6 +5,11 @@ class MemoraController < ApplicationController
   before_action :set_agent
   before_action :set_memory_context
 
+  # Full Memora interface
+  def interface
+    render :memora_interface
+  end
+
   # Chat interface for Memora memory management AI
   def chat
     message = params[:message]

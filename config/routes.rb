@@ -209,6 +209,8 @@ Rails.application.routes.draw do
 
   # Memora development routes
   get '/memora', to: 'memora#index'
+  get '/memora/interface', to: 'memora#interface'
+  post '/memora/chat', to: 'memora#chat'
   post '/memora/store_memory', to: 'memora#store_memory'
   post '/memora/recall_memory', to: 'memora#recall_memory'
   post '/memora/search_memories', to: 'memora#search_memories'
