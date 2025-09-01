@@ -42,7 +42,7 @@ export default class extends Controller {
       const result = await response.json()
 
       if (response.ok && result.success) {
-        this.showSuccess("Successfully subscribed! Your email has been sent to info@onelastai.com for processing.")
+        this.showSuccess("Successfully subscribed! Your email has been sent to mail@onelastai.com for processing.")
         this.emailInputTarget.value = ""
       } else {
         this.showError(result.error || "Something went wrong. Please try again.")

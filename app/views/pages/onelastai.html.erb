@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terminal Chat</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Import Fira Code Font */
+    @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&display=swap');
+
+    /* Base Styles */
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+      background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+      color: #d1d5db;
+      line-height: 1.4;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Panel Transitions */
+    .panel-transition {
+      transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    /* Terminal Visibility */
+    .hidden-terminal { 
+      display: none !important; 
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    /* Panel Slide Animations */
+    .slide-up { 
+      transform: translateY(-100%); 
+    }
+
+    .slide-down { 
+      transform: translateY(100%); 
+    }
+
+    #ascii-background {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 0;
+        color: rgba(46, 204, 113, 0.05);
+        font-family: 'Courier New', Courier, monospace;
+        text-align: center;
+        pointer-events: none;
+        white-space: pre;
+        font-size: 1.2vw;
+        line-height: 1;
+        text-shadow: 0 0 5px rgba(46, 204, 113, 0.1);
+    }
+
+    /* Header Styling */
+    header {
+      background: linear-gradient(90deg, #111111, #1e1e1e);
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid #374151;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    header h1 {
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    /* Button Enhancements */
+    button {
+      transition: all 0.3s ease;
+      border-radius: 6px;
+      padding: 8px 12px;
+      border: 1px solid transparent;
+      font-weight: 500;
+    }
+
+    button:hover {
+      background: rgba(74, 222, 128, 0.1);
+      border-color: #4ade80;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(74, 222, 128, 0.2);
+    }
+
+    #start-setting {
+      background: linear-gradient(45deg, #059669, #047857);
+      color: white;
+      font-weight: 600;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    }
+
+    #start-setting:hover {
+      background: linear-gradient(45deg, #047857, #065f46);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(5, 150, 105, 0.4);
+    }
+
+    /* Panel Styling */
+    .panel {
+      background: linear-gradient(145deg, #1e1e1e, #2a2a2a);
+      -webkit-backdrop-filter: blur(15px);
+      backdrop-filter: blur(15px);
+      border: 1px solid #374151;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    #top-panel, #bottom-panel {
+      background: linear-gradient(90deg, #1e1e1e, #2a2a2a);
+      border-color: #4ade80;
+      font-weight: 600;
+      text-shadow: 0 0 10px rgba(74, 222, 128, 0.5);
+    }
+
+    #left-panel, #right-panel {
+      background: linear-gradient(145deg, #1e1e1e, #2a2a2a);
+    }
+
+    /* Panel Headers */
+    .panel h2 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      text-shadow: 0 0 8px currentColor;
+      border-bottom: 2px solid currentColor;
+      padding-bottom: 8px;
+      margin-bottom: 16px;
+    }
+
+    /* Panel Lists */
+    .panel ul li {
+      margin: 8px 0;
+    }
+
+    .panel button {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid #374151;
+      width: 100%;
+      text-align: left;
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+    }
+
+    .option-doc {
+      border-color: #3b82f6 !important;
+      color: #60a5fa !important;
+    }
+
+    .option-doc:hover {
+      background: rgba(59, 130, 246, 0.1) !important;
+      box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
+    }
+
+    .option-usage {
+      border-color: #f59e0b !important;
+      color: #fbbf24 !important;
+    }
+
+    .option-usage:hover {
+      background: rgba(245, 158, 11, 0.1) !important;
+      box-shadow: 0 0 15px rgba(245, 158, 11, 0.3);
+    }
+
+    /* Terminal Styling */
+    #terminal {
+      background: linear-gradient(135deg, #000000, #1a1a1a);
+      border: 1px solid #374151;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 
+        0 0 0 1px rgba(74, 222, 128, 0.1),
+        0 8px 32px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    }
+
+    .terminal-header {
+      background: linear-gradient(90deg, #2a2a2a, #374151);
+      border-bottom: 1px solid #4ade80;
+      font-family: 'Fira Code', monospace;
+      font-weight: 500;
+      color: #d1d5db;
+    }
+
+    .terminal-content {
+      background: rgba(0, 0, 0, 0.8);
+      font-family: 'Fira Code', monospace;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .terminal-content::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .terminal-content::-webkit-scrollbar-track {
+      background: #1e1e1e;
+    }
+
+    .terminal-content::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, #4ade80, #22d3ee);
+      border-radius: 4px;
+    }
+
+    .terminal-content::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(180deg, #22d3ee, #4ade80);
+    }
+
+    /* Terminal Input */
+    .terminal-input {
+      background: rgba(0, 0, 0, 0.6);
+      border-top: 1px solid #374151;
+      font-family: 'Fira Code', monospace;
+    }
+
+    .terminal-input input {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #d1d5db;
+      font-family: inherit;
+      font-size: 0.95rem;
+      width: 100%;
+    }
+
+    .terminal-input input::placeholder {
+      color: #6b7280;
+      opacity: 0.7;
+    }
+
+    /* Terminal Container */
+    .terminal-container {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    /* Prompt Styling */
+    .prompt {
+      color: #4ade80;
+      font-weight: 600;
+      text-shadow: 0 0 8px rgba(74, 222, 128, 0.4);
+    }
+
+    /* Text Colors */
+    .text-cyan { color: #22d3ee !important; }
+    .text-yellow { color: #fbbf24 !important; }
+    .text-blue { color: #60a5fa !important; }
+    .text-green { color: #4ade80 !important; }
+    .text-red { color: #ef4444 !important; }
+    .text-purple { color: #a855f7 !important; }
+
+    /* Glowing Text Effects */
+    .glow-green {
+      color: #4ade80;
+      text-shadow: 0 0 10px rgba(74, 222, 128, 0.6);
+    }
+
+    .glow-cyan {
+      color: #22d3ee;
+      text-shadow: 0 0 10px rgba(34, 211, 238, 0.6);
+    }
+
+    .glow-yellow {
+      color: #fbbf24;
+      text-shadow: 0 0 10px rgba(251, 191, 36, 0.6);
+    }
+
+    /* Footer Styling */
+    footer {
+      background: linear-gradient(90deg, #111111, #1e1e1e);
+      border-top: 1px solid #374151;
+      font-family: 'Fira Code', monospace;
+      font-weight: 500;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      #left-panel, #right-panel {
+        width: 240px;
+      }
+      
+      .terminal-content {
+        font-size: 0.85rem;
+      }
+      
+      button {
+        padding: 6px 10px;
+        font-size: 0.85rem;
+      }
+    }
+
+    /* Animation Keyframes */
+    @keyframes pulse-glow {
+      0%, 100% { 
+        text-shadow: 0 0 5px currentColor;
+        opacity: 0.8;
+      }
+      50% { 
+        text-shadow: 0 0 20px currentColor;
+        opacity: 1;
+      }
+    }
+
+    .pulse-animation {
+      animation: pulse-glow 2s ease-in-out infinite;
+    }
+
+    /* Hover Effects */
+    .hover-glow:hover {
+      text-shadow: 0 0 15px currentColor;
+      transition: text-shadow 0.3s ease;
+    }
+
+    /* Focus States */
+    input:focus {
+      box-shadow: 0 0 0 2px rgba(74, 222, 128, 0.3);
+      border-radius: 4px;
+    }
+
+    /* Loading Animation */
+    @keyframes typing {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    .typing-cursor::after {
+      content: '█';
+      animation: typing 1s infinite;
+      color: #4ade80;
+    }
+  </style>
+</head>
+<body class="bg-black text-gray-300 h-screen flex flex-col">
+
+  <div id="ascii-background">
+<pre>
+                                                                                                         
+                                                                                                         
+                                                                                                         
+  ▓██▓                       █▒  ▒█                        ██                                 ██   █████ 
+ ▒█  █▒                      ██  ██                        ██                                 ██     █   
+ █░  ░█ █▒██▒   ███          ██░░██ ░███░  █▒██▒          ▒██▒   █▒██▒ ██▓█▓  █░  █          ▒██▒    █   
+ █    █ █▓ ▒█  ▓▓ ▒█         █▒▓▓▒█ █▒ ▒█  █▓ ▒█          ▓▒▒▓   ██  █ █▒█▒█  ▓▒ ▒▓          ▓▒▒▓    █   
+ █    █ █   █  █   █         █ ██ █     █  █   █          █░░█   █     █ █ █  ▒█ █▒          █░░█    █   
+ █    █ █   █  █████         █ █▓ █ ▒████  █   █          █  █   █     █ █ █   █ █           █  █    █   
+ █░  ░█ █   █  █             █    █ █▒  █  █   █         ▒████▒  █     █ █ █   █▓▓          ▒████▒   █   
+ ▒█  █▒ █   █  ▓▓  █         █    █ █░ ▓█  █   █         ▓▒  ▒▓  █     █ █ █   ▓█▒          ▓▒  ▒▓   █   
+  ▓██▓  █   █   ███▒         █    █ ▒██▒█  █   █         █░  ░█  █     █ █ █   ▒█           █░  ░█ █████ 
+                                                                               ▒█                        
+                                                                               █▒                        
+                                                                              ██                         
+
+</pre>
+  </div>
+
+  <!-- Top Panel -->
+  <div id="top-panel" class="panel bg-[#1e1e1e] border-b border-gray-700 p-3 text-center font-bold text-green-400 transition-transform duration-300 z-10 relative glow-green">
+    /usr/top-panel → Heading + Buttons Area
+  </div>
+
+  <!-- Header Bar -->
+  <header class="bg-[#111] border-b border-gray-700 p-2 flex items-center justify-between flex-shrink-0 z-10 relative">
+    <div class="flex items-center gap-4">
+      <button id="toggle-left-panel" class="text-gray-400 hover:text-white hover-glow">⫷</button>
+      <h1 class="text-md font-bold text-gray-200"><span class="text-green-400 glow-green">&lt;&gt;</span> Terminal Chat</h1>
+    </div>
+    <div class="flex items-center gap-4">
+      <button id="start-setting" class="text-gray-400 hover:text-white pulse-animation">⚡ Start Setting</button>
+      <button id="toggle-right-panel" class="text-gray-400 hover:text-white hover-glow">⫸</button>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <div class="flex-grow flex relative overflow-hidden">
+    <!-- Left Panel -->
+    <aside id="left-panel" aria-label="Support Panel" class="panel absolute top-0 left-0 h-full w-56 bg-[#1e1e1e] border-r border-gray-700 p-4 transform transition-transform duration-300 -translate-x-full z-20">
+      <h2 class="text-green-400 font-bold glow-green">/etc/support</h2>
+      <ul class="mt-3 space-y-2">
+        <li><button id="live-chat-btn" class="w-full text-left text-blue-400 hover:text-blue-300 p-2 rounded bg-gray-800 hover:bg-gray-700 transition-all hover-glow">💬 Live Chat</button></li>
+        <li><button id="send-mail-btn" class="w-full text-left text-yellow-400 hover:text-yellow-300 p-2 rounded bg-gray-800 hover:bg-gray-700 transition-all hover-glow">📧 Send Mail</button></li>
+        <li><button id="support-ticket-btn" class="w-full text-left text-cyan-400 hover:text-cyan-300 p-2 rounded bg-gray-800 hover:bg-gray-700 transition-all hover-glow">🎫 Support Ticket</button></li>
+      </ul>
+      
+      <!-- Support Form Container -->
+      <div id="support-form-container" class="mt-4 hidden">
+        <div id="form-header" class="mb-3">
+          <h3 id="form-title" class="text-sm font-bold text-green-400 glow-green"></h3>
+          <p id="form-description" class="text-xs text-gray-400"></p>
+        </div>
+        
+        <!-- Email Form Fields -->
+        <div id="email-fields" class="space-y-2 hidden">
+          <input type="text" id="sender-name" placeholder="Your Name" class="w-full p-2 text-xs bg-gray-800 border border-gray-600 rounded text-white placeholder-gray-400 focus:outline-none focus:border-green-400">
+          <input type="email" id="sender-email" placeholder="Your Email" class="w-full p-2 text-xs bg-gray-800 border border-gray-600 rounded text-white placeholder-gray-400 focus:outline-none focus:border-green-400">
+          <input type="text" id="subject" placeholder="Subject" class="w-full p-2 text-xs bg-gray-800 border border-gray-600 rounded text-white placeholder-gray-400 focus:outline-none focus:border-green-400">
+        </div>
+        
+        <!-- Priority Selector (for tickets) -->
+        <div id="priority-field" class="mb-2 hidden">
+          <select id="priority" class="w-full p-2 text-xs bg-gray-800 border border-gray-600 rounded text-white focus:outline-none focus:border-green-400">
+            <option value="low">Low Priority</option>
+            <option value="medium" selected>Medium Priority</option>
+            <option value="high">High Priority</option>
+            <option value="urgent">Urgent</option>
+          </select>
+        </div>
+        
+        <!-- Message Area -->
+        <textarea id="message-area" placeholder="Type your message here..." class="w-full h-20 p-2 text-xs bg-gray-800 border border-gray-600 rounded text-white placeholder-gray-400 resize-none focus:outline-none focus:border-green-400 hidden"></textarea>
+        
+        <!-- Action Buttons -->
+        <div class="flex space-x-2 mt-2 hidden" id="form-buttons">
+          <button id="send-btn" class="flex-1 p-2 text-xs bg-green-600 hover:bg-green-500 text-white rounded transition-all">
+            Send
+          </button>
+          <button id="cancel-btn" class="flex-1 p-2 text-xs bg-gray-600 hover:bg-gray-500 text-white rounded transition-all">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Terminal -->
+    <main id="terminal" class="terminal-container relative flex-grow bg-transparent flex flex-col overflow-hidden z-10">
+      <div class="terminal-header bg-[#2a2a2a] text-center p-1 rounded-t-lg flex-shrink-0">
+        <p class="text-sm prompt">user@onelastai: /home/support</p>
+      </div>
+      <div id="terminal-output" class="terminal-content flex-grow p-4 overflow-y-auto">
+        <p class="text-green-400 glow-green">Welcome to OneLastAI Support Terminal!</p>
+        <p class="text-cyan-400 glow-cyan">&gt; Open left panel for Live Chat, Send Mail, or Support Ticket options.</p>
+        <p class="text-gray-500">&gt; Type 'help' for available commands.</p>
+      </div>
+      <div class="terminal-input p-2 border-t border-gray-700 flex-shrink-0">
+        <span class="text-green-400 font-bold prompt">user@onelastai:~$</span>
+        <input type="text" id="terminal-input" class="bg-transparent ml-2 focus:outline-none w-full text-white" placeholder="Type your command or message..." title="Terminal input">
+      </div>
+    </main>
+
+    <!-- Right Panel -->
+    <aside id="right-panel" aria-label="Options Panel" class="panel absolute top-0 right-0 h-full w-56 bg-[#1e1e1e] border-l border-gray-700 p-4 transform transition-transform duration-300 translate-x-full z-20">
+      <h2 class="text-green-400 font-bold glow-green">/dev/options</h2>
+      <ul class="mt-3 space-y-2">
+        <li><button class="text-gray-300 hover-glow">Settings</button></li>
+        <li><button class="text-gray-300 hover-glow">Help</button></li>
+        <li><button class="text-gray-300 hover-glow">Documentation</button></li>
+        <li><button class="text-gray-300 hover-glow">Exit</button></li>
+      </ul>
+    </aside>
+  </div>
+
+  <!-- Bottom Panel -->
+  <div id="bottom-panel" class="bg-[#1e1e1e] border-t border-gray-700 p-3 text-center font-bold text-cyan-400 transition-transform duration-300 translate-y-full z-10 relative">
+    /usr/bottom-panel → Documentation / Usage
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-[#111] border-t border-gray-700 p-1 text-xs text-center flex-shrink-0 z-10 relative">
+    v3.2.0 – Status: <span class="text-green-400">Online</span>
+  </footer>
+
+  <script>
+    const leftPanel = document.getElementById("left-panel");
+    const rightPanel = document.getElementById("right-panel");
+    const topPanel = document.getElementById("top-panel");
+    const bottomPanel = document.getElementById("bottom-panel");
+    const terminal = document.getElementById("terminal");
+    const terminalInput = document.getElementById("terminal-input");
+    const terminalOutput = document.getElementById("terminal-output");
+
+    // Support form elements
+    const liveChatBtn = document.getElementById('live-chat-btn');
+    const sendMailBtn = document.getElementById('send-mail-btn');
+    const supportTicketBtn = document.getElementById('support-ticket-btn');
+    const supportFormContainer = document.getElementById('support-form-container');
+    const formTitle = document.getElementById('form-title');
+    const formDescription = document.getElementById('form-description');
+    const emailFields = document.getElementById('email-fields');
+    const priorityField = document.getElementById('priority-field');
+    const messageArea = document.getElementById('message-area');
+    const formButtons = document.getElementById('form-buttons');
+    const sendBtn = document.getElementById('send-btn');
+    const cancelBtn = document.getElementById('cancel-btn');
+
+    let currentMode = null;
+    let chatMode = false;
+
+    // Default state: all 3 panels open
+    leftPanel.classList.remove("-translate-x-full");
+    rightPanel.classList.remove("translate-x-full");
+    topPanel.classList.remove("slide-up");
+
+    const addToTerminal = (message, className = '') => {
+      const p = document.createElement('p');
+      p.innerHTML = message;
+      if (className) p.className = className;
+      terminalOutput.appendChild(p);
+      terminalOutput.scrollTop = terminalOutput.scrollHeight;
+    };
+
+    const resetForm = () => {
+      supportFormContainer.classList.add('hidden');
+      emailFields.classList.add('hidden');
+      priorityField.classList.add('hidden');
+      messageArea.classList.add('hidden');
+      formButtons.classList.add('hidden');
+      currentMode = null;
+      chatMode = false;
+      
+      // Clear form fields
+      document.getElementById('sender-name').value = '';
+      document.getElementById('sender-email').value = '';
+      document.getElementById('subject').value = '';
+      document.getElementById('message-area').value = '';
+      document.getElementById('priority').value = 'medium';
+      
+      terminalInput.placeholder = 'Type your command or message...';
+    };
+
+    // Support button handlers
+    liveChatBtn.addEventListener('click', () => {
+      resetForm();
+      currentMode = 'live-chat';
+      chatMode = true;
+      formTitle.textContent = '💬 Live Chat';
+      formDescription.textContent = 'Live chat with support team';
+      supportFormContainer.classList.remove('hidden');
+      
+      addToTerminal('&gt; LIVE CHAT MODE ACTIVATED', 'text-green-400');
+      addToTerminal('&gt; Connected to support agent. Type messages below.', 'text-cyan-400');
+      addToTerminal('&gt; Agent: Hello! How can I help you today?', 'text-yellow-400');
+      
+      terminalInput.placeholder = 'Type your message to the support agent...';
+      terminalInput.focus();
+    });
+
+    sendMailBtn.addEventListener('click', () => {
+      resetForm();
+      currentMode = 'send-mail';
+      formTitle.textContent = '📧 Send Mail';
+      formDescription.textContent = 'Send email to support team';
+      supportFormContainer.classList.remove('hidden');
+      emailFields.classList.remove('hidden');
+      messageArea.classList.remove('hidden');
+      formButtons.classList.remove('hidden');
+      
+      addToTerminal('&gt; EMAIL COMPOSER ACTIVATED', 'text-green-400');
+      addToTerminal('&gt; Fill in the form and click Send.', 'text-cyan-400');
+    });
+
+    supportTicketBtn.addEventListener('click', () => {
+      resetForm();
+      currentMode = 'support-ticket';
+      formTitle.textContent = '🎫 Support Ticket';
+      formDescription.textContent = 'Create detailed support ticket';
+      supportFormContainer.classList.remove('hidden');
+      emailFields.classList.remove('hidden');
+      priorityField.classList.remove('hidden');
+      messageArea.classList.remove('hidden');
+      formButtons.classList.remove('hidden');
+      
+      addToTerminal('&gt; SUPPORT TICKET SYSTEM ACTIVATED', 'text-green-400');
+      addToTerminal('&gt; Fill in the form to create your ticket.', 'text-cyan-400');
+    });
+
+    // Send button handler
+    sendBtn.addEventListener('click', () => {
+      const name = document.getElementById('sender-name').value;
+      const email = document.getElementById('sender-email').value;
+      const subject = document.getElementById('subject').value;
+      const message = document.getElementById('message-area').value;
+      const priority = document.getElementById('priority').value;
+
+      if (currentMode === 'send-mail') {
+        if (!name || !email || !subject || !message) {
+          addToTerminal('&gt; ERROR: Please fill in all required fields.', 'text-red-500');
+          return;
+        }
+        
+        addToTerminal(`&gt; SENDING EMAIL...`, 'text-yellow-400');
+        addToTerminal(`&gt; From: ${name} &lt;${email}&gt;`, 'text-gray-400');
+        addToTerminal(`&gt; Subject: ${subject}`, 'text-gray-400');
+        addToTerminal(`&gt; Email sent successfully to mail@onelastai.com`, 'text-green-400');
+        
+        setTimeout(() => {
+          window.location.href = `mailto:mail@onelastai.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(`Name: ${name}\\nEmail: ${email}\\n\\nMessage:\\n${message}`)}`;
+        }, 1000);
+        
+      } else if (currentMode === 'support-ticket') {
+        if (!name || !email || !subject || !message) {
+          addToTerminal('&gt; ERROR: Please fill in all required fields.', 'text-red-500');
+          return;
+        }
+        
+        addToTerminal(`&gt; CREATING SUPPORT TICKET...`, 'text-yellow-400');
+        addToTerminal(`&gt; Priority: ${priority.toUpperCase()}`, 'text-gray-400');
+        addToTerminal(`&gt; Ticket #${Math.floor(Math.random() * 100000)} created successfully`, 'text-green-400');
+        addToTerminal(`&gt; Ticket details sent to mail@onelastai.com`, 'text-cyan-400');
+        
+        setTimeout(() => {
+          const ticketBody = `Support Ticket - Priority: ${priority}\\n\\nName: ${name}\\nEmail: ${email}\\n\\nIssue Description:\\n${message}\\n\\nSteps to reproduce:\\n1. \\n2. \\n3. \\n\\nExpected behavior:\\n\\nActual behavior:\\n\\nAdditional information:`;
+          window.location.href = `mailto:mail@onelastai.com?subject=${encodeURIComponent(`Support Ticket - ${subject}`)}&body=${encodeURIComponent(ticketBody)}`;
+        }, 1000);
+      }
+      
+      resetForm();
+    });
+
+    // Cancel button handler
+    cancelBtn.addEventListener('click', () => {
+      addToTerminal(`&gt; ${currentMode?.toUpperCase().replace('-', ' ')} CANCELLED`, 'text-gray-400');
+      resetForm();
+    });
+
+    // Toggle buttons
+    document.getElementById("toggle-left-panel").onclick = () => {
+      leftPanel.classList.toggle("-translate-x-full");
+      checkTerminal();
+    };
+
+    document.getElementById("toggle-right-panel").onclick = () => {
+      rightPanel.classList.toggle("translate-x-full");
+      checkTerminal();
+    };
+
+    // Start Setting → close all panels
+    document.getElementById("start-setting").onclick = () => {
+      leftPanel.classList.add("-translate-x-full");
+      rightPanel.classList.add("translate-x-full");
+      topPanel.classList.add("slide-up");
+      bottomPanel.classList.add("translate-y-full");
+      terminal.classList.remove("hidden-terminal");
+    };
+
+    // Check if 3 panels open → hide terminal
+    function checkTerminal() {
+      const isLeftOpen = !leftPanel.classList.contains("-translate-x-full");
+      const isRightOpen = !rightPanel.classList.contains("translate-x-full");
+      const isTopOpen = !topPanel.classList.contains("slide-up");
+      if (isLeftOpen && isRightOpen && isTopOpen) {
+        terminal.classList.add("hidden-terminal");
+      } else {
+        terminal.classList.remove("hidden-terminal");
+      }
+    }
+
+    // Terminal input logic
+    terminalInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const command = terminalInput.value.trim();
+        
+        if (chatMode && currentMode === 'live-chat') {
+          // Handle live chat messages
+          if (command) {
+            addToTerminal(`&gt; You: ${command}`, 'text-white');
+            
+            // Simulate agent response
+            setTimeout(() => {
+              const responses = [
+                "I understand your concern. Let me help you with that.",
+                "Could you provide more details about this issue?",
+                "I'll escalate this to our technical team for review.",
+                "Is there anything else I can help you with?",
+                "Thank you for contacting OneLastAI support!",
+                "Let me check our knowledge base for a solution.",
+                "I'm processing your request now. Please hold on.",
+                "That's a great question! Here's what I can tell you..."
+              ];
+              const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+              addToTerminal(`&gt; Agent: ${randomResponse}`, 'text-yellow-400');
+            }, 1000 + Math.random() * 2000);
+          }
+        } else {
+          // Handle regular commands
+          if (command) {
+            addToTerminal(`&gt; ${command}`);
+            handleCommand(command);
+          }
+        }
+
+        terminalInput.value = '';
+      }
+    });
+
+    function handleCommand(command) {
+      const output = document.createElement('p');
+      output.classList.add('text-cyan-400');
+      let response = '';
+
+      switch (command.toLowerCase()) {
+        case 'help':
+          response = 'Available commands: help, clear, date, status, contact\\nSupport options: Open left panel for Live Chat, Send Mail, or Support Ticket';
+          break;
+        case 'clear':
+          terminalOutput.innerHTML = '<p class="text-green-400 glow-green">Welcome to OneLastAI Support Terminal!</p><p class="text-cyan-400 glow-cyan">&gt; Open left panel for Live Chat, Send Mail, or Support Ticket options.</p><p class="text-gray-500">&gt; Type \'help\' for available commands.</p>';
+          return;
+        case 'date':
+          response = new Date().toLocaleString();
+          break;
+        case 'status':
+          response = 'OneLastAI Support Terminal - All systems operational';
+          break;
+        case 'contact':
+          response = 'Email: mail@onelastai.com | Open left panel for support options';
+          break;
+        default:
+          response = `Command not found: ${command}. Type 'help' for available commands.`;
+          output.classList.remove('text-cyan-400');
+          output.classList.add('text-red-500');
+      }
+      output.textContent = response;
+      terminalOutput.appendChild(output);
+      terminalOutput.scrollTop = terminalOutput.scrollHeight;
+    }
+    
+    // Initial check
+    checkTerminal();
+  </script>
+</body>
+</html>

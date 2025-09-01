@@ -653,27 +653,27 @@
   <!-- Hero Section -->
   <section class="hero-section">
     <div class="hero-content">
-      <div class="agent-logo">�</div>
-      <h1 class="agent-title">Documind</h1>
-      <p class="agent-tagline">Intelligent document analysis and processing specialist</p>
+      <div class="agent-logo">📄</div>
+      <h1 class="agent-title">DocuMind</h1>
+      <p class="agent-tagline">Advanced Document Intelligence & Processing Specialist</p>
       <p class="agent-description">
-        I am Documind, your AI document intelligence expert. I analyze, extract insights, 
+        I am DocuMind, your AI document intelligence expert. I analyze, extract insights, 
         summarize, and process documents of all types. From PDFs to contracts, research papers 
-        to reports, I transform complex documents into actionable intelligence.
+        to reports, I transform complex documents into actionable intelligence with OCR, NLP, and ML.
       </p>
       
       <div class="agent-stats">
         <div class="stat-item">
-          <span class="stat-value"><%= @agent_stats[:total_conversations] %></span>
-          <span class="stat-label">Conversations</span>
+          <span class="stat-value"><%= @agent_stats[:documents_processed] %></span>
+          <span class="stat-label">Documents</span>
         </div>
         <div class="stat-item">
-          <span class="stat-value"><%= @agent_stats[:average_rating] %></span>
-          <span class="stat-label">Rating</span>
+          <span class="stat-value"><%= @agent_stats[:accuracy_rate] %>%</span>
+          <span class="stat-label">Accuracy</span>
         </div>
         <div class="stat-item">
           <span class="stat-value"><%= @agent_stats[:response_time] %></span>
-          <span class="stat-label">Response Time</span>
+          <span class="stat-label">Processing</span>
         </div>
       </div>
     </div>
@@ -682,8 +682,8 @@
   <!-- Terminal Section -->
   <section class="terminal-section">
     <div class="terminal-header">
-      <h2 class="terminal-title">🖥️ NeoChat Terminal Interface</h2>
-      <p class="terminal-subtitle">Type your questions or commands below and press Enter to chat with NeoChat</p>
+      <h2 class="terminal-title">� DocuMind Terminal Interface</h2>
+      <p class="terminal-subtitle">Upload documents or describe your document analysis needs</p>
     </div>
     
     <div class="terminal-container">
@@ -691,40 +691,42 @@
         <div class="terminal-button"></div>
         <div class="terminal-button yellow"></div>
         <div class="terminal-button green"></div>
-        <span class="terminal-title-text">neochat@onelastai.com:~$</span>
+        <span class="terminal-title-text">documind@analytics:~$</span>
       </div>
       
       <div class="terminal-output" id="terminal-output">
         <div class="welcome-message">
 ╔══════════════════════════════════════════════════════════════════╗
-║                      Welcome to Documind                        ║
+║                      Welcome to DocuMind                        ║
 ║               AI Document Intelligence Hub                       ║
 ╚══════════════════════════════════════════════════════════════════╝
 
-<div class="system-info">System: Documind v1.0 | Status: Online | Agent ID: <%= @agent.id %>
+<div class="system-info">System: DocuMind v2.0 | Status: Online | Agent ID: <%= @agent.id %>
 <%= Time.current.strftime("Date: %Y-%m-%d %H:%M:%S") %> | Session: Active</div>
 
-<span style="color: #a78bfa;">Welcome! I'm Documind, your document intelligence specialist.</span>
+<span style="color: #a78bfa;">Welcome! I'm DocuMind, your document intelligence specialist.</span>
 
 I can help you with:
-• � Document analysis & extraction
-• � Intelligent summarization
-• � Key information identification
-• � Report generation from documents
-• �️ Content categorization & tagging
-• � Contract & legal document review
+• 📄 Document analysis & content extraction
+• 🔍 Entity recognition & information mining
+• 📝 Intelligent summarization & key insights
+• 🌐 Multi-language translation (107+ languages)
+• 🏷️ Document classification & categorization
+• 📋 Contract & legal document review
+• 🖼️ OCR & text recognition from images
+• 📊 Report generation & data visualization
 
-Upload or describe your document processing needs!
+Upload documents, paste text, or describe your analysis needs!
 
         </div>
         
         <div class="typing-indicator" id="typing-indicator">
-          NeoChat is thinking
+          DocuMind is analyzing
         </div>
       </div>
       
       <div class="terminal-input-container">
-        <span class="terminal-prompt">neochat@terminal:~$ </span>
+        <span class="terminal-prompt">documind@terminal:~$ </span>
         <input 
           type="text" 
           class="terminal-input" 
@@ -966,7 +968,7 @@ Upload or describe your document processing needs!
         this.showTyping(true);
         
         try {
-          const response = await fetch('/chat', {
+          const response = await fetch('/documind/chat', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

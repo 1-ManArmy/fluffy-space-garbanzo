@@ -44,7 +44,7 @@
 
 #### **NGINX Configuration** (`config/nginx/onelastai.conf`)
 - ✅ HTTP to HTTPS redirect
-- ✅ Subdomain routing for all 24 AI agents
+- ✅ Subdomain routing for all 27 AI agents
 - ✅ Rate limiting (different rates for API, agents, general traffic)
 - ✅ SSL termination
 - ✅ WebSocket support for Action Cable
@@ -184,7 +184,7 @@ The OneLastAI platform is now production-ready for the `onelastai.com` domain wi
 
 **Total Configuration Time**: ~45 minutes
 **Files Created/Modified**: 10 files
-**Ready for**: Production deployment with 24 AI agents
+**Ready for**: Production deployment with 27 AI agents
 
 ---
 

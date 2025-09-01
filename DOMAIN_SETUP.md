@@ -388,7 +388,7 @@ The OneLastAI API is available at `https://api.onelastai.com` with the following
 ### Contact Information
 
 For technical support or questions about the OneLastAI platform:
-- **Email**: support@onelastai.com
+- **Email**: mail@onelastai.com
 - **Documentation**: https://docs.onelastai.com
 - **GitHub**: https://github.com/1-ManArmy/fluffy-space-garbanzo
 

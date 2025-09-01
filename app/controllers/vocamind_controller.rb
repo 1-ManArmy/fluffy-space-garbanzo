@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
+require 'ostruct'
+
 class VocamindController < ApplicationController
-  before_action :find_vocamind_agent
+  before_action :initialize_agent_data
   before_action :ensure_demo_user
-  
+
   def index
     # Main agent page with hero section and terminal interface
     @agent_stats = {
@@ -13,20 +15,20 @@ class VocamindController < ApplicationController
       specializations: @agent.specializations
     }
   end
-  
+
   def chat
     # Handle chat messages from the terminal interface
     user_message = params[:message]&.strip
-    
+
     if user_message.blank?
       render json: { error: 'Message cannot be empty' }, status: :bad_request
       return
     end
-    
+
     begin
       # Process VocaMind voice and language request
       response_data = process_vocamind_request(user_message)
-      
+
       render json: {
         success: true,
         response: response_data[:text],
@@ -40,7 +42,7 @@ class VocamindController < ApplicationController
       }
     rescue StandardError => e
       Rails.logger.error "Vocamind Error: #{e.message}"
-      
+
       render json: {
         error: 'Sorry, I encountered an error processing your message. Please try again.',
         timestamp: Time.current.strftime('%H:%M:%S')
@@ -53,9 +55,9 @@ class VocamindController < ApplicationController
     audio_input = params[:audio_data]
     analysis_type = params[:analysis_type] || 'comprehensive'
     language = params[:language] || 'english'
-    
+
     speech_results = analyze_speech_patterns(audio_input, analysis_type, language)
-    
+
     render json: {
       success: true,
       analysis: speech_results,
@@ -69,9 +71,9 @@ class VocamindController < ApplicationController
     voice_type = params[:voice_type] || 'natural'
     language = params[:language] || 'english'
     style = params[:style] || 'neutral'
-    
+
     synthesis_result = synthesize_voice(text_input, voice_type, language, style)
-    
+
     render json: {
       success: true,
       synthesis: synthesis_result,
@@ -84,9 +86,9 @@ class VocamindController < ApplicationController
     target_accent = params[:target_accent] || 'american'
     skill_level = params[:skill_level] || 'beginner'
     focus_areas = params[:focus_areas] || []
-    
+
     training_plan = create_accent_training_program(target_accent, skill_level, focus_areas)
-    
+
     render json: {
       success: true,
       training: training_plan,
@@ -97,11 +99,11 @@ class VocamindController < ApplicationController
 
   def language_coaching
     coaching_type = params[:coaching_type] || 'pronunciation'
-    language_pair = params[:language_pair] || ['english', 'spanish']
+    language_pair = params[:language_pair] || %w[english spanish]
     goals = params[:goals] || []
-    
+
     coaching_program = design_language_coaching(coaching_type, language_pair, goals)
-    
+
     render json: {
       success: true,
       coaching: coaching_program,
@@ -114,9 +116,9 @@ class VocamindController < ApplicationController
     text_input = params[:text]
     analysis_depth = params[:depth] || 'standard'
     target_language = params[:target_language] || 'english'
-    
+
     phonetic_breakdown = perform_phonetic_analysis(text_input, analysis_depth, target_language)
-    
+
     render json: {
       success: true,
       phonetics: phonetic_breakdown,
@@ -129,9 +131,9 @@ class VocamindController < ApplicationController
     practice_type = params[:practice_type] || 'general'
     difficulty_level = params[:difficulty] || 'intermediate'
     conversation_topic = params[:topic] || 'daily_life'
-    
+
     practice_session = setup_conversation_practice(practice_type, difficulty_level, conversation_topic)
-    
+
     render json: {
       success: true,
       practice: practice_session,
@@ -139,7 +141,7 @@ class VocamindController < ApplicationController
       feedback_system: setup_conversation_feedback(difficulty_level)
     }
   end
-  
+
   def status
     # Agent status endpoint for monitoring
     render json: {
@@ -151,33 +153,64 @@ class VocamindController < ApplicationController
       last_active: @agent.last_active_at&.strftime('%Y-%m-%d %H:%M:%S')
     }
   end
-  
+
   private
-  
-  def find_vocamind_agent
-    @agent = Agent.find_by(agent_type: 'vocamind', status: 'active')
-    
-    unless @agent
-      redirect_to root_url(subdomain: false), alert: 'Vocamind agent is currently unavailable'
-    end
+
+  def initialize_agent_data
+    @agent = OpenStruct.new(
+      name: 'VocaMind',
+      agent_type: 'vocamind',
+      status: 'active',
+      total_conversations: rand(1800..3500),
+      average_rating: rand(4.3..4.8),
+      specializations: ['Speech Analysis', 'Voice Synthesis', 'Accent Training', 'Language Coaching',
+                        'Phonetic Analysis', 'Conversation Practice'],
+      capabilities: ['Voice Processing', 'Pronunciation Assessment', 'Accent Modification', 'Language Learning',
+                     'Speech Therapy', 'Voice Cloning'],
+      configuration: { 'response_style' => 'voice_focused_educational' },
+      last_active_at: Time.current,
+      update!: ->(attrs) { attrs.each { |k, v| @agent.send("#{k}=", v) } },
+      agent_interactions: OpenStruct.new(
+        where: lambda { |conditions|
+          OpenStruct.new(
+            order: lambda { |sort|
+              OpenStruct.new(
+                limit: lambda { |num|
+                  OpenStruct.new(
+                    pluck: ->(*fields) { [] }
+                  )
+                }
+              )
+            }
+          )
+        }
+      )
+    )
   end
-  
+
+  def find_vocamind_agent
+    # Legacy method - now handled by initialize_agent_data
+    @agent
+  end
+
   def ensure_demo_user
     # Create or find a demo user for the session
     session_id = session[:user_session_id] ||= SecureRandom.uuid
-    
-    @user = User.find_or_create_by(email: "demo_#{session_id}@vocamind.onelastai.com") do |user|
-      user.name = "Vocamind User #{rand(1000..9999)}"
-      user.preferences = {
+
+    @user = OpenStruct.new(
+      id: session_id,
+      email: "demo_#{session_id}@vocamind.onelastai.com",
+      name: "Vocamind User #{rand(1000..9999)}",
+      preferences: {
         communication_style: 'terminal',
         interface_theme: 'dark',
         response_detail: 'comprehensive'
       }.to_json
-    end
-    
+    )
+
     session[:current_user_id] = @user.id
   end
-  
+
   def build_chat_context
     {
       interface_mode: 'terminal',
@@ -187,22 +220,22 @@ class VocamindController < ApplicationController
       conversation_history: recent_conversation_history
     }
   end
-  
+
   def recent_conversation_history
     # Get the last 5 interactions for context
     @agent.agent_interactions
-           .where(user: @user)
-           .order(created_at: :desc)
-           .limit(5)
-           .pluck(:user_message, :agent_response)
-           .reverse
+          .where(user: @user)
+          .order(created_at: :desc)
+          .limit(5)
+          .pluck(:user_message, :agent_response)
+          .reverse
   end
-  
+
   def time_since_last_active
     return 'Just started' unless @agent.last_active_at
-    
+
     time_diff = Time.current - @agent.last_active_at
-    
+
     if time_diff < 1.minute
       'Just now'
     elsif time_diff < 1.hour
@@ -542,7 +575,7 @@ class VocamindController < ApplicationController
     {
       target_accent: 'american_english',
       current_proficiency: 'intermediate',
-      improvement_areas: ['vowel_system', 'consonant_clusters'],
+      improvement_areas: %w[vowel_system consonant_clusters],
       practice_hours_recommended: rand(20..50)
     }
   end

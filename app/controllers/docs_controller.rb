@@ -1,9 +1,11 @@
 class DocsController < ApplicationController
   def index
-    @doc_sections = get_documentation_sections
+    @doc_sections = get_documentation_sections_with_topics
     @getting_started = get_getting_started_guides
     @popular_docs = get_popular_documentation
     @recent_updates = get_recent_doc_updates
+    @popular_articles = get_popular_articles
+    @api_endpoints = get_api_endpoints
   end
 
   def section
@@ -15,10 +17,27 @@ class DocsController < ApplicationController
 
   def topic
     @section = params[:section]
-    @topic = params[:topic]
-    @doc_content = get_documentation_content(@section, @topic)
-    @navigation = get_topic_navigation(@section, @topic)
-    @related_topics = get_related_topics(@section, @topic)
+    @topic_slug = params[:topic]
+    @section_name = get_section_info(@section)[:name] || @section.titleize
+
+    # Get the topic data from the section topics
+    topics = get_section_topics(@section)
+    @topic = topics.find { |t| t[:slug] == @topic_slug }
+
+    # If topic not found, redirect to section
+    if @topic.nil?
+      redirect_to docs_section_path(@section), alert: 'Topic not found'
+      return
+    end
+
+    # Add detailed content to the topic
+    @topic[:content] = get_topic_detailed_content(@section, @topic_slug)
+    @topic[:resources] = get_topic_resources(@section, @topic_slug)
+
+    @navigation = get_topic_navigation(@section, @topic_slug)
+    @prev_topic = @navigation[:previous]
+    @next_topic = @navigation[:next]
+    @related_topics = get_related_topics(@section, @topic_slug)
   end
 
   private
@@ -26,94 +45,101 @@ class DocsController < ApplicationController
   def get_documentation_sections
     [
       {
-        name: "Getting Started",
-        slug: "getting-started",
-        description: "Everything you need to begin using Phantom AI",
-        icon: "🚀",
+        name: 'Getting Started',
+        slug: 'getting-started',
+        description: 'Everything you need to begin using Phantom AI',
+        icon: '🚀',
         topics: 12,
-        color: "emerald"
+        color: 'emerald'
       },
       {
-        name: "API Reference",
-        slug: "api",
-        description: "Complete API documentation and examples",
-        icon: "📡",
+        name: 'API Reference',
+        slug: 'api',
+        description: 'Complete API documentation and examples',
+        icon: '📡',
         topics: 45,
-        color: "blue"
+        color: 'blue'
       },
       {
-        name: "AI Agents",
-        slug: "agents",
-        description: "Detailed guides for each AI agent",
-        icon: "🌌",
+        name: 'AI Agents',
+        slug: 'agents',
+        description: 'Detailed guides for each AI agent',
+        icon: '🌌',
         topics: 28,
-        color: "purple"
+        color: 'purple'
       },
       {
-        name: "Integration Guides",
-        slug: "integrations",
-        description: "How to integrate with popular platforms",
-        icon: "🔗",
+        name: 'Integration Guides',
+        slug: 'integrations',
+        description: 'How to integrate with popular platforms',
+        icon: '🔗',
         topics: 18,
-        color: "cyan"
+        color: 'cyan'
       },
       {
-        name: "Authentication",
-        slug: "auth",
-        description: "Security and authentication methods",
-        icon: "🔐",
+        name: 'Authentication',
+        slug: 'auth',
+        description: 'Security and authentication methods',
+        icon: '🔐',
         topics: 8,
-        color: "amber"
+        color: 'amber'
       },
       {
-        name: "SDKs & Libraries",
-        slug: "sdks",
-        description: "Official SDKs and community libraries",
-        icon: "📦",
+        name: 'SDKs & Libraries',
+        slug: 'sdks',
+        description: 'Official SDKs and community libraries',
+        icon: '📦',
         topics: 15,
-        color: "rose"
+        color: 'rose'
       },
       {
-        name: "Tutorials",
-        slug: "tutorials",
-        description: "Step-by-step project tutorials",
-        icon: "📚",
+        name: 'Tutorials',
+        slug: 'tutorials',
+        description: 'Step-by-step project tutorials',
+        icon: '📚',
         topics: 22,
-        color: "indigo"
+        color: 'indigo'
       },
       {
-        name: "Troubleshooting",
-        slug: "troubleshooting",
-        description: "Common issues and solutions",
-        icon: "🔧",
+        name: 'Troubleshooting',
+        slug: 'troubleshooting',
+        description: 'Common issues and solutions',
+        icon: '🔧',
         topics: 19,
-        color: "orange"
+        color: 'orange'
       }
     ]
+  end
+
+  def get_documentation_sections_with_topics
+    get_documentation_sections.map do |section|
+      section_topics = get_section_topics(section[:slug]).first(3)
+      section.merge(topic_list: section_topics)
+    end
   end
 
   def get_getting_started_guides
     [
       {
-        title: "Quick Start Guide",
-        description: "Get up and running in 5 minutes",
-        duration: "5 min",
-        difficulty: "Beginner",
-        link: "/docs/getting-started/quick-start"
+        title: 'Quick Start Guide',
+        description: 'Get up and running in 5 minutes',
+        duration: '5 min',
+        difficulty: 'Beginner',
+        link: '/docs/getting-started/quick-start'
       },
       {
-        title: "Your First AI Agent",
-        description: "Create and deploy your first agent",
-        duration: "15 min", 
-        difficulty: "Beginner",
-        link: "/docs/getting-started/first-agent"
+        title: 'Your First AI Agent',
+        description: 'Create and deploy your first agent',
+        duration: '15 min',
+        difficulty: 'Beginner',
+        link: '/docs/getting-started/first-agent'
       },
       {
-        title: "Authentication Setup",
-        description: "Configure API keys and security",
-        duration: "10 min",
-        difficulty: "Beginner", 
-        link: "/docs/getting-started/authentication"
+        title: 'Authentication Setup',
+        description: 'Configure API keys and security',
+        duration: '10 min',
+        difficulty: 'Beginner',
+        link: '/docs/getting-started/authentication'
       }
     ]
   end
@@ -121,26 +147,26 @@ class DocsController < ApplicationController
   def get_popular_documentation
     [
       {
-        title: "EmotiSense API Reference",
-        section: "AI Agents",
-        views: 15420,
+        title: 'EmotiSense API Reference',
+        section: 'AI Agents',
+        views: 15_420,
         rating: 4.9
       },
       {
-        title: "Webhook Integration Guide",
-        section: "Integration Guides", 
-        views: 12850,
+        title: 'Webhook Integration Guide',
+        section: 'Integration Guides',
+        views: 12_850,
         rating: 4.8
       },
       {
-        title: "Rate Limiting Best Practices",
-        section: "API Reference",
-        views: 11200,
+        title: 'Rate Limiting Best Practices',
+        section: 'API Reference',
+        views: 11_200,
         rating: 4.7
       },
       {
-        title: "ContentCrafter Advanced Usage",
-        section: "AI Agents",
+        title: 'ContentCrafter Advanced Usage',
+        section: 'AI Agents',
         views: 9800,
         rating: 4.9
       }
@@ -150,19 +176,79 @@ class DocsController < ApplicationController
   def get_recent_doc_updates
     [
       {
-        title: "CineGen v2.1 API Updates",
-        date: "2 days ago",
-        type: "update"
+        title: 'CineGen v2.1 API Updates',
+        date: '2 days ago',
+        type: 'update'
       },
       {
-        title: "New Python SDK Released",
-        date: "1 week ago", 
-        type: "new"
+        title: 'New Python SDK Released',
+        date: '1 week ago',
+        type: 'new'
       },
       {
-        title: "Enhanced Error Handling Guide",
-        date: "2 weeks ago",
-        type: "update"
+        title: 'Enhanced Error Handling Guide',
+        date: '2 weeks ago',
+        type: 'update'
+      }
+    ]
+  end
+
+  def get_popular_articles
+    [
+      {
+        title: 'Getting Started with Phantom AI',
+        slug: 'getting-started-phantom-ai',
+        excerpt: 'Learn the basics of our AI platform and get up and running quickly.',
+        category: 'Getting Started',
+        reading_time: 5,
+        views: 12_450,
+        tags: %w[beginner setup quickstart],
+        updated_at: '2 days ago'
+      },
+      {
+        title: 'API Authentication Best Practices',
+        slug: 'api-authentication-best-practices',
+        excerpt: 'Secure your API calls with proper authentication methods and key management.',
+        category: 'API',
+        reading_time: 8,
+        views: 9_320,
+        tags: %w[security api authentication],
+        updated_at: '1 week ago'
+      },
+      {
+        title: 'Building Your First AI Agent',
+        slug: 'building-first-ai-agent',
+        excerpt: 'Step-by-step tutorial for creating and deploying your first AI agent.',
+        category: 'Tutorial',
+        reading_time: 15,
+        views: 8_150,
+        tags: %w[tutorial agents deployment],
+        updated_at: '3 days ago'
+      }
+    ]
+  end
+
+  def get_api_endpoints
+    [
+      {
+        method: 'GET',
+        path: '/api/v1/models',
+        description: 'List all available AI models'
+      },
+      {
+        method: 'POST',
+        path: '/api/v1/neochat/chat',
+        description: 'Send a chat message to NeoChat'
+      },
+      {
+        method: 'POST',
+        path: '/api/v1/emotisense/analyze',
+        description: 'Analyze text for emotional content'
+      },
+      {
+        method: 'GET',
+        path: '/api/v1/status',
+        description: 'Check API service status'
       }
     ]
   end
@@ -198,32 +284,32 @@ class DocsController < ApplicationController
   def get_getting_started_topics
     [
       {
-        title: "Quick Start Guide",
-        slug: "quick-start",
-        description: "Get up and running in minutes",
-        difficulty: "Beginner",
-        duration: "5 min"
+        title: 'Quick Start Guide',
+        slug: 'quick-start',
+        description: 'Get up and running in minutes',
+        difficulty: 'Beginner',
+        duration: '5 min'
       },
       {
-        title: "Platform Overview",
-        slug: "overview",
-        description: "Understanding the Phantom AI ecosystem",
-        difficulty: "Beginner",
-        duration: "8 min"
+        title: 'Platform Overview',
+        slug: 'overview',
+        description: 'Understanding the Phantom AI ecosystem',
+        difficulty: 'Beginner',
+        duration: '8 min'
       },
       {
-        title: "Your First AI Agent",
-        slug: "first-agent",
-        description: "Create and deploy your first agent",
-        difficulty: "Beginner",
-        duration: "15 min"
+        title: 'Your First AI Agent',
+        slug: 'first-agent',
+        description: 'Create and deploy your first agent',
+        difficulty: 'Beginner',
+        duration: '15 min'
       },
       {
-        title: "Understanding Agent Types",
-        slug: "agent-types",
-        description: "Different types of AI agents and their use cases",
-        difficulty: "Intermediate",
-        duration: "12 min"
+        title: 'Understanding Agent Types',
+        slug: 'agent-types',
+        description: 'Different types of AI agents and their use cases',
+        difficulty: 'Intermediate',
+        duration: '12 min'
       }
     ]
   end
@@ -231,39 +317,39 @@ class DocsController < ApplicationController
   def get_api_topics
     [
       {
-        title: "Authentication",
-        slug: "authentication",
-        description: "API key management and security",
-        difficulty: "Beginner",
-        duration: "7 min"
+        title: 'Authentication',
+        slug: 'authentication',
+        description: 'API key management and security',
+        difficulty: 'Beginner',
+        duration: '7 min'
       },
       {
-        title: "Making Your First Request",
-        slug: "first-request",
-        description: "Basic API usage and response handling",
-        difficulty: "Beginner",
-        duration: "10 min"
+        title: 'Making Your First Request',
+        slug: 'first-request',
+        description: 'Basic API usage and response handling',
+        difficulty: 'Beginner',
+        duration: '10 min'
       },
       {
-        title: "Rate Limiting",
-        slug: "rate-limiting",
-        description: "Understanding and managing API limits",
-        difficulty: "Intermediate",
-        duration: "8 min"
+        title: 'Rate Limiting',
+        slug: 'rate-limiting',
+        description: 'Understanding and managing API limits',
+        difficulty: 'Intermediate',
+        duration: '8 min'
       },
       {
-        title: "Error Handling",
-        slug: "error-handling",
-        description: "Comprehensive error response guide",
-        difficulty: "Intermediate",
-        duration: "12 min"
+        title: 'Error Handling',
+        slug: 'error-handling',
+        description: 'Comprehensive error response guide',
+        difficulty: 'Intermediate',
+        duration: '12 min'
       },
       {
-        title: "Webhooks",
-        slug: "webhooks",
-        description: "Real-time notifications and callbacks",
-        difficulty: "Advanced",
-        duration: "15 min"
+        title: 'Webhooks',
+        slug: 'webhooks',
+        description: 'Real-time notifications and callbacks',
+        difficulty: 'Advanced',
+        duration: '15 min'
       }
     ]
   end
@@ -271,32 +357,32 @@ class DocsController < ApplicationController
   def get_agents_topics
     [
       {
-        title: "EmotiSense Guide",
-        slug: "emotisense",
-        description: "Emotion analysis and sentiment detection",
-        difficulty: "Beginner",
-        duration: "12 min"
+        title: 'EmotiSense Guide',
+        slug: 'emotisense',
+        description: 'Emotion analysis and sentiment detection',
+        difficulty: 'Beginner',
+        duration: '12 min'
       },
       {
-        title: "ContentCrafter Guide",
-        slug: "contentcrafter",
-        description: "AI-powered content generation",
-        difficulty: "Beginner", 
-        duration: "10 min"
+        title: 'ContentCrafter Guide',
+        slug: 'contentcrafter',
+        description: 'AI-powered content generation',
+        difficulty: 'Beginner',
+        duration: '10 min'
       },
       {
-        title: "CineGen Guide",
-        slug: "cinegen",
-        description: "Video creation and editing",
-        difficulty: "Intermediate",
-        duration: "18 min"
+        title: 'CineGen Guide',
+        slug: 'cinegen',
+        description: 'Video creation and editing',
+        difficulty: 'Intermediate',
+        duration: '18 min'
       },
       {
-        title: "NeoChat Guide",
-        slug: "neochat",
-        description: "Conversational AI and chatbots",
-        difficulty: "Beginner",
-        duration: "8 min"
+        title: 'NeoChat Guide',
+        slug: 'neochat',
+        description: 'Conversational AI and chatbots',
+        difficulty: 'Beginner',
+        duration: '8 min'
       }
     ]
   end
@@ -304,25 +390,25 @@ class DocsController < ApplicationController
   def get_integration_topics
     [
       {
-        title: "Slack Integration",
-        slug: "slack",
-        description: "Connect AI agents to Slack workspaces",
-        difficulty: "Intermediate",
-        duration: "20 min"
+        title: 'Slack Integration',
+        slug: 'slack',
+        description: 'Connect AI agents to Slack workspaces',
+        difficulty: 'Intermediate',
+        duration: '20 min'
       },
       {
-        title: "Discord Bots",
-        slug: "discord",
-        description: "Build AI-powered Discord bots",
-        difficulty: "Intermediate",
-        duration: "25 min"
+        title: 'Discord Bots',
+        slug: 'discord',
+        description: 'Build AI-powered Discord bots',
+        difficulty: 'Intermediate',
+        duration: '25 min'
       },
       {
-        title: "WordPress Plugin",
-        slug: "wordpress",
-        description: "Add AI features to WordPress sites",
-        difficulty: "Beginner",
-        duration: "15 min"
+        title: 'WordPress Plugin',
+        slug: 'wordpress',
+        description: 'Add AI features to WordPress sites',
+        difficulty: 'Beginner',
+        duration: '15 min'
       }
     ]
   end
@@ -330,18 +416,18 @@ class DocsController < ApplicationController
   def get_auth_topics
     [
       {
-        title: "API Keys",
-        slug: "api-keys",
-        description: "Managing and securing API keys",
-        difficulty: "Beginner",
-        duration: "5 min"
+        title: 'API Keys',
+        slug: 'api-keys',
+        description: 'Managing and securing API keys',
+        difficulty: 'Beginner',
+        duration: '5 min'
       },
       {
-        title: "OAuth 2.0",
-        slug: "oauth",
-        description: "OAuth integration for user authentication",
-        difficulty: "Advanced",
-        duration: "20 min"
+        title: 'OAuth 2.0',
+        slug: 'oauth',
+        description: 'OAuth integration for user authentication',
+        difficulty: 'Advanced',
+        duration: '20 min'
       }
     ]
   end
@@ -349,25 +435,25 @@ class DocsController < ApplicationController
   def get_sdk_topics
     [
       {
-        title: "Python SDK",
-        slug: "python",
-        description: "Official Python library and examples",
-        difficulty: "Beginner",
-        duration: "10 min"
+        title: 'Python SDK',
+        slug: 'python',
+        description: 'Official Python library and examples',
+        difficulty: 'Beginner',
+        duration: '10 min'
       },
       {
-        title: "Node.js SDK", 
-        slug: "nodejs",
-        description: "JavaScript/TypeScript SDK for Node.js",
-        difficulty: "Beginner",
-        duration: "10 min"
+        title: 'Node.js SDK',
+        slug: 'nodejs',
+        description: 'JavaScript/TypeScript SDK for Node.js',
+        difficulty: 'Beginner',
+        duration: '10 min'
       },
       {
-        title: "PHP SDK",
-        slug: "php",
-        description: "PHP library for web applications",
-        difficulty: "Beginner",
-        duration: "8 min"
+        title: 'PHP SDK',
+        slug: 'php',
+        description: 'PHP library for web applications',
+        difficulty: 'Beginner',
+        duration: '8 min'
       }
     ]
   end
@@ -375,18 +461,18 @@ class DocsController < ApplicationController
   def get_tutorial_topics
     [
       {
-        title: "Build a Customer Service Bot",
-        slug: "customer-service-bot",
-        description: "Complete tutorial for AI customer support",
-        difficulty: "Intermediate",
-        duration: "45 min"
+        title: 'Build a Customer Service Bot',
+        slug: 'customer-service-bot',
+        description: 'Complete tutorial for AI customer support',
+        difficulty: 'Intermediate',
+        duration: '45 min'
       },
       {
-        title: "Content Marketing Automation",
-        slug: "content-automation",
-        description: "Automate content creation workflows",
-        difficulty: "Advanced",
-        duration: "60 min"
+        title: 'Content Marketing Automation',
+        slug: 'content-automation',
+        description: 'Automate content creation workflows',
+        difficulty: 'Advanced',
+        duration: '60 min'
       }
     ]
   end
@@ -394,18 +480,18 @@ class DocsController < ApplicationController
   def get_troubleshooting_topics
     [
       {
-        title: "Common API Errors",
-        slug: "api-errors",
-        description: "Debugging frequent API issues",
-        difficulty: "Beginner",
-        duration: "8 min"
+        title: 'Common API Errors',
+        slug: 'api-errors',
+        description: 'Debugging frequent API issues',
+        difficulty: 'Beginner',
+        duration: '8 min'
       },
       {
-        title: "Performance Optimization",
-        slug: "performance",
-        description: "Optimizing response times and throughput",
-        difficulty: "Advanced",
-        duration: "15 min"
+        title: 'Performance Optimization',
+        slug: 'performance',
+        description: 'Optimizing response times and throughput',
+        difficulty: 'Advanced',
+        duration: '15 min'
       }
     ]
   end
@@ -419,32 +505,32 @@ class DocsController < ApplicationController
     {
       title: get_topic_title(section, topic),
       content: get_topic_content(section, topic),
-      last_updated: "3 days ago",
-      contributors: ["DocsTeam", "AIExpert", "CommunityMember"],
-      estimated_read_time: "8 min"
+      last_updated: '3 days ago',
+      contributors: %w[DocsTeam AIExpert CommunityMember],
+      estimated_read_time: '8 min'
     }
   end
 
   def get_topic_title(section, topic)
     case "#{section}/#{topic}"
-    when "getting-started/quick-start"
-      "Quick Start Guide"
-    when "api/authentication"
-      "API Authentication"
-    when "agents/emotisense"
-      "EmotiSense Agent Guide"
+    when 'getting-started/quick-start'
+      'Quick Start Guide'
+    when 'api/authentication'
+      'API Authentication'
+    when 'agents/emotisense'
+      'EmotiSense Agent Guide'
     else
-      "Documentation Topic"
+      'Documentation Topic'
     end
   end
 
   def get_topic_content(section, topic)
     case "#{section}/#{topic}"
-    when "getting-started/quick-start"
+    when 'getting-started/quick-start'
       get_quick_start_content
-    when "api/authentication"
+    when 'api/authentication'
       get_api_auth_content
-    when "agents/emotisense"
+    when 'agents/emotisense'
       get_emotisense_content
     else
       get_default_content
@@ -555,7 +641,7 @@ class DocsController < ApplicationController
       API keys have different rate limits based on your subscription:
 
       - **Free**: 100 requests/hour
-      - **Pro**: 10,000 requests/hour  
+      - **Pro**: 10,000 requests/hour#{'  '}
       - **Enterprise**: Custom limits
 
       Rate limit headers are included in all responses:
@@ -631,7 +717,7 @@ class DocsController < ApplicationController
 
       ```javascript
       const ws = new WebSocket('wss://api.phantom-ai.com/v1/emotisense/stream');
-      
+
       ws.onmessage = function(event) {
         const emotion_data = JSON.parse(event.data);
         console.log('Real-time emotion:', emotion_data);
@@ -653,7 +739,7 @@ class DocsController < ApplicationController
       from phantom_ai import EmotiSense
 
       client = EmotiSense(api_key="YOUR_API_KEY")
-      
+
       result = client.analyze_text("I love this product!")
       print(f"Primary emotion: {result.primary_emotion}")
       print(f"Confidence: {result.confidence_score}")
@@ -665,7 +751,7 @@ class DocsController < ApplicationController
       const { EmotiSense } = require('@phantom-ai/sdk');
 
       const client = new EmotiSense({ apiKey: 'YOUR_API_KEY' });
-      
+
       async function analyzeEmotion() {
         const result = await client.analyzeText('This is amazing!');
         console.log('Emotions:', result.emotions);
@@ -703,7 +789,7 @@ class DocsController < ApplicationController
   def get_topic_navigation(section, topic)
     topics = get_section_topics(section)
     current_index = topics.find_index { |t| t[:slug] == topic }
-    
+
     {
       previous: current_index > 0 ? topics[current_index - 1] : nil,
       next: current_index < topics.length - 1 ? topics[current_index + 1] : nil,
@@ -714,5 +800,193 @@ class DocsController < ApplicationController
   def get_related_topics(section, topic)
     all_topics = get_section_topics(section)
     all_topics.reject { |t| t[:slug] == topic }.sample(3)
+  end
+
+  def get_topic_detailed_content(section, topic)
+    case "#{section}/#{topic}"
+    when 'getting-started/quick-start'
+      get_quick_start_detailed_content
+    when 'api/authentication'
+      get_api_auth_detailed_content
+    when 'agents/emotisense'
+      get_emotisense_detailed_content
+    else
+      get_default_detailed_content
+    end
+  end
+
+  def get_quick_start_detailed_content
+    {
+      overview: "This guide will help you get started with Phantom AI in just a few minutes. You'll learn how to set up your account, get your API key, and make your first request.",
+      sections: [
+        {
+          title: 'Prerequisites',
+          subsections: [
+            {
+              title: 'Account Setup',
+              content: "Before you begin, you'll need a Phantom AI account. Sign up at phantom-ai.com/signup if you haven't already.",
+              tip: 'Use your work email for easier team collaboration later.'
+            },
+            {
+              title: 'Basic Requirements',
+              content: "You'll need basic understanding of REST APIs and your favorite programming language or API client."
+            }
+          ]
+        },
+        {
+          title: 'Getting Your API Key',
+          subsections: [
+            {
+              title: 'Dashboard Access',
+              content: 'Log into your Phantom AI dashboard and navigate to the API Keys section.',
+              code_example: {
+                language: 'bash',
+                code: '# Navigate to: https://dashboard.phantom-ai.com/api-keys'
+              }
+            },
+            {
+              title: 'Key Generation',
+              content: "Click 'Create New Key', give it a descriptive name, and copy the generated key immediately.",
+              tip: "Store your API key securely - it won't be shown again!"
+            }
+          ]
+        },
+        {
+          title: 'Your First Request',
+          subsections: [
+            {
+              title: 'Basic API Call',
+              content: 'Make your first API request to test the connection:',
+              code_example: {
+                language: 'bash',
+                code: 'curl -X POST "https://api.phantom-ai.com/v1/neochat/chat" \\\n  -H "Authorization: Bearer YOUR_API_KEY" \\\n  -H "Content-Type: application/json" \\\n  -d \'{\n    "message": "Hello, world!",\n    "model": "neochat-v2"\n  }\''
+              }
+            }
+          ]
+        }
+      ]
+    }
+  end
+
+  def get_api_auth_detailed_content
+    {
+      overview: 'Phantom AI uses API keys for authentication. All API requests must include a valid API key in the Authorization header for security.',
+      sections: [
+        {
+          title: 'Authentication Methods',
+          subsections: [
+            {
+              title: 'Bearer Token (Recommended)',
+              content: 'The preferred method is using the Authorization header with Bearer token format:',
+              code_example: {
+                language: 'bash',
+                code: 'Authorization: Bearer YOUR_API_KEY'
+              }
+            },
+            {
+              title: 'Security Best Practices',
+              content: 'Never expose API keys in client-side code, use environment variables, and rotate keys regularly.',
+              tip: 'Use different API keys for development, staging, and production environments.'
+            }
+          ]
+        }
+      ]
+    }
+  end
+
+  def get_emotisense_detailed_content
+    {
+      overview: 'EmotiSense is our advanced emotion analysis AI that can process text, voice, and facial expressions to understand emotional context with high accuracy.',
+      sections: [
+        {
+          title: 'Text Analysis',
+          subsections: [
+            {
+              title: 'Basic Usage',
+              content: 'Analyze emotions in text content with a simple API call:',
+              code_example: {
+                language: 'bash',
+                code: 'curl -X POST "https://api.phantom-ai.com/v1/emotisense/analyze" \\\n  -H "Authorization: Bearer YOUR_API_KEY" \\\n  -H "Content-Type: application/json" \\\n  -d \'{\n    "input_type": "text",\n    "content": "I am so excited about this new project!"\n  }\''
+              }
+            },
+            {
+              title: 'Response Format',
+              content: 'The API returns emotion scores, primary emotion, and confidence metrics:',
+              code_example: {
+                language: 'json',
+                code: '{\n  "emotions": {\n    "joy": 0.85,\n    "excitement": 0.78,\n    "confidence": 0.65\n  },\n  "primary_emotion": "joy",\n  "confidence_score": 0.92\n}'
+              }
+            }
+          ]
+        }
+      ]
+    }
+  end
+
+  def get_default_detailed_content
+    {
+      overview: 'This documentation page is under construction. Please check back soon for updated content.',
+      sections: [
+        {
+          title: 'Coming Soon',
+          subsections: [
+            {
+              title: 'Documentation Update',
+              content: "We're working on comprehensive documentation for this topic. Check back soon or contact support for specific questions."
+            }
+          ]
+        }
+      ]
+    }
+  end
+
+  def get_topic_resources(section, topic)
+    case "#{section}/#{topic}"
+    when 'getting-started/quick-start'
+      [
+        {
+          type: 'guide',
+          title: 'Platform Overview',
+          description: 'Understanding the Phantom AI ecosystem',
+          url: '/docs/getting-started/overview'
+        },
+        {
+          type: 'tutorial',
+          title: 'Your First AI Agent',
+          description: 'Step-by-step agent creation tutorial',
+          url: '/docs/getting-started/first-agent'
+        }
+      ]
+    when 'api/authentication'
+      [
+        {
+          type: 'guide',
+          title: 'Rate Limiting',
+          description: 'Understanding API limits and best practices',
+          url: '/docs/api/rate-limiting'
+        },
+        {
+          type: 'external',
+          title: 'Postman Collection',
+          description: 'Pre-configured API requests for testing',
+          url: 'https://postman.com/phantom-ai'
+        }
+      ]
+    else
+      [
+        {
+          type: 'guide',
+          title: 'Getting Started',
+          description: 'Learn the basics of Phantom AI',
+          url: '/docs/getting-started'
+        },
+        {
+          type: 'tutorial',
+          title: 'Community Forum',
+          description: 'Get help from the community',
+          url: '/community/forum'
+        }
+      ]
+    end
   end
 end

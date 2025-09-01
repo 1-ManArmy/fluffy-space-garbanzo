@@ -3,9 +3,9 @@ class AwardsController < ApplicationController
     @awards = [
       {
         id: 'edtech',
-        title: 'Best EdTech 2025',
+        title: 'Best EdTech 2024',
         organization: 'Education Technology Association',
-        date: 'December 2025',
+        date: 'December 2024',
         description: 'Recognized for excellence in educational technology innovation',
         icon: '🏆',
         color: 'yellow',
@@ -15,7 +15,7 @@ class AwardsController < ApplicationController
         id: 'innovation',
         title: 'Innovation Award',
         organization: 'Tech Innovation Council',
-        date: 'November 2025',
+        date: 'November 2024',
         description: 'Outstanding achievement in technological innovation',
         icon: '⭐',
         color: 'purple',
@@ -25,7 +25,7 @@ class AwardsController < ApplicationController
         id: 'startup',
         title: 'Startup of the Year',
         organization: 'Global Startup Awards',
-        date: 'October 2025',
+        date: 'October 2024',
         description: 'Exceptional growth and business development',
         icon: '🚀',
         color: 'pink',
@@ -35,7 +35,7 @@ class AwardsController < ApplicationController
         id: 'ai',
         title: 'AI Excellence Award',
         organization: 'Artificial Intelligence Institute',
-        date: 'September 2025',
+        date: 'September 2024',
         description: 'Leading innovation in artificial intelligence applications',
         icon: '💎',
         color: 'cyan',
@@ -60,9 +60,9 @@ class AwardsController < ApplicationController
     case award_id
     when 'edtech'
       {
-        title: 'Best EdTech Platform 2025',
+        title: 'Best EdTech Platform 2024',
         organization: 'Education Technology Association',
-        date: 'December 5, 2025',
+        date: 'December 5, 2024',
         location: 'San Francisco, CA',
         icon: '🏆',
         color: 'yellow',
@@ -88,7 +88,7 @@ class AwardsController < ApplicationController
       {
         title: 'Outstanding Technology Innovation Award',
         organization: 'Tech Innovation Council',
-        date: 'November 18, 2025',
+        date: 'November 18, 2024',
         location: 'Austin, TX',
         icon: '⭐',
         color: 'purple',
@@ -112,9 +112,9 @@ class AwardsController < ApplicationController
       }
     when 'startup'
       {
-        title: 'Startup of the Year 2025',
+        title: 'Startup of the Year 2024',
         organization: 'Global Startup Awards',
-        date: 'October 22, 2025',
+        date: 'October 22, 2024',
         location: 'New York, NY',
         icon: '🚀',
         color: 'pink',
@@ -126,7 +126,7 @@ class AwardsController < ApplicationController
           'Team excellence and leadership',
           'Social and economic impact'
         ],
-        achievement: 'OneLastAI achieved 2,500% revenue growth in 2025, the highest growth rate among all nominees in the technology category.',
+        achievement: 'OneLastAI achieved 2,500% revenue growth in 2024, the highest growth rate among all nominees in the technology category.',
         quote: 'OneLastAI exemplifies the entrepreneurial spirit that drives technological progress and societal advancement.',
         quote_author: 'Sarah Kim, GSA Chairman',
         benefits: [
@@ -138,9 +138,9 @@ class AwardsController < ApplicationController
       }
     when 'ai'
       {
-        title: 'AI Excellence Award 2025',
+        title: 'AI Excellence Award 2024',
         organization: 'Artificial Intelligence Institute',
-        date: 'September 15, 2025',
+        date: 'September 15, 2024',
         location: 'Cambridge, MA',
         icon: '💎',
         color: 'cyan',

@@ -6,10 +6,10 @@ class CinegenController < AgentController
 
   layout 'application'
 
-  # before_action :set_cinegen_agent,
-  #               only: %i[index chat generate_video compose_scenes render_progress emotion_sync
-  #                        scene_composer render_dashboard video_player analytics]
-  # before_action :initialize_data_arrays, only: %i[scene_composer compose_scenes emotion_sync]
+  before_action :set_cinegen_agent,
+                only: %i[index chat generate_video compose_scenes render_progress emotion_sync
+                         scene_composer render_dashboard video_player analytics]
+  before_action :initialize_data_arrays, only: %i[scene_composer compose_scenes emotion_sync]
 
   # Chat interface for CineGen cinematic AI
   def chat

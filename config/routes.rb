@@ -71,6 +71,7 @@ Rails.application.routes.draw do
   # NetScope subdomain routes
   constraints subdomain: 'netscope' do
     root 'netscope#index', as: :netscope_root
+    post '/chat', to: 'netscope#chat'
     post '/scan_target', to: 'netscope#scan_target'
     post '/port_scan', to: 'netscope#port_scan'
     post '/whois_lookup', to: 'netscope#whois_lookup'
@@ -103,6 +104,7 @@ Rails.application.routes.draw do
   get '/emotisense/wellness_center', to: 'emotisense#wellness_center'
   post '/emotisense/analyze_voice', to: 'emotisense#analyze_voice'
   get '/emotisense/export_data', to: 'emotisense#export_data'
+  get '/emotisense/status', to: 'emotisense#status'
   post '/emotisense/emotion_detection', to: 'emotisense#emotion_detection'
   post '/emotisense/sentiment_analysis', to: 'emotisense#sentiment_analysis'
   post '/emotisense/mood_tracking', to: 'emotisense#mood_tracking'
@@ -183,6 +185,9 @@ Rails.application.routes.draw do
   post '/memora/memory_optimization', to: 'memora#memory_optimization'
 
   # NetScope specialized endpoints
+  get '/netscope', to: 'netscope#index'
+  post '/netscope', to: 'netscope#index'
+  post '/netscope/chat', to: 'netscope#chat'
   post '/netscope/network_analysis', to: 'netscope#network_analysis'
   post '/netscope/security_monitoring', to: 'netscope#security_monitoring'
   post '/netscope/threat_detection', to: 'netscope#threat_detection'
@@ -364,10 +369,12 @@ Rails.application.routes.draw do
   # TaskMaster routes
   get '/taskmaster', to: 'taskmaster#index'
   post '/taskmaster/chat', to: 'taskmaster#chat'
+  get '/taskmaster/status', to: 'taskmaster#status'
 
   # Reportly routes
   get '/reportly', to: 'reportly#index'
   post '/reportly/chat', to: 'reportly#chat'
+  get '/reportly/status', to: 'reportly#status'
 
   # DataSphere routes
   get '/datasphere', to: 'datasphere#index'
@@ -455,6 +462,8 @@ Rails.application.routes.draw do
   post '/contact', to: 'pages#contact_submit'
   get '/blog', to: 'pages#blog'
   get '/news', to: 'pages#news'
+  get '/news/onelastai', to: 'pages#news_onelastai'
+  get '/news/onemanarmy', to: 'pages#news_onemanarmy'
   get '/faq', to: 'pages#faq'
   get '/signup', to: 'pages#signup'
   post '/signup', to: 'pages#signup_submit'
@@ -502,14 +511,12 @@ Rails.application.routes.draw do
   post '/support/ticket', to: 'pages#support_ticket'
 
   # Community Routes
-  namespace :community do
-    get '/', to: 'community#index', as: :root
-    get '/forum', to: 'community#forum'
-    get '/forum/:category', to: 'community#forum_category'
-    post '/forum/post', to: 'community#create_post'
-    get '/forum/post/:id', to: 'community#show_post'
-    post '/forum/reply', to: 'community#create_reply'
-  end
+  get '/community', to: 'community#index', as: :community_root
+  get '/community/forum', to: 'community#forum'
+  get '/community/forum/:category', to: 'community#forum_category'
+  post '/community/forum/post', to: 'community#create_post'
+  get '/community/forum/post/:id', to: 'community#show_post'
+  post '/community/forum/reply', to: 'community#create_reply'
 
   # Documentation Routes
   get '/docs', to: 'docs#index'
@@ -603,7 +610,7 @@ Rails.application.routes.draw do
   end
 
   # Girlfriend Companion & Wellness Agent
-  scope module: 'girlfriend', path: 'girlfriend' do
+  scope path: 'girlfriend' do
     root 'girlfriend#index', as: 'girlfriend_root'
     post 'chat', to: 'girlfriend#chat', as: 'girlfriend_chat'
     post 'emotional_support', to: 'girlfriend#emotional_support', as: 'girlfriend_emotional_support'

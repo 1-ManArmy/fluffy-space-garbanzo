@@ -664,12 +664,12 @@
       
       <div class="agent-stats">
         <div class="stat-item">
-          <span class="stat-value"><%= @agent_stats[:total_conversations] %></span>
-          <span class="stat-label">Conversations</span>
+          <span class="stat-value"><%= @agent_stats[:systems_configured] %></span>
+          <span class="stat-label">Systems</span>
         </div>
         <div class="stat-item">
-          <span class="stat-value"><%= @agent_stats[:average_rating] %></span>
-          <span class="stat-label">Rating</span>
+          <span class="stat-value"><%= @agent_stats[:uptime_improvement] %>%</span>
+          <span class="stat-label">Uptime</span>
         </div>
         <div class="stat-item">
           <span class="stat-value"><%= @agent_stats[:response_time] %></span>
@@ -682,8 +682,8 @@
   <!-- Terminal Section -->
   <section class="terminal-section">
     <div class="terminal-header">
-      <h2 class="terminal-title">🖥️ NeoChat Terminal Interface</h2>
-      <p class="terminal-subtitle">Type your questions or commands below and press Enter to chat with NeoChat</p>
+      <h2 class="terminal-title">⚙️ ConfigAI Terminal Interface</h2>
+      <p class="terminal-subtitle">Describe your configuration or deployment needs</p>
     </div>
     
     <div class="terminal-container">
@@ -691,7 +691,7 @@
         <div class="terminal-button"></div>
         <div class="terminal-button yellow"></div>
         <div class="terminal-button green"></div>
-        <span class="terminal-title-text">neochat@onelastai.com:~$</span>
+        <span class="terminal-title-text">configai@devops:~$</span>
       </div>
       
       <div class="terminal-output" id="terminal-output">
@@ -966,7 +966,7 @@ Type your message below and let's start chatting!
         this.showTyping(true);
         
         try {
-          const response = await fetch('/chat', {
+          const response = await fetch('/configai/chat', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

@@ -1,5 +1,12 @@
-<% content_for :head do %>
-  <!-- Custom NetScope Styles -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NetScope - Network Intelligence & Security Reconnaissance | OneLast.AI</title>
+  <meta name="csrf-token" content="<%= form_authenticity_token %>">
+  <%= csrf_meta_tags if defined?(csrf_meta_tags) %>
+  <%= csp_meta_tag if defined?(csp_meta_tag) %>
   <style>
     * {
       margin: 0;
@@ -639,8 +646,9 @@
       }
     }
   </style>
-<% end %>
+</head>
 
+<body>
 <div class="netscope-container">
   <!-- Sticky Menu Bar -->
   <nav class="menu-bar">
@@ -1064,6 +1072,10 @@ Examples:
             window.terminal.addMessage('system', `${scanType} scan completed successfully.\nResults saved to /var/log/netscope/${scanType}_$(date +%Y%m%d_%H%M%S).log`);
           }
         }, 2000);
+        
+        // Close the dropdown menu
+        const allDropdowns = document.querySelectorAll('.dropdown');
+        allDropdowns.forEach(dropdown => dropdown.classList.remove('active'));
       }
     }
 
@@ -1081,6 +1093,12 @@ Examples:
         };
         
         window.terminal.addMessage('system', monitorCommands[monitorType] || 'Monitoring started...');
+        
+        // Close the dropdown menu
+        const allDropdowns = document.querySelectorAll('.dropdown');
+        allDropdowns.forEach(dropdown => dropdown.classList.remove('active'));
+        const allButtons = document.querySelectorAll('.menu-button');
+        allButtons.forEach(button => button.classList.remove('active'));
       }
     }
 
@@ -1099,24 +1117,48 @@ Examples:
         };
         
         window.terminal.addMessage('system', analysisCommands[analysisType] || 'Analysis started...');
+        
+        // Close the dropdown menu
+        const allDropdowns = document.querySelectorAll('.dropdown');
+        allDropdowns.forEach(dropdown => dropdown.classList.remove('active'));
+        const allButtons = document.querySelectorAll('.menu-button');
+        allButtons.forEach(button => button.classList.remove('active'));
       }
     }
 
     function viewAlerts() {
       if (window.terminal) {
         window.terminal.addMessage('system', '$ tail -20 /var/log/netscope/alerts.log\n[2025-08-29 02:54:32] HIGH: Suspicious port scan detected from 192.168.1.100\n[2025-08-29 02:52:15] MEDIUM: Failed SSH login attempts from 203.0.113.45\n[2025-08-29 02:49:03] LOW: Unusual DNS query pattern detected\n[2025-08-29 02:45:22] CRITICAL: Potential SQL injection attempt blocked\n[2025-08-29 02:40:11] HIGH: Unauthorized network access attempt');
+        
+        // Close the dropdown menu
+        const allDropdowns = document.querySelectorAll('.dropdown');
+        allDropdowns.forEach(dropdown => dropdown.classList.remove('active'));
+        const allButtons = document.querySelectorAll('.menu-button');
+        allButtons.forEach(button => button.classList.remove('active'));
       }
     }
 
     function configureAlerts() {
       if (window.terminal) {
         window.terminal.addMessage('system', '$ nano /etc/netscope/alert_rules.yml\nOpening alert configuration...\n[Alert rules configuration panel would open here]');
+        
+        // Close the dropdown menu
+        const allDropdowns = document.querySelectorAll('.dropdown');
+        allDropdowns.forEach(dropdown => dropdown.classList.remove('active'));
+        const allButtons = document.querySelectorAll('.menu-button');
+        allButtons.forEach(button => button.classList.remove('active'));
       }
     }
 
     function alertHistory() {
       if (window.terminal) {
         window.terminal.addMessage('system', '$ sqlite3 /var/lib/netscope/alerts.db "SELECT * FROM alerts ORDER BY timestamp DESC LIMIT 10;"\nRetrieving alert history from database...\nDisplaying recent security events...');
+        
+        // Close the dropdown menu
+        const allDropdowns = document.querySelectorAll('.dropdown');
+        allDropdowns.forEach(dropdown => dropdown.classList.remove('active'));
+        const allButtons = document.querySelectorAll('.menu-button');
+        allButtons.forEach(button => button.classList.remove('active'));
       }
     }
 
@@ -1210,14 +1252,23 @@ Examples:
         this.showTyping(true);
         
         try {
+          const csrfToken = document.querySelector('[name="csrf-token"]')?.getAttribute('content') || 
+                           document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+          
           const response = await fetch('/netscope/chat', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              'X-CSRF-Token': document.querySelector('[name="csrf-token"]').getAttribute('content')
+              'X-CSRF-Token': csrfToken
             },
-            body: JSON.stringify({ message: message })
+            body: JSON.stringify({ 
+              message: message
+            })
           });
+          
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
           
           const data = await response.json();
           
@@ -1229,10 +1280,10 @@ Examples:
               this.addMessage('analysis', `Network Analysis:\n${JSON.stringify(data.network_analysis, null, 2)}`);
             }
             if (data.security_insights) {
-              this.addMessage('security', `Security Insights:\n${data.security_insights}`);
+              this.addMessage('security', `Security Insights:\n${Array.isArray(data.security_insights) ? data.security_insights.join('\n• ') : data.security_insights}`);
             }
             if (data.scan_recommendations) {
-              this.addMessage('recommendation', `Recommendations:\n${data.scan_recommendations}`);
+              this.addMessage('recommendation', `Recommendations:\n${Array.isArray(data.scan_recommendations) ? data.scan_recommendations.join('\n• ') : data.scan_recommendations}`);
             }
           } else {
             this.addMessage('error', data.message || 'Security analysis failed. Please check your input and try again.');
@@ -1310,4 +1361,7 @@ Examples:
     document.addEventListener('DOMContentLoaded', () => {
       window.terminal = new NetScopeTerminal();
     });
-  </script>
+    </script>
+
+</body>
+</html>

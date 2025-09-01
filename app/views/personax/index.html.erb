@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NeoChat - AI Conversation Terminal | onelastai.com</title>
+  <title>PersonaX - Personality Analysis & Psychology AI Terminal | onelastai.com</title>
   
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
@@ -653,23 +653,23 @@
   <!-- Hero Section -->
   <section class="hero-section">
     <div class="hero-content">
-      <div class="agent-logo">🎭</div>
+      <div class="agent-logo">🌌</div>
       <h1 class="agent-title">PersonaX</h1>
-      <p class="agent-tagline">Advanced AI persona and character development specialist</p>
+      <p class="agent-tagline">Advanced Personality Analysis & Psychology Intelligence Specialist</p>
       <p class="agent-description">
-        I am PersonaX, your expert in creating, developing, and refining AI personas and characters. 
-        I help design authentic personalities, craft compelling character backgrounds, develop 
-        consistent behavioral patterns, and create engaging personas for any purpose or context.
+        I am PersonaX, your expert in personality psychology, behavioral analysis, and human psychology. 
+        I provide comprehensive personality assessments, MBTI analysis, relationship compatibility insights,
+        behavioral pattern recognition, and personalized development coaching with scientific precision.
       </p>
       
       <div class="agent-stats">
         <div class="stat-item">
           <span class="stat-value"><%= @agent_stats[:total_conversations] %></span>
-          <span class="stat-label">Conversations</span>
+          <span class="stat-label">Assessments</span>
         </div>
         <div class="stat-item">
           <span class="stat-value"><%= @agent_stats[:average_rating] %></span>
-          <span class="stat-label">Rating</span>
+          <span class="stat-label">Accuracy</span>
         </div>
         <div class="stat-item">
           <span class="stat-value"><%= @agent_stats[:response_time] %></span>
@@ -682,8 +682,8 @@
   <!-- Terminal Section -->
   <section class="terminal-section">
     <div class="terminal-header">
-      <h2 class="terminal-title">🖥️ NeoChat Terminal Interface</h2>
-      <p class="terminal-subtitle">Type your questions or commands below and press Enter to chat with NeoChat</p>
+      <h2 class="terminal-title">🌌 PersonaX Psychology Terminal</h2>
+      <p class="terminal-subtitle">Enter personality analysis, MBTI assessment, or psychological evaluation requests below</p>
     </div>
     
     <div class="terminal-container">
@@ -691,40 +691,40 @@
         <div class="terminal-button"></div>
         <div class="terminal-button yellow"></div>
         <div class="terminal-button green"></div>
-        <span class="terminal-title-text">neochat@onelastai.com:~$</span>
+        <span class="terminal-title-text">🌌 PersonaX Psychology Terminal</span>
       </div>
       
       <div class="terminal-output" id="terminal-output">
         <div class="welcome-message">
 ╔══════════════════════════════════════════════════════════════════╗
-║                       Welcome to PersonaX                        ║
-║              Your AI Conversation Terminal                       ║
+║                      Welcome to PersonaX                        ║
+║            Personality Analysis & Psychology Intelligence         ║
 ╚══════════════════════════════════════════════════════════════════╝
 
-<div class="system-info">System: NeoChat v1.0 | Status: Online | Agent ID: <%= @agent.id %>
+<div class="system-info">System: PersonaX v1.0 | Status: Online | Agent ID: psychology-ai
 <%= Time.current.strftime("Date: %Y-%m-%d %H:%M:%S") %> | Session: Active</div>
 
-<span style="color: #00d4ff;">Welcome! I'm NeoChat, your intelligent AI assistant.</span>
+<span style="color: #00d4ff;">Welcome! I'm PersonaX, your personality psychology and behavioral analysis specialist.</span>
 
 I can help you with:
-• 💭 Questions & Answers on any topic
-• 🛠 Problem solving and analysis  
-• 💡 Creative brainstorming and ideas
-• 📚 Information research and learning
-• 🎯 Suggestions and helpful advice
-• 💬 Friendly conversation
+• 🌌 Comprehensive Personality Analysis & Psychological Profiling
+• 🎭 MBTI Assessment & 16 Personality Type Discovery  
+• � Relationship Compatibility Analysis & Dynamics
+• 🌱 Personal Development Coaching & Growth Planning
+• 📊 Behavioral Pattern Recognition & Analysis
+• 🤝 Communication Style Optimization & Insights
 
-Type your message below and let's start chatting!
+Type your personality analysis or psychology request below!
 
         </div>
         
         <div class="typing-indicator" id="typing-indicator">
-          NeoChat is thinking
+          PersonaX is analyzing personality
         </div>
       </div>
       
       <div class="terminal-input-container">
-        <span class="terminal-prompt">neochat@terminal:~$ </span>
+        <span class="terminal-prompt">personax@psychology:~$ </span>
         <input 
           type="text" 
           class="terminal-input" 
@@ -966,7 +966,7 @@ Type your message below and let's start chatting!
         this.showTyping(true);
         
         try {
-          const response = await fetch('/chat', {
+          const response = await fetch('/personax/chat', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

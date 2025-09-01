@@ -79,6 +79,7 @@
               <div class="terminal-input-line">
                 <span class="terminal-prompt">codemaster@ai:~$</span>
                 <input type="text" id="terminal-input" class="terminal-input" placeholder="Type your coding question or request..." autocomplete="off" />
+                <button id="send-button" class="terminal-send-btn" onclick="sendCurrentMessage()">Send</button>
               </div>
             </div>
           </div>
@@ -106,7 +107,7 @@
         </p>
       </div>
       
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         <!-- Code Generation -->
         <div class="cinematic-card">
           <div class="floating-orb"></div>
@@ -119,12 +120,28 @@
             <li>Generate test cases and documentation</li>
             <li>Support for 12+ programming languages</li>
           </ul>
+          <button class="card-action-btn" onclick="tryFeature('generate')">Try Now</button>
+        </div>
+        
+        <!-- Project Scaffolding -->
+        <div class="cinematic-card">
+          <div class="floating-orb"></div>
+          <div class="card-number">02</div>
+          <h3 class="card-title">PROJECT SCAFFOLDING</h3>
+          <ul class="card-feature-list">
+            <li>Full project structure generation</li>
+            <li>Framework-specific templates</li>
+            <li>Configuration files and dependencies</li>
+            <li>Docker and deployment setup</li>
+            <li>CI/CD pipeline templates</li>
+          </ul>
+          <button class="card-action-btn" onclick="tryFeature('scaffold')">Scaffold Project</button>
         </div>
         
         <!-- Code Analysis -->
         <div class="cinematic-card">
           <div class="floating-orb"></div>
-          <div class="card-number">02</div>
+          <div class="card-number">03</div>
           <h3 class="card-title">CODE ANALYSIS</h3>
           <ul class="card-feature-list">
             <li>Complexity analysis and metrics</li>
@@ -133,12 +150,43 @@
             <li>Performance bottleneck identification</li>
             <li>Maintainability scoring</li>
           </ul>
+          <button class="card-action-btn" onclick="tryFeature('analyze')">Analyze Code</button>
         </div>
         
-        <!-- Debugging -->
+        <!-- Security Audit -->
         <div class="cinematic-card">
           <div class="floating-orb"></div>
-          <div class="card-number">03</div>
+          <div class="card-number">04</div>
+          <h3 class="card-title">SECURITY AUDIT</h3>
+          <ul class="card-feature-list">
+            <li>Vulnerability scanning</li>
+            <li>Security best practices check</li>
+            <li>Dependency audit</li>
+            <li>Authentication review</li>
+            <li>Data protection analysis</li>
+          </ul>
+          <button class="card-action-btn" onclick="tryFeature('security')">Security Scan</button>
+        </div>
+        
+        <!-- Performance Profiling -->
+        <div class="cinematic-card">
+          <div class="floating-orb"></div>
+          <div class="card-number">05</div>
+          <h3 class="card-title">PERFORMANCE PROFILING</h3>
+          <ul class="card-feature-list">
+            <li>Execution time analysis</li>
+            <li>Memory usage optimization</li>
+            <li>Database query optimization</li>
+            <li>Load testing suggestions</li>
+            <li>Caching strategies</li>
+          </ul>
+          <button class="card-action-btn" onclick="tryFeature('performance')">Profile Code</button>
+        </div>
+        
+        <!-- Smart Debugging -->
+        <div class="cinematic-card">
+          <div class="floating-orb"></div>
+          <div class="card-number">06</div>
           <h3 class="card-title">SMART DEBUGGING</h3>
           <ul class="card-feature-list">
             <li>Error identification and explanation</li>
@@ -147,48 +195,100 @@
             <li>Stack trace analysis</li>
             <li>Logic error detection</li>
           </ul>
+          <button class="card-action-btn" onclick="tryFeature('debug')">Debug Code</button>
         </div>
         
-        <!-- Code Optimization -->
+        <!-- Code Conversion -->
         <div class="cinematic-card">
           <div class="floating-orb"></div>
-          <div class="card-number">04</div>
-          <h3 class="card-title">OPTIMIZATION</h3>
+          <div class="card-number">07</div>
+          <h3 class="card-title">CODE CONVERSION</h3>
           <ul class="card-feature-list">
-            <li>Performance optimization</li>
-            <li>Memory usage improvements</li>
-            <li>Algorithm efficiency enhancement</li>
-            <li>Code refactoring suggestions</li>
-            <li>Best practices implementation</li>
+            <li>Language-to-language translation</li>
+            <li>Framework migration assistance</li>
+            <li>API version upgrades</li>
+            <li>Legacy code modernization</li>
+            <li>Syntax transformation</li>
           </ul>
+          <button class="card-action-btn" onclick="tryFeature('convert')">Convert Code</button>
+        </div>
+        
+        <!-- AI Code Completion -->
+        <div class="cinematic-card">
+          <div class="floating-orb"></div>
+          <div class="card-number">08</div>
+          <h3 class="card-title">AI CODE COMPLETION</h3>
+          <ul class="card-feature-list">
+            <li>Intelligent code suggestions</li>
+            <li>Context-aware completions</li>
+            <li>Function signature help</li>
+            <li>Import statement generation</li>
+            <li>Code pattern recognition</li>
+          </ul>
+          <button class="card-action-btn" onclick="tryFeature('complete')">Get Suggestions</button>
+        </div>
+      </div>
+      
+      <!-- Advanced Features Row -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-8">
+        <!-- Test Generation -->
+        <div class="cinematic-card">
+          <div class="floating-orb"></div>
+          <div class="card-number">09</div>
+          <h3 class="card-title">TEST GENERATION</h3>
+          <ul class="card-feature-list">
+            <li>Unit test generation</li>
+            <li>Integration test templates</li>
+            <li>Test data creation</li>
+            <li>Mocking and stubbing</li>
+            <li>Coverage analysis</li>
+          </ul>
+          <button class="card-action-btn" onclick="tryFeature('test')">Generate Tests</button>
+        </div>
+        
+        <!-- Documentation -->
+        <div class="cinematic-card">
+          <div class="floating-orb"></div>
+          <div class="card-number">10</div>
+          <h3 class="card-title">DOCUMENTATION</h3>
+          <ul class="card-feature-list">
+            <li>API documentation generation</li>
+            <li>Code comments and docstrings</li>
+            <li>README file creation</li>
+            <li>Architecture diagrams</li>
+            <li>Usage examples</li>
+          </ul>
+          <button class="card-action-btn" onclick="tryFeature('docs')">Generate Docs</button>
+        </div>
+        
+        <!-- Code Refactoring -->
+        <div class="cinematic-card">
+          <div class="floating-orb"></div>
+          <div class="card-number">11</div>
+          <h3 class="card-title">REFACTORING</h3>
+          <ul class="card-feature-list">
+            <li>Code structure improvement</li>
+            <li>Design pattern application</li>
+            <li>Naming convention fixes</li>
+            <li>Duplicate code elimination</li>
+            <li>SOLID principles implementation</li>
+          </ul>
+          <button class="card-action-btn" onclick="tryFeature('refactor')">Refactor Code</button>
         </div>
         
         <!-- Code Review -->
         <div class="cinematic-card">
           <div class="floating-orb"></div>
-          <div class="card-number">05</div>
-          <h3 class="card-title">CODE REVIEW</h3>
+          <div class="card-number">12</div>
+          <h3 class="card-title">AI CODE REVIEW</h3>
           <ul class="card-feature-list">
             <li>Comprehensive code evaluation</li>
             <li>Style and convention checking</li>
-            <li>Security best practices review</li>
-            <li>Documentation quality assessment</li>
+            <li>Best practices validation</li>
             <li>Improvement recommendations</li>
+            <li>Team standards compliance</li>
           </ul>
-        </div>
-        
-        <!-- Code Explanation -->
-        <div class="cinematic-card">
-          <div class="floating-orb"></div>
-          <div class="card-number">06</div>
-          <h3 class="card-title">CODE EXPLANATION</h3>
-          <ul class="card-feature-list">
-            <li>Line-by-line code breakdown</li>
-            <li>Algorithm explanation</li>
-            <li>Design pattern identification</li>
-            <li>Complexity analysis</li>
-            <li>Educational code walkthroughs</li>
-          </ul>
+          <button class="card-action-btn" onclick="tryFeature('review')">Review Code</button>
         </div>
       </div>
     </div>
@@ -229,25 +329,52 @@
     </div>
   </section>
 
-  <!-- Stats Section -->
+  <!-- Enhanced Stats Section -->
   <section class="py-20">
     <div class="container mx-auto px-6">
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div class="text-center mb-12">
+        <h2 class="text-4xl font-bold text-white mb-4">CodeMaster Performance</h2>
+        <p class="text-xl text-gray-300">Real-time metrics from our AI programming assistant</p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
         <div class="stat-card">
-          <div class="stat-number"><%= @agent_stats[:total_conversations] %></div>
+          <div class="stat-number"><%= @performance_metrics[:code_reviews] %></div>
           <div class="stat-label">Code Reviews</div>
+          <div class="stat-trend">+<%= @performance_metrics[:reviews_growth] %>% this month</div>
         </div>
         <div class="stat-card">
-          <div class="stat-number">12+</div>
-          <div class="stat-label">Languages</div>
+          <div class="stat-number"><%= @supported_frameworks.count %></div>
+          <div class="stat-label">Frameworks Supported</div>
+          <div class="stat-trend">Updated weekly</div>
         </div>
         <div class="stat-card">
-          <div class="stat-number"><%= @agent_stats[:response_time] %></div>
-          <div class="stat-label">Response Time</div>
+          <div class="stat-number"><%= @performance_metrics[:avg_response_time] %></div>
+          <div class="stat-label">Avg Response Time</div>
+          <div class="stat-trend"><%= @performance_metrics[:response_improvement] %> faster</div>
         </div>
         <div class="stat-card">
-          <div class="stat-number"><%= @agent_stats[:average_rating] %>/5</div>
-          <div class="stat-label">Developer Rating</div>
+          <div class="stat-number"><%= @performance_metrics[:accuracy_rate] %>%</div>
+          <div class="stat-label">Code Accuracy</div>
+          <div class="stat-trend">Industry leading</div>
+        </div>
+      </div>
+      
+      <!-- Recent Projects Showcase -->
+      <div class="bg-black/30 rounded-xl p-8">
+        <h3 class="text-2xl font-bold text-white mb-6">Recent Success Stories</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <% @recent_projects.each do |project| %>
+            <div class="project-card">
+              <div class="project-language"><%= project[:language] %></div>
+              <h4 class="project-title"><%= project[:title] %></h4>
+              <p class="project-description"><%= project[:description] %></p>
+              <div class="project-metrics">
+                <span class="metric">✨ <%= project[:lines_generated] %> lines</span>
+                <span class="metric">⚡ <%= project[:completion_time] %></span>
+              </div>
+            </div>
+          <% end %>
         </div>
       </div>
     </div>
@@ -370,6 +497,275 @@
   font-size: 0.875rem;
   letter-spacing: 0.05em;
 }
+
+.stat-trend {
+  color: #10b981;
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+  font-weight: 500;
+}
+
+.card-action-btn {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 1rem;
+  width: 100%;
+}
+
+.card-action-btn:hover {
+  background: linear-gradient(135deg, #7c3aed, #6d28d9);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4);
+}
+
+.project-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-5px);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(139, 92, 246, 0.4);
+}
+
+.project-language {
+  display: inline-block;
+  background: rgba(139, 92, 246, 0.2);
+  color: #a855f7;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+.project-title {
+  color: white;
+  font-weight: 600;
+  font-size: 1.125rem;
+  margin-bottom: 0.5rem;
+}
+
+.project-description {
+  color: #9ca3af;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+
+.project-metrics {
+  display: flex;
+  gap: 1rem;
+}
+
+.metric {
+  color: #6b7280;
+  font-size: 0.75rem;
+}
+
+.terminal-code-block {
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 8px;
+  margin: 1rem 0;
+  overflow: hidden;
+}
+
+.code-header {
+  background: rgba(139, 92, 246, 0.1);
+  padding: 0.5rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(139, 92, 246, 0.3);
+}
+
+.code-language {
+  color: #a855f7;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.copy-code {
+  background: rgba(139, 92, 246, 0.2);
+  color: #a855f7;
+  border: 1px solid rgba(139, 92, 246, 0.4);
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.copy-code:hover {
+  background: rgba(139, 92, 246, 0.3);
+  border-color: rgba(139, 92, 246, 0.6);
+}
+
+.terminal-code-block pre {
+  padding: 1rem;
+  overflow-x: auto;
+  margin: 0;
+}
+
+.terminal-code-block code {
+  color: #e5e7eb;
+  font-family: 'Fira Code', monospace;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.terminal-structure-block,
+.terminal-analysis-block {
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  border-radius: 8px;
+  margin: 1rem 0;
+  overflow: hidden;
+}
+
+.structure-header,
+.analysis-header {
+  background: rgba(16, 185, 129, 0.1);
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.structure-title,
+.analysis-title {
+  color: #10b981;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.structure-tree {
+  padding: 1rem;
+  color: #e5e7eb;
+  font-family: 'Fira Code', monospace;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.analysis-content {
+  padding: 1rem;
+}
+
+.analysis-metric {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.metric-label {
+  color: #9ca3af;
+  font-size: 0.875rem;
+}
+
+.metric-value {
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.metric-value.high {
+  color: #10b981;
+}
+
+.metric-value.medium {
+  color: #f59e0b;
+}
+
+.metric-value.low {
+  color: #ef4444;
+}
+
+.analysis-suggestions {
+  margin-top: 1rem;
+}
+
+.analysis-suggestions h4 {
+  color: #e5e7eb;
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+}
+
+.analysis-suggestions ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.analysis-suggestions li {
+  color: #9ca3af;
+  font-size: 0.875rem;
+  margin-bottom: 0.25rem;
+  padding-left: 1rem;
+  position: relative;
+}
+
+.analysis-suggestions li:before {
+  content: '→';
+  color: #10b981;
+  position: absolute;
+  left: 0;
+}
+
+.terminal-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #10b981;
+  font-family: 'Fira Code', monospace;
+  font-size: 14px;
+  outline: none;
+  padding: 0.5rem;
+}
+
+.terminal-input::placeholder {
+  color: #666666;
+}
+
+.terminal-input-line {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.terminal-send-btn {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.terminal-send-btn:hover {
+  background: linear-gradient(135deg, #059669, #047857);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+}
+
+.terminal-send-btn:active {
+  transform: translateY(0);
+}
 </style>
 
 <script>
@@ -422,13 +818,22 @@ document.addEventListener('DOMContentLoaded', function() {
     // Show typing indicator
     addMessageToTerminal('system', '🌌 CodeMaster is analyzing...');
     
-    fetch('/codemaster/chat', {
+    // Determine the appropriate endpoint based on message content
+    const endpoint = routeFeatureRequest(message);
+    
+    fetch(endpoint, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'X-CSRF-Token': document.querySelector('[name="csrf-token"]').content
       },
-      body: JSON.stringify({ message: message })
+      body: JSON.stringify({ 
+        message: message,
+        context: {
+          timestamp: new Date().toISOString(),
+          session_id: generateSessionId()
+        }
+      })
     })
     .then(response => response.json())
     .then(data => {
@@ -449,6 +854,23 @@ document.addEventListener('DOMContentLoaded', function() {
             addCodeSnippet(code, data.language);
           });
         }
+        
+        // Handle specialized responses
+        if (data.project_structure) {
+          displayProjectStructure(data.project_structure);
+        }
+        
+        if (data.analysis_results) {
+          displayAnalysisResults(data.analysis_results);
+        }
+        
+        if (data.security_findings) {
+          displaySecurityFindings(data.security_findings);
+        }
+        
+        if (data.performance_metrics) {
+          displayPerformanceMetrics(data.performance_metrics);
+        }
       } else {
         addMessageToTerminal('error', data.error || 'Sorry, something went wrong.');
       }
@@ -457,6 +879,91 @@ document.addEventListener('DOMContentLoaded', function() {
       console.error('Error:', error);
       addMessageToTerminal('error', 'Connection error. Please try again.');
     });
+  }
+  
+  function generateSessionId() {
+    return 'codemaster_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+  }
+  
+  function displayProjectStructure(structure) {
+    const terminalBody = terminal.querySelector('.terminal-body') || terminal;
+    const structureBlock = document.createElement('div');
+    structureBlock.className = 'terminal-structure-block';
+    structureBlock.innerHTML = `
+      <div class="structure-header">
+        <span class="structure-title">📁 Project Structure</span>
+      </div>
+      <pre class="structure-tree">${structure}</pre>
+    `;
+    
+    // Remove the input line temporarily
+    const inputLine = terminalBody.querySelector('.terminal-input-line');
+    if (inputLine) {
+      terminalBody.removeChild(inputLine);
+    }
+    
+    terminalBody.appendChild(structureBlock);
+    
+    // Add the input line back
+    if (inputLine) {
+      terminalBody.appendChild(inputLine);
+    }
+    
+    // Scroll to bottom
+    terminalBody.scrollTop = terminalBody.scrollHeight;
+  }
+  
+  function displayAnalysisResults(results) {
+    const terminalBody = terminal.querySelector('.terminal-body') || terminal;
+    const analysisBlock = document.createElement('div');
+    analysisBlock.className = 'terminal-analysis-block';
+    analysisBlock.innerHTML = `
+      <div class="analysis-header">
+        <span class="analysis-title">🔍 Code Analysis Results</span>
+      </div>
+      <div class="analysis-content">
+        <div class="analysis-metric">
+          <span class="metric-label">Complexity Score:</span>
+          <span class="metric-value ${results.complexity_score > 7 ? 'high' : results.complexity_score > 4 ? 'medium' : 'low'}">${results.complexity_score}/10</span>
+        </div>
+        <div class="analysis-metric">
+          <span class="metric-label">Quality Score:</span>
+          <span class="metric-value ${results.quality_score > 8 ? 'high' : results.quality_score > 6 ? 'medium' : 'low'}">${results.quality_score}/10</span>
+        </div>
+        <div class="analysis-suggestions">
+          <h4>Suggestions:</h4>
+          <ul>
+            ${results.suggestions.map(suggestion => `<li>${suggestion}</li>`).join('')}
+          </ul>
+        </div>
+      </div>
+    `;
+    
+    // Remove the input line temporarily
+    const inputLine = terminalBody.querySelector('.terminal-input-line');
+    if (inputLine) {
+      terminalBody.removeChild(inputLine);
+    }
+    
+    terminalBody.appendChild(analysisBlock);
+    
+    // Add the input line back
+    if (inputLine) {
+      terminalBody.appendChild(inputLine);
+    }
+    
+    // Scroll to bottom
+    terminalBody.scrollTop = terminalBody.scrollHeight;
+  }
+  
+  function displaySecurityFindings(findings) {
+    // Implementation for security findings display
+    addMessageToTerminal('system', `🔒 Security Audit Complete: ${findings.risk_level} risk level`);
+  }
+  
+  function displayPerformanceMetrics(metrics) {
+    // Implementation for performance metrics display
+    addMessageToTerminal('system', `⚡ Performance Analysis: ${metrics.efficiency_score}/10 efficiency score`);
   }
   
   function addCodeSnippet(code, language) {
@@ -507,6 +1014,18 @@ function copyCode(button) {
   });
 }
 
+function sendCurrentMessage() {
+  const terminalInput = document.getElementById('terminal-input');
+  if (terminalInput) {
+    const message = terminalInput.value.trim();
+    if (message) {
+      addMessageToTerminal('user', message);
+      terminalInput.value = '';
+      sendMessage(message);
+    }
+  }
+}
+
 function focusTerminal() {
   const terminalInput = document.getElementById('terminal-input');
   if (terminalInput) {
@@ -516,5 +1035,89 @@ function focusTerminal() {
 
 function showFeatures() {
   document.getElementById('features').scrollIntoView({ behavior: 'smooth' });
+}
+
+function tryFeature(feature) {
+  const terminalInput = document.getElementById('terminal-input');
+  let command = '';
+  
+  switch(feature) {
+    case 'generate':
+      command = 'Generate a Python API endpoint for user authentication';
+      break;
+    case 'scaffold':
+      command = 'Create a full React.js project structure with TypeScript';
+      break;
+    case 'analyze':
+      command = 'Analyze my JavaScript code for performance issues';
+      break;
+    case 'security':
+      command = 'Run a security audit on my Node.js application';
+      break;
+    case 'performance':
+      command = 'Profile my Python code for optimization opportunities';
+      break;
+    case 'debug':
+      command = 'Help me debug this error: TypeError undefined method';
+      break;
+    case 'convert':
+      command = 'Convert this Python function to JavaScript';
+      break;
+    case 'complete':
+      command = 'Complete this function: def fibonacci(n):';
+      break;
+    case 'test':
+      command = 'Generate unit tests for my REST API endpoints';
+      break;
+    case 'docs':
+      command = 'Generate API documentation for my Express.js routes';
+      break;
+    case 'refactor':
+      command = 'Refactor this code to follow SOLID principles';
+      break;
+    case 'review':
+      command = 'Review my code for best practices and improvements';
+      break;
+  }
+  
+  if (terminalInput && command) {
+    terminalInput.value = command;
+    terminalInput.focus();
+    
+    // Trigger the enter key event
+    const event = new KeyboardEvent('keypress', {
+      key: 'Enter',
+      code: 'Enter',
+      keyCode: 13,
+      which: 13,
+      bubbles: true
+    });
+    terminalInput.dispatchEvent(event);
+  }
+}
+
+// Enhanced feature detection and routing
+function routeFeatureRequest(message) {
+  const lowerMessage = message.toLowerCase();
+  
+  if (lowerMessage.includes('scaffold') || lowerMessage.includes('project structure')) {
+    return '/codemaster/project_scaffold';
+  } else if (lowerMessage.includes('convert') || lowerMessage.includes('translate')) {
+    return '/codemaster/code_converter';
+  } else if (lowerMessage.includes('security') || lowerMessage.includes('audit')) {
+    return '/codemaster/security_audit';
+  } else if (lowerMessage.includes('performance') || lowerMessage.includes('profile')) {
+    return '/codemaster/performance_profiler';
+  } else if (lowerMessage.includes('test') || lowerMessage.includes('unit test')) {
+    return '/codemaster/test_generator';
+  } else if (lowerMessage.includes('documentation') || lowerMessage.includes('docs')) {
+    return '/codemaster/documentation_generator';
+  } else if (lowerMessage.includes('refactor') || lowerMessage.includes('improve')) {
+    return '/codemaster/refactoring_assistant';
+  } else if (lowerMessage.includes('complete') || lowerMessage.includes('suggestion')) {
+    return '/codemaster/ai_code_completion';
+  }
+  
+  return '/codemaster/chat'; // Default to chat
 }
 </script>

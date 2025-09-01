@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NeoChat - AI Conversation Terminal | onelastai.com</title>
+  <title>IdeaForge - Innovation & Creativity AI | onelastai.com</title>
   
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
   
-  <!-- Custom NeoChat Styles -->
+  <!-- Custom IdeaForge Styles -->
   <style>
     * {
       margin: 0;
@@ -18,11 +18,11 @@
     
     body {
       font-family: 'Consolas', 'Monaco', 'Lucida Console', monospace;
-      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
-      color: #00d4ff;
+      background: linear-gradient(135deg, #1a0a0a 0%, #2e1a1a 50%, #3e1a2e 100%);
+      color: #ff9500;
       min-height: 100vh;
       overflow-x: hidden;
-      padding-top: 0; /* NeoChat has its own menu, no global menu needed */
+      padding-top: 0; /* IdeaForge has its own menu, no global menu needed */
     }
     
     /* Hide global menu for terminal interface */
@@ -34,8 +34,8 @@
     .hero-section {
       padding: 4rem 2rem;
       text-align: center;
-      background: radial-gradient(ellipse at center, rgba(0, 212, 255, 0.1) 0%, rgba(0, 0, 0, 0.3) 70%);
-      border-bottom: 2px solid #00d4ff;
+      background: radial-gradient(ellipse at center, rgba(255, 149, 0, 0.1) 0%, rgba(0, 0, 0, 0.3) 70%);
+      border-bottom: 2px solid #ff9500;
       position: relative;
     }
     
@@ -46,7 +46,7 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="%2300d4ff" stroke-width="0.5" opacity="0.3"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="%23ff9500" stroke-width="0.5" opacity="0.3"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
       opacity: 0.2;
       animation: gridMove 20s linear infinite;
     }
@@ -653,23 +653,23 @@
   <!-- Hero Section -->
   <section class="hero-section">
     <div class="hero-content">
-      <div class="agent-logo">�</div>
+      <div class="agent-logo">💡</div>
       <h1 class="agent-title">IdeaForge</h1>
-      <p class="agent-tagline">Creative innovation and strategic brainstorming catalyst</p>
+      <p class="agent-tagline">Innovation & Creative Brainstorming Catalyst</p>
       <p class="agent-description">
         I am IdeaForge, your creative thinking and innovation specialist. I help you generate 
-        breakthrough ideas, solve complex problems creatively, and transform concepts into 
-        actionable strategies. Let's forge your next big idea together!
+        breakthrough ideas, facilitate design thinking workshops, analyze trends, and transform concepts into 
+        actionable strategies. Let's forge your next big innovation together!
       </p>
       
       <div class="agent-stats">
         <div class="stat-item">
-          <span class="stat-value"><%= @agent_stats[:total_conversations] %></span>
-          <span class="stat-label">Conversations</span>
+          <span class="stat-value"><%= @agent_stats[:ideas_generated] %></span>
+          <span class="stat-label">Ideas Created</span>
         </div>
         <div class="stat-item">
-          <span class="stat-value"><%= @agent_stats[:average_rating] %></span>
-          <span class="stat-label">Rating</span>
+          <span class="stat-value"><%= @agent_stats[:success_rate] %>%</span>
+          <span class="stat-label">Success Rate</span>
         </div>
         <div class="stat-item">
           <span class="stat-value"><%= @agent_stats[:response_time] %></span>
@@ -682,8 +682,8 @@
   <!-- Terminal Section -->
   <section class="terminal-section">
     <div class="terminal-header">
-      <h2 class="terminal-title">🖥️ NeoChat Terminal Interface</h2>
-      <p class="terminal-subtitle">Type your questions or commands below and press Enter to chat with NeoChat</p>
+      <h2 class="terminal-title">� IdeaForge Innovation Terminal</h2>
+      <p class="terminal-subtitle">Describe your innovation challenge or creative project</p>
     </div>
     
     <div class="terminal-container">
@@ -691,7 +691,7 @@
         <div class="terminal-button"></div>
         <div class="terminal-button yellow"></div>
         <div class="terminal-button green"></div>
-        <span class="terminal-title-text">neochat@onelastai.com:~$</span>
+        <span class="terminal-title-text">ideaforge@innovation:~$</span>
       </div>
       
       <div class="terminal-output" id="terminal-output">
@@ -701,30 +701,32 @@
 ║              Creative Innovation Workshop                        ║
 ╚══════════════════════════════════════════════════════════════════╝
 
-<div class="system-info">System: IdeaForge v1.0 | Status: Online | Agent ID: <%= @agent.id %>
+<div class="system-info">System: IdeaForge v2.0 | Status: Online | Agent ID: <%= @agent.id %>
 <%= Time.current.strftime("Date: %Y-%m-%d %H:%M:%S") %> | Session: Active</div>
 
-<span style="color: #00d4ff;">Welcome! I'm IdeaForge, your creative innovation catalyst.</span>
+<span style="color: #ff9500;">Welcome! I'm IdeaForge, your creative innovation catalyst.</span>
 
 I can help you with:
-• � Creative brainstorming & ideation
-• 🚀 Innovation strategy development
-• 🧩 Complex problem solving
-• 🎨 Design thinking methodologies
-• � Concept iteration & refinement
-• 📋 Implementation planning
+• 💡 Creative brainstorming & idea generation
+• 🚀 Innovation strategy & framework development
+• 🧩 Complex problem solving with design thinking
+• 🎨 Workshop facilitation & collaborative sessions
+• 📈 Trend analysis & future forecasting
+• 🔄 Concept development & prototyping
+• 🤝 Team collaboration & innovation culture
+• 📋 Implementation planning & roadmaps
 
-Share your challenge and let's forge innovative solutions!
+Share your innovation challenge and let's forge breakthrough solutions!
 
         </div>
         
         <div class="typing-indicator" id="typing-indicator">
-          NeoChat is thinking
+          IdeaForge is innovating
         </div>
       </div>
       
       <div class="terminal-input-container">
-        <span class="terminal-prompt">neochat@terminal:~$ </span>
+        <span class="terminal-prompt">ideaforge@terminal:~$ </span>
         <input 
           type="text" 
           class="terminal-input" 
@@ -966,7 +968,7 @@ Share your challenge and let's forge innovative solutions!
         this.showTyping(true);
         
         try {
-          const response = await fetch('/chat', {
+          const response = await fetch('/ideaforge/chat', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

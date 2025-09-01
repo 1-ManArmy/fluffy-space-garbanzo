@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NeoChat - AI Conversation Terminal | onelastai.com</title>
+  <title>CallGhost - AI Communication Terminal | onelastai.com</title>
   
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
   
-  <!-- Custom NeoChat Styles -->
+  <!-- Custom CallGhost Styles -->
   <style>
     * {
       margin: 0;
@@ -18,11 +18,11 @@
     
     body {
       font-family: 'Consolas', 'Monaco', 'Lucida Console', monospace;
-      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
-      color: #00d4ff;
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a2e1a 50%, #0f3e16 100%);
+      color: #00ff88;
       min-height: 100vh;
       overflow-x: hidden;
-      padding-top: 0; /* NeoChat has its own menu, no global menu needed */
+      padding-top: 0; /* CallGhost has its own menu, no global menu needed */
     }
     
     /* Hide global menu for terminal interface */
@@ -34,8 +34,8 @@
     .hero-section {
       padding: 4rem 2rem;
       text-align: center;
-      background: radial-gradient(ellipse at center, rgba(0, 212, 255, 0.1) 0%, rgba(0, 0, 0, 0.3) 70%);
-      border-bottom: 2px solid #00d4ff;
+      background: radial-gradient(ellipse at center, rgba(0, 255, 136, 0.1) 0%, rgba(0, 0, 0, 0.3) 70%);
+      border-bottom: 2px solid #00ff88;
       position: relative;
     }
     
@@ -46,7 +46,7 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="%2300d4ff" stroke-width="0.5" opacity="0.3"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="%2300ff88" stroke-width="0.5" opacity="0.3"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
       opacity: 0.2;
       animation: gridMove 20s linear infinite;
     }
@@ -64,7 +64,7 @@
     .agent-logo {
       font-size: 4rem;
       margin-bottom: 1rem;
-      text-shadow: 0 0 20px #00d4ff;
+      text-shadow: 0 0 20px #00ff88;
       animation: pulse 2s infinite;
     }
     
@@ -77,8 +77,8 @@
       font-size: 3rem;
       font-weight: bold;
       margin-bottom: 0.5rem;
-      text-shadow: 0 0 10px #00d4ff;
-      background: linear-gradient(45deg, #00d4ff, #ffffff);
+      text-shadow: 0 0 10px #00ff88;
+      background: linear-gradient(45deg, #00ff88, #ffffff);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -108,8 +108,8 @@
     }
     
     .stat-item {
-      background: rgba(0, 212, 255, 0.1);
-      border: 1px solid #00d4ff;
+      background: rgba(0, 255, 136, 0.1);
+      border: 1px solid #00ff88;
       border-radius: 8px;
       padding: 1rem;
       min-width: 120px;
@@ -119,7 +119,7 @@
     .stat-value {
       font-size: 1.5rem;
       font-weight: bold;
-      color: #00d4ff;
+      color: #00ff88;
       display: block;
     }
     
@@ -144,7 +144,7 @@
     
     .terminal-title {
       font-size: 1.5rem;
-      color: #00d4ff;
+      color: #00ff88;
       margin-bottom: 0.5rem;
     }
     
@@ -155,15 +155,15 @@
     
     .terminal-container {
       background: #000000;
-      border: 2px solid #00d4ff;
+      border: 2px solid #00ff88;
       border-radius: 12px;
-      box-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+      box-shadow: 0 0 30px rgba(0, 255, 136, 0.3);
       overflow: hidden;
       position: relative;
     }
     
     .terminal-titlebar {
-      background: linear-gradient(90deg, #00d4ff 0%, #0099cc 100%);
+      background: linear-gradient(90deg, #00ff88 0%, #00cc66 100%);
       padding: 0.75rem 1rem;
       display: flex;
       align-items: center;
@@ -207,12 +207,12 @@
     }
     
     .terminal-output::-webkit-scrollbar-thumb {
-      background: #00d4ff;
+      background: #00ff88;
       border-radius: 4px;
     }
     
     .terminal-output::-webkit-scrollbar-thumb:hover {
-      background: #00a8cc;
+      background: #00cc66;
     }
 
     /* Sticky Menu Bar */
@@ -221,9 +221,9 @@
       top: 0;
       left: 0;
       right: 0;
-      background: linear-gradient(90deg, #0a0a0a 0%, #1a1a2e 50%, #0a0a0a 100%);
-      border-bottom: 2px solid #00d4ff;
-      box-shadow: 0 2px 10px rgba(0, 212, 255, 0.3);
+      background: linear-gradient(90deg, #0a0a0a 0%, #1a2e1a 50%, #0a0a0a 100%);
+      border-bottom: 2px solid #00ff88;
+      box-shadow: 0 2px 10px rgba(0, 255, 136, 0.3);
       z-index: 1000;
       padding: 0.5rem 1rem;
       font-family: 'Consolas', 'Monaco', monospace;
@@ -243,7 +243,7 @@
     .menu-button {
       background: transparent;
       border: 1px solid transparent;
-      color: #00d4ff;
+      color: #00ff88;
       padding: 0.5rem 1rem;
       cursor: pointer;
       font-family: inherit;
@@ -253,14 +253,14 @@
     }
 
     .menu-button:hover {
-      background: rgba(0, 212, 255, 0.1);
-      border-color: #00d4ff;
-      box-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+      background: rgba(0, 255, 136, 0.1);
+      border-color: #00ff88;
+      box-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
     }
 
     .menu-button.active {
-      background: rgba(0, 212, 255, 0.2);
-      border-color: #00d4ff;
+      background: rgba(0, 255, 136, 0.2);
+      border-color: #00ff88;
     }
 
     /* Terminal-style Dropdown */
@@ -269,9 +269,9 @@
       top: 100%;
       left: 0;
       background: #000000;
-      border: 2px solid #00d4ff;
+      border: 2px solid #00ff88;
       border-radius: 8px;
-      box-shadow: 0 5px 20px rgba(0, 212, 255, 0.4);
+      box-shadow: 0 5px 20px rgba(0, 255, 136, 0.4);
       min-width: 250px;
       max-height: 400px;
       overflow-y: auto;
@@ -289,12 +289,12 @@
     }
 
     .dropdown-header {
-      background: linear-gradient(90deg, #00d4ff 0%, #0099cc 100%);
+      background: linear-gradient(90deg, #00ff88 0%, #00cc66 100%);
       color: #000;
       padding: 0.5rem 1rem;
       font-weight: bold;
       font-size: 12px;
-      border-bottom: 1px solid #00d4ff;
+      border-bottom: 1px solid #00ff88;
     }
 
     /* Linux Tree Structure */
@@ -323,12 +323,12 @@
 
     .tree-item.expandable::before {
       content: "├── ";
-      color: #00d4ff;
+      color: #00ff88;
     }
 
     .tree-item.last::before {
       content: "└── ";
-      color: #00d4ff;
+      color: #00ff88;
     }
 
     .tree-item.folder::after {
@@ -362,12 +362,12 @@
 
     .tree-children .tree-item::before {
       content: "├── ";
-      color: #00d4ff;
+      color: #00ff88;
     }
 
     .tree-children .tree-item:last-child::before {
       content: "└── ";
-      color: #00d4ff;
+      color: #00ff88;
     }
 
     /* Sub-menu arrow */
@@ -388,7 +388,7 @@
     }
     
     .user-message {
-      color: #00d4ff;
+      color: #00ff88;
     }
     
     .user-message::before {
@@ -429,7 +429,7 @@
       flex: 1;
       background: transparent;
       border: none;
-      color: #00d4ff;
+      color: #00ff88;
       font-family: inherit;
       font-size: 14px;
       outline: none;
@@ -441,7 +441,7 @@
     }
     
     .send-button {
-      background: linear-gradient(45deg, #00d4ff, #0099cc);
+      background: linear-gradient(45deg, #00ff88, #00cc66);
       border: none;
       border-radius: 6px;
       color: #000;
@@ -454,7 +454,7 @@
     
     .send-button:hover {
       transform: translateY(-2px);
-      box-shadow: 0 4px 15px rgba(0, 212, 255, 0.4);
+      box-shadow: 0 4px 15px rgba(0, 255, 136, 0.4);
     }
     
     .send-button:active {
@@ -528,60 +528,61 @@
   <nav class="menu-bar">
     <div class="menu-items">
       <div class="menu-item">
-        <button class="menu-button" onclick="toggleDropdown('file-menu')">File</button>
-        <div id="file-menu" class="dropdown">
-          <div class="dropdown-header">File Operations</div>
+        <button class="menu-button" onclick="toggleDropdown('call-menu')">Call Management</button>
+        <div id="call-menu" class="dropdown">
+          <div class="dropdown-header">Call Operations</div>
           <div class="tree-container">
             <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
-              conversations
+              routing
               <div class="tree-children">
-                <div class="tree-item executable" onclick="newConversation()">new_chat.sh</div>
-                <div class="tree-item config" onclick="loadHistory()">history.log</div>
-                <div class="tree-item config" onclick="exportChat()">export.json</div>
-                <div class="tree-item last config" onclick="clearHistory()">clear.sh</div>
+                <div class="tree-item executable" onclick="callFunction('routing', 'intelligent')">intelligent_routing.py</div>
+                <div class="tree-item executable" onclick="callFunction('routing', 'priority')">priority_queue.sh</div>
+                <div class="tree-item config" onclick="callFunction('routing', 'config')">routing_rules.conf</div>
+                <div class="tree-item last link" onclick="callFunction('routing', 'monitor')">monitor.log → /var/log/calls/</div>
               </div>
             </div>
             <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
-              settings
+              queue_management
               <div class="tree-children">
-                <div class="tree-item config" onclick="openSettings()">config.yml</div>
-                <div class="tree-item config" onclick="openPreferences()">preferences.ini</div>
-                <div class="tree-item last link" onclick="openThemes()">themes.conf → /usr/share/themes/</div>
+                <div class="tree-item executable" onclick="callFunction('queue', 'status')">queue_status.py</div>
+                <div class="tree-item executable" onclick="callFunction('queue', 'optimize')">optimize_wait.sh</div>
+                <div class="tree-item config" onclick="callFunction('queue', 'metrics')">queue_metrics.json</div>
+                <div class="tree-item last executable" onclick="callFunction('queue', 'callback')">callback_system.rb</div>
               </div>
             </div>
-            <div class="tree-item last executable" onclick="exitChat()">exit.sh</div>
+            <div class="tree-item last executable" onclick="callFunction('general', 'analysis')">call_analysis.ai</div>
           </div>
         </div>
       </div>
 
       <div class="menu-item">
-        <button class="menu-button" onclick="toggleDropdown('features-menu')">Features</button>
-        <div id="features-menu" class="dropdown">
-          <div class="dropdown-header">AI Capabilities</div>
+        <button class="menu-button" onclick="toggleDropdown('voice-menu')">Voice Processing</button>
+        <div id="voice-menu" class="dropdown">
+          <div class="dropdown-header">Voice Analytics & Enhancement</div>
           <div class="tree-container">
             <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
-              intelligence
+              analysis
               <div class="tree-children">
-                <div class="tree-item executable" onclick="setMode('question')">question_answering.py</div>
-                <div class="tree-item executable" onclick="setMode('creative')">creative_writing.py</div>
-                <div class="tree-item executable" onclick="setMode('problem')">problem_solving.py</div>
-                <div class="tree-item last executable" onclick="setMode('analysis')">data_analysis.py</div>
+                <div class="tree-item executable" onclick="voiceFunction('analysis', 'quality')">voice_quality.py</div>
+                <div class="tree-item executable" onclick="voiceFunction('analysis', 'sentiment')">sentiment_analysis.ai</div>
+                <div class="tree-item executable" onclick="voiceFunction('analysis', 'clarity')">clarity_metrics.rb</div>
+                <div class="tree-item last config" onclick="voiceFunction('analysis', 'report')">analysis_report.json</div>
               </div>
             </div>
             <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
-              tools
+              enhancement
               <div class="tree-children">
-                <div class="tree-item executable" onclick="openCodeGen()">code_generator.sh</div>
-                <div class="tree-item executable" onclick="openTranslator()">translator.py</div>
-                <div class="tree-item executable" onclick="openSummarizer()">summarizer.rb</div>
-                <div class="tree-item last config" onclick="openCalculator()">calculator.js</div>
+                <div class="tree-item executable" onclick="voiceFunction('enhance', 'noise')">noise_reduction.sh</div>
+                <div class="tree-item executable" onclick="voiceFunction('enhance', 'clarity')">voice_enhance.py</div>
+                <div class="tree-item config" onclick="voiceFunction('enhance', 'settings')">enhancement.conf</div>
+                <div class="tree-item last executable" onclick="voiceFunction('enhance', 'realtime')">realtime_processor.c</div>
               </div>
             </div>
             <div class="tree-item last folder has-submenu" onclick="toggleSubmenu(this)">
-              memory
+              recognition
               <div class="tree-children">
-                <div class="tree-item config" onclick="showMemory()">context.db</div>
-                <div class="tree-item last link" onclick="showKnowledge()">knowledge_base.sqlite → /var/lib/neochat/</div>
+                <div class="tree-item executable" onclick="voiceFunction('recognize', 'speech')">speech_to_text.ai</div>
+                <div class="tree-item last config" onclick="voiceFunction('recognize', 'accuracy')">accuracy_metrics.log</div>
               </div>
             </div>
           </div>
@@ -589,32 +590,34 @@
       </div>
 
       <div class="menu-item">
-        <button class="menu-button" onclick="toggleDropdown('agents-menu')">Agents</button>
-        <div id="agents-menu" class="dropdown">
-          <div class="dropdown-header">Agent Network</div>
+        <button class="menu-button" onclick="toggleDropdown('communication-menu')">Communication Analytics</button>
+        <div id="communication-menu" class="dropdown">
+          <div class="dropdown-header">Communication Intelligence</div>
           <div class="tree-container">
             <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
-              active
+              patterns
               <div class="tree-children">
-                <div class="tree-item executable config">neochat.service ● running</div>
-                <div class="tree-item last link" onclick="switchAgent('mood')">mood_engine.agent → /agents/mood/</div>
+                <div class="tree-item executable" onclick="commFunction('pattern', 'analyze')">pattern_analysis.py</div>
+                <div class="tree-item executable" onclick="commFunction('pattern', 'trends')">trend_detection.ai</div>
+                <div class="tree-item executable" onclick="commFunction('pattern', 'effectiveness')">effectiveness_score.rb</div>
+                <div class="tree-item last config" onclick="commFunction('pattern', 'report')">pattern_report.json</div>
               </div>
             </div>
             <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
-              available
+              optimization
               <div class="tree-children">
-                <div class="tree-item executable" onclick="switchAgent('rapstar')">rapstar_ai.agent</div>
-                <div class="tree-item executable" onclick="switchAgent('storyteller')">storyteller.agent</div>
-                <div class="tree-item executable" onclick="switchAgent('zen')">zen_agent.agent</div>
-                <div class="tree-item last config" onclick="createAgent()">custom.template</div>
+                <div class="tree-item executable" onclick="commFunction('optimize', 'contact')">contact_strategy.py</div>
+                <div class="tree-item executable" onclick="commFunction('optimize', 'timing')">timing_optimizer.sh</div>
+                <div class="tree-item config" onclick="commFunction('optimize', 'channels')">channel_config.yml</div>
+                <div class="tree-item last executable" onclick="commFunction('optimize', 'personalize')">personalization.ai</div>
               </div>
             </div>
             <div class="tree-item last folder has-submenu" onclick="toggleSubmenu(this)">
-              network
+              tracking
               <div class="tree-children">
-                <div class="tree-item config">agents.onelastai.com</div>
-                <div class="tree-item config">cluster.status</div>
-                <div class="tree-item last link">api.endpoint → https://api.onelastai.com/</div>
+                <div class="tree-item executable" onclick="commFunction('track', 'metrics')">interaction_metrics.py</div>
+                <div class="tree-item config" onclick="commFunction('track', 'dashboard')">analytics_dashboard.js</div>
+                <div class="tree-item last link" onclick="commFunction('track', 'export')">data_export.csv → /reports/</div>
               </div>
             </div>
           </div>
@@ -622,7 +625,7 @@
       </div>
 
       <div class="menu-item">
-        <button class="menu-button" onclick="toggleDropdown('help-menu')">Help</button>
+        <button class="menu-button" onclick="toggleDropdown('help-menu')">Help & Support</button>
         <div id="help-menu" class="dropdown">
           <div class="dropdown-header">Documentation & Support</div>
           <div class="tree-container">
@@ -630,20 +633,20 @@
               docs
               <div class="tree-children">
                 <div class="tree-item config" onclick="showDocs('getting-started')">getting_started.md</div>
-                <div class="tree-item config" onclick="showDocs('commands')">commands.txt</div>
-                <div class="tree-item config" onclick="showDocs('api')">api_reference.html</div>
-                <div class="tree-item last config" onclick="showDocs('examples')">examples.json</div>
+                <div class="tree-item config" onclick="showDocs('call-management')">call_management_guide.pdf</div>
+                <div class="tree-item config" onclick="showDocs('voice-processing')">voice_processing_api.html</div>
+                <div class="tree-item last config" onclick="showDocs('examples')">communication_examples.json</div>
               </div>
             </div>
             <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
               support
               <div class="tree-children">
-                <div class="tree-item link" onclick="openSupport()">github.com/onelastai/neochat</div>
-                <div class="tree-item link" onclick="openDiscord()">discord.gg/onelastai</div>
+                <div class="tree-item link" onclick="openSupport()">github.com/onelastai/callghost</div>
+                <div class="tree-item link" onclick="openDiscord()">discord.gg/callghost-support</div>
                 <div class="tree-item last config" onclick="reportBug()">bug_report.template</div>
               </div>
             </div>
-            <div class="tree-item last executable" onclick="showAbout()">about.sh</div>
+            <div class="tree-item last executable" onclick="showAbout()">about_callghost.sh</div>
           </div>
         </div>
       </div>
@@ -653,13 +656,13 @@
   <!-- Hero Section -->
   <section class="hero-section">
     <div class="hero-content">
-      <div class="agent-logo">�</div>
+      <div class="agent-logo">📞</div>
       <h1 class="agent-title">CallGhost</h1>
-      <p class="agent-tagline">Advanced call management and communication specialist</p>
+      <p class="agent-tagline">Advanced Communication & Call Management Specialist</p>
       <p class="agent-description">
-        I am CallGhost, your expert in call management, communication optimization, and phone 
-        interaction systems. I help automate calls, manage phone workflows, analyze call data, 
-        and enhance communication experiences through intelligent call handling.
+        I am CallGhost, your expert in call management, voice processing, and communication optimization. 
+        I specialize in automated call routing, voice analytics, communication pattern analysis, 
+        interaction tracking, and conversation enhancement to maximize your communication effectiveness.
       </p>
       
       <div class="agent-stats">
@@ -682,8 +685,8 @@
   <!-- Terminal Section -->
   <section class="terminal-section">
     <div class="terminal-header">
-      <h2 class="terminal-title">🖥️ NeoChat Terminal Interface</h2>
-      <p class="terminal-subtitle">Type your questions or commands below and press Enter to chat with NeoChat</p>
+      <h2 class="terminal-title">� CallGhost Communication Terminal</h2>
+      <p class="terminal-subtitle">Advanced call management and communication optimization interface</p>
     </div>
     
     <div class="terminal-container">
@@ -691,45 +694,47 @@
         <div class="terminal-button"></div>
         <div class="terminal-button yellow"></div>
         <div class="terminal-button green"></div>
-        <span class="terminal-title-text">neochat@onelastai.com:~$</span>
+        <span class="terminal-title-text">callghost@communication.terminal:~$</span>
       </div>
       
       <div class="terminal-output" id="terminal-output">
         <div class="welcome-message">
 ╔══════════════════════════════════════════════════════════════════╗
 ║                       Welcome to CallGhost                        ║
-║              Your AI Conversation Terminal                       ║
+║            Advanced Communication Management Terminal             ║
 ╚══════════════════════════════════════════════════════════════════╝
 
-<div class="system-info">System: NeoChat v1.0 | Status: Online | Agent ID: <%= @agent.id %>
+<div class="system-info">System: CallGhost v2.0 | Status: Online | Agent ID: <%= @agent.name %>
 <%= Time.current.strftime("Date: %Y-%m-%d %H:%M:%S") %> | Session: Active</div>
 
-<span style="color: #00d4ff;">Welcome! I'm NeoChat, your intelligent AI assistant.</span>
+<span style="color: #00ff88;">Welcome! I'm CallGhost, your advanced communication management AI.</span>
 
-I can help you with:
-• 💭 Questions & Answers on any topic
-• 🛠 Problem solving and analysis  
-• 💡 Creative brainstorming and ideas
-• 📚 Information research and learning
-• 🎯 Suggestions and helpful advice
-• 💬 Friendly conversation
+I specialize in:
+• � Call Management & Intelligent Routing
+• 🎤 Voice Processing & Quality Analysis  
+• � Communication Pattern Analysis
+• 🎯 Contact Strategy Optimization
+• � Interaction Metrics & Tracking
+• 💬 Conversation Quality Enhancement
+• � Automated Call Workflows
+• 📋 Call Queue Management
 
-Type your message below and let's start chatting!
+Type your communication needs below and let's optimize your calls!
 
         </div>
         
         <div class="typing-indicator" id="typing-indicator">
-          NeoChat is thinking
+          CallGhost is analyzing communication...
         </div>
       </div>
       
       <div class="terminal-input-container">
-        <span class="terminal-prompt">neochat@terminal:~$ </span>
+        <span class="terminal-prompt">callghost@terminal:~$ </span>
         <input 
           type="text" 
           class="terminal-input" 
           id="user-input"
-          placeholder="Type your message here..."
+          placeholder="Describe your communication needs..."
           autocomplete="off"
         >
         <button class="send-button" id="send-button">Send</button>
@@ -742,19 +747,31 @@ Type your message below and let's start chatting!
     function toggleDropdown(menuId) {
       // Close all other dropdowns first
       const allDropdowns = document.querySelectorAll('.dropdown');
+      const allButtons = document.querySelectorAll('.menu-button');
+      
       allDropdowns.forEach(dropdown => {
         if (dropdown.id !== menuId) {
           dropdown.classList.remove('active');
         }
       });
       
+      allButtons.forEach(button => {
+        if (button.getAttribute('onclick') !== `toggleDropdown('${menuId}')`) {
+          button.classList.remove('active');
+        }
+      });
+      
       // Toggle the target dropdown
       const dropdown = document.getElementById(menuId);
-      dropdown.classList.toggle('active');
-      
-      // Toggle active state on menu button
-      const button = dropdown.previousElementSibling;
-      button.classList.toggle('active');
+      if (dropdown) {
+        dropdown.classList.toggle('active');
+        
+        // Toggle active state on menu button
+        const button = dropdown.previousElementSibling;
+        if (button) {
+          button.classList.toggle('active');
+        }
+      }
     }
 
     function toggleSubmenu(element) {
@@ -902,25 +919,161 @@ Type your message below and let's start chatting!
 
     function showAbout() {
       if (window.terminal) {
-        window.terminal.addMessage('system', `$ ./about.sh
+        window.terminal.addMessage('system', `$ ./about_callghost.sh
 ╔══════════════════════════════════════╗
-║              NeoChat v1.0            ║
+║            CallGhost v2.0            ║
 ║                                      ║
-║     AI Conversation Terminal         ║
+║  Advanced Communication Terminal     ║
 ║     Built by onelastai.com          ║
 ║                                      ║
-║  • Intelligent conversation AI       ║
-║  • Terminal-style interface          ║
-║  • Multi-modal capabilities          ║
-║  • Real-time responses              ║
+║  • Call Management & Routing         ║
+║  • Voice Processing & Analysis       ║
+║  • Communication Optimization        ║
+║  • Interaction Analytics            ║
+║  • Queue Management Systems         ║
+║  • Real-time Voice Enhancement      ║
 ║                                      ║
 ║  © 2025 onelastai.com               ║
 ╚══════════════════════════════════════╝`);
       }
     }
 
+    // CallGhost-specific menu functions
+    function callFunction(category, type) {
+      if (window.terminal) {
+        const messages = {
+          'routing.intelligent': '$ python3 intelligent_routing.py\nInitializing intelligent call routing system...\nML-powered routing algorithms activated.\nCall distribution optimized for maximum efficiency.',
+          'routing.priority': '$ ./priority_queue.sh\nConfiguring priority-based call queuing...\nHigh-priority calls will be processed first.\nQueue optimization complete.',
+          'routing.config': '$ nano routing_rules.conf\nOpening call routing configuration...\nConfigure routing rules, priorities, and failover options.\n[Routing configuration panel would open here]',
+          'routing.monitor': '$ tail -f /var/log/calls/monitor.log\nMonitoring call routing in real-time...\n[Live call routing data would stream here]',
+          'queue.status': '$ python3 queue_status.py\nChecking current queue status...\nActive calls: 12 | Waiting: 3 | Average wait: 45s',
+          'queue.optimize': '$ ./optimize_wait.sh\nOptimizing queue wait times...\nImplementing dynamic queue management.\nWait time reduced by 23%.',
+          'queue.metrics': '$ cat queue_metrics.json\nDisplaying queue performance metrics...\n{"avg_wait": "45s", "completion_rate": "94%", "satisfaction": "4.7/5"}',
+          'queue.callback': '$ ruby callback_system.rb\nActivating intelligent callback system...\nCustomers can request callbacks instead of waiting.\nCallback success rate: 89%.',
+          'general.analysis': '$ ./call_analysis.ai\nRunning comprehensive call analysis...\nAnalyzing patterns, quality, and outcomes.\nGenerating optimization recommendations...'
+        };
+        
+        const key = `${category}.${type}`;
+        const message = messages[key] || `$ ./${type}_${category}.sh\nExecuting ${category} ${type} operation...\nOperation completed successfully.`;
+        window.terminal.addMessage('system', message);
+        
+        // Close the dropdown after action
+        const allDropdowns = document.querySelectorAll('.dropdown');
+        const allButtons = document.querySelectorAll('.menu-button');
+        allDropdowns.forEach(dropdown => dropdown.classList.remove('active'));
+        allButtons.forEach(button => button.classList.remove('active'));
+      }
+    }
+
+    function voiceFunction(category, type) {
+      if (window.terminal) {
+        const messages = {
+          'analysis.quality': '$ python3 voice_quality.py\nAnalyzing voice quality metrics...\nClarity: 89% | Noise level: -42dB | Enhancement potential: 15%',
+          'analysis.sentiment': '$ ./sentiment_analysis.ai\nPerforming voice sentiment analysis...\nTone: Professional | Confidence: High | Engagement: 78%',
+          'analysis.clarity': '$ ruby clarity_metrics.rb\nMeasuring voice clarity and intelligibility...\nSpeech clarity score: 92/100 | Articulation quality: Excellent',
+          'analysis.report': '$ cat analysis_report.json\nDisplaying voice analysis report...\n{"quality_score": 89, "clarity": 92, "sentiment": "positive"}',
+          'enhance.noise': '$ ./noise_reduction.sh\nApplying advanced noise reduction...\nBackground noise reduced by 35dB.\nVoice clarity significantly improved.',
+          'enhance.clarity': '$ python3 voice_enhance.py\nEnhancing voice clarity and quality...\nApplying AI-powered voice optimization.\nClarity improved by 27%.',
+          'enhance.settings': '$ nano enhancement.conf\nOpening voice enhancement settings...\n[Voice enhancement configuration panel]',
+          'enhance.realtime': '$ ./realtime_processor.c\nActivating real-time voice processing...\nLow-latency enhancement: Active | Processing delay: <5ms',
+          'recognize.speech': '$ ./speech_to_text.ai\nInitializing speech recognition system...\nAccuracy: 97.3% | Languages: 25+ | Real-time transcription: Active',
+          'recognize.accuracy': '$ tail accuracy_metrics.log\nDisplaying recognition accuracy metrics...\nWord accuracy: 97.3% | Phrase accuracy: 95.8% | Error rate: 2.7%'
+        };
+        
+        const key = `${category}.${type}`;
+        const message = messages[key] || `$ ./${type}_${category}.py\nExecuting voice ${category} ${type}...\nVoice processing completed.`;
+        window.terminal.addMessage('system', message);
+        
+        // Close the dropdown after action
+        const allDropdowns = document.querySelectorAll('.dropdown');
+        const allButtons = document.querySelectorAll('.menu-button');
+        allDropdowns.forEach(dropdown => dropdown.classList.remove('active'));
+        allButtons.forEach(button => button.classList.remove('active'));
+      }
+    }
+
+    function commFunction(category, type) {
+      if (window.terminal) {
+        const messages = {
+          'pattern.analyze': '$ python3 pattern_analysis.py\nAnalyzing communication patterns...\nIdentified 12 key patterns | Success rate correlation: 84%',
+          'pattern.trends': '$ ./trend_detection.ai\nDetecting communication trends...\nUpward trend in engagement | Peak hours: 10-11 AM, 2-3 PM',
+          'pattern.effectiveness': '$ ruby effectiveness_score.rb\nCalculating communication effectiveness...\nOverall effectiveness: 87% | Top performing approach: Consultative',
+          'pattern.report': '$ cat pattern_report.json\nDisplaying pattern analysis report...\n{"effectiveness": 87, "top_patterns": ["consultative", "solution_focused"]}',
+          'optimize.contact': '$ python3 contact_strategy.py\nOptimizing contact strategies...\nBest contact time: 10:30 AM | Preferred channel: Voice | Success rate: 78%',
+          'optimize.timing': '$ ./timing_optimizer.sh\nOptimizing contact timing...\nAnalyzing response patterns and availability.\nOptimal timing strategy configured.',
+          'optimize.channels': '$ cat channel_config.yml\nDisplaying channel optimization settings...\nPrimary: Voice (85% success) | Secondary: Email (72% success)',
+          'optimize.personalize': '$ ./personalization.ai\nApplying personalization algorithms...\nCustomizing approach based on communication history.\nPersonalization score: 91%',
+          'track.metrics': '$ python3 interaction_metrics.py\nTracking interaction metrics...\nTotal interactions: 1,247 | Success rate: 84% | Avg duration: 7.3 min',
+          'track.dashboard': '$ node analytics_dashboard.js\nLaunching analytics dashboard...\nReal-time metrics display activated.\n[Analytics dashboard would open here]',
+          'track.export': '$ cp interaction_data.csv /reports/\nExporting interaction data...\nData exported to /reports/communication_analytics.csv'
+        };
+        
+        const key = `${category}.${type}`;
+        const message = messages[key] || `$ ./${type}_${category}.py\nExecuting communication ${category} ${type}...\nCommunication analysis completed.`;
+        window.terminal.addMessage('system', message);
+        
+        // Close the dropdown after action
+        const allDropdowns = document.querySelectorAll('.dropdown');
+        const allButtons = document.querySelectorAll('.menu-button');
+        allDropdowns.forEach(dropdown => dropdown.classList.remove('active'));
+        allButtons.forEach(button => button.classList.remove('active'));
+      }
+    }
+
+    // Documentation and help functions
+    function showDocs(docType) {
+      if (window.terminal) {
+        const docs = {
+          'getting-started': 'Welcome to CallGhost!\n\nQuick Start Guide:\n- Access call management tools via menu\n- Use voice processing for audio optimization\n- Analyze communication patterns for insights\n- Track interaction metrics for performance\n\nType "help" for more commands.',
+          'call-management': 'CallGhost Call Management Guide:\n\n• Intelligent Routing: ML-powered call distribution\n• Priority Queues: High-priority call handling\n• Queue Optimization: Reduce wait times\n• Callback Systems: Alternative to holding\n• Real-time Monitoring: Live call tracking\n\nCommands: routing, queue, priority, callback',
+          'voice-processing': 'Voice Processing API Reference:\n\nAnalysis Endpoints:\n- voice_quality.py - Audio quality metrics\n- sentiment_analysis.ai - Emotional tone detection\n- clarity_metrics.rb - Speech intelligibility\n\nEnhancement:\n- noise_reduction.sh - Background noise filtering\n- voice_enhance.py - AI-powered optimization\n- realtime_processor.c - Low-latency processing',
+          'communication-examples': '{\n  "examples": [\n    {"input": "Optimize call routing", "output": "Intelligent routing activated"},\n    {"input": "Analyze voice quality", "output": "Quality score: 89/100"},\n    {"input": "Track interactions", "output": "1,247 interactions analyzed"}\n  ]\n}'
+        };
+        
+        window.terminal.addMessage('system', `$ cat ${docType}.md\n${docs[docType] || 'Documentation not found'}`);
+        
+        // Close the dropdown after action
+        const allDropdowns = document.querySelectorAll('.dropdown');
+        const allButtons = document.querySelectorAll('.menu-button');
+        allDropdowns.forEach(dropdown => dropdown.classList.remove('active'));
+        allButtons.forEach(button => button.classList.remove('active'));
+      }
+    }
+
+    function openSupport() {
+      window.open('https://github.com/onelastai/callghost', '_blank');
+      
+      // Close the dropdown after action
+      const allDropdowns = document.querySelectorAll('.dropdown');
+      const allButtons = document.querySelectorAll('.menu-button');
+      allDropdowns.forEach(dropdown => dropdown.classList.remove('active'));
+      allButtons.forEach(button => button.classList.remove('active'));
+    }
+
+    function openDiscord() {
+      window.open('https://discord.gg/callghost-support', '_blank');
+      
+      // Close the dropdown after action
+      const allDropdowns = document.querySelectorAll('.dropdown');
+      const allButtons = document.querySelectorAll('.menu-button');
+      allDropdowns.forEach(dropdown => dropdown.classList.remove('active'));
+      allButtons.forEach(button => button.classList.remove('active'));
+    }
+
+    function reportBug() {
+      if (window.terminal) {
+        window.terminal.addMessage('system', '$ nano bug_report.template\nOpening CallGhost bug report template...\n\nPlease describe:\n• Issue description\n• Steps to reproduce\n• Expected vs actual behavior\n• System information\n\n[Bug reporting system would open here]');
+        
+        // Close the dropdown after action
+        const allDropdowns = document.querySelectorAll('.dropdown');
+        const allButtons = document.querySelectorAll('.menu-button');
+        allDropdowns.forEach(dropdown => dropdown.classList.remove('active'));
+        allButtons.forEach(button => button.classList.remove('active'));
+      }
+    }
+
     // Terminal Chat Functionality
-    class NeoChatTerminal {
+    class CallGhostTerminal {
       constructor() {
         this.output = document.getElementById('terminal-output');
         this.input = document.getElementById('user-input');
@@ -966,7 +1119,7 @@ Type your message below and let's start chatting!
         this.showTyping(true);
         
         try {
-          const response = await fetch('/chat', {
+          const response = await fetch('/callghost/chat', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -978,9 +1131,9 @@ Type your message below and let's start chatting!
           const data = await response.json();
           
           if (data.success) {
-            this.addMessage('agent', data.response, data.timestamp);
+            this.addMessage('agent', data.message, data.timestamp);
           } else {
-            this.addMessage('error', data.error || 'Sorry, there was an error processing your message.');
+            this.addMessage('error', data.message || 'Sorry, there was an error processing your communication request.');
           }
         } catch (error) {
           console.error('Chat error:', error);
@@ -1045,7 +1198,7 @@ Type your message below and let's start chatting!
     
     // Initialize terminal when page loads
     document.addEventListener('DOMContentLoaded', () => {
-      window.terminal = new NeoChatTerminal();
+      window.terminal = new CallGhostTerminal();
     });
   </script>
 </body>

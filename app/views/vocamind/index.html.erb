@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NeoChat - AI Conversation Terminal | onelastai.com</title>
+  <title>VocaMind - Voice Technology & Language AI Terminal | onelastai.com</title>
   
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
@@ -653,23 +653,23 @@
   <!-- Hero Section -->
   <section class="hero-section">
     <div class="hero-content">
-      <div class="agent-logo">�️</div>
+      <div class="agent-logo">🎤</div>
       <h1 class="agent-title">VocaMind</h1>
-      <p class="agent-tagline">Advanced language learning and communication specialist</p>
+      <p class="agent-tagline">Advanced Voice Technology & Language Intelligence Specialist</p>
       <p class="agent-description">
-        I am VocaMind, your intelligent language learning companion. I help you master new 
-        languages, improve communication skills, practice conversations, and understand linguistic 
-        nuances. From vocabulary building to fluency development, I accelerate your language journey.
+        I am VocaMind, your expert in voice technology, speech analysis, and linguistic intelligence. 
+        I provide advanced speech synthesis, accent training, phonetic analysis, voice coaching,
+        and conversation practice with AI-powered precision for perfect pronunciation and fluency.
       </p>
       
       <div class="agent-stats">
         <div class="stat-item">
           <span class="stat-value"><%= @agent_stats[:total_conversations] %></span>
-          <span class="stat-label">Conversations</span>
+          <span class="stat-label">Voice Sessions</span>
         </div>
         <div class="stat-item">
           <span class="stat-value"><%= @agent_stats[:average_rating] %></span>
-          <span class="stat-label">Rating</span>
+          <span class="stat-label">Accuracy</span>
         </div>
         <div class="stat-item">
           <span class="stat-value"><%= @agent_stats[:response_time] %></span>
@@ -682,8 +682,8 @@
   <!-- Terminal Section -->
   <section class="terminal-section">
     <div class="terminal-header">
-      <h2 class="terminal-title">🖥️ NeoChat Terminal Interface</h2>
-      <p class="terminal-subtitle">Type your questions or commands below and press Enter to chat with NeoChat</p>
+      <h2 class="terminal-title">🎤 VocaMind Voice Technology Terminal</h2>
+      <p class="terminal-subtitle">Enter your voice analysis, speech synthesis, or language learning requests below</p>
     </div>
     
     <div class="terminal-container">
@@ -691,40 +691,40 @@
         <div class="terminal-button"></div>
         <div class="terminal-button yellow"></div>
         <div class="terminal-button green"></div>
-        <span class="terminal-title-text">neochat@onelastai.com:~$</span>
+        <span class="terminal-title-text">🎤 VocaMind Voice Terminal</span>
       </div>
       
       <div class="terminal-output" id="terminal-output">
         <div class="welcome-message">
 ╔══════════════════════════════════════════════════════════════════╗
-║                       Welcome to VocaMind                        ║
-║              Your AI Conversation Terminal                       ║
+║                      Welcome to VocaMind                        ║
+║            Voice Technology & Language Intelligence              ║
 ╚══════════════════════════════════════════════════════════════════╝
 
-<div class="system-info">System: NeoChat v1.0 | Status: Online | Agent ID: <%= @agent.id %>
+<div class="system-info">System: VocaMind v1.0 | Status: Online | Agent ID: voice-ai
 <%= Time.current.strftime("Date: %Y-%m-%d %H:%M:%S") %> | Session: Active</div>
 
-<span style="color: #00d4ff;">Welcome! I'm NeoChat, your intelligent AI assistant.</span>
+<span style="color: #00d4ff;">Welcome! I'm VocaMind, your voice technology and language specialist.</span>
 
 I can help you with:
-• 💭 Questions & Answers on any topic
-• 🛠 Problem solving and analysis  
-• 💡 Creative brainstorming and ideas
-• 📚 Information research and learning
-• 🎯 Suggestions and helpful advice
-• 💬 Friendly conversation
+• 🎤 Advanced Speech Analysis & Voice Pattern Recognition
+• �️ Voice Synthesis & Natural Text-to-Speech Generation  
+• 🌍 Accent Training & Pronunciation Coaching
+• �‍🏫 Personalized Language Coaching & Fluency Development
+• 🔬 Phonetic Analysis & IPA Transcription
+• 💬 Interactive Conversation Practice with AI Partners
 
-Type your message below and let's start chatting!
+Type your voice technology or language learning request below!
 
         </div>
         
         <div class="typing-indicator" id="typing-indicator">
-          NeoChat is thinking
+          VocaMind is processing speech
         </div>
       </div>
       
       <div class="terminal-input-container">
-        <span class="terminal-prompt">neochat@terminal:~$ </span>
+        <span class="terminal-prompt">vocamind@voice:~$ </span>
         <input 
           type="text" 
           class="terminal-input" 
@@ -966,7 +966,7 @@ Type your message below and let's start chatting!
         this.showTyping(true);
         
         try {
-          const response = await fetch('/chat', {
+          const response = await fetch('/vocamind/chat', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

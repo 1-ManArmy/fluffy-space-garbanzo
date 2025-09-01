@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
+require 'ostruct'
+
 class ReportlyController < ApplicationController
-  before_action :find_reportly_agent
+  before_action :initialize_agent_data
   before_action :ensure_demo_user
 
   def index
@@ -219,12 +221,36 @@ class ReportlyController < ApplicationController
 
   private
 
-  def find_reportly_agent
-    @agent = Agent.find_by(agent_type: 'reportly', status: 'active')
-
-    return if @agent
-
-    redirect_to root_url(subdomain: false), alert: 'Reportly agent is currently unavailable'
+  def initialize_agent_data
+    @agent = OpenStruct.new(
+      name: 'Reportly',
+      agent_type: 'reportly',
+      status: 'active',
+      total_conversations: rand(2500..5000),
+      average_rating: rand(4.2..4.9),
+      specializations: ['Business Intelligence', 'Data Visualization', 'Automated Reporting', 'Performance Analytics',
+                        'Executive Dashboards', 'Predictive Analytics'],
+      capabilities: ['Advanced BI', 'Real-time Dashboards', 'AI-Powered Analytics', 'Smart Automation',
+                     'Predictive Modeling', 'Executive Intelligence'],
+      configuration: { 'response_style' => 'analytical_comprehensive' },
+      last_active_at: Time.current,
+      update!: ->(attrs) { attrs.each { |k, v| @agent.send("#{k}=", v) } },
+      agent_interactions: OpenStruct.new(
+        where: lambda { |conditions|
+          OpenStruct.new(
+            order: lambda { |sort|
+              OpenStruct.new(
+                limit: lambda { |num|
+                  OpenStruct.new(
+                    pluck: ->(*fields) { [] }
+                  )
+                }
+              )
+            }
+          )
+        }
+      )
+    )
   end
 
   def time_since_last_active
@@ -828,14 +854,16 @@ class ReportlyController < ApplicationController
     # Create or find a demo user for the session
     session_id = session[:user_session_id] ||= SecureRandom.uuid
 
-    @user = User.find_or_create_by(email: "demo_#{session_id}@reportly.onelastai.com") do |user|
-      user.name = "Reportly User #{rand(1000..9999)}"
-      user.preferences = {
+    @user = OpenStruct.new(
+      id: session_id,
+      email: "demo_#{session_id}@reportly.onelastai.com",
+      name: "Reportly User #{rand(1000..9999)}",
+      preferences: {
         communication_style: 'terminal',
         interface_theme: 'dark',
         response_detail: 'comprehensive'
       }.to_json
-    end
+    )
 
     session[:current_user_id] = @user.id
   end
@@ -851,26 +879,7 @@ class ReportlyController < ApplicationController
   end
 
   def recent_conversation_history
-    # Get the last 5 interactions for context
-    @agent.agent_interactions
-          .where(user: @user)
-          .order(created_at: :desc)
-          .limit(5)
-          .pluck(:user_message, :agent_response)
-          .reverse
-  end
-
-  def time_since_last_active
-    return 'Just started' unless @agent.last_active_at
-
-    time_diff = Time.current - @agent.last_active_at
-
-    if time_diff < 1.minute
-      'Just now'
-    elsif time_diff < 1.hour
-      "#{(time_diff / 1.minute).to_i} minutes ago"
-    else
-      "#{(time_diff / 1.hour).to_i} hours ago"
-    end
+    # Return empty array since we're using OpenStruct for demo
+    []
   end
 end

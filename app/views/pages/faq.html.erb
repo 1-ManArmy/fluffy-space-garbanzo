@@ -68,32 +68,46 @@
       font-weight: 600;
       color: #00d4ff;
       transition: all 0.3s ease;
+      user-select: none;
     }
 
     .faq-question:hover {
       background: rgba(0, 212, 255, 0.2);
+      transform: translateX(5px);
+    }
+
+    .faq-question:active {
+      transform: translateX(2px);
     }
 
     .faq-answer {
       padding: 0 1.5rem;
       max-height: 0;
       overflow: hidden;
-      transition: all 0.3s ease;
+      transition: all 0.4s ease-in-out;
       color: #b8b8b8;
       line-height: 1.6;
+      opacity: 0;
     }
 
     .faq-answer.active {
       padding: 1.5rem;
-      max-height: 500px;
+      max-height: 800px;
+      opacity: 1;
     }
 
     .faq-icon {
-      transition: transform 0.3s ease;
+      transition: all 0.3s ease;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #00d4ff;
+      min-width: 20px;
+      text-align: center;
     }
 
     .faq-item.active .faq-icon {
       transform: rotate(45deg);
+      color: #66d9ff;
     }
 
     .search-box {
@@ -444,25 +458,48 @@
   </section>
 
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
+    // Function to initialize FAQ functionality
+    function initializeFAQ() {
       // FAQ toggle functionality
       const faqQuestions = document.querySelectorAll('.faq-question');
       faqQuestions.forEach(question => {
-        question.addEventListener('click', () => {
+        // Remove any existing event listeners to prevent duplicates
+        question.replaceWith(question.cloneNode(true));
+      });
+      
+      // Re-select after cloning to remove old listeners
+      const newFaqQuestions = document.querySelectorAll('.faq-question');
+      newFaqQuestions.forEach(question => {
+        question.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          
           const faqItem = question.parentElement;
           const answer = faqItem.querySelector('.faq-answer');
+          const icon = question.querySelector('.faq-icon');
           
           // Close other open FAQs
           document.querySelectorAll('.faq-item').forEach(item => {
             if (item !== faqItem) {
               item.classList.remove('active');
-              item.querySelector('.faq-answer').classList.remove('active');
+              const otherAnswer = item.querySelector('.faq-answer');
+              const otherIcon = item.querySelector('.faq-icon');
+              if (otherAnswer) otherAnswer.classList.remove('active');
+              if (otherIcon) otherIcon.textContent = '+';
             }
           });
           
           // Toggle current FAQ
-          faqItem.classList.toggle('active');
-          answer.classList.toggle('active');
+          const isActive = faqItem.classList.contains('active');
+          if (isActive) {
+            faqItem.classList.remove('active');
+            answer.classList.remove('active');
+            icon.textContent = '+';
+          } else {
+            faqItem.classList.add('active');
+            answer.classList.add('active');
+            icon.textContent = '−';
+          }
         });
       });
 
@@ -471,7 +508,8 @@
       const faqItems = document.querySelectorAll('.faq-item');
 
       categoryTabs.forEach(tab => {
-        tab.addEventListener('click', () => {
+        tab.addEventListener('click', (e) => {
+          e.preventDefault();
           const category = tab.dataset.category;
           
           // Update active tab
@@ -491,21 +529,35 @@
 
       // Search functionality
       const searchInput = document.getElementById('search-input');
-      searchInput.addEventListener('input', (e) => {
-        const searchTerm = e.target.value.toLowerCase();
-        
-        faqItems.forEach(item => {
-          const question = item.querySelector('.faq-question').textContent.toLowerCase();
-          const answer = item.querySelector('.faq-answer').textContent.toLowerCase();
+      if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+          const searchTerm = e.target.value.toLowerCase();
           
-          if (question.includes(searchTerm) || answer.includes(searchTerm)) {
-            item.style.display = 'block';
-          } else {
-            item.style.display = 'none';
-          }
+          faqItems.forEach(item => {
+            const question = item.querySelector('.faq-question').textContent.toLowerCase();
+            const answer = item.querySelector('.faq-answer').textContent.toLowerCase();
+            
+            if (question.includes(searchTerm) || answer.includes(searchTerm)) {
+              item.style.display = 'block';
+            } else {
+              item.style.display = 'none';
+            }
+          });
         });
-      });
-    });
+      }
+    }
+
+    // Initialize on both DOMContentLoaded and turbo:load for Rails 7 compatibility
+    document.addEventListener('DOMContentLoaded', initializeFAQ);
+    document.addEventListener('turbo:load', initializeFAQ);
+    
+    // Also initialize immediately if DOM is already loaded
+    if (document.readyState === 'loading') {
+      // DOM is still loading
+    } else {
+      // DOM is already loaded
+      initializeFAQ();
+    }
   </script>
 </body>
 </html>

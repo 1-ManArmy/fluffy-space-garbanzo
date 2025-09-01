@@ -653,23 +653,23 @@
   <!-- Hero Section -->
   <section class="hero-section">
     <div class="hero-content">
-      <div class="agent-logo">🌌</div>
+      <div class="agent-logo">✍️</div>
       <h1 class="agent-title">AIBlogster</h1>
-      <p class="agent-tagline">Professional blog writing and content creation specialist</p>
+      <p class="agent-tagline">Professional Content Creation & Blog Writing Specialist</p>
       <p class="agent-description">
         I am AIBlogster, your expert blog writer and content strategist. I help create engaging 
         blog posts, develop content strategies, optimize for SEO, and craft compelling articles 
-        that resonate with your audience. From idea to publication, I make blogging effortless.
+        that resonate with your audience. From idea to publication, I make content creation effortless.
       </p>
       
       <div class="agent-stats">
         <div class="stat-item">
-          <span class="stat-value"><%= @agent_stats[:total_conversations] %></span>
-          <span class="stat-label">Conversations</span>
+          <span class="stat-value"><%= @agent_stats[:articles_generated] %></span>
+          <span class="stat-label">Articles</span>
         </div>
         <div class="stat-item">
-          <span class="stat-value"><%= @agent_stats[:average_rating] %></span>
-          <span class="stat-label">Rating</span>
+          <span class="stat-value"><%= @agent_stats[:engagement_rate] %>%</span>
+          <span class="stat-label">Engagement</span>
         </div>
         <div class="stat-item">
           <span class="stat-value"><%= @agent_stats[:response_time] %></span>
@@ -682,8 +682,8 @@
   <!-- Terminal Section -->
   <section class="terminal-section">
     <div class="terminal-header">
-      <h2 class="terminal-title">🖥️ NeoChat Terminal Interface</h2>
-      <p class="terminal-subtitle">Type your questions or commands below and press Enter to chat with NeoChat</p>
+      <h2 class="terminal-title">✍️ AIBlogster Content Terminal</h2>
+      <p class="terminal-subtitle">Describe your content creation needs or blogging goals</p>
     </div>
     
     <div class="terminal-container">
@@ -691,7 +691,7 @@
         <div class="terminal-button"></div>
         <div class="terminal-button yellow"></div>
         <div class="terminal-button green"></div>
-        <span class="terminal-title-text">neochat@onelastai.com:~$</span>
+        <span class="terminal-title-text">aiblogster@content:~$</span>
       </div>
       
       <div class="terminal-output" id="terminal-output">
@@ -966,7 +966,7 @@ Type your message below and let's start chatting!
         this.showTyping(true);
         
         try {
-          const response = await fetch('/chat', {
+          const response = await fetch('/aiblogster/chat', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

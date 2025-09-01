@@ -1,161 +1,294 @@
-<!-- Testimonials & Success Stories Section -->
-<section class="testimonials-section relative py-20 overflow-hidden">
-  <!-- Animated Needle Cone Lights Background -->
-  <div class="needle-lights-container absolute inset-0">
-    <div class="needle-light needle-1"></div>
-    <div class="needle-light needle-2"></div>
-    <div class="needle-light needle-3"></div>
-    <div class="needle-light needle-4"></div>
-    <div class="needle-light needle-5"></div>
-    <div class="needle-light needle-6"></div>
-    <div class="needle-light needle-7"></div>
-    <div class="needle-light needle-8"></div>
-  </div>
-  
-  <!-- Deep Purple Gradient Background -->
-  <div class="absolute inset-0 bg-gradient-to-br from-purple-900/40 via-indigo-900/30 to-black"></div>
-  <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/40"></div>
-  
-  <!-- Floating Purple Particles -->
-  <div class="floating-particles absolute inset-0 pointer-events-none">
-    <div class="particle particle-1"></div>
-    <div class="particle particle-2"></div>
-    <div class="particle particle-3"></div>
-    <div class="particle particle-4"></div>
-    <div class="particle particle-5"></div>
-  </div>
-  
-  <div class="container mx-auto px-4 relative z-20">
-    <div class="text-center mb-16">
-      <h2 class="text-4xl lg:text-5xl font-bold mb-6 text-gradient bg-gradient-to-r from-purple-400 via-pink-400 to-purple-600 bg-clip-text text-transparent">Success Stories</h2>
-      <p class="text-xl text-gray-300 max-w-3xl mx-auto">Voices from our global learning community who mastered the shadows</p>
-    </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Success Stories</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* --- Cyberpunk/Mythic Operator Theme --- */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0A0A0A; /* Deep matte black (The Void) */
+            color: #E5E7EB; /* Light gray for base text */
+        }
+
+        /* --- Main Section Styling --- */
+        .testimonials-section {
+            background-color: #0A0A0A;
+        }
+
+        /* --- Canvas Background --- */
+        #particle-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: 0.6;
+        }
+
+        /* --- Text and Animations --- */
+        .text-glow {
+            text-shadow: 0 0 10px rgba(236, 72, 153, 0.4), 0 0 20px rgba(236, 72, 153, 0.2);
+        }
+        
+        .text-gradient-pink {
+             background: linear-gradient(to right, #f9a8d4, #ec4899, #be185d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* --- Card Structure (Shared Style) --- */
+        .cyber-card {
+            position: relative;
+            background: rgba(20, 20, 20, 0.5); /* Semi-transparent dark background */
+            backdrop-filter: blur(10px);
+            border: 2px solid #FF00CC; /* Neon pink/magenta border */
+            border-radius: 16px; /* Rounded corners */
+            z-index: 2;
+            overflow: hidden;
+            box-shadow: 0 0 15px rgba(255, 0, 204, 0.2),  /* Outer glow */
+                        inset 0 0 10px rgba(255, 0, 204, 0.1); /* Inner glow for depth */
+            transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), 
+                        box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        
+        .cyber-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 0 30px rgba(255, 0, 204, 0.4), /* Intensified outer glow */
+                        inset 0 0 15px rgba(255, 0, 204, 0.2);
+        }
+
+        /* --- Testimonial Card Specifics --- */
+        .testimonial-text {
+            color: #D1D5DB; /* Gray-300 */
+            font-style: italic;
+            border-left: 3px solid #FF00CC;
+            padding-left: 1rem;
+        }
+
+        .author-name { color: #FFF; font-weight: 600; }
+        .author-role { color: #9CA3AF; /* Gray-400 */ font-size: 0.875rem; }
+
+        .story-stats {
+            border-top: 1px solid rgba(255, 0, 204, 0.2);
+            margin-top: auto; /* Pushes stats to the bottom */
+            padding-top: 1rem;
+        }
+        .stat-number {
+            color: #F472B6; /* Pink-400 */
+            font-weight: 700;
+        }
+        .stat-label {
+            color: #6B7280; /* Gray-500 */
+            font-size: 0.75rem;
+            text-transform: uppercase;
+        }
+
+    </style>
+</head>
+<body>
+
+<section class="testimonials-section relative py-20 sm:py-24 overflow-hidden">
+    <!-- Dynamic Canvas Background -->
+    <canvas id="particle-canvas"></canvas>
     
-    <div class="testimonials-carousel" data-controller="carousel">
-      <div class="testimonial-container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <!-- Testimonial Card 1 -->
-        <div class="success-story-card group">
-          <div class="card-glow-effect"></div>
-          <div class="card-inner">
-            <div class="quote-section">
-              <div class="quote-icon-wrapper">
-                <div class="quote-icon">💬</div>
-                <div class="quote-glow"></div>
-              </div>
-              <p class="testimonial-text">"This AI platform changed my learning forever. The personalized guidance is incredible!"</p>
-            </div>
-            
-            <div class="author-section">
-              <div class="author-avatar-wrapper">
-                <div class="author-avatar">🇮🇳</div>
-                <div class="avatar-glow"></div>
-              </div>
-              <div class="author-info">
-                <h4 class="author-name">Priya Sharma</h4>
-                <p class="author-role">Computer Science Student</p>
-                <p class="author-location">Mumbai, India</p>
-              </div>
-            </div>
-            
-            <div class="story-stats">
-              <div class="stat-item">
-                <span class="stat-number">6</span>
-                <span class="stat-label">Months</span>
-              </div>
-              <div class="stat-item">
-                <span class="stat-number">15</span>
-                <span class="stat-label">Projects</span>
-              </div>
-              <div class="stat-item">
-                <span class="stat-number">95%</span>
-                <span class="stat-label">Score</span>
-              </div>
-            </div>
-          </div>
+    <div class="container mx-auto px-4 relative z-10">
+        <div class="text-center mb-16">
+            <h2 class="text-4xl lg:text-5xl font-bold mb-6 text-glow text-gradient-pink">Success Stories</h2>
+            <p class="text-xl text-gray-300 max-w-3xl mx-auto">Voices from our global community who mastered the shadows</p>
         </div>
         
-        <!-- Testimonial Card 2 -->
-        <div class="success-story-card group">
-          <div class="card-glow-effect"></div>
-          <div class="card-inner">
-            <div class="quote-section">
-              <div class="quote-icon-wrapper">
-                <div class="quote-icon">💬</div>
-                <div class="quote-glow"></div>
-              </div>
-              <p class="testimonial-text">"From zero to full-stack developer in 6 months. The AI guidance was my secret weapon."</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Testimonial Card 1 -->
+            <div class="cyber-card p-6">
+                <div class="flex items-start gap-4 mb-6">
+                    <div class="text-pink-400 text-3xl flex-shrink-0 mt-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M9.983 3v7.391c0 2.9-2.35 5.258-5.238 5.258h-1.745v7.351h2.745c4.196 0 7.625-3.428 7.625-7.625v-12.375h-3.387zm10.625 0v7.391c0 2.9-2.35 5.258-5.238 5.258h-1.745v7.351h2.745c4.196 0 7.625-3.428 7.625-7.625v-12.375h-3.387z"/></svg>
+                    </div>
+                    <p class="testimonial-text">"This AI platform changed my learning forever. The personalized guidance is incredible!"</p>
+                </div>
+                
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="w-12 h-12 rounded-full flex items-center justify-center bg-gray-800 border-2 border-pink-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-pink-400"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    </div>
+                    <div>
+                        <h4 class="author-name">Priya Sharma</h4>
+                        <p class="author-role">CS Student from Mumbai, India</p>
+                    </div>
+                </div>
+                
+                <div class="story-stats flex justify-around text-center">
+                    <div class="stat-item">
+                        <span class="block text-2xl stat-number">6</span>
+                        <span class="stat-label">Months</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="block text-2xl stat-number">15</span>
+                        <span class="stat-label">Projects</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="block text-2xl stat-number">95%</span>
+                        <span class="stat-label">Score</span>
+                    </div>
+                </div>
             </div>
             
-            <div class="author-section">
-              <div class="author-avatar-wrapper">
-                <div class="author-avatar">🇺🇸</div>
-                <div class="avatar-glow"></div>
-              </div>
-              <div class="author-info">
-                <h4 class="author-name">Marcus Johnson</h4>
-                <p class="author-role">Freelance Developer</p>
-                <p class="author-location">San Francisco, USA</p>
-              </div>
+            <!-- Testimonial Card 2 -->
+            <div class="cyber-card p-6">
+                <div class="flex items-start gap-4 mb-6">
+                    <div class="text-pink-400 text-3xl flex-shrink-0 mt-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M9.983 3v7.391c0 2.9-2.35 5.258-5.238 5.258h-1.745v7.351h2.745c4.196 0 7.625-3.428 7.625-7.625v-12.375h-3.387zm10.625 0v7.391c0 2.9-2.35 5.258-5.238 5.258h-1.745v7.351h2.745c4.196 0 7.625-3.428 7.625-7.625v-12.375h-3.387z"/></svg>
+                    </div>
+                    <p class="testimonial-text">"From zero to full-stack developer in 6 months. The AI guidance was my secret weapon."</p>
+                </div>
+                
+                <div class="flex items-center gap-4 mb-6">
+                     <div class="w-12 h-12 rounded-full flex items-center justify-center bg-gray-800 border-2 border-pink-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-pink-400"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    </div>
+                    <div>
+                        <h4 class="author-name">Marcus Johnson</h4>
+                        <p class="author-role">Freelancer from San Francisco, USA</p>
+                    </div>
+                </div>
+                
+                <div class="story-stats flex justify-around text-center">
+                    <div class="stat-item">
+                        <span class="block text-2xl stat-number">8</span>
+                        <span class="stat-label">Clients</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="block text-2xl stat-number">$120K</span>
+                        <span class="stat-label">Earned</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="block text-2xl stat-number">5★</span>
+                        <span class="stat-label">Rating</span>
+                    </div>
+                </div>
             </div>
             
-            <div class="story-stats">
-              <div class="stat-item">
-                <span class="stat-number">8</span>
-                <span class="stat-label">Clients</span>
-              </div>
-              <div class="stat-item">
-                <span class="stat-number">$120K</span>
-                <span class="stat-label">Earned</span>
-              </div>
-              <div class="stat-item">
-                <span class="stat-number">5★</span>
-                <span class="stat-label">Rating</span>
-              </div>
+            <!-- Testimonial Card 3 -->
+            <div class="cyber-card p-6">
+                <div class="flex items-start gap-4 mb-6">
+                    <div class="text-pink-400 text-3xl flex-shrink-0 mt-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M9.983 3v7.391c0 2.9-2.35 5.258-5.238 5.258h-1.745v7.351h2.745c4.196 0 7.625-3.428 7.625-7.625v-12.375h-3.387zm10.625 0v7.391c0 2.9-2.35 5.258-5.238 5.258h-1.745v7.351h2.745c4.196 0 7.625-3.428 7.625-7.625v-12.375h-3.387z"/></svg>
+                    </div>
+                    <p class="testimonial-text">"The phantom-like intelligence of this AI feels like having a coding mentor 24/7."</p>
+                </div>
+                
+                <div class="flex items-center gap-4 mb-6">
+                     <div class="w-12 h-12 rounded-full flex items-center justify-center bg-gray-800 border-2 border-pink-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-pink-400"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    </div>
+                    <div>
+                        <h4 class="author-name">Elena Weber</h4>
+                        <p class="author-role">Tech Lead from Berlin, Germany</p>
+                    </div>
+                </div>
+                
+                <div class="story-stats flex justify-around text-center">
+                    <div class="stat-item">
+                        <span class="block text-2xl stat-number">12</span>
+                        <span class="stat-label">Team Size</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="block text-2xl stat-number">3x</span>
+                        <span class="stat-label">Faster</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="block text-2xl stat-number">€180K</span>
+                        <span class="stat-label">Salary</span>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-        
-        <!-- Testimonial Card 3 -->
-        <div class="success-story-card group">
-          <div class="card-glow-effect"></div>
-          <div class="card-inner">
-            <div class="quote-section">
-              <div class="quote-icon-wrapper">
-                <div class="quote-icon">💬</div>
-                <div class="quote-glow"></div>
-              </div>
-              <p class="testimonial-text">"The phantom-like intelligence of this AI feels like having a coding mentor 24/7."</p>
-            </div>
-            
-            <div class="author-section">
-              <div class="author-avatar-wrapper">
-                <div class="author-avatar">🇩🇪</div>
-                <div class="avatar-glow"></div>
-              </div>
-              <div class="author-info">
-                <h4 class="author-name">Elena Weber</h4>
-                <p class="author-role">Tech Lead</p>
-                <p class="author-location">Berlin, Germany</p>
-              </div>
-            </div>
-            
-            <div class="story-stats">
-              <div class="stat-item">
-                <span class="stat-number">12</span>
-                <span class="stat-label">Team Size</span>
-              </div>
-              <div class="stat-item">
-                <span class="stat-number">3x</span>
-                <span class="stat-label">Faster</span>
-              </div>
-              <div class="stat-item">
-                <span class="stat-number">€180K</span>
-                <span class="stat-label">Salary</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
-  </div>
 </section>
+
+<script>
+    // --- Particle Canvas Animation Script ---
+    const canvas = document.getElementById('particle-canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    const numParticles = window.innerWidth > 768 ? 80 : 30;
+    const connectDistance = 120;
+    const particleSpeed = 0.3;
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = canvas.parentElement.offsetHeight;
+    }
+    class Particle {
+        constructor(x, y, vx, vy, radius, color) {
+            this.x = x; this.y = y; this.vx = vx; this.vy = vy; this.radius = radius; this.color = color;
+        }
+        draw() {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+            ctx.fillStyle = this.color;
+            ctx.fill();
+        }
+        update() {
+            this.x += this.vx; this.y += this.vy;
+            if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+            if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+        }
+    }
+    function init() {
+        particles = [];
+        for (let i = 0; i < numParticles; i++) {
+            const x = Math.random() * canvas.width;
+            const y = Math.random() * canvas.height;
+            const vx = (Math.random() - 0.5) * particleSpeed;
+            const vy = (Math.random() - 0.5) * particleSpeed;
+            const radius = Math.random() * 1.5 + 1;
+            const color = `rgba(255, 0, 204, ${Math.random() * 0.5 + 0.2})`; 
+            particles.push(new Particle(x, y, vx, vy, radius, color));
+        }
+    }
+    function connect() {
+        for (let i = 0; i < particles.length; i++) {
+            for (let j = i; j < particles.length; j++) {
+                const dx = particles[i].x - particles[j].x;
+                const dy = particles[i].y - particles[j].y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                if (distance < connectDistance) {
+                    ctx.beginPath();
+                    ctx.moveTo(particles[i].x, particles[i].y);
+                    ctx.lineTo(particles[j].x, particles[j].y);
+                    const opacity = 1 - distance / connectDistance;
+                    ctx.strokeStyle = `rgba(236, 72, 153, ${opacity * 0.5})`;
+                    ctx.lineWidth = 0.8;
+                    ctx.stroke();
+                }
+            }
+        }
+    }
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => { p.update(); p.draw(); });
+        connect();
+        requestAnimationFrame(animate);
+    }
+    window.addEventListener('resize', () => {
+        resizeCanvas();
+        init(); 
+    });
+    // A slight delay to ensure parent element has its final size
+    setTimeout(() => {
+        resizeCanvas();
+        init();
+        animate();
+    }, 100);
+</script>
+
+</body>
+</html>

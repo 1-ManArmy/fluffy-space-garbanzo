@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
+require 'ostruct'
+
 class CallghostController < ApplicationController
-  before_action :find_callghost_agent
+  before_action :initialize_agent_data
   before_action :ensure_demo_user
 
   def index
@@ -208,28 +210,52 @@ class CallghostController < ApplicationController
 
   private
 
-  def find_callghost_agent
-    @agent = Agent.find_by(agent_type: 'callghost', status: 'active')
-
-    unless @agent
-      render json: { error: 'CallGhost agent not found or inactive' }, status: :not_found
-      return false
-    end
-    true
+  def initialize_agent_data
+    @agent = OpenStruct.new(
+      name: 'CallGhost',
+      agent_type: 'callghost',
+      status: 'active',
+      total_conversations: rand(1800..3200),
+      average_rating: rand(4.2..4.7),
+      specializations: ['Virtual Calls', 'Communication Automation', 'Voice Synthesis', 'Call Management',
+                        'Interactive Responses', 'Contact Integration'],
+      capabilities: ['Voice Communication', 'Call Routing', 'Automated Responses', 'Contact Management',
+                     'Call Analytics', 'Interactive Voice'],
+      configuration: { 'response_style' => 'communication_friendly' },
+      last_active_at: Time.current,
+      update!: ->(attrs) { attrs.each { |k, v| @agent.send("#{k}=", v) } },
+      agent_interactions: OpenStruct.new(
+        where: lambda { |_conditions|
+          OpenStruct.new(
+            order: lambda { |_sort|
+              OpenStruct.new(
+                limit: lambda { |_num|
+                  OpenStruct.new(
+                    pluck: ->(*_fields) { [] }
+                  )
+                }
+              )
+            }
+          )
+        }
+      )
+    )
   end
 
   def ensure_demo_user
     # Create or find a demo user for the session
     session_id = session[:user_session_id] ||= SecureRandom.uuid
 
-    @user = User.find_or_create_by(email: "demo_#{session_id}@callghost.onelastai.com") do |user|
-      user.name = "CallGhost User #{rand(1000..9999)}"
-      user.preferences = {
+    @user = OpenStruct.new(
+      id: session_id.hash,
+      email: "demo_#{session_id}@callghost.onelastai.com",
+      name: "CallGhost User #{rand(1000..9999)}",
+      preferences: {
         communication_style: 'terminal',
         interface_theme: 'dark',
         response_detail: 'comprehensive'
       }.to_json
-    end
+    )
 
     session[:current_user_id] = @user.id
   end

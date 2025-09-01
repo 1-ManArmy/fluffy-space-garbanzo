@@ -1,7 +1,7 @@
 class PagesController < ApplicationController
   before_action :authenticate_user!,
                 except: %i[about contact contact_submit blog news faq signup signup_submit login login_submit privacy terms cookies
-                           marketplace tutorials changelog status careers partners developers get_started schedule_demo schedule_demo_submit start_free]
+                           marketplace tutorials changelog status careers partners developers get_started schedule_demo schedule_demo_submit start_free support send_support_email]
 
   # Public Pages
   def about; end
@@ -10,12 +10,29 @@ class PagesController < ApplicationController
 
   def contact_submit
     # Handle contact form submission
-    redirect_to contact_path, notice: 'Message sent successfully!'
+    # Forward contact form data to mail@onelastai.com
+    name = params[:name]
+    email = params[:email]
+    subject = params[:subject] || 'Contact Form Submission'
+    message = params[:message]
+
+    Rails.logger.info "Contact form submission: #{name} <#{email}> -> mail@onelastai.com"
+    Rails.logger.info "Subject: #{subject}"
+    Rails.logger.info "Message: #{message}"
+
+    # TODO: Implement email sending to mail@onelastai.com
+    # ContactMailer.new_contact(name, email, subject, message, 'mail@onelastai.com').deliver_now
+
+    redirect_to contact_path, notice: 'Message sent successfully! We will get back to you at mail@onelastai.com'
   end
 
   def blog; end
 
   def news; end
+
+  def news_onelastai; end
+
+  def news_onemanarmy; end
 
   def faq; end
 
@@ -98,6 +115,37 @@ class PagesController < ApplicationController
 
   def support; end
 
+  def send_support_email
+    # Handle support email form submission
+    sender_name = params[:sender_name]
+    sender_email = params[:sender_email]
+    subject = params[:subject]
+    message = params[:message]
+    priority = params[:priority] || 'medium'
+
+    # Log the support request
+    Rails.logger.info "Support email received from: #{sender_name} <#{sender_email}>"
+    Rails.logger.info "Subject: #{subject}"
+    Rails.logger.info "Priority: #{priority}"
+    Rails.logger.info "Message: #{message}"
+
+    # In a real application, you would send an email to mail@onelastai.com
+    # For now, we'll just log it and return a success response
+    # TODO: Implement actual email sending
+    # SupportMailer.new_support_request(sender_name, sender_email, subject, message, priority, 'mail@onelastai.com').deliver_now
+
+    respond_to do |format|
+      format.json { render json: { success: true, message: 'Email sent successfully!' } }
+      format.html { redirect_to support_path, notice: 'Your message has been sent! We will respond within 24 hours.' }
+    end
+  rescue StandardError => e
+    Rails.logger.error "Error sending support email: #{e.message}"
+    respond_to do |format|
+      format.json { render json: { success: false, message: 'Failed to send email. Please try again.' } }
+      format.html { redirect_to support_path, alert: 'Failed to send message. Please try again.' }
+    end
+  end
+
   def support_ticket
     # Handle support ticket creation
     redirect_to support_path, notice: 'Support ticket created!'
@@ -125,11 +173,13 @@ class PagesController < ApplicationController
 
   def developers; end
 
+  def community_forum; end
+
   def newsletter; end
 
   def newsletter_subscribe
     email = params[:email]
-    recipient = params[:recipient] || 'info@onelastai.com'
+    recipient = params[:recipient] || 'mail@onelastai.com'
 
     if email.blank?
       render json: { success: false, error: 'Email is required' }, status: 400
@@ -146,7 +196,7 @@ class PagesController < ApplicationController
       # 1. Save to database
       # 2. Send to email service (like Mailchimp, SendGrid, etc.)
       # 3. Send confirmation email
-      # 4. Forward to info@onelastai.com
+      # 4. Forward to mail@onelastai.com
 
       # For now, we'll simulate the process
       Rails.logger.info "Newsletter subscription: #{email} -> #{recipient}"

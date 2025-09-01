@@ -108,23 +108,23 @@
                   <%= section[:icon] %>
                 </div>
                 <div class="section-info">
-                  <h3 class="section-title"><%= section[:title] %></h3>
+                  <h3 class="section-title"><%= section[:name] %></h3>
                   <p class="section-description"><%= section[:description] %></p>
                 </div>
               </div>
               
               <div class="section-topics">
-                <% section[:topics].each do |topic| %>
+                <% section[:topic_list].each do |topic| %>
                   <a href="/docs/<%= section[:slug] %>/<%= topic[:slug] %>" class="topic-link">
                     <span class="topic-title"><%= topic[:title] %></span>
-                    <span class="topic-badge"><%= topic[:type] %></span>
+                    <span class="topic-badge"><%= topic[:difficulty] %></span>
                   </a>
                 <% end %>
               </div>
               
               <div class="section-footer">
                 <a href="/docs/<%= section[:slug] %>" class="view-all-link">
-                  View all <%= section[:title].downcase %> docs
+                  View all <%= section[:name].downcase %> docs
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                   </svg>

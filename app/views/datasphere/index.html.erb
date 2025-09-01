@@ -530,26 +530,26 @@
       <div class="menu-item">
         <button class="menu-button" onclick="toggleDropdown('file-menu')">File</button>
         <div id="file-menu" class="dropdown">
-          <div class="dropdown-header">File Operations</div>
+          <div class="dropdown-header">Data Management</div>
           <div class="tree-container">
             <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
-              conversations
+              datasets
               <div class="tree-children">
-                <div class="tree-item executable" onclick="newConversation()">new_chat.sh</div>
-                <div class="tree-item config" onclick="loadHistory()">history.log</div>
-                <div class="tree-item config" onclick="exportChat()">export.json</div>
-                <div class="tree-item last config" onclick="clearHistory()">clear.sh</div>
+                <div class="tree-item executable" onclick="loadDataset()">load_dataset.py</div>
+                <div class="tree-item config" onclick="previewData()">data_preview.csv</div>
+                <div class="tree-item config" onclick="exportResults()">export_results.json</div>
+                <div class="tree-item last executable" onclick="cleanData()">data_cleaning.py</div>
               </div>
             </div>
             <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
-              settings
+              models
               <div class="tree-children">
-                <div class="tree-item config" onclick="openSettings()">config.yml</div>
-                <div class="tree-item config" onclick="openPreferences()">preferences.ini</div>
-                <div class="tree-item last link" onclick="openThemes()">themes.conf → /usr/share/themes/</div>
+                <div class="tree-item config" onclick="loadModel()">trained_model.pkl</div>
+                <div class="tree-item config" onclick="modelMetrics()">model_metrics.json</div>
+                <div class="tree-item last config" onclick="saveModel()">save_model.py</div>
               </div>
             </div>
-            <div class="tree-item last executable" onclick="exitChat()">exit.sh</div>
+            <div class="tree-item last executable" onclick="exitDatasphere()">shutdown.sh</div>
           </div>
         </div>
       </div>
@@ -557,31 +557,32 @@
       <div class="menu-item">
         <button class="menu-button" onclick="toggleDropdown('features-menu')">Features</button>
         <div id="features-menu" class="dropdown">
-          <div class="dropdown-header">AI Capabilities</div>
+          <div class="dropdown-header">Data Science Tools</div>
           <div class="tree-container">
             <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
-              intelligence
+              machine_learning
               <div class="tree-children">
-                <div class="tree-item executable" onclick="setMode('question')">question_answering.py</div>
-                <div class="tree-item executable" onclick="setMode('creative')">creative_writing.py</div>
-                <div class="tree-item executable" onclick="setMode('problem')">problem_solving.py</div>
-                <div class="tree-item last executable" onclick="setMode('analysis')">data_analysis.py</div>
+                <div class="tree-item executable" onclick="setMode('regression')">regression_analysis.py</div>
+                <div class="tree-item executable" onclick="setMode('classification')">classification.py</div>
+                <div class="tree-item executable" onclick="setMode('clustering')">clustering.py</div>
+                <div class="tree-item last executable" onclick="setMode('neural_networks')">neural_networks.py</div>
               </div>
             </div>
             <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
-              tools
+              statistics
               <div class="tree-children">
-                <div class="tree-item executable" onclick="openCodeGen()">code_generator.sh</div>
-                <div class="tree-item executable" onclick="openTranslator()">translator.py</div>
-                <div class="tree-item executable" onclick="openSummarizer()">summarizer.rb</div>
-                <div class="tree-item last config" onclick="openCalculator()">calculator.js</div>
+                <div class="tree-item executable" onclick="runStatisticalTest()">hypothesis_testing.R</div>
+                <div class="tree-item executable" onclick="runCorrelation()">correlation_analysis.py</div>
+                <div class="tree-item executable" onclick="runRegression()">regression_modeling.py</div>
+                <div class="tree-item last config" onclick="generateReport()">statistical_report.html</div>
               </div>
             </div>
             <div class="tree-item last folder has-submenu" onclick="toggleSubmenu(this)">
-              memory
+              visualization
               <div class="tree-children">
-                <div class="tree-item config" onclick="showMemory()">context.db</div>
-                <div class="tree-item last link" onclick="showKnowledge()">knowledge_base.sqlite → /var/lib/neochat/</div>
+                <div class="tree-item executable" onclick="createVisualization()">plot_generator.py</div>
+                <div class="tree-item executable" onclick="createDashboard()">dashboard.py</div>
+                <div class="tree-item last link" onclick="openNotebook()">jupyter_notebook.ipynb</div>
               </div>
             </div>
           </div>
@@ -591,30 +592,30 @@
       <div class="menu-item">
         <button class="menu-button" onclick="toggleDropdown('agents-menu')">Agents</button>
         <div id="agents-menu" class="dropdown">
-          <div class="dropdown-header">Agent Network</div>
+          <div class="dropdown-header">Analytics Network</div>
           <div class="tree-container">
             <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
-              active
+              active_models
               <div class="tree-children">
-                <div class="tree-item executable config">neochat.service ● running</div>
-                <div class="tree-item last link" onclick="switchAgent('mood')">mood_engine.agent → /agents/mood/</div>
+                <div class="tree-item executable config">datasphere.service ● running</div>
+                <div class="tree-item last link" onclick="switchModel('predictive')">predictive_engine.model → /models/</div>
               </div>
             </div>
             <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
-              available
+              algorithms
               <div class="tree-children">
-                <div class="tree-item executable" onclick="switchAgent('rapstar')">rapstar_ai.agent</div>
-                <div class="tree-item executable" onclick="switchAgent('storyteller')">storyteller.agent</div>
-                <div class="tree-item executable" onclick="switchAgent('zen')">zen_agent.agent</div>
-                <div class="tree-item last config" onclick="createAgent()">custom.template</div>
+                <div class="tree-item executable" onclick="loadAlgorithm('random_forest')">random_forest.py</div>
+                <div class="tree-item executable" onclick="loadAlgorithm('gradient_boost')">gradient_boosting.py</div>
+                <div class="tree-item executable" onclick="loadAlgorithm('neural_net')">neural_network.py</div>
+                <div class="tree-item last config" onclick="createCustomModel()">custom_model.template</div>
               </div>
             </div>
             <div class="tree-item last folder has-submenu" onclick="toggleSubmenu(this)">
-              network
+              data_sources
               <div class="tree-children">
-                <div class="tree-item config">agents.onelastai.com</div>
-                <div class="tree-item config">cluster.status</div>
-                <div class="tree-item last link">api.endpoint → https://api.onelastai.com/</div>
+                <div class="tree-item config">database.onelastai.com</div>
+                <div class="tree-item config">analytics.status</div>
+                <div class="tree-item last link">api.datasphere → https://api.datasphere.com/</div>
               </div>
             </div>
           </div>
@@ -624,26 +625,26 @@
       <div class="menu-item">
         <button class="menu-button" onclick="toggleDropdown('help-menu')">Help</button>
         <div id="help-menu" class="dropdown">
-          <div class="dropdown-header">Documentation & Support</div>
+          <div class="dropdown-header">DataSphere Documentation</div>
           <div class="tree-container">
             <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
-              docs
+              guides
               <div class="tree-children">
-                <div class="tree-item config" onclick="showDocs('getting-started')">getting_started.md</div>
-                <div class="tree-item config" onclick="showDocs('commands')">commands.txt</div>
-                <div class="tree-item config" onclick="showDocs('api')">api_reference.html</div>
-                <div class="tree-item last config" onclick="showDocs('examples')">examples.json</div>
+                <div class="tree-item config" onclick="showDocs('data-science-basics')">data_science_basics.md</div>
+                <div class="tree-item config" onclick="showDocs('ml-algorithms')">ml_algorithms.txt</div>
+                <div class="tree-item config" onclick="showDocs('statistical-tests')">statistical_methods.html</div>
+                <div class="tree-item last config" onclick="showDocs('visualization')">visualization_guide.json</div>
               </div>
             </div>
             <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
-              support
+              community
               <div class="tree-children">
-                <div class="tree-item link" onclick="openSupport()">github.com/onelastai/neochat</div>
-                <div class="tree-item link" onclick="openDiscord()">discord.gg/onelastai</div>
-                <div class="tree-item last config" onclick="reportBug()">bug_report.template</div>
+                <div class="tree-item link" onclick="openDataScience()">github.com/datasphere/community</div>
+                <div class="tree-item link" onclick="openKaggle()">kaggle.com/datasphere</div>
+                <div class="tree-item last config" onclick="reportDataIssue()">data_issue_report.template</div>
               </div>
             </div>
-            <div class="tree-item last executable" onclick="showAbout()">about.sh</div>
+            <div class="tree-item last executable" onclick="showDataSphereAbout()">about_datasphere.sh</div>
           </div>
         </div>
       </div>
@@ -653,27 +654,31 @@
   <!-- Hero Section -->
   <section class="hero-section">
     <div class="hero-content">
-      <div class="agent-logo">🌐</div>
+      <div class="agent-logo">📊</div>
       <h1 class="agent-title">DataSphere</h1>
-      <p class="agent-tagline">Advanced data management and analytics intelligence</p>
+      <p class="agent-tagline">Advanced Data Science & Machine Learning Intelligence</p>
       <p class="agent-description">
-        I am DataSphere, your comprehensive data management and analytics specialist. 
-        I help you organize, analyze, visualize, and derive actionable insights from your data, 
-        turning raw information into strategic business intelligence.
+        I am DataSphere, your advanced data science and machine learning specialist. 
+        I transform raw data into actionable insights through statistical analysis, predictive modeling, 
+        and cutting-edge AI algorithms. Let's unlock the hidden patterns in your data together.
       </p>
       
       <div class="agent-stats">
         <div class="stat-item">
           <span class="stat-value"><%= @agent_stats[:total_conversations] %></span>
-          <span class="stat-label">Conversations</span>
+          <span class="stat-label">Data Analyses</span>
         </div>
         <div class="stat-item">
           <span class="stat-value"><%= @agent_stats[:average_rating] %></span>
-          <span class="stat-label">Rating</span>
+          <span class="stat-label">ML Accuracy</span>
         </div>
         <div class="stat-item">
           <span class="stat-value"><%= @agent_stats[:response_time] %></span>
-          <span class="stat-label">Response Time</span>
+          <span class="stat-label">Processing Speed</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value">97.3%</span>
+          <span class="stat-label">Model Precision</span>
         </div>
       </div>
     </div>
@@ -682,8 +687,8 @@
   <!-- Terminal Section -->
   <section class="terminal-section">
     <div class="terminal-header">
-      <h2 class="terminal-title">🖥️ NeoChat Terminal Interface</h2>
-      <p class="terminal-subtitle">Type your questions or commands below and press Enter to chat with NeoChat</p>
+      <h2 class="terminal-title">� DataSphere Analytics Terminal</h2>
+      <p class="terminal-subtitle">Advanced data science and machine learning interface - Type your data queries below</p>
     </div>
     
     <div class="terminal-container">
@@ -691,30 +696,32 @@
         <div class="terminal-button"></div>
         <div class="terminal-button yellow"></div>
         <div class="terminal-button green"></div>
-        <span class="terminal-title-text">neochat@onelastai.com:~$</span>
+        <span class="terminal-title-text">datasphere@analytics.onelastai.com:~$</span>
       </div>
       
       <div class="terminal-output" id="terminal-output">
         <div class="welcome-message">
 ╔══════════════════════════════════════════════════════════════════╗
-║                     Welcome to DataSphere                       ║
-║             Data Management & Analytics Hub                      ║
+║                    Welcome to DataSphere                         ║
+║           Advanced Data Science & ML Platform                    ║
 ╚══════════════════════════════════════════════════════════════════╝
 
-<div class="system-info">System: DataSphere v1.0 | Status: Online | Agent ID: <%= @agent.id %>
-<%= Time.current.strftime("Date: %Y-%m-%d %H:%M:%S") %> | Session: Active</div>
+<div class="system-info">System: DataSphere v2.1 | Status: Online | Agent ID: <%= @agent.id %>
+<%= Time.current.strftime("Date: %Y-%m-%d %H:%M:%S") %> | ML Models: Active | GPU: Available</div>
 
-<span style="color: #00d4ff;">Welcome! I'm DataSphere, your data intelligence specialist.</span>
+<span style="color: #00d4ff;">Welcome! I'm DataSphere, your advanced data science specialist.</span>
 
 I can help you with:
-• � Data analysis & visualization
-• �️ Database design & optimization
-• 📈 Business intelligence reporting
-• � Pattern recognition & insights
-• � Data cleaning & preprocessing
-• 🎯 Predictive analytics & modeling
+• 📊 Statistical analysis & hypothesis testing
+• 🤖 Machine learning model development
+• 📈 Data visualization & dashboard creation
+• 🔍 Pattern recognition & anomaly detection
+• 📉 Predictive modeling & forecasting
+• 🌌 Deep learning & neural networks
+• 📋 Data preprocessing & feature engineering
+• ⚡ Real-time analytics & streaming data
 
-Describe your data challenges and I'll provide solutions!
+Ready to transform your data into insights? Let's begin!
 
         </div>
         
@@ -724,12 +731,12 @@ Describe your data challenges and I'll provide solutions!
       </div>
       
       <div class="terminal-input-container">
-        <span class="terminal-prompt">neochat@terminal:~$ </span>
+        <span class="terminal-prompt">datasphere@analytics:~$ </span>
         <input 
           type="text" 
           class="terminal-input" 
           id="user-input"
-          placeholder="Type your message here..."
+          placeholder="Describe your data analysis needs, upload dataset, or ask about ML algorithms..."
           autocomplete="off"
         >
         <button class="send-button" id="send-button">Send</button>
@@ -781,38 +788,40 @@ Describe your data challenges and I'll provide solutions!
       }
     });
 
-    // Menu Action Functions
-    function newConversation() {
+    // DataSphere-specific menu functions
+    function loadDataset() {
       if (window.terminal) {
-        window.terminal.addMessage('system', '$ ./new_chat.sh\nStarting new conversation session...\nConversation cleared. How can I help you today?');
-        window.terminal.output.innerHTML = '';
-        window.terminal.focusInput();
+        window.terminal.addMessage('system', '$ python load_dataset.py\nLoading dataset from data source...\nDataset loaded: 50,000 rows, 25 features\nData types: 15 numerical, 10 categorical\nReady for analysis!');
       }
     }
 
-    function loadHistory() {
+    function previewData() {
       if (window.terminal) {
-        window.terminal.addMessage('system', '$ cat history.log\nLoading conversation history...\n[Feature coming soon - conversation persistence]');
+        window.terminal.addMessage('system', '$ head -10 data_preview.csv\nDisplaying first 10 rows:\n   ID  Feature1  Feature2  Target\n    1     12.5      8.3     1.2\n    2      9.1      7.8     0.9\n... [Preview generated]');
       }
     }
 
-    function exportChat() {
+    function cleanData() {
       if (window.terminal) {
-        const chatData = {
-          timestamp: new Date().toISOString(),
-          agent: 'neochat',
-          messages: []
-        };
-        
-        const blob = new Blob([JSON.stringify(chatData, null, 2)], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `neochat-export-${Date.now()}.json`;
-        a.click();
-        URL.revokeObjectURL(url);
-        
-        window.terminal.addMessage('system', '$ ./export.json\nExporting conversation data...\nChat exported successfully!');
+        window.terminal.addMessage('system', '$ python data_cleaning.py\nChecking for missing values...\nHandling outliers...\nData cleaning completed: 98.5% data quality score');
+      }
+    }
+
+    function loadModel() {
+      if (window.terminal) {
+        window.terminal.addMessage('system', '$ import pickle; model = pickle.load(open("trained_model.pkl", "rb"))\nModel loaded successfully!\nAlgorithm: Random Forest\nAccuracy: 94.2%\nReady for predictions!');
+      }
+    }
+
+    function runStatisticalTest() {
+      if (window.terminal) {
+        window.terminal.addMessage('system', '$ Rscript hypothesis_testing.R\nRunning statistical analysis...\nt-test: p-value = 0.001 (significant)\nChi-square: p-value = 0.023 (significant)\nAnalysis complete!');
+      }
+    }
+
+    function createVisualization() {
+      if (window.terminal) {
+        window.terminal.addMessage('system', '$ python plot_generator.py\nGenerating data visualizations...\n✓ Scatter plot created\n✓ Histogram generated\n✓ Correlation heatmap ready\nPlots saved to /output/visualizations/');
       }
     }
 
@@ -876,10 +885,10 @@ Describe your data challenges and I'll provide solutions!
     function showDocs(docType) {
       if (window.terminal) {
         const docs = {
-          'getting-started': 'Welcome to DataSphere!\n\nBasic Commands:\n- Type your message and press Enter\n- Use the menu for advanced features\n- Export conversations as JSON\n',
-          'commands': 'Available Commands:\n- /help - Show this help\n- /clear - Clear conversation\n- /export - Export chat\n- /mode [type] - Switch AI mode\n',
-          'api': 'NeoChat API Reference:\n\nEndpoints:\n- POST /chat - Send message\n- GET /status - Agent status\n- GET /history - Chat history\n',
-          'examples': '{\n  "examples": [\n    {"input": "Hello", "output": "Hello! How can I help?"},\n    {"input": "What is AI?", "output": "AI explanation..."}\n  ]\n}'
+          'data-science-basics': 'Welcome to DataSphere Data Science!\n\nCore Concepts:\n- Statistical inference and hypothesis testing\n- Machine learning fundamentals\n- Data preprocessing and feature engineering\n- Model evaluation and validation\n',
+          'ml-algorithms': 'Available ML Algorithms:\n- Supervised: Random Forest, SVM, Neural Networks\n- Unsupervised: K-means, DBSCAN, PCA\n- Ensemble: Gradient Boosting, AdaBoost\n- Deep Learning: CNN, RNN, Transformers\n',
+          'statistical-tests': 'Statistical Methods:\n- t-tests and ANOVA for group comparisons\n- Chi-square tests for categorical data\n- Correlation and regression analysis\n- Time series analysis and forecasting\n',
+          'visualization': 'Visualization Tools:\n- Matplotlib and Seaborn for static plots\n- Plotly for interactive visualizations\n- Dashboard creation with Streamlit\n- Real-time data monitoring\n'
         };
         
         window.terminal.addMessage('system', `$ cat ${docType}.md\n${docs[docType] || 'Documentation not found'}`);
@@ -900,22 +909,59 @@ Describe your data challenges and I'll provide solutions!
       }
     }
 
-    function showAbout() {
+    function showDataSphereAbout() {
       if (window.terminal) {
-        window.terminal.addMessage('system', `$ ./about.sh
+        window.terminal.addMessage('system', `$ ./about_datasphere.sh
 ╔══════════════════════════════════════╗
-║              NeoChat v1.0            ║
+║           DataSphere v2.1            ║
 ║                                      ║
-║     AI Conversation Terminal         ║
+║   Advanced Data Science Platform     ║
 ║     Built by onelastai.com          ║
 ║                                      ║
-║  • Intelligent conversation AI       ║
-║  • Terminal-style interface          ║
-║  • Multi-modal capabilities          ║
-║  • Real-time responses              ║
+║  • Machine Learning Algorithms       ║
+║  • Statistical Analysis Tools        ║
+║  • Data Visualization Engine         ║
+║  • Predictive Modeling Suite         ║
+║  • Real-time Analytics              ║
+║  • GPU-Accelerated Processing       ║
 ║                                      ║
-║  © 2025 onelastai.com               ║
+║  Models Trained: 1,247+             ║
+║  Accuracy Rate: 97.3%               ║
+║  Processing Speed: < 1.2s           ║
+║                                      ║
+║  © 2025 DataSphere Analytics        ║
 ╚══════════════════════════════════════╝`);
+      }
+    }
+
+    function setMode(mode) {
+      if (window.terminal) {
+        const modeMessages = {
+          regression: '$ python regression_analysis.py\nActivating regression modeling...\nLinear, polynomial, and logistic regression ready!\nFeature selection: enabled | Cross-validation: active',
+          classification: '$ python classification.py\nActivating classification algorithms...\nRandom Forest, SVM, and Neural Networks loaded!\nAccuracy optimization: enabled',
+          clustering: '$ python clustering.py\nActivating unsupervised learning...\nK-means, DBSCAN, and hierarchical clustering ready!\nOptimal cluster detection: active',
+          neural_networks: '$ python neural_networks.py\nActivating deep learning...\nTensorFlow and PyTorch frameworks loaded!\nGPU acceleration: enabled'
+        };
+        
+        window.terminal.addMessage('system', modeMessages[mode] || 'DataSphere mode activated');
+      }
+    }
+
+    function loadAlgorithm(algorithm) {
+      const algorithms = {
+        random_forest: '$ python random_forest.py\nLoading Random Forest algorithm...\n✓ Ensemble method ready\n✓ Feature importance enabled\n✓ Out-of-bag error: 0.023',
+        gradient_boost: '$ python gradient_boosting.py\nLoading Gradient Boosting...\n✓ XGBoost framework active\n✓ Learning rate: optimized\n✓ Early stopping: enabled',
+        neural_net: '$ python neural_network.py\nLoading Neural Network...\n✓ Deep learning architecture ready\n✓ Backpropagation: active\n✓ GPU acceleration: enabled'
+      };
+      
+      if (window.terminal && algorithms[algorithm]) {
+        window.terminal.addMessage('system', algorithms[algorithm]);
+      }
+    }
+
+    function exitDatasphere() {
+      if (confirm('Exit DataSphere? Any unsaved models will be lost.')) {
+        window.location.href = '/';
       }
     }
 

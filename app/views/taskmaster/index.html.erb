@@ -653,23 +653,23 @@
   <!-- Hero Section -->
   <section class="hero-section">
     <div class="hero-content">
-      <div class="agent-logo">✅</div>
+      <div class="agent-logo">📋</div>
       <h1 class="agent-title">TaskMaster</h1>
-      <p class="agent-tagline">Advanced productivity and task management orchestrator</p>
+      <p class="agent-tagline">Advanced Project Management & Productivity Specialist</p>
       <p class="agent-description">
-        I am TaskMaster, your productivity optimization specialist. I help you organize tasks, 
-        manage projects, optimize workflows, and achieve maximum efficiency. From simple to-dos 
-        to complex project management, I'm your productivity command center.
+        I am TaskMaster, your productivity optimization and project management specialist. I help you organize tasks, 
+        manage complex projects, optimize workflows, coordinate teams, and achieve maximum efficiency. From simple to-dos 
+        to enterprise-level project orchestration, I'm your complete productivity command center.
       </p>
       
       <div class="agent-stats">
         <div class="stat-item">
-          <span class="stat-value"><%= @agent_stats[:total_conversations] %></span>
-          <span class="stat-label">Conversations</span>
+          <span class="stat-value"><%= @agent_stats[:projects_managed] %></span>
+          <span class="stat-label">Projects</span>
         </div>
         <div class="stat-item">
-          <span class="stat-value"><%= @agent_stats[:average_rating] %></span>
-          <span class="stat-label">Rating</span>
+          <span class="stat-value"><%= @agent_stats[:efficiency_gain] %>%</span>
+          <span class="stat-label">Efficiency</span>
         </div>
         <div class="stat-item">
           <span class="stat-value"><%= @agent_stats[:response_time] %></span>
@@ -682,8 +682,8 @@
   <!-- Terminal Section -->
   <section class="terminal-section">
     <div class="terminal-header">
-      <h2 class="terminal-title">🖥️ NeoChat Terminal Interface</h2>
-      <p class="terminal-subtitle">Type your questions or commands below and press Enter to chat with NeoChat</p>
+      <h2 class="terminal-title">� TaskMaster Project Terminal</h2>
+      <p class="terminal-subtitle">Describe your project management or productivity optimization needs</p>
     </div>
     
     <div class="terminal-container">
@@ -691,40 +691,42 @@
         <div class="terminal-button"></div>
         <div class="terminal-button yellow"></div>
         <div class="terminal-button green"></div>
-        <span class="terminal-title-text">neochat@onelastai.com:~$</span>
+        <span class="terminal-title-text">taskmaster@productivity:~$</span>
       </div>
       
       <div class="terminal-output" id="terminal-output">
         <div class="welcome-message">
 ╔══════════════════════════════════════════════════════════════════╗
 ║                       Welcome to TaskMaster                        ║
-║              Your AI Conversation Terminal                       ║
+║              Project Management & Productivity Hub               ║
 ╚══════════════════════════════════════════════════════════════════╝
 
-<div class="system-info">System: NeoChat v1.0 | Status: Online | Agent ID: <%= @agent.id %>
+<div class="system-info">System: TaskMaster v2.0 | Status: Online | Agent ID: <%= @agent.id %>
 <%= Time.current.strftime("Date: %Y-%m-%d %H:%M:%S") %> | Session: Active</div>
 
-<span style="color: #00d4ff;">Welcome! I'm NeoChat, your intelligent AI assistant.</span>
+<span style="color: #00d4ff;">Welcome! I'm TaskMaster, your project management and productivity specialist.</span>
 
 I can help you with:
-• 💭 Questions & Answers on any topic
-• 🛠 Problem solving and analysis  
-• 💡 Creative brainstorming and ideas
-• 📚 Information research and learning
-• 🎯 Suggestions and helpful advice
-• 💬 Friendly conversation
+• � Project planning & task organization
+• ⚡ Workflow automation & optimization
+• � Resource planning & allocation
+• ⏰ Deadline management & scheduling
+• � Team coordination & collaboration
+• 📈 Productivity analytics & insights
+• 🔄 Process improvement & efficiency
+• � Meeting management & documentation
 
-Type your message below and let's start chatting!
+Describe your project or productivity challenge and let's optimize your workflow!
 
         </div>
         
         <div class="typing-indicator" id="typing-indicator">
-          NeoChat is thinking
+          TaskMaster is organizing
         </div>
       </div>
       
       <div class="terminal-input-container">
-        <span class="terminal-prompt">neochat@terminal:~$ </span>
+        <span class="terminal-prompt">taskmaster@terminal:~$ </span>
         <input 
           type="text" 
           class="terminal-input" 
@@ -966,7 +968,7 @@ Type your message below and let's start chatting!
         this.showTyping(true);
         
         try {
-          const response = await fetch('/chat', {
+          const response = await fetch('/taskmaster/chat', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

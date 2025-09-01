@@ -1,83 +1,313 @@
-<section class="infrastructure-section relative overflow-hidden py-24">
-  <!-- Fog effects -->
-  <div class="infrastructure-smoky-fog"></div>
-  <div class="infrastructure-ambient-fog"></div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Infrastructure</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0A0A0A; /* Deep matte black background */
+            color: #e0e7ff;
+            overflow-x: hidden;
+        }
 
-  <div class="relative container mx-auto px-6 lg:px-12">
-    <!-- Heading -->
-    <div class="text-center mb-16">
-      <h2 class="text-4xl font-bold text-white mb-4">AI-Powered Infrastructure</h2>
-      <p class="text-lg text-gray-300 max-w-3xl mx-auto">
-        Secure, scalable, and optimized environments built for AI, automation, and real-time intelligence.
-      </p>
-    </div>
+        /* --- Canvas Background (for interactive elements) --- */
+        #interactive-canvas {
+            position: fixed; /* Changed to fixed to cover the whole page */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
 
-    <!-- Grid Layout -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-      <!-- Tech Stack Cards -->
-      <div class="space-y-6">
-        <div class="tech-stack-card p-6">
-          <div class="flex items-center gap-4 mb-3">
-            <div class="tech-icon">⚡</div>
-            <h3 class="text-xl font-semibold text-white">High-Performance Compute</h3>
-          </div>
-          <p class="text-gray-300">
-            AI workloads optimized with GPU acceleration and distributed computing.
+        /* --- Infrastructure Section Styles --- */
+        .infrastructure-section {
+            position: relative;
+            z-index: 2;
+        }
+
+        .infrastructure-smoky-fog, .infrastructure-ambient-fog {
+            position: absolute;
+            background: radial-gradient(circle, rgba(147, 51, 234, 0.2), transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.5;
+        }
+
+        .infrastructure-smoky-fog {
+            width: 50vw;
+            height: 50vh;
+            top: 10%;
+            left: -10%;
+        }
+
+        .infrastructure-ambient-fog {
+            width: 60vw;
+            height: 60vh;
+            bottom: 5%;
+            right: -20%;
+        }
+
+        .tech-stack-card {
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            border: 2px solid rgba(147, 51, 234, 0.5);
+            border-radius: 1.5rem;
+            box-shadow: 0 0 10px rgba(147, 51, 234, 0.4);
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            position: relative;
+            z-index: 3;
+            background-color: rgba(15, 23, 42, 0.5);
+            padding: 1.5rem;
+        }
+
+        .tech-stack-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 0 25px rgba(147, 51, 234, 0.8), 0 0 40px rgba(147, 51, 234, 0.6);
+        }
+
+        .tech-icon {
+            font-size: 2rem;
+            line-height: 1;
+        }
+
+        /* Linux Terminal Styles */
+        .linux-terminal {
+            background-color: #0d1117;
+            border: 2px solid rgba(147, 51, 234, 0.5);
+            border-radius: 1.5rem;
+            box-shadow: 0 0 20px rgba(147, 51, 234, 0.5), inset 0 0 10px rgba(147, 51, 234, 0.3);
+            overflow: hidden;
+            font-family: monospace;
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+
+        .terminal-header {
+            background-color: #161b22;
+            padding: 0.5rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-bottom: 1px solid #30363d;
+        }
+
+        .terminal-dots {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .terminal-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .terminal-title {
+            flex-grow: 1;
+            text-align: center;
+            color: #c9d1d9;
+        }
+
+        .terminal-content {
+            padding: 1rem;
+        }
+
+        .terminal-prompt {
+            color: #58a6ff;
+        }
+
+        .terminal-command {
+            color: #8b949e;
+        }
+
+        .terminal-output {
+            color: #c9d1d9;
+            white-space: pre-wrap;
+        }
+
+        .terminal-key {
+            color: #79c0ff;
+        }
+
+        .terminal-success {
+            color: #3fb950;
+        }
+
+        .terminal-cursor {
+            background-color: #3fb950;
+            display: inline-block;
+            width: 8px;
+            height: 14px;
+            margin-left: 4px;
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+            from, to { visibility: hidden; }
+            50% { visibility: visible; }
+        }
+    </style>
+</head>
+<body class="bg-[#0A0A0A] text-white min-h-screen">
+
+    <!-- Canvas Background -->
+    <canvas id="interactive-canvas"></canvas>
+
+    <!-- AI Infrastructure Section -->
+    <section class="infrastructure-section relative overflow-hidden py-24 z-20">
+      <!-- Fog effects -->
+      <div class="infrastructure-smoky-fog"></div>
+      <div class="infrastructure-ambient-fog"></div>
+
+      <div class="relative container mx-auto px-6 lg:px-12">
+        <!-- Heading -->
+        <div class="text-center mb-16">
+          <h2 class="text-4xl font-bold text-white mb-4">AI-Powered Infrastructure</h2>
+          <p class="text-lg text-gray-300 max-w-3xl mx-auto">
+            Secure, scalable, and optimized environments built for AI, automation, and real-time intelligence.
           </p>
         </div>
 
-        <div class="tech-stack-card p-6">
-          <div class="flex items-center gap-4 mb-3">
-            <div class="tech-icon">🔒</div>
-            <h3 class="text-xl font-semibold text-white">Security First</h3>
-          </div>
-          <p class="text-gray-300">
-            Enterprise-grade security protocols, encrypted pipelines, and zero-trust architecture.
-          </p>
-        </div>
+        <!-- Grid Layout -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          <!-- Tech Stack Cards -->
+          <div class="space-y-6">
+            <div class="tech-stack-card p-6">
+              <div class="flex items-center gap-4 mb-3">
+                <div class="tech-icon">⚡</div>
+                <h3 class="text-xl font-semibold text-white">High-Performance Compute</h3>
+              </div>
+              <p class="text-gray-300">
+                AI workloads optimized with GPU acceleration and distributed computing.
+              </p>
+            </div>
 
-        <div class="tech-stack-card p-6">
-          <div class="flex items-center gap-4 mb-3">
-            <div class="tech-icon">🌐</div>
-            <h3 class="text-xl font-semibold text-white">Global Scalability</h3>
+            <div class="tech-stack-card p-6">
+              <div class="flex items-center gap-4 mb-3">
+                <div class="tech-icon">🔒</div>
+                <h3 class="text-xl font-semibold text-white">Security First</h3>
+              </div>
+              <p class="text-gray-300">
+                Enterprise-grade security protocols, encrypted pipelines, and zero-trust architecture.
+              </p>
+            </div>
+
+            <div class="tech-stack-card p-6">
+              <div class="flex items-center gap-4 mb-3">
+                <div class="tech-icon">🌐</div>
+                <h3 class="text-xl font-semibold text-white">Global Scalability</h3>
+              </div>
+              <p class="text-gray-300">
+                Deploy anywhere with cloud-native orchestration and edge computing support.
+              </p>
+            </div>
           </div>
-          <p class="text-gray-300">
-            Deploy anywhere with cloud-native orchestration and edge computing support.
-          </p>
+
+          <!-- Linux Terminal -->
+          <div class="linux-terminal">
+            <div class="terminal-header">
+              <div class="terminal-dots">
+                <div class="terminal-dot bg-red-500"></div>
+                <div class="terminal-dot bg-yellow-500"></div>
+                <div class="terminal-dot bg-green-500"></div>
+              </div>
+              <div class="terminal-title">root@onelastAI:~</div>
+            </div>
+            <div class="terminal-content">
+              <div class="terminal-prompt">$ <span class="terminal-command">systemctl status ai-core</span></div>
+              <div class="terminal-output">
+                ● ai-core.service - AI Core Engine<br>
+                &nbsp;&nbsp;Loaded: <span class="terminal-key">enabled</span><br>
+                &nbsp;&nbsp;Active: <span class="terminal-success">running</span> since Fri 2025-08-28 21:10:32 UTC
+              </div>
+
+              <div class="terminal-prompt mt-4">$ <span class="terminal-command">kubectl get pods</span></div>
+              <div class="terminal-output">
+                NAME&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;STATUS&nbsp;&nbsp;&nbsp;&nbsp;RESTARTS&nbsp;&nbsp;&nbsp;&nbsp;AGE<br>
+                ai-core-1&nbsp;&nbsp;&nbsp;Running&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;&nbsp;12m<br>
+                ai-core-2&nbsp;&nbsp;&nbsp;Running&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;&nbsp;12m
+              </div>
+
+              <div class="terminal-prompt mt-4">$ <span class="terminal-command">echo "AI Infrastructure Ready"</span></div>
+              <div class="terminal-output terminal-success">
+                AI Infrastructure Ready<span class="terminal-cursor"></span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
+    </section>
 
-      <!-- Linux Terminal -->
-      <div class="linux-terminal">
-        <div class="terminal-header">
-          <div class="terminal-dots">
-            <div class="terminal-dot bg-red-500"></div>
-            <div class="terminal-dot bg-yellow-500"></div>
-            <div class="terminal-dot bg-green-500"></div>
-          </div>
-          <div class="terminal-title">root@onelastAI:~</div>
-        </div>
-        <div class="terminal-content">
-          <div class="terminal-prompt">$ <span class="terminal-command">systemctl status ai-core</span></div>
-          <div class="terminal-output">
-            ● ai-core.service - AI Core Engine<br>
-            &nbsp;&nbsp;Loaded: <span class="terminal-key">enabled</span><br>
-            &nbsp;&nbsp;Active: <span class="terminal-success">running</span> since Fri 2025-08-28 21:10:32 UTC
-          </div>
+    <script>
+        window.onload = function() {
+            const canvas = document.getElementById('interactive-canvas');
+            const ctx = canvas.getContext('2d');
+            let ripples = [];
+            let lastMouseX = -1;
+            let lastMouseY = -1;
+            let rippleMaxRadius = 150;
+            let rippleSpeed = 1;
+            let rippleColor = 'rgba(147, 51, 234, 0.4)';
 
-          <div class="terminal-prompt mt-4">$ <span class="terminal-command">kubectl get pods</span></div>
-          <div class="terminal-output">
-            NAME&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;STATUS&nbsp;&nbsp;&nbsp;&nbsp;RESTARTS&nbsp;&nbsp;&nbsp;&nbsp;AGE<br>
-            ai-core-1&nbsp;&nbsp;&nbsp;Running&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;&nbsp;12m<br>
-            ai-core-2&nbsp;&nbsp;&nbsp;Running&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;&nbsp;12m
-          </div>
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
 
-          <div class="terminal-prompt mt-4">$ <span class="terminal-command">echo "AI Infrastructure Ready"</span></div>
-          <div class="terminal-output terminal-success">
-            AI Infrastructure Ready<span class="terminal-cursor"></span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            // Add new ripple on mouse move if enough distance is covered
+            document.addEventListener('mousemove', (e) => {
+                const distance = Math.sqrt(Math.pow(e.clientX - lastMouseX, 2) + Math.pow(e.clientY - lastMouseY, 2));
+                if (distance > 50 || lastMouseX === -1) {
+                    ripples.push({
+                        x: e.clientX,
+                        y: e.clientY,
+                        radius: 0,
+                        opacity: 1
+                    });
+                    lastMouseX = e.clientX;
+                    lastMouseY = e.clientY;
+                }
+            });
+
+            // Animation loop
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                for (let i = 0; i < ripples.length; i++) {
+                    const ripple = ripples[i];
+
+                    // Update ripple properties
+                    ripple.radius += rippleSpeed;
+                    ripple.opacity = 1 - (ripple.radius / rippleMaxRadius);
+
+                    // Draw the ripple
+                    ctx.beginPath();
+                    ctx.arc(ripple.x, ripple.y, ripple.radius, 0, Math.PI * 2);
+                    ctx.strokeStyle = rippleColor;
+                    ctx.lineWidth = 2;
+                    ctx.globalAlpha = ripple.opacity;
+                    ctx.stroke();
+
+                    // Remove ripple if it's too big or faded out
+                    if (ripple.radius > rippleMaxRadius || ripple.opacity <= 0) {
+                        ripples.splice(i, 1);
+                        i--; // Decrement index to account for the removed element
+                    }
+                }
+
+                requestAnimationFrame(animate);
+            }
+
+            animate();
+        };
+    </script>
+</body>
+</html>

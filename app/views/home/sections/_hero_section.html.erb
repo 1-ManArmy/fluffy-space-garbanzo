@@ -1,235 +1,325 @@
-<section class="relative pt-20 pb-32 overflow-hidden">
-  <div class="container mx-auto px-6 relative z-10">
-    <div class="flex flex-col lg:flex-row items-center gap-12">
-      
-      <!-- Hero Content -->
-      <div class="lg:w-1/2 text-center lg:text-left">
-        <div class="mb-6">
-          <span class="inline-block px-4 py-2 bg-purple-600/20 border border-purple-500/30 rounded-full text-purple-300 text-sm font-medium mb-4">
-            🚀 24 AI Agents Ready to Deploy
-          </span>
-        </div>
-        
-        <h1 class="text-5xl lg:text-7xl font-bold mb-6 leading-tight">
-          <span class="text-gradient">OneLastAI</span><br>
-          <span class="text-white">Enterprise Platform</span>
-        </h1>
-        
-        <p class="text-xl text-gray-300 mb-8 leading-relaxed max-w-2xl">
-          Deploy intelligent AI agents instantly. From conversational AI to specialized automation, 
-          our platform delivers enterprise-grade solutions with zero configuration.
-        </p>
-        
-        <div class="flex flex-col sm:flex-row gap-4 mb-8">
-          <button class="btn-primary group">
-            Start Building
-            <span class="ml-2 transform group-hover:translate-x-1 transition-transform">→</span>
-          </button>
-          <button class="btn-secondary">
-            View Documentation
-          </button>
-        </div>
-        
-        <div class="flex items-center gap-8 text-sm text-gray-400">
-          <div class="flex items-center gap-2">
-            <div class="w-2 h-2 bg-green-400 rounded-full pulse-glow"></div>
-            <span>24 Agents Online</span>
-          </div>
-          <div class="flex items-center gap-2">
-            <div class="w-2 h-2 bg-blue-400 rounded-full"></div>
-            <span>99.9% Uptime</span>
-          </div>
-          <div class="flex items-center gap-2">
-            <div class="w-2 h-2 bg-purple-400 rounded-full"></div>
-            <span>Enterprise Ready</span>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Terminal Demo -->
-      <div class="lg:w-1/2 relative">
-        <div class="floating-animation">
-          <div class="terminal-window max-w-lg mx-auto bg-black text-sm p-4 rounded-lg shadow-lg font-mono text-white relative overflow-hidden">
-            <div class="terminal-header flex items-center mb-4">
-              <div class="terminal-dot bg-red-500 w-3 h-3 rounded-full mr-1"></div>
-              <div class="terminal-dot bg-yellow-500 w-3 h-3 rounded-full mr-1"></div>
-              <div class="terminal-dot bg-green-500 w-3 h-3 rounded-full mr-2"></div>
-              <span class="text-gray-400 text-sm">generation@onelastAI:~</span>
+<% content_for :head do %>
+  <style>
+    .text-gradient {
+      background: linear-gradient(to right, #a78bfa, #f472b6, #8b5cf6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .btn-primary {
+      @apply flex items-center justify-center bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-all duration-300 shadow-lg hover:shadow-purple-500/50;
+    }
+
+    .btn-secondary {
+      @apply bg-gray-800/60 backdrop-blur-sm text-gray-300 px-6 py-3 rounded-lg font-semibold hover:bg-gray-700 transition-all duration-300 border border-gray-700;
+    }
+
+    .pulse-glow {
+      animation: pulseGlow 2s infinite ease-in-out;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 2px 2px rgba(16, 185, 129, 0.4); }
+      50% { box-shadow: 0 0 10px 5px rgba(16, 185, 129, 0); }
+    }
+
+    .floating-animation {
+      animation: floatUpDown 6s ease-in-out infinite;
+    }
+
+    @keyframes floatUpDown {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+
+    /* --- Terminal Styles --- */
+    .hero-terminal-window {
+      height: 320px !important;
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      box-shadow: 0 0 30px rgba(139, 92, 246, 0.2), 0 0 15px rgba(0, 0, 0, 0.5) inset;
+      position: relative;
+      z-index: 10;
+    }
+
+    .hero-terminal-content {
+      height: 240px !important;
+      overflow-y: auto !important;
+      overflow-x: hidden !important;
+      display: block !important;
+      background: linear-gradient(135deg, rgba(0,0,0,0.95) 0%, rgba(20,20,30,0.95) 100%);
+      padding: 8px;
+      scroll-behavior: smooth;
+      position: relative;
+      z-index: 11;
+      /* Hide scrollbar for all browsers */
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none; /* Internet Explorer 10+ */
+    }
+
+    /* Hide scrollbar for Webkit browsers (Chrome, Safari, Edge) */
+    .hero-terminal-content::-webkit-scrollbar {
+      display: none;
+    }
+
+    .hero-terminal-line {
+      line-height: 1.6;
+      margin-bottom: 0.25rem;
+      font-family: 'Fira Code', 'Courier New', monospace;
+      text-shadow: 0 0 2px rgba(200, 200, 255, 0.1);
+      word-wrap: break-word;
+      white-space: pre-wrap;
+      overflow-wrap: break-word;
+    }
+
+    .hero-terminal-cursor {
+      display: inline-block;
+      background-color: #67e8f9;
+      animation: heroTerminalBlink 1.2s step-end infinite;
+      width: 9px;
+      height: 1.2em;
+      margin-left: 4px;
+      box-shadow: 0 0 10px #67e8f9;
+      transform: translateY(0.2em);
+    }
+
+    @keyframes heroTerminalBlink {
+      from, to { background-color: transparent; }
+      50% { background-color: #67e8f9; }
+    }
+  </style>
+<% end %>
+
+    <!-- Enhanced Hero Section with Canvas and Realistic Terminal -->
+    <section class="relative pt-20 pb-32 overflow-hidden">
+        <!-- Canvas Background -->
+        <canvas id="particle-canvas" class="absolute top-0 left-0 w-full h-full z-0"></canvas>
+
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="flex flex-col lg:flex-row items-center gap-12">
+
+                <!-- Hero Content -->
+                <div class="lg:w-1/2 text-center lg:text-left">
+                    <div class="mb-6">
+                        <span class="inline-block px-4 py-2 bg-purple-600/20 border border-purple-500/30 rounded-full text-purple-300 text-sm font-medium mb-4">
+                            🚀 27 AI Agents Ready to Deploy
+                        </span>
+                    </div>
+
+                    <h1 class="text-5xl lg:text-7xl font-bold mb-6 leading-tight">
+                        <span class="text-gradient">OneLastAI</span><br>
+                        <span class="text-white">Enterprise Platform</span>
+                    </h1>
+
+                    <p class="text-xl text-gray-300 mb-8 leading-relaxed max-w-2xl mx-auto lg:mx-0">
+                        Deploy intelligent AI agents instantly. From conversational AI to specialized automation,
+                        our platform delivers enterprise-grade solutions with zero configuration.
+                    </p>
+
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-8">
+                        <a href="/agents" class="btn-primary group">
+                            Start Building
+                            <span class="ml-2 transform group-hover:translate-x-1 transition-transform">→</span>
+                        </a>
+                        <a href="/templates" class="btn-secondary">
+                            View Documentation
+                        </a>
+                    </div>
+
+                    <div class="flex items-center justify-center lg:justify-start gap-8 text-sm text-gray-400">
+                        <div class="flex items-center gap-2">
+                            <div class="w-2 h-2 bg-green-400 rounded-full pulse-glow"></div>
+                            <span>27 Agents Online</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-2 h-2 bg-blue-400 rounded-full"></div>
+                            <span>99.9% Uptime</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-2 h-2 bg-purple-400 rounded-full"></div>
+                            <span>Enterprise Ready</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Terminal Demo -->
+                <div class="lg:w-1/2 w-full relative">
+                    <div class="floating-animation">
+                        <div class="hero-terminal-window max-w-2xl mx-auto bg-black/80 backdrop-blur-sm text-sm p-4 rounded-lg shadow-2xl font-mono text-white relative overflow-hidden">
+                            <div class="terminal-header flex items-center mb-4">
+                                <div class="terminal-dot bg-red-500 w-3 h-3 rounded-full mr-1"></div>
+                                <div class="terminal-dot bg-yellow-500 w-3 h-3 rounded-full mr-1"></div>
+                                <div class="terminal-dot bg-green-500 w-3 h-3 rounded-full mr-2"></div>
+                                <span class="text-gray-400 text-xs sm:text-sm">generation@onelastai:~/</span>
+                            </div>
+                            <div id="terminal-output" class="hero-terminal-content whitespace-pre-wrap text-sm"></div>
+                            <div class="absolute inset-0 pointer-events-none z-0">
+                                <div class="blur-3xl w-full h-full bg-gradient-to-br from-purple-500/10 via-blue-500/10 to-transparent"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div id="terminal-output" class="terminal-content whitespace-pre-wrap text-sm"></div>
-            <div class="absolute inset-0 pointer-events-none z-0">
-              <div class="blur-3xl w-full h-full bg-gradient-to-br from-purple-500/10 via-blue-500/10 to-transparent"></div>
-            </div>
-          </div>
         </div>
-      </div>
-    </div>
-  </div>
+    </section>
 
-  <!-- Background decorations -->
-  <div class="absolute inset-0 overflow-hidden">
-    <div class="absolute -top-40 -right-40 w-80 h-80 bg-purple-600/20 rounded-full blur-3xl"></div>
-    <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-600/20 rounded-full blur-3xl"></div>
-  </div>
-</section>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
 
-<script>
-  const terminal = document.getElementById('terminal-output');
-  const lines = [
-    '$ echo "I am the operator. The terminal listens. The agents rise."',
-    '→ Manifesto accepted.',
-    '$ curl -X POST https://api.onelastai.com/agents',
-    '→ Initializing AI agents...',
-    '✓ NeoChat: Ready for conversations',
-    '✓ EmotiSense: Emotion analysis active',
-    '✓ CineGen: Video generation online',
-    '✓ ContentCrafter: Content engine ready',
-    '$ Deployed 24 agents in 0.3s'
-  ];
+        // --- Particle Canvas Animation ---
+        const canvas = document.getElementById('particle-canvas');
+        if (canvas) {
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+            
+            const setCanvasSize = () => {
+                canvas.width = canvas.offsetWidth;
+                canvas.height = canvas.offsetHeight;
+            };
 
-  let index = 0;
-  let currentCharIndex = 0;
-  let currentLine = null;
-  
-  function typeLine() {
-    if (index >= lines.length) return;
-    
-    // Create new line if we're starting a new one
-    if (currentCharIndex === 0) {
-      currentLine = document.createElement('div');
-      currentLine.className = 'terminal-line mb-2';
-      terminal.appendChild(currentLine);
-    }
-    
-    const lineText = lines[index];
-    const displayText = lineText.slice(0, currentCharIndex + 1);
-    
-    // Style the line based on its content
-    if (lineText.startsWith('$')) {
-      currentLine.innerHTML = `<span class="text-purple-400">$</span> <span class="text-white">${displayText.slice(2)}</span><span class="terminal-cursor">_</span>`;
-    } else if (lineText.startsWith('✓')) {
-      currentLine.innerHTML = `<span class="text-green-400">✓</span> <span class="text-gray-300">${displayText.slice(1)}</span><span class="terminal-cursor">_</span>`;
-    } else if (lineText.startsWith('→')) {
-      currentLine.innerHTML = `<span class="text-yellow-400">→</span> <span class="text-gray-400">${displayText.slice(1)}</span><span class="terminal-cursor">_</span>`;
-    } else {
-      currentLine.innerHTML = `<span class="text-white">${displayText}</span><span class="terminal-cursor">_</span>`;
-    }
-    
-    currentCharIndex++;
-    
-    // Check if we've finished typing this line
-    if (currentCharIndex > lineText.length) {
-      // Remove cursor and finalize line
-      if (lineText.startsWith('$')) {
-        currentLine.innerHTML = `<span class="text-purple-400">$</span> <span class="text-white">${lineText.slice(2)}</span>`;
-      } else if (lineText.startsWith('✓')) {
-        currentLine.innerHTML = `<span class="text-green-400">✓</span> <span class="text-gray-300">${lineText.slice(1)}</span>`;
-      } else if (lineText.startsWith('→')) {
-        currentLine.innerHTML = `<span class="text-yellow-400">→</span> <span class="text-gray-400">${lineText.slice(1)}</span>`;
-      } else {
-        currentLine.innerHTML = `<span class="text-white">${lineText}</span>`;
-      }
-      
-      // Move to next line
-      index++;
-      currentCharIndex = 0;
-      setTimeout(typeLine, 800); // Pause between lines
-    } else {
-      setTimeout(typeLine, 50); // Typing speed
-    }
-  }   currentLine.className = 'terminal-line mb-2';
-      terminal.appendChild(currentLine);
-    }
-    
-    const lineText = lines[index];
-    const displayText = lineText.slice(0, currentCharIndex + 1);
-    
-    // Style the line based on its content
-    if (lineText.startsWith('$')) {
-      currentLine.innerHTML = `<span class="text-purple-400">$</span> <span class="text-white">${displayText.slice(2)}</span><span class="terminal-cursor">_</span>`;
-    } else if (lineText.startsWith('✓')) {
-      currentLine.innerHTML = `<span class="text-green-400">✓</span> <span class="text-gray-300">${displayText.slice(1)}</span><span class="terminal-cursor">_</span>`;
-    } else if (lineText.startsWith('→')) {
-      currentLine.innerHTML = `<span class="text-yellow-400">→</span> <span class="text-gray-400">${displayText.slice(1)}</span><span class="terminal-cursor">_</span>`;
-    } else {
-      currentLine.innerHTML = `<span class="text-white">${displayText}</span><span class="terminal-cursor">_</span>`;
-    }
-    
-    currentCharIndex++;
-    
-    // Check if we've finished typing this line
-    if (currentCharIndex > lineText.length) {
-      // Remove cursor and finalize line
-      if (lineText.startsWith('$')) {
-        currentLine.innerHTML = `<span class="text-purple-400">$</span> <span class="text-white">${lineText.slice(2)}</span>`;
-      } else if (lineText.startsWith('✓')) {
-        currentLine.innerHTML = `<span class="text-green-400">✓</span> <span class="text-gray-300">${lineText.slice(1)}</span>`;
-      } else if (lineText.startsWith('→')) {
-        currentLine.innerHTML = `<span class="text-yellow-400">→</span> <span class="text-gray-400">${lineText.slice(1)}</span>`;
-      } else {
-        currentLine.innerHTML = `<span class="text-white">${lineText}</span>`;
-      }
-      
-      // Move to next line
-      index++;
-      currentCharIndex = 0;
-      setTimeout(typeLine, 800); // Pause between lines
-    } else {
-      setTimeout(typeLine, 50); // Typing speed
-    }
-  }
+            class Particle {
+                constructor(x, y) {
+                    this.x = x;
+                    this.y = y;
+                    this.size = Math.random() * 2 + 1;
+                    this.speedX = Math.random() * 0.8 - 0.4;
+                    this.speedY = Math.random() * 0.8 - 0.4;
+                    this.color = 'rgba(167, 139, 250, 0.5)';
+                }
+                update() {
+                    if (this.x > canvas.width || this.x < 0) this.speedX *= -1;
+                    if (this.y > canvas.height || this.y < 0) this.speedY *= -1;
+                    this.x += this.speedX;
+                    this.y += this.speedY;
+                }
+                draw() {
+                    ctx.fillStyle = this.color;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
 
-  window.addEventListener('DOMContentLoaded', typeLine);
+            function initParticles() {
+                particles = [];
+                let numberOfParticles = (canvas.width * canvas.height) / 10000;
+                for (let i = 0; i < numberOfParticles; i++) {
+                    let x = Math.random() * canvas.width;
+                    let y = Math.random() * canvas.height;
+                    particles.push(new Particle(x, y));
+                }
+            }
+
+            function connectParticles() {
+                for (let a = 0; a < particles.length; a++) {
+                    for (let b = a; b < particles.length; b++) {
+                        let distance = Math.sqrt(
+                            Math.pow(particles[a].x - particles[b].x, 2) +
+                            Math.pow(particles[a].y - particles[b].y, 2)
+                        );
+                        if (distance < 150) {
+                            ctx.strokeStyle = `rgba(167, 139, 250, ${1 - distance / 150})`;
+                            ctx.lineWidth = 0.5;
+                            ctx.beginPath();
+                            ctx.moveTo(particles[a].x, particles[a].y);
+                            ctx.lineTo(particles[b].x, particles[b].y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+            
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach(p => { p.update(); p.draw(); });
+                connectParticles();
+                requestAnimationFrame(animate);
+            }
+            
+            setCanvasSize();
+            initParticles();
+            animate();
+            window.addEventListener('resize', () => {
+                setCanvasSize();
+                initParticles();
+            });
+        }
+
+        // --- Terminal Typing Animation ---
+        const terminal = document.getElementById('terminal-output');
+        if (!terminal) return;
+        
+        const LINES_PER_PAGE = 12; // Number of lines that fit in the fixed height
+
+        const allAgentPages = [
+             ['$ systemctl start onelastai.service', '● onelastai.service - OneLastAI Agent Platform', '  Loaded: loaded (/etc/systemd/system/onelastai.service; enabled)', '  Active: <span class="text-green-400">active (running)</span> since ' + new Date().toUTCString(), '$ deploy --all-agents', 'Initializing deployment sequence... 27 agents found.'],
+             ['✓ <span class="text-cyan-400">NeoChat</span>: Universal conversation master... <span class="text-green-400">ONLINE</span>', '✓ <span class="text-cyan-400">EmotiSense</span>: Emotional intelligence companion... <span class="text-green-400">ONLINE</span>', '✓ <span class="text-cyan-400">CineGen</span>: Cinematic AI director... <span class="text-green-400">ONLINE</span>', '✓ <span class="text-cyan-400">ContentCrafter</span>: Master content strategist... <span class="text-green-400">ONLINE</span>', '✓ <span class="text-cyan-400">Memora</span>: Infinite memory archive... <span class="text-green-400">ONLINE</span>'],
+             ['$ get-agent-status --group=security', '→ <span class="text-pink-400">NetScope</span>: Network security specialist... <span class="text-green-400">ACTIVE</span>', '→ <span class="text-pink-400">AuthWise</span>: Cybersecurity guardian... <span class="text-green-400">ACTIVE</span>', '$ get-agent-status --group=data', '→ <span class="text-fuchsia-400">DataVision</span>: Data visualization expert... <span class="text-green-400">ACTIVE</span>', '→ <span class="text-fuchsia-400">DataSphere</span>: Big data analytics engine... <span class="text-green-400">ACTIVE</span>'],
+             ['✓ <span class="text-indigo-400">InfoSeek</span>, <span class="text-indigo-400">AIBlogster</span>, <span class="text-indigo-400">DocuMind</span>... <span class="text-green-400">ONLINE</span>', '✓ <span class="text-indigo-400">CareBot</span>, <span class="text-indigo-400">PersonaX</span>... <span class="text-green-400">ONLINE</span>', '$ netstat -tlnp | grep onelastai', '<span class="text-gray-400">tcp6  0  0 :::8080 :::* LISTEN  1250/IdeaForge</span>', '<span class="text-gray-400">tcp6  0  0 :::8081 :::* LISTEN  1251/VocaMind</span>', '<span class="text-gray-400">tcp6  0  0 :::8082 :::* LISTEN  1252/TaskMaster</span>'],
+             ['$ echo "All 27 AI agents successfully deployed."', '<span class="text-lime-300">All 27 AI agents successfully deployed and operational.</span>', 'System status: <span class="text-green-400">HEALTHY</span>.', 'Awaiting next command...']
+        ];
+        
+        const allLines = allAgentPages.flat();
+        let globalLineIndex = 0;
+        let currentCharIndex = 0;
+        let currentLineEl = null;
+        let lineQueue = [];
+
+        function typeLine() {
+            if (globalLineIndex >= allLines.length) {
+                setTimeout(() => {
+                    globalLineIndex = 0;
+                    lineQueue = [];
+                    terminal.innerHTML = '';
+                    typeLine();
+                }, 4000); // Pause before restarting loop
+                return;
+            }
+
+            if (currentCharIndex === 0) {
+                if (lineQueue.length >= LINES_PER_PAGE) {
+                    const oldestLine = lineQueue.shift();
+                    if (oldestLine && oldestLine.parentNode) {
+                        oldestLine.parentNode.removeChild(oldestLine);
+                    }
+                }
+                currentLineEl = document.createElement('div');
+                currentLineEl.className = 'hero-terminal-line';
+                terminal.appendChild(currentLineEl);
+                lineQueue.push(currentLineEl);
+            }
+            
+            const lineText = allLines[globalLineIndex];
+            const displayText = lineText.slice(0, currentCharIndex + 1);
+
+            let styledText = displayText;
+            if (lineText.startsWith('$')) {
+                styledText = `<span class="text-yellow-400">$</span> <span class="text-cyan-300">${displayText.slice(2)}</span>`;
+            } else if (lineText.startsWith('✓')) {
+                styledText = `<span class="text-green-400">✓</span> ${displayText.slice(1)}`;
+            } else if (lineText.startsWith('→')) {
+                styledText = `<span class="text-pink-400">→</span> ${displayText.slice(1)}`;
+            } else if (lineText.startsWith('●')) {
+                styledText = `<span class="text-blue-400">●</span> ${displayText.slice(1)}`;
+            } else {
+                styledText = `<span class="text-gray-300">${displayText}</span>`;
+            }
+
+            currentLineEl.innerHTML = styledText + '<span class="hero-terminal-cursor"></span>';
+            terminal.scrollTop = terminal.scrollHeight;
+            currentCharIndex++;
+
+            if (currentCharIndex > lineText.length) {
+                currentLineEl.innerHTML = styledText; 
+                currentCharIndex = 0;
+                globalLineIndex++;
+                
+                const isEndOfPage = globalLineIndex > 0 && globalLineIndex % 6 === 0;
+                const pauseTime = isEndOfPage ? 1500 : 150;
+                setTimeout(typeLine, pauseTime);
+            } else {
+                setTimeout(typeLine, 25); 
+            }
+        }
+        typeLine();
+    });
 </script>
-<style>
-  .terminal-cursor {
-    color: #10b981;
-    animation: blink 1s infinite;
-    font-weight: bold;
-    margin-left: 2px;
-  }
-  
-  @keyframes blink {
-    0%, 50% { opacity: 1; }
-    51%, 100% { opacity: 0; }
-  }
-  
-  .terminal-line {
-    line-height: 1.6;
-    margin-bottom: 0.5rem;
-    font-family: 'Courier New', monospace;
-  }
-  
-  .text-gradient {
-    background: linear-gradient(to right, #a78bfa, #f472b6, #8b5cf6);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    color: transparent;
-  }
-  
-  .btn-primary {
-    @apply bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition;
-  }
-  
-  .btn-secondary {
-    @apply bg-gray-800 text-gray-300 px-6 py-3 rounded-lg font-semibold hover:bg-gray-700 transition;
-  }
-  
-  .pulse-glow {
-    animation: pulseGlow 2s infinite;
-  }
-  
-  @keyframes pulseGlow {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
-    50% { box-shadow: 0 0 10px 10px rgba(16, 185, 129, 0); }
-  }
-  
-  .floating-animation {
-    animation: floatUpDown 6s ease-in-out infinite;
-  }
-  
-  @keyframes floatUpDown {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-20px); }
-  }
-</style>

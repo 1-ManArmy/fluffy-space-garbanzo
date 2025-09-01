@@ -356,9 +356,11 @@
 
   <body class="<%= body_css_classes %> <%= 'agent-page' if is_agent_page? %>">
     <!-- Menu Toggle Button (Only visible on agent pages) -->
-    <button class="menu-toggle-btn" onclick="toggleGlobalMenu()" id="menuToggleBtn">
-      ▼
-    </button>
+    <% if is_agent_page? %>
+      <button class="menu-toggle-btn" onclick="toggleGlobalMenu()" id="menuToggleBtn">
+        ▼
+      </button>
+    <% end %>
 
     <!-- Global Menu Bar -->
     <nav class="global-menu-bar" id="globalMenuBar">

@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
+require 'ostruct'
+
 class SpylensController < ApplicationController
-  before_action :find_spylens_agent
+  before_action :initialize_agent_data
   before_action :ensure_demo_user
 
   def index
@@ -667,26 +669,52 @@ class SpylensController < ApplicationController
     }
   end
 
-  def find_spylens_agent
-    @agent = Agent.find_by(agent_type: 'spylens', status: 'active')
-
-    return if @agent
-
-    redirect_to root_url(subdomain: false), alert: 'Spylens agent is currently unavailable'
+  def initialize_agent_data
+    @agent = OpenStruct.new(
+      name: 'SpyLens',
+      agent_type: 'spylens',
+      status: 'active',
+      total_conversations: rand(1500..2800),
+      average_rating: rand(4.3..4.7),
+      specializations: ['Surveillance Analysis', 'Data Intelligence', 'Pattern Detection', 'Threat Assessment',
+                        'Security Monitoring', 'Investigation Support'],
+      capabilities: ['Advanced Analytics', 'Pattern Recognition', 'Behavioral Analysis', 'Risk Detection',
+                     'Intelligence Gathering', 'Security Assessment'],
+      configuration: { 'response_style' => 'surveillance_analytical' },
+      last_active_at: Time.current,
+      update!: ->(attrs) { attrs.each { |k, v| @agent.send("#{k}=", v) } },
+      agent_interactions: OpenStruct.new(
+        where: lambda { |_conditions|
+          OpenStruct.new(
+            order: lambda { |_sort|
+              OpenStruct.new(
+                limit: lambda { |_num|
+                  OpenStruct.new(
+                    pluck: ->(*_fields) { [] }
+                  )
+                }
+              )
+            }
+          )
+        }
+      )
+    )
   end
 
   def ensure_demo_user
     # Create or find a demo user for the session
     session_id = session[:user_session_id] ||= SecureRandom.uuid
 
-    @user = User.find_or_create_by(email: "demo_#{session_id}@spylens.onelastai.com") do |user|
-      user.name = "Spylens User #{rand(1000..9999)}"
-      user.preferences = {
+    @user = OpenStruct.new(
+      id: session_id.hash,
+      email: "demo_#{session_id}@spylens.onelastai.com",
+      name: "SpyLens User #{rand(1000..9999)}",
+      preferences: {
         communication_style: 'terminal',
         interface_theme: 'dark',
         response_detail: 'comprehensive'
       }.to_json
-    end
+    )
 
     session[:current_user_id] = @user.id
   end

@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>One Man Army AI - Cybersecurity Education Suite</title>
+
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <%= javascript_importmap_tags %>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+      background: linear-gradient(135deg, #0a0a1a 0%, #1a1a2a 50%, #2a1a3a 100%);
+      color: #ffffff;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .hero-section {
+      padding: 4rem 2rem 3rem;
+      text-align: center;
+      background: radial-gradient(ellipse at center, rgba(255, 0, 100, 0.15) 0%, rgba(0, 0, 0, 0.3) 70%);
+      border-bottom: 2px solid #ff0064;
+    }
+
+    .hero-title {
+      font-size: 3.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 20px #ff0064;
+      background: linear-gradient(45deg, #ff0064, #cc0051, #ff3377);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 30px #ff0064;
+    }
+
+    .hero-tagline {
+      font-size: 1.5rem;
+      color: #e0e0e0;
+      margin-bottom: 1rem;
+      font-weight: 300;
+    }
+
+    .launch-badge {
+      background: linear-gradient(45deg, #ff0064, #cc0051);
+      color: #fff;
+      padding: 0.8rem 2rem;
+      border-radius: 25px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      display: inline-block;
+      margin: 0.5rem;
+      animation: pulse 2s infinite;
+    }
+
+    .premium-badge {
+      background: linear-gradient(45deg, #ffaa00, #ff8800);
+      color: #000;
+      padding: 0.8rem 2rem;
+      border-radius: 25px;
+      font-size: 1rem;
+      font-weight: 600;
+      display: inline-block;
+      margin: 0.5rem;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    .content-section {
+      padding: 3rem 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .info-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 0, 100, 0.2);
+      border-radius: 15px;
+      padding: 2rem;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .info-card:hover {
+      border-color: #ff0064;
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(255, 0, 100, 0.2);
+    }
+
+    .info-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 15px #ff0064;
+    }
+
+    .info-title {
+      font-size: 1.2rem;
+      color: #ff0064;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    .info-content {
+      color: #e0e0e0;
+      line-height: 1.5;
+      font-size: 0.95rem;
+    }
+
+    .agents-section {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 0, 100, 0.2);
+      border-radius: 20px;
+      padding: 3rem;
+      margin: 3rem 0;
+    }
+
+    .section-title {
+      font-size: 2.5rem;
+      color: #ff0064;
+      text-align: center;
+      margin-bottom: 2rem;
+      text-shadow: 0 0 10px #ff0064;
+    }
+
+    .agents-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .agent-card {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 0, 100, 0.1);
+      border-radius: 12px;
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .agent-card:hover {
+      border-color: #ff0064;
+      background: rgba(255, 0, 100, 0.05);
+      transform: translateX(5px);
+    }
+
+    .agent-number {
+      color: #ffaa00;
+      font-weight: 700;
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .agent-name {
+      color: #ff0064;
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-bottom: 0.8rem;
+      font-family: 'Courier New', monospace;
+    }
+
+    .agent-description {
+      color: #e0e0e0;
+      line-height: 1.5;
+      font-size: 0.9rem;
+    }
+
+    .warning-section {
+      background: rgba(255, 170, 0, 0.1);
+      border: 2px solid #ffaa00;
+      border-radius: 15px;
+      padding: 2rem;
+      margin: 2rem 0;
+      text-align: center;
+    }
+
+    .warning-title {
+      color: #ffaa00;
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .warning-text {
+      color: #e0e0e0;
+      line-height: 1.6;
+      font-size: 1rem;
+    }
+
+    .back-button {
+      display: inline-block;
+      background: linear-gradient(45deg, #666, #888);
+      color: #ffffff;
+      padding: 1rem 2rem;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      margin-top: 2rem;
+    }
+
+    .back-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(136, 136, 136, 0.4);
+    }
+
+    @media (max-width: 768px) {
+      .hero-title {
+        font-size: 2.5rem;
+      }
+      
+      .info-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .agents-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .agents-section {
+        padding: 2rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <section class="hero-section">
+    <div class="hero-icon">⚔️</div>
+    <h1 class="hero-title">One Man Army AI</h1>
+    <p class="hero-tagline">Cybersecurity Education & Ethical Testing Suite</p>
+    <div class="launch-badge">🚀 LAUNCHING 2026</div>
+    <div class="premium-badge">🔒 PREMIUM USERS ONLY</div>
+    <p style="margin-top: 1rem; color: #ccc;">
+      🔗 <a href="https://onemanarmy.ai" target="_blank" style="color: #ff0064;">onemanarmy.ai</a>
+    </p>
+    
+    <!-- Hero Buttons -->
+    <div style="display: flex; flex-direction: column; gap: 1rem; justify-content: center; align-items: center; margin-top: 2rem;">
+      <a href="https://onemanarmy.ai" target="_blank" style="background: linear-gradient(45deg, #ff0064, #cc0051); color: white; padding: 1rem 2rem; border-radius: 25px; text-decoration: none; font-weight: 600; transition: all 0.3s ease; transform: scale(1); box-shadow: 0 5px 15px rgba(255, 0, 100, 0.3);" 
+         onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+        🛡️ Visit Official Site
+      </a>
+      <a href="/news" style="background: linear-gradient(45deg, #666, #888); color: white; padding: 1rem 2rem; border-radius: 25px; text-decoration: none; font-weight: 600; transition: all 0.3s ease; transform: scale(1); box-shadow: 0 5px 15px rgba(136, 136, 136, 0.3);"
+         onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+        📰 Back to News
+      </a>
+    </div>
+  </section>
+
+  <section class="content-section">
+    
+    <!-- Project Information Grid -->
+    <div class="info-grid">
+      <div class="info-card">
+        <div class="info-icon">🚀</div>
+        <h3 class="info-title">Launch Date</h3>
+        <p class="info-content">2026 / Update Soon</p>
+      </div>
+      <div class="info-card">
+        <div class="info-icon">🔒</div>
+        <h3 class="info-title">Access Requirements</h3>
+        <p class="info-content">Premium Users who have completed 1 full year</p>
+      </div>
+      <div class="info-card">
+        <div class="info-icon">🎯</div>
+        <h3 class="info-title">Purpose</h3>
+        <p class="info-content">Educational, Testing, and Youth Cybersecurity Awareness</p>
+      </div>
+      <div class="info-card">
+        <div class="info-icon">🌐</div>
+        <h3 class="info-title">Project Domain</h3>
+        <p class="info-content">onemanarmy.ai</p>
+      </div>
+    </div>
+
+    <!-- Warning Section -->
+    <div class="warning-section">
+      <h2 class="warning-title">⚠️ EDUCATIONAL PURPOSE ONLY</h2>
+      <p class="warning-text">
+        This document contains the list of 50 AI-Cybersecurity agents (modules) included in the One Man Army suite. 
+        Each module is designed for <strong>ethical testing, education, and awareness</strong> for youth and responsible researchers only.
+        All tools are intended for educational purposes and authorized testing environments.
+      </p>
+    </div>
+
+    <!-- AI Cybersecurity Agents Section -->
+    <div class="agents-section">
+      <h2 class="section-title">🛡️ 50 AI Cybersecurity Agents</h2>
+      <p style="text-align: center; color: #e0e0e0; margin-bottom: 2rem; font-size: 1.1rem;">
+        Advanced AI-powered cybersecurity modules for educational testing and awareness
+      </p>
+      
+      <div class="agents-grid">
+        
+        <div class="agent-card">
+          <div class="agent-number">01.</div>
+          <h3 class="agent-name">ai_giant_sniffer</h3>
+          <p class="agent-description">Advanced AI-powered packet sniffer for deep traffic inspection.</p>
+        </div>
+
+        <div class="agent-card">
+          <div class="agent-number">02.</div>
+          <h3 class="agent-name">antiforensicai</h3>
+          <p class="agent-description">Removes digital footprints and evades forensic tools.</p>
+        </div>
+
+        <div class="agent-card">
+          <div class="agent-number">03.</div>
+          <h3 class="agent-name">blackmamba</h3>
+          <p class="agent-description">Stealth payload injector using encrypted delivery.</p>
+        </div>
+
+        <div class="agent-card">
+          <div class="agent-number">04.</div>
+          <h3 class="agent-name">black_sea_leviathan</h3>
+          <p class="agent-description">Dark web reconnaissance and monitoring bot.</p>
+        </div>
+
+        <div class="agent-card">
+          <div class="agent-number">05.</div>
+          <h3 class="agent-name">bruteforcex</h3>
+          <p class="agent-description">Automated AI-based brute-force login attack tester.</p>
+        </div>
+
+        <div class="agent-card">
+          <div class="agent-number">06.</div>
+          <h3 class="agent-name">c2relay</h3>
+          <p class="agent-description">Command & Control relay module for red-team emulation.</p>
+        </div>
+
+        <div class="agent-card">
+          <div class="agent-number">07.</div>
+          <h3 class="agent-name">c2sim</h3>
+          <p class="agent-description">Simulates full C2 server behaviors for test environments.</p>
+        </div>
+
+        <div class="agent-card">
+          <div class="agent-number">08.</div>
+          <h3 class="agent-name">cyber_detective_cid</h3>
+          <p class="agent-description">AI agent to trace cyber footprints and analyze CID.</p>
+        </div>
+
+        <div class="agent-card">
+          <div class="agent-number">09.</div>
+          <h3 class="agent-name">cyber_intelligence_detective</h3>
+          <p class="agent-description">Collects and correlates cyber intelligence feeds.</p>
+        </div>
+
+        <div class="agent-card">
+          <div class="agent-number">10.</div>
+          <h3 class="agent-name">enhanced_auto_hunter</h3>
+          <p class="agent-description">Detects vulnerabilities in live targets autonomously.</p>
+        </div>
+
+        <div class="agent-card">
+          <div class="agent-number">11.</div>
+          <h3 class="agent-name">formsnatchai</h3>
+          <p class="agent-description">Captures form input data for simulation and analysis.</p>
+        </div>
+
+        <div class="agent-card">
+          <div class="agent-number">12.</div>
+          <h3 class="agent-name">fxinterceptorai</h3>
+          <p class="agent-description">Intercepts API and JS-based data exfiltration.</p>
+        </div>
+
+        <div class="agent-card">
+          <div class="agent-number">13.</div>
+          <h3 class="agent-name">ghostscrollai</h3>
+          <p class="agent-description">Social media and blog auto-scroller for intel gathering.</p>
+        </div>
+
+        <div class="agent-card">
+          <div class="agent-number">14.</div>
+          <h3 class="agent-name">intercept_proxy</h3>
+          <p class="agent-description">Man-in-the-middle proxy for encrypted traffic testing.</p>
+        </div>
+
+        <div class="agent-card">
+          <div class="agent-number">15.</div>
+          <h3 class="agent-name">johnnyai</h3>
+          <p class="agent-description">AI bot for simulating real-user behavior across web apps.</p>
+        </div>
+
+        <div class="agent-card">
+          <div class="agent-number">16.</div>
+          <h3 class="agent-name">keyloggerx</h3>
+          <p class="agent-description">Simulated keylogger for keyboard activity testing.</p>
+        </div>
+
+        <div class="agent-card">
+          <div class="agent-number">17.</div>
+          <h3 class="agent-name">lateralmover</h3>
+          <p class="agent-description">Simulates lateral movement across networks.</p>
+        </div>
+
+        <div class="agent-card">
+          <div class="agent-number">18.</div>
+          <h3 class="agent-name">logwiper</h3>
+          <p class="agent-description">Cleans and manipulates logs for forensics testing.</p>
+        </div>
+
+        <div class="agent-card">
+          <div class="agent-number">19.</div>
+          <h3 class="agent-name">magecart_injectx</h3>
+          <p class="agent-description">Detects and simulates Magecart-style attacks.</p>
+        </div>
+
+        <div class="agent-card">
+          <div class="agent-number">20.</div>
+          <h3 class="agent-name">mailsnatcher</h3>
+          <p class="agent-description">Email traffic interceptor and analyzer.</p>
+        </div>
+
+        <div class="agent-card">
+          <div class="agent-number">21.</div>
+          <h3 class="agent-name">metamorph_ai</h3>
+          <p class="agent-description">Polymorphic engine for payload shape-shifting.</p>
+        </div>
+
+        <div class="agent-card">
+          <div class="agent-number">22.</div>
+          <h3 class="agent-name">network_phantom_scanner</h3>
+          <p class="agent-description">Stealth network scanning module.</p>
+        </div>
+
+        <div class="agent-card">
+          <div class="agent-number">23.</div>
+          <h3 class="agent-name">professorai</h3>
+          <p class="agent-description">AI-based tutor and advisory agent for cybersecurity training.</p>
+        </div>
+
+        <div class="agent-card">
+          <div class="agent-number">24.</div>
+          <h3 class="agent-name">payload_injector</h3>
+          <p class="agent-description">Delivers test payloads into live or emulated targets.</p>
+        </div>
+
+        <div class="agent-card">
+          <div class="agent-number">25.</div>
+          <h3 class="agent-name">reversex_ai</h3>
+          <p class="agent-description">Reverse engineering assistant for binary deconstruction.</p>
+        </div>
+
+        <div class="agent-card">
+          <div class="agent-number">26.</div>
+          <h3 class="agent-name">socialhack_master</h3>
+          <p class="agent-description">Simulates social engineering techniques.</p>
+        </div>
+
+        <div class="agent-card">
+          <div class="agent-number">27.</div>
+          <h3 class="agent-name">backdoor_bender</h3>
+          <p class="agent-description">Tests persistence mechanisms using stealthy backdoors.</p>
+        </div>
+
+        <div class="agent-card">
+          <div class="agent-number">28.</div>
+          <h3 class="agent-name">stealthrat_ai</h3>
+          <p class="agent-description">Remote access tool for ethical red-team simulations.</p>
+        </div>
+
+        <div class="agent-card">
+          <div class="agent-number">29.</div>
+          <h3 class="agent-name">spyglass_ai</h3>
+          <p class="agent-description">Automated surveillance through web scraping.</p>
+        </div>
+
+        <div class="agent-card">
+          <div class="agent-number">30.</div>
+          <h3 class="agent-name">browser_spyder</h3>
+          <p class="agent-description">Simulates browser-based exploits.</p>
+        </div>
+
+        <div class="agent-card">
+          <div class="agent-number">31.</div>
+          <h3 class="agent-name">dns_tunnel_ai</h3>
+          <p class="agent-description">Emulates DNS tunneling attacks.</p>
+        </div>
+
+        <div class="agent-card">
+          <div class="agent-number">32.</div>
+          <h3 class="agent-name">packet_sniff_ai</h3>
+          <p class="agent-description">Captures and decodes packet-level data.</p>
+        </div>
+
+        <div class="agent-card">
+          <div class="agent-number">33.</div>
+          <h3 class="agent-name">rce_exploiter</h3>
+          <p class="agent-description">Performs Remote Code Execution in test envs.</p>
+        </div>
+
+        <div class="agent-card">
+          <div class="agent-number">34.</div>
+          <h3 class="agent-name">rootkit_genie</h3>
+          <p class="agent-description">Simulated rootkit behavior for detection testing.</p>
+        </div>
+
+        <div class="agent-card">
+          <div class="agent-number">35.</div>
+          <h3 class="agent-name">trojanfabricator</h3>
+          <p class="agent-description">Builds and analyzes Trojan file behavior.</p>
+        </div>
+
+        <div class="agent-card">
+          <div class="agent-number">36.</div>
+          <h3 class="agent-name">ai_breach_lab</h3>
+          <p class="agent-description">Full AI suite to simulate system breaches.</p>
+        </div>
+
+        <div class="agent-card">
+          <div class="agent-number">37.</div>
+          <h3 class="agent-name">darknet_explorer</h3>
+          <p class="agent-description">Maps and monitors dark web content.</p>
+        </div>
+
+        <div class="agent-card">
+          <div class="agent-number">38.</div>
+          <h3 class="agent-name">hookmaster_ai</h3>
+          <p class="agent-description">Injects JavaScript hooks for tracking.</p>
+        </div>
+
+        <div class="agent-card">
+          <div class="agent-number">39.</div>
+          <h3 class="agent-name">tokenstealer</h3>
+          <p class="agent-description">Simulates token stealing vectors.</p>
+        </div>
+
+        <div class="agent-card">
+          <div class="agent-number">40.</div>
+          <h3 class="agent-name">clipboardghost</h3>
+          <p class="agent-description">Clipboard data interceptor.</p>
+        </div>
+
+        <div class="agent-card">
+          <div class="agent-number">41.</div>
+          <h3 class="agent-name">usb_infect_ai</h3>
+          <p class="agent-description">Simulates USB-based payload drops.</p>
+        </div>
+
+        <div class="agent-card">
+          <div class="agent-number">42.</div>
+          <h3 class="agent-name">remote_exec_ai</h3>
+          <p class="agent-description">Remotely executes ethical test scripts.</p>
+        </div>
+
+        <div class="agent-card">
+          <div class="agent-number">43.</div>
+          <h3 class="agent-name">exploit_injector</h3>
+          <p class="agent-description">Injects exploits in live or sandbox apps.</p>
+        </div>
+
+        <div class="agent-card">
+          <div class="agent-number">44.</div>
+          <h3 class="agent-name">wormx_ai</h3>
+          <p class="agent-description">Models worm-like self-replication.</p>
+        </div>
+
+        <div class="agent-card">
+          <div class="agent-number">45.</div>
+          <h3 class="agent-name">credential_stuffer</h3>
+          <p class="agent-description">Automated credential stuffing simulator.</p>
+        </div>
+
+        <div class="agent-card">
+          <div class="agent-number">46.</div>
+          <h3 class="agent-name">sessionhijacker</h3>
+          <p class="agent-description">Tests session token capture and reuse.</p>
+        </div>
+
+        <div class="agent-card">
+          <div class="agent-number">47.</div>
+          <h3 class="agent-name">phishbot</h3>
+          <p class="agent-description">Auto-generates phishing email simulations.</p>
+        </div>
+
+        <div class="agent-card">
+          <div class="agent-number">48.</div>
+          <h3 class="agent-name">persistence_engine</h3>
+          <p class="agent-description">Tests various persistence strategies.</p>
+        </div>
+
+        <div class="agent-card">
+          <div class="agent-number">49.</div>
+          <h3 class="agent-name">keyclone_ai</h3>
+          <p class="agent-description">AI-driven keystroke replicator.</p>
+        </div>
+
+        <div class="agent-card">
+          <div class="agent-number">50.</div>
+          <h3 class="agent-name">invisible_listener</h3>
+          <p class="agent-description">Background listener for port surveillance.</p>
+        </div>
+
+      </div>
+    </div>
+
+    <div style="text-align: center;">
+      <a href="/news" class="back-button">← Back to News</a>
+    </div>
+  </section>
+</body>
+</html>

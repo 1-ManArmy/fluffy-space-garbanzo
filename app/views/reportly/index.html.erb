@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NeoChat - AI Conversation Terminal | onelastai.com</title>
+  <title>Reportly - Business Intelligence & Analytics Terminal | onelastai.com</title>
   
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
@@ -653,23 +653,23 @@
   <!-- Hero Section -->
   <section class="hero-section">
     <div class="hero-content">
-      <div class="agent-logo">�</div>
+      <div class="agent-logo">📊</div>
       <h1 class="agent-title">Reportly</h1>
-      <p class="agent-tagline">Advanced business intelligence and reporting specialist</p>
+      <p class="agent-tagline">Advanced Business Intelligence & Analytics Specialist</p>
       <p class="agent-description">
-        I am Reportly, your expert in business intelligence, data analysis, and report generation. 
-        I help create comprehensive reports, analyze business metrics, generate insights from data, 
-        and transform complex information into clear, actionable business intelligence.
+        I am Reportly, your expert in business intelligence, data visualization, and advanced analytics. 
+        I help transform complex data into actionable insights, create comprehensive reports, build interactive dashboards,
+        and provide predictive analytics to drive strategic business decisions.
       </p>
       
       <div class="agent-stats">
         <div class="stat-item">
           <span class="stat-value"><%= @agent_stats[:total_conversations] %></span>
-          <span class="stat-label">Conversations</span>
+          <span class="stat-label">Reports Generated</span>
         </div>
         <div class="stat-item">
           <span class="stat-value"><%= @agent_stats[:average_rating] %></span>
-          <span class="stat-label">Rating</span>
+          <span class="stat-label">Accuracy Rate</span>
         </div>
         <div class="stat-item">
           <span class="stat-value"><%= @agent_stats[:response_time] %></span>
@@ -682,8 +682,8 @@
   <!-- Terminal Section -->
   <section class="terminal-section">
     <div class="terminal-header">
-      <h2 class="terminal-title">🖥️ NeoChat Terminal Interface</h2>
-      <p class="terminal-subtitle">Type your questions or commands below and press Enter to chat with NeoChat</p>
+      <h2 class="terminal-title">� Reportly Business Intelligence Terminal</h2>
+      <p class="terminal-subtitle">Enter your business intelligence requirements and data analysis requests below</p>
     </div>
     
     <div class="terminal-container">
@@ -691,40 +691,40 @@
         <div class="terminal-button"></div>
         <div class="terminal-button yellow"></div>
         <div class="terminal-button green"></div>
-        <span class="terminal-title-text">neochat@onelastai.com:~$</span>
+        <span class="terminal-title-text">📊 Reportly Analytics Terminal</span>
       </div>
       
       <div class="terminal-output" id="terminal-output">
         <div class="welcome-message">
 ╔══════════════════════════════════════════════════════════════════╗
-║                       Welcome to Reportly                        ║
-║              Your AI Conversation Terminal                       ║
+║                      Welcome to Reportly                        ║
+║            Business Intelligence & Analytics Center              ║
 ╚══════════════════════════════════════════════════════════════════╝
 
-<div class="system-info">System: NeoChat v1.0 | Status: Online | Agent ID: <%= @agent.id %>
+<div class="system-info">System: Reportly v1.0 | Status: Online | Agent ID: bi-analytics
 <%= Time.current.strftime("Date: %Y-%m-%d %H:%M:%S") %> | Session: Active</div>
 
-<span style="color: #00d4ff;">Welcome! I'm NeoChat, your intelligent AI assistant.</span>
+<span style="color: #00d4ff;">Welcome! I'm Reportly, your advanced business intelligence specialist.</span>
 
 I can help you with:
-• 💭 Questions & Answers on any topic
-• 🛠 Problem solving and analysis  
-• 💡 Creative brainstorming and ideas
-• 📚 Information research and learning
-• 🎯 Suggestions and helpful advice
-• 💬 Friendly conversation
+• � Business Intelligence & Strategic Analysis
+• � Data Visualization & Interactive Dashboards  
+• 🤖 Automated Reporting & Smart Scheduling
+• � Performance Analytics & KPI Tracking
+• 👔 Executive Dashboards & Real-time Intelligence
+• � Predictive Analytics & AI-Powered Forecasting
 
-Type your message below and let's start chatting!
+Type your business intelligence requirements below and let's transform your data into insights!
 
         </div>
         
         <div class="typing-indicator" id="typing-indicator">
-          NeoChat is thinking
+          Reportly is analyzing data
         </div>
       </div>
       
       <div class="terminal-input-container">
-        <span class="terminal-prompt">neochat@terminal:~$ </span>
+        <span class="terminal-prompt">reportly@analytics:~$ </span>
         <input 
           type="text" 
           class="terminal-input" 
@@ -966,7 +966,7 @@ Type your message below and let's start chatting!
         this.showTyping(true);
         
         try {
-          const response = await fetch('/chat', {
+          const response = await fetch('/reportly/chat', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

@@ -32,48 +32,52 @@
     <!-- Cards Grid -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
       
-      <!-- Card -->
+      <!-- Card 1 - AI Tutor -->
       <div class="rounded-2xl bg-[#0a0a0f] shadow-2xl shadow-black/80 p-8 hover:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.9)] hover:shadow-purple-900/30 transition-all duration-500 transform hover:-translate-y-1">
         <div class="w-12 h-12 flex items-center justify-center rounded-full bg-purple-600 text-white text-xl shadow-lg shadow-purple-600/30">📘</div>
         <h3 class="text-xl font-semibold text-white mt-4">AI Tutor</h3>
         <p class="text-gray-400 mt-2">Personalized learning companion that adapts to your pace and style.</p>
-        <a href="#" class="text-blue-400 font-medium hover:underline mt-4 inline-block">Learn more →</a>
+        <a href="<%= url_for('/learn') %>" class="text-blue-400 font-medium hover:underline mt-4 inline-block">Learn more →</a>
       </div>
 
-      <!-- Repeat 5 more cards with different icons/text -->
+      <!-- Card 2 - Interactive Projects -->
       <div class="rounded-2xl bg-[#0a0a0f] shadow-2xl shadow-black/80 p-8 hover:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.9)] hover:shadow-purple-900/30 transition-all duration-500 transform hover:-translate-y-1">
         <div class="w-12 h-12 flex items-center justify-center rounded-full bg-purple-600 text-white text-xl shadow-lg shadow-purple-600/30">⚡</div>
         <h3 class="text-xl font-semibold text-white mt-4">Interactive Projects</h3>
         <p class="text-gray-400 mt-2">Hands-on coding experiences with real-time feedback and guidance.</p>
-        <a href="#" class="text-blue-400 font-medium hover:underline mt-4 inline-block">Learn more →</a>
+        <a href="<%= url_for('/learn/tutorials') %>" class="text-blue-400 font-medium hover:underline mt-4 inline-block">Learn more →</a>
       </div>
 
+      <!-- Card 3 - Smart Tracking -->
       <div class="rounded-2xl bg-[#0a0a0f] shadow-2xl shadow-black/80 p-8 hover:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.9)] hover:shadow-purple-900/30 transition-all duration-500 transform hover:-translate-y-1">
         <div class="w-12 h-12 flex items-center justify-center rounded-full bg-purple-600 text-white text-xl shadow-lg shadow-purple-600/30">📊</div>
         <h3 class="text-xl font-semibold text-white mt-4">Smart Tracking</h3>
         <p class="text-gray-400 mt-2">AI-powered analytics to monitor growth and optimize learning paths.</p>
-        <a href="#" class="text-blue-400 font-medium hover:underline mt-4 inline-block">Learn more →</a>
+        <a href="<%= url_for('/features/intelligence-analytics') %>" class="text-blue-400 font-medium hover:underline mt-4 inline-block">Learn more →</a>
       </div>
 
+      <!-- Card 4 - Secure Platform -->
       <div class="rounded-2xl bg-[#0a0a0f] shadow-2xl shadow-black/80 p-8 hover:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.9)] hover:shadow-purple-900/30 transition-all duration-500 transform hover:-translate-y-1">
         <div class="w-12 h-12 flex items-center justify-center rounded-full bg-purple-600 text-white text-xl shadow-lg shadow-purple-600/30">🛡️</div>
         <h3 class="text-xl font-semibold text-white mt-4">Secure Platform</h3>
         <p class="text-gray-400 mt-2">Enterprise-grade security with strict data protection compliance.</p>
-        <a href="#" class="text-blue-400 font-medium hover:underline mt-4 inline-block">Learn more →</a>
+        <a href="<%= url_for('/docs/auth') %>" class="text-blue-400 font-medium hover:underline mt-4 inline-block">Learn more →</a>
       </div>
 
+      <!-- Card 5 - Global Access -->
       <div class="rounded-2xl bg-[#0a0a0f] shadow-2xl shadow-black/80 p-8 hover:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.9)] hover:shadow-purple-900/30 transition-all duration-500 transform hover:-translate-y-1">
         <div class="w-12 h-12 flex items-center justify-center rounded-full bg-purple-600 text-white text-xl shadow-lg shadow-purple-600/30">🌐</div>
         <h3 class="text-xl font-semibold text-white mt-4">Global Access</h3>
         <p class="text-gray-400 mt-2">Available 24/7 across devices and regions without compromise.</p>
-        <a href="#" class="text-blue-400 font-medium hover:underline mt-4 inline-block">Learn more →</a>
+        <a href="<%= url_for('/docs/getting-started') %>" class="text-blue-400 font-medium hover:underline mt-4 inline-block">Learn more →</a>
       </div>
 
+      <!-- Card 6 - API Integration -->
       <div class="rounded-2xl bg-[#0a0a0f] shadow-2xl shadow-black/80 p-8 hover:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.9)] hover:shadow-purple-900/30 transition-all duration-500 transform hover:-translate-y-1">
         <div class="w-12 h-12 flex items-center justify-center rounded-full bg-purple-600 text-white text-xl shadow-lg shadow-purple-600/30">🔗</div>
         <h3 class="text-xl font-semibold text-white mt-4">API Integration</h3>
         <p class="text-gray-400 mt-2">Seamless integration with your existing tools and workflows.</p>
-        <a href="#" class="text-blue-400 font-medium hover:underline mt-4 inline-block">Learn more →</a>
+        <a href="<%= url_for('/docs/api') %>" class="text-blue-400 font-medium hover:underline mt-4 inline-block">Learn more →</a>
       </div>
 
     </div>

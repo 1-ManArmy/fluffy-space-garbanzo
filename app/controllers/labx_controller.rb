@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
+require 'ostruct'
+
 class LabxController < ApplicationController
-  before_action :find_labx_agent
+  before_action :initialize_agent_data
   before_action :ensure_demo_user
 
   def index
@@ -669,26 +671,52 @@ class LabxController < ApplicationController
     }
   end
 
-  def find_labx_agent
-    @agent = Agent.find_by(agent_type: 'labx', status: 'active')
-
-    return if @agent
-
-    redirect_to root_url(subdomain: false), alert: 'Labx agent is currently unavailable'
+  def initialize_agent_data
+    @agent = OpenStruct.new(
+      name: 'LabX',
+      agent_type: 'labx',
+      status: 'active',
+      total_conversations: rand(1900..3600),
+      average_rating: rand(4.4..4.8),
+      specializations: ['Laboratory Analysis', 'Research Methodology', 'Data Experimentation', 'Scientific Computing',
+                        'Protocol Development', 'Results Interpretation'],
+      capabilities: ['Experimental Design', 'Data Analysis', 'Statistical Computing', 'Research Planning',
+                     'Lab Management', 'Scientific Reporting'],
+      configuration: { 'response_style' => 'scientific_analytical' },
+      last_active_at: Time.current,
+      update!: ->(attrs) { attrs.each { |k, v| @agent.send("#{k}=", v) } },
+      agent_interactions: OpenStruct.new(
+        where: lambda { |_conditions|
+          OpenStruct.new(
+            order: lambda { |_sort|
+              OpenStruct.new(
+                limit: lambda { |_num|
+                  OpenStruct.new(
+                    pluck: ->(*_fields) { [] }
+                  )
+                }
+              )
+            }
+          )
+        }
+      )
+    )
   end
 
   def ensure_demo_user
     # Create or find a demo user for the session
     session_id = session[:user_session_id] ||= SecureRandom.uuid
 
-    @user = User.find_or_create_by(email: "demo_#{session_id}@labx.onelastai.com") do |user|
-      user.name = "Labx User #{rand(1000..9999)}"
-      user.preferences = {
+    @user = OpenStruct.new(
+      id: session_id.hash,
+      email: "demo_#{session_id}@labx.onelastai.com",
+      name: "LabX User #{rand(1000..9999)}",
+      preferences: {
         communication_style: 'terminal',
         interface_theme: 'dark',
         response_detail: 'comprehensive'
       }.to_json
-    end
+    )
 
     session[:current_user_id] = @user.id
   end

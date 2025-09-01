@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
+require 'ostruct'
+
 class AuthwiseController < ApplicationController
-  before_action :find_authwise_agent
+  before_action :initialize_agent_data
   before_action :ensure_demo_user
 
   def index
@@ -62,26 +64,52 @@ class AuthwiseController < ApplicationController
 
   private
 
-  def find_authwise_agent
-    @agent = Agent.find_by(agent_type: 'authwise', status: 'active')
-
-    return if @agent
-
-    redirect_to root_url(subdomain: false), alert: 'Authwise agent is currently unavailable'
+  def initialize_agent_data
+    @agent = OpenStruct.new(
+      name: 'AuthWise',
+      agent_type: 'authwise',
+      status: 'active',
+      total_conversations: rand(2800..4200),
+      average_rating: rand(4.6..4.9),
+      specializations: ['Authentication Security', 'Identity Management', 'Access Control', 'Security Auditing',
+                        'Threat Detection', 'Compliance Management'],
+      capabilities: ['Multi-Factor Authentication', 'Single Sign-On', 'Role-Based Access', 'Security Monitoring',
+                     'Risk Assessment', 'Compliance Reporting'],
+      configuration: { 'response_style' => 'security_focused_professional' },
+      last_active_at: Time.current,
+      update!: ->(attrs) { attrs.each { |k, v| @agent.send("#{k}=", v) } },
+      agent_interactions: OpenStruct.new(
+        where: lambda { |_conditions|
+          OpenStruct.new(
+            order: lambda { |_sort|
+              OpenStruct.new(
+                limit: lambda { |_num|
+                  OpenStruct.new(
+                    pluck: ->(*_fields) { [] }
+                  )
+                }
+              )
+            }
+          )
+        }
+      )
+    )
   end
 
   def ensure_demo_user
     # Create or find a demo user for the session
     session_id = session[:user_session_id] ||= SecureRandom.uuid
 
-    @user = User.find_or_create_by(email: "demo_#{session_id}@authwise.onelastai.com") do |user|
-      user.name = "Authwise User #{rand(1000..9999)}"
-      user.preferences = {
+    @user = OpenStruct.new(
+      id: session_id.hash,
+      email: "demo_#{session_id}@authwise.onelastai.com",
+      name: "AuthWise User #{rand(1000..9999)}",
+      preferences: {
         communication_style: 'terminal',
         interface_theme: 'dark',
         response_detail: 'comprehensive'
       }.to_json
-    end
+    )
 
     session[:current_user_id] = @user.id
   end
