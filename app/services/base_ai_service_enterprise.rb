@@ -1,7 +1,7 @@
 # Base AI Service with Enterprise Integrations
 class BaseAiServiceEnterprise
   include HTTParty
-  
+
   # Service configuration
   PROVIDERS = {
     openai: {
@@ -17,7 +17,7 @@ class BaseAiServiceEnterprise
     google: {
       base_url: 'https://generativelanguage.googleapis.com/v1',
       headers: -> { { 'Authorization' => "Bearer #{ENV['GOOGLE_AI_API_KEY']}" } },
-      models: %w[gemini-pro gemini-pro-vision]
+      models: %w[agent-pro agent-pro-vision]
     },
     huggingface: {
       base_url: 'https://api-inference.huggingface.co',
@@ -32,10 +32,12 @@ class BaseAiServiceEnterprise
     # Enterprise AI Services
     runwayml: {
       base_url: 'https://api.runwayml.com/v1',
-      headers: -> { { 
-        'Authorization' => "Bearer #{ENV['RUNWAYML_API_KEY']}",
-        'X-Team-ID' => ENV['RUNWAYML_TEAM_ID']
-      } },
+      headers: lambda {
+        {
+          'Authorization' => "Bearer #{ENV['RUNWAYML_API_KEY']}",
+          'X-Team-ID' => ENV['RUNWAYML_TEAM_ID']
+        }
+      },
       models: %w[gen3 gen2 stable-diffusion inpainting]
     },
     elevenlabs: {
@@ -54,7 +56,7 @@ class BaseAiServiceEnterprise
     @provider = provider.to_sym
     @model = model || default_model_for(@provider)
     @options = default_options.merge(options)
-    
+
     validate_provider!
     validate_api_key!
   end
@@ -62,7 +64,7 @@ class BaseAiServiceEnterprise
   # Main completion method
   def complete(prompt, **options)
     merged_options = @options.merge(options)
-    
+
     case @provider
     when :openai
       openai_complete(prompt, merged_options)
@@ -83,14 +85,14 @@ class BaseAiServiceEnterprise
     else
       raise UnsupportedProviderError, "Provider #{@provider} is not supported"
     end
-  rescue => e
+  rescue StandardError => e
     handle_error(e)
   end
 
   # Streaming support for real-time responses
   def stream(prompt, **options, &block)
     merged_options = @options.merge(options).merge(stream: true)
-    
+
     case @provider
     when :openai
       openai_stream(prompt, merged_options, &block)
@@ -107,14 +109,14 @@ class BaseAiServiceEnterprise
   # RunwayML specific methods for video/image generation
   def generate_video(prompt, duration: 10, **options)
     return unless @provider == :runwayml
-    
+
     payload = {
       model: @model,
       prompt: prompt,
       duration: duration,
       **options
     }
-    
+
     response = post_request('/generations/videos', payload)
     handle_runwayml_response(response)
   end
@@ -133,9 +135,9 @@ class BaseAiServiceEnterprise
   # Voice synthesis with ElevenLabs
   def synthesize_speech(text, voice_id: nil, **options)
     return unless @provider == :elevenlabs
-    
+
     voice_id ||= ENV['ELEVENLABS_DEFAULT_VOICE_ID'] || 'pNInz6obpgDQGcFmaJgB'
-    
+
     payload = {
       text: text,
       model_id: @model,
@@ -144,7 +146,7 @@ class BaseAiServiceEnterprise
         similarity_boost: options[:similarity_boost] || 0.5
       }
     }
-    
+
     response = post_request("/text-to-speech/#{voice_id}", payload)
     handle_audio_response(response)
   end
@@ -152,18 +154,18 @@ class BaseAiServiceEnterprise
   # Speech recognition with AssemblyAI
   def transcribe_audio(audio_url, **options)
     return unless @provider == :assemblyai
-    
+
     # First, upload the audio file
     upload_response = post_request('/upload', { audio_url: audio_url })
     upload_url = upload_response['upload_url']
-    
+
     # Then, create transcription job
     transcription_config = {
       audio_url: upload_url,
       model: @model,
       **options
     }
-    
+
     response = post_request('/transcript', transcription_config)
     poll_transcription(response['id'])
   end
@@ -171,19 +173,19 @@ class BaseAiServiceEnterprise
   private
 
   def validate_provider!
-    unless PROVIDERS.key?(@provider)
-      raise InvalidProviderError, "Unknown provider: #{@provider}"
-    end
+    return if PROVIDERS.key?(@provider)
+
+    raise InvalidProviderError, "Unknown provider: #{@provider}"
   end
 
   def validate_api_key!
     config = PROVIDERS[@provider]
     headers = config[:headers].call
     key_header = headers.keys.first
-    
-    if headers[key_header].blank?
-      raise MissingApiKeyError, "API key not found for #{@provider}"
-    end
+
+    return unless headers[key_header].blank?
+
+    raise MissingApiKeyError, "API key not found for #{@provider}"
   end
 
   def default_model_for(provider)
@@ -210,32 +212,32 @@ class BaseAiServiceEnterprise
 
   def headers
     provider_config[:headers].call.merge({
-      'Content-Type' => 'application/json',
-      'User-Agent' => 'OneLastAI/1.0'
-    })
+                                           'Content-Type' => 'application/json',
+                                           'User-Agent' => 'OneLastAI/1.0'
+                                         })
   end
 
   # HTTP request helpers
   def post_request(endpoint, payload)
     url = "#{base_url}#{endpoint}"
-    
+
     response = HTTParty.post(url, {
-      headers: headers,
-      body: payload.to_json,
-      timeout: 60
-    })
-    
+                               headers: headers,
+                               body: payload.to_json,
+                               timeout: 60
+                             })
+
     handle_response(response)
   end
 
   def get_request(endpoint)
     url = "#{base_url}#{endpoint}"
-    
+
     response = HTTParty.get(url, {
-      headers: headers,
-      timeout: 30
-    })
-    
+                              headers: headers,
+                              timeout: 30
+                            })
+
     handle_response(response)
   end
 
@@ -263,7 +265,7 @@ class BaseAiServiceEnterprise
       messages: [{ role: 'user', content: prompt }],
       **options.except(:stream)
     }
-    
+
     response = post_request('/chat/completions', payload)
     response.dig('choices', 0, 'message', 'content')
   end
@@ -274,7 +276,7 @@ class BaseAiServiceEnterprise
       messages: [{ role: 'user', content: prompt }],
       max_tokens: options[:max_tokens] || 4096
     }
-    
+
     response = post_request('/messages', payload)
     response.dig('content', 0, 'text')
   end
@@ -287,7 +289,7 @@ class BaseAiServiceEnterprise
         maxOutputTokens: options[:max_tokens]
       }
     }
-    
+
     response = post_request("/models/#{@model}:generateContent?key=#{ENV['GOOGLE_AI_API_KEY']}", payload)
     response.dig('candidates', 0, 'content', 'parts', 0, 'text')
   end
@@ -305,7 +307,7 @@ class BaseAiServiceEnterprise
       height: options[:height] || 512,
       steps: options[:steps] || 20
     }
-    
+
     response = post_request('/generations/images', payload)
     response['image_url']
   end
@@ -320,7 +322,7 @@ class BaseAiServiceEnterprise
       stream: true,
       **options.except(:stream)
     }
-    
+
     # Streaming implementation would go here
     # For now, fallback to regular completion
     complete(prompt, **options.except(:stream))
@@ -329,7 +331,7 @@ class BaseAiServiceEnterprise
   # Error handling
   def handle_error(error)
     Rails.logger.error "AI Service Error (#{@provider}): #{error.message}"
-    
+
     case error
     when Net::TimeoutError
       raise TimeoutError, "Request timed out for #{@provider}"
@@ -342,13 +344,13 @@ class BaseAiServiceEnterprise
 
   # Helper methods for async operations
   def poll_transcription(transcription_id)
-    max_attempts = 60  # 5 minutes with 5-second intervals
+    max_attempts = 60 # 5 minutes with 5-second intervals
     attempts = 0
-    
+
     loop do
       response = get_request("/transcript/#{transcription_id}")
       status = response['status']
-      
+
       case status
       when 'completed'
         return response['text']
@@ -356,9 +358,8 @@ class BaseAiServiceEnterprise
         raise TranscriptionError, response['error']
       when 'processing', 'queued'
         attempts += 1
-        if attempts >= max_attempts
-          raise TimeoutError, "Transcription timed out"
-        end
+        raise TimeoutError, 'Transcription timed out' if attempts >= max_attempts
+
         sleep 5
       end
     end
@@ -375,13 +376,13 @@ class BaseAiServiceEnterprise
   end
 
   def poll_runwayml_job(job_id)
-    max_attempts = 120  # 10 minutes for video generation
+    max_attempts = 120 # 10 minutes for video generation
     attempts = 0
-    
+
     loop do
       response = get_request("/generations/#{job_id}")
       status = response['status']
-      
+
       case status
       when 'completed'
         return response['video_url'] || response['image_url']
@@ -389,9 +390,8 @@ class BaseAiServiceEnterprise
         raise GenerationError, response['error']
       when 'processing', 'queued'
         attempts += 1
-        if attempts >= max_attempts
-          raise TimeoutError, "Generation timed out"
-        end
+        raise TimeoutError, 'Generation timed out' if attempts >= max_attempts
+
         sleep 5
       end
     end

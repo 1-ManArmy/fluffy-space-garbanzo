@@ -114,7 +114,7 @@ class NeochatController < ApplicationController
       ai_services: ai_health,
       capabilities: [
         'Real-time AI Processing (OpenAI GPT-4)',
-        'Advanced Language Understanding (Google Gemini)',
+        'Advanced Language Understanding (Google agent)',
         'Video Generation (RunwayML)',
         'Natural Language Processing',
         'Contextual Understanding',

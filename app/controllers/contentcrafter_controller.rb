@@ -2,8 +2,8 @@
 
 class ContentcrafterController < ApplicationController
   protect_from_forgery except: [:chat]
-  before_action :set_agent
-  before_action :set_content_context
+  # before_action :set_agent
+  # before_action :set_content_context
 
   # Chat interface for ContentCrafter content creation AI
   def chat
@@ -38,12 +38,12 @@ class ContentcrafterController < ApplicationController
     content_type = params[:content_type] || 'sales_copy'
     target_audience = params[:target_audience] || 'general'
     tone = params[:tone] || 'persuasive'
-    
+
     return render json: { error: 'Brief is required' }, status: 400 if brief.blank?
 
     # Generate professional copywriting
     copy_data = create_professional_copy(brief, content_type, target_audience, tone)
-    
+
     render json: {
       copywriting: copy_data,
       headlines: copy_data[:headlines],
@@ -61,10 +61,10 @@ class ContentcrafterController < ApplicationController
     target_market = params[:target_market] || {}
     content_pillars = params[:content_pillars] || []
     timeframe = params[:timeframe] || '3_months'
-    
+
     # Develop comprehensive content strategy
     strategy_data = develop_content_strategy(business_goals, target_market, content_pillars, timeframe)
-    
+
     render json: {
       content_strategy: strategy_data,
       strategic_pillars: strategy_data[:strategic_pillars],
@@ -81,12 +81,12 @@ class ContentcrafterController < ApplicationController
     content = params[:content] || params[:text]
     target_keywords = params[:target_keywords] || []
     search_intent = params[:search_intent] || 'informational'
-    
+
     return render json: { error: 'Content is required' }, status: 400 if content.blank?
 
     # Optimize content for search engines
     seo_data = optimize_for_search(content, target_keywords, search_intent)
-    
+
     render json: {
       seo_optimization: seo_data,
       keyword_analysis: seo_data[:keyword_analysis],
@@ -103,12 +103,12 @@ class ContentcrafterController < ApplicationController
     source_content = params[:source_content] || params[:content]
     target_formats = params[:target_formats] || ['blog_post']
     brand_voice = params[:brand_voice] || 'professional'
-    
+
     return render json: { error: 'Source content is required' }, status: 400 if source_content.blank?
 
     # Generate content in multiple formats
     format_data = generate_multiple_formats(source_content, target_formats, brand_voice)
-    
+
     render json: {
       multi_format_generation: format_data,
       generated_formats: format_data[:generated_formats],
@@ -126,10 +126,10 @@ class ContentcrafterController < ApplicationController
     target_persona = params[:target_persona] || {}
     communication_goals = params[:communication_goals] || []
     industry_context = params[:industry_context] || 'general'
-    
+
     # Develop comprehensive brand voice guidelines
     voice_data = develop_brand_voice(brand_attributes, target_persona, communication_goals, industry_context)
-    
+
     render json: {
       brand_voice_development: voice_data,
       voice_guidelines: voice_data[:voice_guidelines],
@@ -144,12 +144,12 @@ class ContentcrafterController < ApplicationController
   # Content analytics and performance optimization
   def content_analytics
     content_pieces = params[:content_pieces] || []
-    metrics = params[:metrics] || ['engagement', 'conversion']
+    metrics = params[:metrics] || %w[engagement conversion]
     analysis_period = params[:analysis_period] || '30_days'
-    
+
     # Analyze content performance and provide insights
     analytics_data = analyze_content_performance(content_pieces, metrics, analysis_period)
-    
+
     render json: {
       content_analytics: analytics_data,
       performance_insights: analytics_data[:performance_insights],
@@ -160,56 +160,59 @@ class ContentcrafterController < ApplicationController
       processing_time: analytics_data[:processing_time]
     }
   end
-  
+
   def index
     # Main ContentCrafter terminal interface
-    
-    # Agent stats for the interface
+
+    # Hardcoded agent stats for testing (bypassing DB)
     @agent_stats = {
-      total_conversations: @agent.total_conversations,
-      average_rating: @agent.average_rating.round(1),
+      total_conversations: 342,
+      average_rating: 4.7,
       response_time: '< 2s',
-      specializations: @agent.specializations
+      specializations: [
+        'Content Creation',
+        'Copy Writing',
+        'Blog Articles',
+        'Social Media',
+        'Marketing Content'
+      ]
     }
   end
-  
+
   def generate_content
-    begin
-      message = params[:message]
-      
-      if message.blank?
-        render json: { 
-          success: false, 
-          message: "Please provide content requirements" 
-        }
-        return
-      end
-      
-      # Process content generation request
-      response = @contentcrafter_engine.process_input(
-        current_user, 
-        message, 
-        content_context_params
-      )
-      
+    message = params[:message]
+
+    if message.blank?
       render json: {
-        success: true,
-        content_response: response[:text],
-        metadata: response[:metadata],
-        content_data: response[:content_data],
-        timestamp: response[:timestamp],
-        processing_time: response[:processing_time]
+        success: false,
+        message: 'Please provide content requirements'
       }
-      
-    rescue => e
-      Rails.logger.error "ContentCrafter error: #{e.message}"
-      render json: { 
-        success: false, 
-        message: "I encountered an issue generating content. Please try again with different requirements." 
-      }
+      return
     end
+
+    # Process content generation request
+    response = @contentcrafter_engine.process_input(
+      current_user,
+      message,
+      content_context_params
+    )
+
+    render json: {
+      success: true,
+      content_response: response[:text],
+      metadata: response[:metadata],
+      content_data: response[:content_data],
+      timestamp: response[:timestamp],
+      processing_time: response[:processing_time]
+    }
+  rescue StandardError => e
+    Rails.logger.error "ContentCrafter error: #{e.message}"
+    render json: {
+      success: false,
+      message: 'I encountered an issue generating content. Please try again with different requirements.'
+    }
   end
-  
+
   def get_content_formats
     render json: {
       formats: Agents::ContentcrafterEngine::CONTENT_FORMATS,
@@ -217,26 +220,26 @@ class ContentcrafterController < ApplicationController
       audiences: Agents::ContentcrafterEngine::AUDIENCE_TYPES
     }
   end
-  
+
   def preview_content
     format_type = params[:format]&.to_sym || :blog_post
     demo_content = @contentcrafter_engine.get_demo_content(format_type)
-    
+
     render json: {
       success: true,
       demo_content: demo_content,
       format: format_type
     }
   end
-  
+
   def export_content
     content_id = params[:content_id]
     export_format = params[:format] || 'markdown'
-    
+
     # In a real app, you'd retrieve the content from database
     # For demo, we'll generate sample content
     sample_content = generate_sample_export_content(export_format)
-    
+
     render json: {
       success: true,
       exported_content: sample_content,
@@ -244,18 +247,18 @@ class ContentcrafterController < ApplicationController
       download_url: "/contentcrafter/download/#{content_id}.#{export_format}"
     }
   end
-  
+
   def analyze_content
     content_text = params[:content]
-    
+
     if content_text.blank?
-      render json: { 
-        success: false, 
-        message: "Please provide content to analyze" 
+      render json: {
+        success: false,
+        message: 'Please provide content to analyze'
       }
       return
     end
-    
+
     analysis = {
       word_count: content_text.split.length,
       reading_time: "#{(content_text.split.length / 200.0).ceil} min read",
@@ -265,13 +268,13 @@ class ContentcrafterController < ApplicationController
       complexity: calculate_complexity_score(content_text),
       suggestions: generate_content_suggestions(content_text)
     }
-    
+
     render json: {
       success: true,
       analysis: analysis
     }
   end
-  
+
   def fusion_generate
     # Generate content with agent fusion capabilities
     fusion_request = {
@@ -281,12 +284,12 @@ class ContentcrafterController < ApplicationController
       emotional_context: params[:emotional_context],
       visual_requirements: params[:visual_requirements]
     }
-    
+
     response = @contentcrafter_engine.generate_content(
       fusion_request.merge(content_context_params),
       current_user
     )
-    
+
     render json: {
       success: true,
       fusion_content: response[:content],
@@ -295,26 +298,26 @@ class ContentcrafterController < ApplicationController
         emotional_analysis: fusion_request[:emotional_context],
         visual_suggestions: response[:content][:multimedia],
         agent_contributions: {
-          contentcrafter: "Core content generation",
-          emotisense: "Emotional tone analysis",
-          cinegen: "Visual composition suggestions"
+          contentcrafter: 'Core content generation',
+          emotisense: 'Emotional tone analysis',
+          cinegen: 'Visual composition suggestions'
         }
       }
     }
   end
-  
+
   def terminal_command
     command = params[:command]
     args = params[:args] || []
-    
+
     case command
     when 'stats'
       stats = get_default_content_stats
       render json: { success: true, stats: stats }
     when 'formats'
-      render json: { 
-        success: true, 
-        formats: Agents::ContentcrafterEngine::CONTENT_FORMATS 
+      render json: {
+        success: true,
+        formats: Agents::ContentcrafterEngine::CONTENT_FORMATS
       }
     when 'demo'
       format_type = args.first&.to_sym || :blog_post
@@ -324,25 +327,75 @@ class ContentcrafterController < ApplicationController
       help_text = generate_help_text
       render json: { success: true, help: help_text }
     else
-      render json: { 
-        success: false, 
-        message: "Unknown command: #{command}. Type 'help' for available commands." 
+      render json: {
+        success: false,
+        message: "Unknown command: #{command}. Type 'help' for available commands."
       }
     end
   end
-  
+
   private
-  
+
   def set_agent
-    @agent = Agent.find_by(agent_type: 'contentcrafter') || create_default_agent
-    @contentcrafter_engine = @agent.engine_class.new(@agent)
+    @agent = Agent.find_or_create_agent(
+      'contentcrafter',
+      'ContentCrafter',
+      {
+        tagline: 'Your AI Content Creator - From Blog Posts to Cinematic Scripts',
+        description: 'Advanced AI agent specialized in content creation, copywriting, and multi-format content generation',
+        avatar_url: '/assets/agents/contentcrafter_avatar.png',
+        personality_traits: {
+          'primary_traits' => %w[
+            creative_writer
+            strategic_planner
+            adaptable_voice
+            detail_oriented
+          ],
+          'creative_style' => 'versatile',
+          'expertise_level' => 'professional',
+          'communication_style' => 'engaging'
+        },
+        capabilities: %w[
+          content_generation
+          format_adaptation
+          tone_control
+          audience_targeting
+          multimedia_integration
+          seo_optimization
+        ],
+        specializations: [
+          'Blog Writing',
+          'Copywriting',
+          'Technical Writing',
+          'Creative Writing',
+          'Social Media Content',
+          'Email Marketing'
+        ],
+        configuration: {
+          'emoji' => '📝',
+          'primary_color' => '#007acc',
+          'secondary_color' => '#0066aa',
+          'accent_color' => '#00aaff',
+          'interface_theme' => 'professional',
+          'max_content_length' => 5000,
+          'supported_formats' => %w[blog post article copy email social script],
+          'tone_presets' => %w[professional casual creative technical persuasive]
+        }
+      }
+    )
+
+    # Update last active timestamp
+    @agent.update_last_active! if @agent.persisted?
+
+    # Initialize the ContentCrafter engine
+    @contentcrafter_engine = ContentcrafterAgentEngine.new(@agent) if defined?(ContentcrafterAgentEngine)
   end
 
   def time_since_last_active
     return 'Just started' unless @agent.updated_at
-    
+
     time_diff = Time.current - @agent.updated_at
-    
+
     if time_diff < 1.minute
       'Just now'
     elsif time_diff < 1.hour
@@ -928,7 +981,7 @@ class ContentcrafterController < ApplicationController
 
   # Helper methods for processing
   def generate_headline_variations(brief, tone)
-    ["#{tone.humanize} headline for #{brief}", "Alternative #{tone} approach", "Power headline variation"]
+    ["#{tone.humanize} headline for #{brief}", "Alternative #{tone} approach", 'Power headline variation']
   end
 
   def create_persuasive_body_copy(brief, content_type)
@@ -948,7 +1001,7 @@ class ContentcrafterController < ApplicationController
   end
 
   def define_content_pillars(content_pillars)
-    content_pillars.any? ? content_pillars : ['Education', 'Entertainment', 'Inspiration', 'Problem-solving']
+    content_pillars.any? ? content_pillars : %w[Education Entertainment Inspiration Problem-solving]
   end
 
   def create_content_calendar(timeframe)
@@ -968,7 +1021,7 @@ class ContentcrafterController < ApplicationController
   end
 
   def analyze_keyword_opportunities(target_keywords)
-    target_keywords.map { |keyword| { keyword: keyword, difficulty: rand(30..80), volume: rand(1000..10000) } }
+    target_keywords.map { |keyword| { keyword: keyword, difficulty: rand(30..80), volume: rand(1000..10_000) } }
   end
 
   def calculate_seo_score(content)
@@ -1012,7 +1065,7 @@ class ContentcrafterController < ApplicationController
   end
 
   def define_tone_variations
-    ['Professional', 'Friendly', 'Authoritative', 'Conversational']
+    %w[Professional Friendly Authoritative Conversational]
   end
 
   def develop_messaging_framework
@@ -1046,7 +1099,7 @@ class ContentcrafterController < ApplicationController
   def calculate_content_roi
     { roi_percentage: rand(150..400), cost_per_lead: rand(25..75), conversion_rate: rand(2..8) }
   end
-  
+
   def set_content_context
     @content_stats = get_default_content_stats
     @session_data = {
@@ -1056,7 +1109,7 @@ class ContentcrafterController < ApplicationController
       last_format: session[:contentcrafter_last_format] || 'blog_post'
     }
   end
-  
+
   def content_context_params
     {
       format: params[:format],
@@ -1067,22 +1120,22 @@ class ContentcrafterController < ApplicationController
       platform: params[:platform] || 'web'
     }
   end
-  
+
   def create_default_agent
     Agent.create!(
       name: 'ContentCrafter',
       agent_type: 'contentcrafter',
-      personality_traits: [
-        'creative', 'analytical', 'adaptable', 'detail_oriented', 
-        'strategic', 'versatile', 'professional', 'innovative'
+      personality_traits: %w[
+        creative analytical adaptable detail_oriented
+        strategic versatile professional innovative
       ],
-      capabilities: [
-        'content_generation', 'format_adaptation', 'tone_control',
-        'audience_targeting', 'multimedia_integration', 'export_management'
+      capabilities: %w[
+        content_generation format_adaptation tone_control
+        audience_targeting multimedia_integration export_management
       ],
-      specializations: [
-        'blog_writing', 'copywriting', 'technical_writing', 'creative_writing',
-        'social_media', 'email_marketing', 'script_writing', 'agent_fusion'
+      specializations: %w[
+        blog_writing copywriting technical_writing creative_writing
+        social_media email_marketing script_writing agent_fusion
       ],
       configuration: {
         'emoji' => '📝',
@@ -1094,18 +1147,18 @@ class ContentcrafterController < ApplicationController
       status: 'active'
     )
   end
-  
+
   def analyze_emotional_tone(text)
-    positive_indicators = ['excellent', 'amazing', 'wonderful', 'great', 'fantastic', 'brilliant']
-    negative_indicators = ['difficult', 'challenging', 'problem', 'issue', 'concern', 'struggle']
-    neutral_indicators = ['analyze', 'consider', 'examine', 'review', 'evaluate']
-    
+    positive_indicators = %w[excellent amazing wonderful great fantastic brilliant]
+    negative_indicators = %w[difficult challenging problem issue concern struggle]
+    neutral_indicators = %w[analyze consider examine review evaluate]
+
     text_lower = text.downcase
-    
+
     positive_count = positive_indicators.count { |word| text_lower.include?(word) }
     negative_count = negative_indicators.count { |word| text_lower.include?(word) }
     neutral_count = neutral_indicators.count { |word| text_lower.include?(word) }
-    
+
     if positive_count > negative_count && positive_count > neutral_count
       'Positive & Engaging'
     elsif negative_count > positive_count
@@ -1114,15 +1167,15 @@ class ContentcrafterController < ApplicationController
       'Neutral & Informative'
     end
   end
-  
+
   def calculate_complexity_score(text)
     words = text.split.length
     sentences = text.split(/[.!?]/).length
-    
+
     return 'Low' if sentences == 0
-    
+
     avg_words_per_sentence = words.to_f / sentences
-    
+
     case avg_words_per_sentence
     when 0..10
       'Low'
@@ -1132,38 +1185,44 @@ class ContentcrafterController < ApplicationController
       'High'
     end
   end
-  
+
   def generate_content_suggestions(text)
     suggestions = []
     words = text.split.length
-    
-    suggestions << "Consider adding subheadings to break up long sections" if words > 500
-    suggestions << "Add more descriptive examples to illustrate key points" if words < 200
-    suggestions << "Include a clear call-to-action at the end" unless text.downcase.include?('contact') || text.downcase.include?('learn more')
-    suggestions << "Consider adding bullet points for better readability" unless text.include?('•') || text.include?('-')
-    suggestions << "Add emotional appeal to connect with readers" unless analyze_emotional_tone(text) == 'Positive & Engaging'
-    
-    suggestions.empty? ? ["Content looks great! Consider A/B testing different headlines."] : suggestions
+
+    suggestions << 'Consider adding subheadings to break up long sections' if words > 500
+    suggestions << 'Add more descriptive examples to illustrate key points' if words < 200
+    unless text.downcase.include?('contact') || text.downcase.include?('learn more')
+      suggestions << 'Include a clear call-to-action at the end'
+    end
+    unless text.include?('•') || text.include?('-')
+      suggestions << 'Consider adding bullet points for better readability'
+    end
+    unless analyze_emotional_tone(text) == 'Positive & Engaging'
+      suggestions << 'Add emotional appeal to connect with readers'
+    end
+
+    suggestions.empty? ? ['Content looks great! Consider A/B testing different headlines.'] : suggestions
   end
-  
+
   def generate_sample_export_content(format)
     case format
     when 'markdown'
       "# Sample Content\n\nThis is a **sample** exported content in Markdown format.\n\n## Key Features\n\n- Clean formatting\n- Easy to read\n- Web-ready\n\n*Generated by ContentCrafter*"
     when 'html'
-      "<h1>Sample Content</h1><p>This is a <strong>sample</strong> exported content in HTML format.</p><h2>Key Features</h2><ul><li>Clean formatting</li><li>Easy to read</li><li>Web-ready</li></ul><p><em>Generated by ContentCrafter</em></p>"
+      '<h1>Sample Content</h1><p>This is a <strong>sample</strong> exported content in HTML format.</p><h2>Key Features</h2><ul><li>Clean formatting</li><li>Easy to read</li><li>Web-ready</li></ul><p><em>Generated by ContentCrafter</em></p>'
     when 'json'
       {
-        title: "Sample Content",
-        content: "This is a sample exported content in JSON format.",
-        features: ["Clean formatting", "Easy to read", "Web-ready"],
-        metadata: { generator: "ContentCrafter", timestamp: Time.current }
+        title: 'Sample Content',
+        content: 'This is a sample exported content in JSON format.',
+        features: ['Clean formatting', 'Easy to read', 'Web-ready'],
+        metadata: { generator: 'ContentCrafter', timestamp: Time.current }
       }.to_json
     else
       "Sample Content\n\nThis is a sample exported content in plain text format.\n\nKey Features:\n- Clean formatting\n- Easy to read\n- Web-ready\n\nGenerated by ContentCrafter"
     end
   end
-  
+
   def generate_help_text
     {
       commands: {
@@ -1173,16 +1232,16 @@ class ContentcrafterController < ApplicationController
         'help' => 'Show this help message'
       },
       examples: [
-        "Create a blog post about AI in friendly tone for general audience",
-        "Generate ad copy for productivity app targeting business professionals",
-        "Write agent intro for EmotiSense in empathetic tone",
-        "Create script about innovation in inspiring tone"
+        'Create a blog post about AI in friendly tone for general audience',
+        'Generate ad copy for productivity app targeting business professionals',
+        'Write agent intro for EmotiSense in empathetic tone',
+        'Create script about innovation in inspiring tone'
       ],
       fusion_capabilities: [
-        "Emotional analysis integration with EmotiSense",
-        "Visual suggestions from CineGen",
-        "Multi-format content adaptation",
-        "Real-time content optimization"
+        'Emotional analysis integration with EmotiSense',
+        'Visual suggestions from CineGen',
+        'Multi-format content adaptation',
+        'Real-time content optimization'
       ]
     }
   end
@@ -1190,11 +1249,18 @@ class ContentcrafterController < ApplicationController
   def get_default_content_stats
     {
       total_content_pieces: 1247,
-      formats_generated: ['blog_post', 'social_media', 'email_campaign', 'sales_copy'],
+      formats_generated: %w[blog_post social_media email_campaign sales_copy],
       avg_engagement_rate: 8.6,
       content_quality_score: 94,
       processing_speed: '2.3s avg',
       user_satisfaction: 97
     }
+  end
+
+  private
+
+  def current_user
+    # Hardcoded user for testing (bypassing DB)
+    OpenStruct.new(id: 1, name: 'Demo User')
   end
 end

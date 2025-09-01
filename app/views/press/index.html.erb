@@ -1,86 +1,469 @@
-<div class="min-h-screen bg-gray-900">
-  <!-- Header Section -->
-  <section class="relative py-20 overflow-hidden">
-    <div class="absolute inset-0 bg-gradient-to-br from-blue-900/20 via-indigo-900/20 to-purple-900/20"></div>
-    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/40"></div>
+<!-- Press Page Styles -->
+<style>
+  .press-page {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0f0f23 0%, #1a0a2e 50%, #16213e 100%);
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  .press-page::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+      radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+      radial-gradient(circle at 40% 40%, rgba(120, 119, 198, 0.2) 0%, transparent 50%);
+    animation: float 20s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(1deg); }
+  }
+
+  .press-container {
+    position: relative;
+    z-index: 1;
+    padding: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .press-header {
+    text-align: center;
+    margin-bottom: 4rem;
+    padding: 4rem 0;
+  }
+
+  .press-title {
+    font-size: 4rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 1rem;
+    text-shadow: 0 0 30px rgba(102, 126, 234, 0.5);
+  }
+
+  .press-subtitle {
+    font-size: 1.25rem;
+    color: #a0aec0;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  .press-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 2rem;
+    margin-bottom: 4rem;
+  }
+
+  .press-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 2rem;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+  }
+
+  .press-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.6s;
+  }
+
+  .press-card:hover::before {
+    left: 100%;
+  }
+
+  .press-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    border-color: rgba(102, 126, 234, 0.5);
+    box-shadow: 
+      0 20px 40px rgba(0, 0, 0, 0.3),
+      0 0 30px rgba(102, 126, 234, 0.2);
+  }
+
+  .press-source {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .press-logo {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    font-weight: bold;
+    color: white;
+    font-size: 1.25rem;
+  }
+
+  .press-publication {
+    font-weight: 600;
+    color: #e2e8f0;
+    font-size: 1.1rem;
+  }
+
+  .press-date {
+    color: #a0aec0;
+    font-size: 0.9rem;
+  }
+
+  .press-headline {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #f7fafc;
+    margin: 1rem 0;
+    line-height: 1.4;
+  }
+
+  .press-excerpt {
+    color: #cbd5e0;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+
+  .press-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .press-tag {
+    background: rgba(102, 126, 234, 0.2);
+    color: #667eea;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+
+  .press-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .read-more-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+  }
+
+  .read-more-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+  }
+
+  .press-rating {
+    display: flex;
+    gap: 0.2rem;
+  }
+
+  .star {
+    color: #fbbf24;
+    font-size: 1.2rem;
+  }
+
+  .press-stats {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 3rem 2rem;
+    text-align: center;
+  }
+
+  .stats-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #f7fafc;
+    margin-bottom: 2rem;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+  }
+
+  .stat-item {
+    padding: 1.5rem;
+  }
+
+  .stat-number {
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .stat-label {
+    color: #a0aec0;
+    font-size: 1.1rem;
+    font-weight: 500;
+  }
+
+  /* Article Modal Styles */
+  .article-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .article-modal.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .modal-content {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    padding: 3rem;
+    max-width: 800px;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+  }
+
+  .article-modal.active .modal-content {
+    transform: scale(1);
+  }
+
+  .close-modal {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  @media (max-width: 768px) {
+    .press-title {
+      font-size: 2.5rem;
+    }
     
-    <div class="container mx-auto px-6 relative z-10">
-      <div class="max-w-4xl mx-auto text-center">
-        <h1 class="text-5xl lg:text-6xl font-bold text-white mb-6">Press Coverage</h1>
-        <p class="text-xl text-gray-300 leading-relaxed">
-          See what leading tech publications are saying about OneLastAI
-        </p>
-      </div>
-    </div>
-  </section>
+    .press-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .stats-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .modal-content {
+      margin: 1rem;
+      padding: 2rem;
+    }
+  }
+</style>
 
-  <!-- Press Articles Grid -->
-  <section class="py-20">
-    <div class="container mx-auto px-6">
-      <div class="max-w-6xl mx-auto">
-        <div class="grid lg:grid-cols-3 gap-8">
-          <% @press_articles.each do |article| %>
-            <a href="/press/<%= article[:id] %>" class="press-article-card group">
-              <div class="press-card-glow"></div>
-              <div class="press-card-content">
-                <div class="press-logo bg-gradient-to-br from-<%= article[:color] %>-400 to-<%= article[:color] %>-600">
-                  <span class="font-bold text-white text-xl"><%= article[:logo] %></span>
-                </div>
-                
-                <div class="press-badge">
-                  <span class="badge-text"><%= article[:badge] %></span>
-                </div>
-                
-                <h3 class="press-article-title"><%= article[:publication] %></h3>
-                <h4 class="press-article-headline"><%= article[:title] %></h4>
-                
-                <p class="press-excerpt"><%= article[:excerpt] %></p>
-                
-                <div class="press-meta">
-                  <span class="press-date"><%= article[:date] %></span>
-                  <div class="press-rating">
-                    <% article[:rating].times do %>
-                      <span class="star">★</span>
-                    <% end %>
-                  </div>
-                </div>
-                
-                <div class="press-read-more">
-                  Read Full Article →
-                </div>
-              </div>
-            </a>
-          <% end %>
+<div class="press-page">
+  <div class="press-container">
+    <!-- Header Section -->
+    <div class="press-header">
+      <h1 class="press-title">Press Coverage</h1>
+      <p class="press-subtitle">
+        Discover what leading technology publications and industry experts are saying about OneLastAI's revolutionary platform and cutting-edge AI solutions.
+      </p>
+    </div>
+
+    <!-- Press Articles Grid -->
+    <div class="press-grid">
+      <% @press_articles.each do |article| %>
+        <div class="press-card" onclick="openArticle('<%= article[:id] %>')">
+          <div class="press-source">
+            <div class="press-logo" style="background: linear-gradient(135deg, <%= article[:color_start] %> 0%, <%= article[:color_end] %> 100%);">
+              <%= article[:logo] %>
+            </div>
+            <div>
+              <div class="press-publication"><%= article[:publication] %></div>
+              <div class="press-date"><%= article[:date] %></div>
+            </div>
+          </div>
+
+          <h3 class="press-headline"><%= article[:title] %></h3>
+          <p class="press-excerpt"><%= article[:excerpt] %></p>
+
+          <div class="press-tags">
+            <% article[:tags].each do |tag| %>
+              <span class="press-tag"><%= tag %></span>
+            <% end %>
+          </div>
+
+          <div class="press-actions">
+            <button class="read-more-btn">Read Full Article</button>
+            <div class="press-rating">
+              <% article[:rating].times do %>
+                <span class="star">★</span>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Press Statistics -->
+    <div class="press-stats">
+      <h2 class="stats-title">Media Impact & Recognition</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-number">50+</div>
+          <div class="stat-label">Press Features</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">25M+</div>
+          <div class="stat-label">Media Reach</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">98%</div>
+          <div class="stat-label">Positive Coverage</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">15</div>
+          <div class="stat-label">Industry Awards</div>
         </div>
       </div>
     </div>
-  </section>
-
-  <!-- Press Stats -->
-  <section class="py-20 border-t border-gray-800">
-    <div class="container mx-auto px-6">
-      <div class="max-w-4xl mx-auto">
-        <h2 class="text-3xl font-bold text-white text-center mb-12">Media Impact</h2>
-        
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-8">
-          <div class="text-center">
-            <div class="text-4xl font-bold text-blue-400 mb-2">25+</div>
-            <div class="text-gray-400">Press Features</div>
-          </div>
-          <div class="text-center">
-            <div class="text-4xl font-bold text-green-400 mb-2">10M+</div>
-            <div class="text-gray-400">Media Reach</div>
-          </div>
-          <div class="text-center">
-            <div class="text-4xl font-bold text-purple-400 mb-2">95%</div>
-            <div class="text-gray-400">Positive Coverage</div>
-          </div>
-          <div class="text-center">
-            <div class="text-4xl font-bold text-yellow-400 mb-2">8</div>
-            <div class="text-gray-400">Major Awards</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+  </div>
 </div>
+
+<!-- Article Modal -->
+<div id="articleModal" class="article-modal">
+  <div class="modal-content">
+    <button class="close-modal" onclick="closeArticle()">&times;</button>
+    <div id="modalContent">
+      <!-- Article content will be loaded here -->
+    </div>
+  </div>
+</div>
+
+<!-- JavaScript for Interactive Features -->
+<script>
+  // Sample article data for modal display
+  const articleData = {
+    <% @press_articles.each_with_index do |article, index| %>
+      '<%= article[:id] %>': {
+        title: '<%= j article[:title] %>',
+        publication: '<%= j article[:publication] %>',
+        date: '<%= j article[:date] %>',
+        content: '<%= j article[:full_content] %>',
+        author: '<%= j article[:author] %>',
+        readTime: '<%= article[:read_time] %>'
+      }<%= index < @press_articles.length - 1 ? ',' : '' %>
+    <% end %>
+  };
+
+  function openArticle(articleId) {
+    const article = articleData[articleId];
+    if (!article) return;
+
+    const modalContent = document.getElementById('modalContent');
+    modalContent.innerHTML = `
+      <div style="margin-bottom: 2rem;">
+        <h2 style="color: #f7fafc; font-size: 2rem; font-weight: 700; margin-bottom: 1rem;">${article.title}</h2>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; color: #a0aec0;">
+          <div>
+            <strong>${article.publication}</strong> • ${article.author}
+          </div>
+          <div>${article.date} • ${article.readTime} min read</div>
+        </div>
+      </div>
+      <div style="color: #cbd5e0; line-height: 1.8; font-size: 1.1rem;">
+        ${article.content}
+      </div>
+    `;
+
+    document.getElementById('articleModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeArticle() {
+    document.getElementById('articleModal').classList.remove('active');
+    document.body.style.overflow = 'auto';
+  }
+
+  // Close modal when clicking outside
+  document.getElementById('articleModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+      closeArticle();
+    }
+  });
+
+  // Close modal with Escape key
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      closeArticle();
+    }
+  });
+
+  // Add loading animation
+  document.addEventListener('DOMContentLoaded', function() {
+    const cards = document.querySelectorAll('.press-card');
+    cards.forEach((card, index) => {
+      card.style.opacity = '0';
+      card.style.transform = 'translateY(20px)';
+      setTimeout(() => {
+        card.style.transition = 'all 0.6s ease';
+        card.style.opacity = '1';
+        card.style.transform = 'translateY(0)';
+      }, index * 100);
+    });
+  });
+</script>

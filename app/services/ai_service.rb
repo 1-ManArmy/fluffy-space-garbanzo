@@ -51,7 +51,7 @@ class AiService
       end
     end
 
-    # Google AI (Gemini) Integration
+    # Google AI (agent) Integration
     def google_ai_chat(message, options = {})
       return { error: 'Google AI API key not configured' } unless Rails.application.config.google_ai[:api_key].present?
 

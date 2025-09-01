@@ -1,44 +1,60 @@
-# MongoDB configuration for OneLastAI
+# MongoDB configuration for OneLastAI - Environment-driven deployment-ready config
+
 development:
   clients:
     default:
-      database: onelastai_development
-      hosts:
-        - localhost:27017
+      uri: <%= ENV['MONGODB_URI'] || 'mongodb+srv://miczugamark:WSTbNCDS7zfh3e0D@pawns.pwzfji.mongodb.net/onelastai_development?retryWrites=true&w=majority&appName=Pawns' %>
       options:
-        server_selection_timeout: 1
+        read:
+          mode: :primary
+        retry_writes: true
+        server_selection_timeout: 10
+        connect_timeout: 15
+        socket_timeout: 10
+        max_pool_size: 10
+        min_pool_size: 2
+        ssl: true
+        ssl_verify: true
+        heartbeat_frequency: 10
+  options:
+    use_utc: false
+    log_level: :info
 
 test:
   clients:
     default:
-      database: onelastai_test
-      hosts:
-        - localhost:27017
+      uri: <%= ENV['MONGODB_TEST_URI'] || 'mongodb+srv://miczugamark:WSTbNCDS7zfh3e0D@pawns.pwzfji.mongodb.net/onelastai_test?retryWrites=true&w=majority&appName=Pawns' %>
       options:
         read:
           mode: :primary
-        max_pool_size: 1
+        retry_writes: true
+        server_selection_timeout: 5
+        connect_timeout: 10
+        socket_timeout: 5
+        max_pool_size: 5
+        min_pool_size: 1
+        ssl: true
+  options:
+    use_utc: false
 
 production:
   clients:
     default:
       uri: <%= ENV['MONGODB_URI'] %>
       options:
+        read:
+          mode: :primary_preferred
+          max_staleness_seconds: 120
+        retry_writes: true
+        server_selection_timeout: 10
+        connect_timeout: 15
+        socket_timeout: 10
         max_pool_size: <%= ENV['MONGODB_POOL_SIZE'] || 20 %>
-        min_pool_size: 1
-        wait_queue_timeout: <%= ENV['MONGODB_TIMEOUT'] || 10 %>
-        connect_timeout: 10
-        socket_timeout: 5
+        min_pool_size: 5
+        wait_queue_timeout: <%= ENV['MONGODB_TIMEOUT'] || 15 %>
         ssl: true
         ssl_verify: true
         heartbeat_frequency: 10
-        # Retry writes for better reliability
-        retry_writes: true
-        # Write concern for data durability
-        write:
-          w: :majority
-          j: true
-        # Read preference for performance
-        read:
-          mode: :secondary_preferred
-          max_staleness_seconds: 120
+  options:
+    use_utc: true
+    log_level: :warn

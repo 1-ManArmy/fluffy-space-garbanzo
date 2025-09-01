@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terminal Chat</title>
+    <!-- Link to external CSS and Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&display=swap" rel="stylesheet">
+    <%= stylesheet_link_tag 'terminal_chat', 'data-turbo-track': 'reload' %>
+</head>
+<body>
+
+    <!-- Top Header Bar -->
+    <header class="bg-[#1e1e1e] border-b border-gray-700 p-2 flex items-center justify-between flex-shrink-0">
+        <div class="flex items-center gap-4">
+            <button id="toggle-left-panel" title="Toggle Features" class="text-gray-400 hover:text-white">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16"></path></svg>
+            </button>
+            <h1 class="text-md font-bold text-gray-200"><span class="text-green-400">&lt;&gt;</span> Terminal Chat</h1>
+        </div>
+        <div class="flex items-center gap-4">
+             <button title="New Session" class="text-gray-400 hover:text-white">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+            </button>
+             <button title="Save Log" class="text-gray-400 hover:text-white">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+            </button>
+            <button id="toggle-right-panel" title="Toggle Options" class="text-gray-400 hover:text-white">
+                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <div class="flex-grow flex relative overflow-hidden">
+        <!-- Left Panel (Sliding Door) -->
+        <aside id="left-panel" class="absolute top-0 left-0 h-full w-64 bg-[#1e1e1e] border-r border-gray-700 p-4 transform -translate-x-full transition-transform duration-300 ease-in-out z-20">
+            <h2 class="text-lg font-bold text-green-400 border-b border-gray-600 pb-2">/etc/features</h2>
+            <ul class="mt-4 space-y-2">
+                <li><a href="#" class="flex items-center gap-2 p-2 rounded hover:bg-gray-700"><svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z"></path></svg> User Profiles</a></li>
+                <li><a href="#" class="flex items-center gap-2 p-2 rounded hover:bg-gray-700"><svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg> Channels</a></li>
+                <li><a href="#" class="flex items-center gap-2 p-2 rounded hover:bg-gray-700"><svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg> File Transfers</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Terminal Chat -->
+        <main class="relative flex-grow bg-black flex flex-col overflow-hidden">
+            <pre id="ascii-background" class="absolute inset-0 flex items-center justify-center text-center text-[#1a1a1a] text-xs md:text-base pointer-events-none select-none overflow-hidden z-0"></pre>
+            <div class="bg-[#2a2a2a] text-center p-1 rounded-t-lg z-10 flex-shrink-0">
+                <p class="text-sm">user@agent: /home/chat</p>
+            </div>
+            <div id="terminal-output" class="relative terminal-output flex-grow p-4 overflow-y-auto z-10">
+                <!-- Chat content will be injected here -->
+            </div>
+            <div class="p-2 border-t border-gray-700 z-10 flex-shrink-0">
+                <div class="flex items-center">
+                    <span class="text-green-400 font-bold">user@agent:~$</span>
+                    <input type="text" id="terminal-input" class="bg-transparent text-gray-300 flex-grow ml-2 focus:outline-none" autocomplete="off" placeholder="">
+                    <div class="input-cursor"></div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Right Panel (Sliding Door) -->
+        <aside id="right-panel" class="absolute top-0 right-0 h-full w-64 bg-[#1e1e1e] border-l border-gray-700 p-4 transform translate-x-full transition-transform duration-300 ease-in-out z-20">
+             <h2 class="text-lg font-bold text-green-400 border-b border-gray-600 pb-2">/dev/options</h2>
+             <ul class="mt-4 space-y-2">
+                <li><a href="#" class="flex items-center gap-2 p-2 rounded hover:bg-gray-700"><svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg> Settings</a></li>
+                <li><a href="#" class="flex items-center gap-2 p-2 rounded hover:bg-gray-700"><svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path></svg> Text Options</a></li>
+                <li><a href="#" class="flex items-center gap-2 p-2 rounded hover:bg-gray-700"><svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path></svg> Voice Settings</a></li>
+             </ul>
+             <div class="mt-4 border-t border-gray-600 pt-4">
+                 <p class="text-sm font-bold text-green-400">/var/help</p>
+                 <ul class="mt-2 text-xs space-y-1 list-disc list-inside">
+                     <li><span class="text-yellow-400">help</span> - Show commands.</li>
+                     <li><span class="text-cyan-400">agent</span> - Chat with AI.</li>
+                 </ul>
+             </div>
+        </aside>
+    </div>
+
+    <!-- Bottom Status Bar -->
+    <footer class="bg-[#1e1e1e] border-t border-gray-700 p-1 flex items-center justify-between text-xs flex-shrink-0">
+        <div class="flex items-center gap-4">
+            <p>Status: <span class="text-green-400">Online</span></p>
+            <p>Session ID: <span id="session-id"></span></p>
+        </div>
+        <div class="flex items-center gap-4">
+            <p>Ln 1, Col 1</p>
+            <p>v3.1.0</p>
+        </div>
+    </footer>
+
+
+    <script>
+        const output = document.getElementById('terminal-output');
+        const input = document.getElementById('terminal-input');
+        const asciiBackground = document.getElementById('ascii-background');
+
+        const createCommandOutput = (command, result) => {
+            const commandElement = document.createElement('div');
+            commandElement.innerHTML = `<span class="text-green-400 font-bold">user@agent:~$</span> <span class="text-gray-300">${command}</span>`;
+            output.appendChild(commandElement);
+
+            const resultElement = document.createElement('div');
+            resultElement.innerHTML = result;
+            resultElement.classList.add('mb-4');
+            output.appendChild(resultElement);
+            output.scrollTop = output.scrollHeight;
+        };
+        
+        // --- agent API Integration ---
+        async function callagentApi(prompt) {
+            const apiKey = ""; // This will be handled by the execution environment.
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/agent-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+
+            const payload = {
+                contents: [{
+                    parts: [{
+                        text: `You are a helpful AI assistant integrated into a web-based terminal. Keep your responses concise and format them for a terminal where appropriate (e.g., using simple text, lists, no markdown). User prompt: "${prompt}"`
+                    }]
+                }],
+            };
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    console.error("agent API Error:", errorData);
+                    return `Error: API request failed with status ${response.status}. Check console for details.`;
+                }
+
+                const result = await response.json();
+                const candidate = result.candidates?.[0];
+                if (candidate && candidate.content?.parts?.[0]?.text) {
+                    const text = candidate.content.parts[0].text;
+                    // Sanitize to prevent HTML injection from the response
+                    return text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                } else {
+                    return "Error: Could not extract a valid response from the API.";
+                }
+            } catch (error) {
+                console.error("agent API call failed:", error);
+                return "Error: An exception occurred while contacting the agent API.";
+            }
+        }
+
+        const executeCommand = async (command) => {
+            let result = '';
+            const parts = command.split(' ');
+            const baseCommand = parts[0].toLowerCase();
+            const prompt = parts.slice(1).join(' ');
+
+            // Display user's command immediately
+            const commandElement = document.createElement('div');
+            commandElement.innerHTML = `<span class="text-green-400 font-bold">user@agent:~$</span> <span class="text-gray-300">${command}</span>`;
+            output.appendChild(commandElement);
+            
+            let resultElement = document.createElement('div');
+            resultElement.classList.add('mb-4');
+            output.appendChild(resultElement);
+            output.scrollTop = output.scrollHeight;
+
+            switch (baseCommand) {
+                case 'help':
+                    result = `
+                        <p class="text-blue-400">Available Commands:</p>
+                        <p class="ml-2">'help'   - Displays this list of commands.</p>
+                        <p class="ml-2">'date'   - Shows the current date and time.</p>
+                        <p class="ml-2">'clear'  - Clears the terminal output.</p>
+                        <p class="ml-2">'ping'   - Pings a simulated server.</p>
+                        <p class="ml-2">'whoami' - Displays information about the current user.</p>
+                        <p class="ml-2"><span class="text-cyan-400">'agent [prompt]'</span> - Ask the AI anything. (e.g., agent tell me a joke)</p>
+                        <br>
+                        <p>Just type anything else to get a standard bot response.</p>
+                    `;
+                    resultElement.innerHTML = result;
+                    break;
+                case 'date':
+                    result = `<p>${new Date().toString()}</p>`;
+                    resultElement.innerHTML = result;
+                    break;
+                case 'clear':
+                    output.innerHTML = '';
+                    return;
+                case 'ping':
+                    result = `<p>PONG! Latency: ${Math.floor(Math.random() * 50) + 10}ms</p>`;
+                    resultElement.innerHTML = result;
+                    break;
+                case 'whoami':
+                    result = `<p>user: guest</p><p>session_id: ${document.getElementById('session-id').textContent}</p><p>permissions: read-only</p>`;
+                    resultElement.innerHTML = result;
+                    break;
+                case 'agent':
+                    if (!prompt) {
+                        result = `<p class="text-yellow-400">Usage: agent [your prompt]</p><p>Example: agent what is the capital of Thailand?</p>`;
+                        resultElement.innerHTML = result;
+                    } else {
+                        resultElement.innerHTML = `<p class="text-cyan-400">[✨ agent is thinking<span class="agent-thinking-animation">...</span>]</p>`;
+                        output.scrollTop = output.scrollHeight;
+                        const agentResponse = await callagentApi(prompt);
+                        // Use pre for better formatting of multi-line responses
+                        resultElement.innerHTML = `<pre class="text-cyan-400 whitespace-pre-wrap">${agentResponse}</pre>`;
+                    }
+                    break;
+                default:
+                    result = `<p class="text-purple-400">[bot]: Command not recognized. Did you mean to use 'agent ${command}'?</p>`;
+                    resultElement.innerHTML = result;
+                    break;
+            }
+            output.scrollTop = output.scrollHeight;
+        };
+        
+        const welcomeMessage = () => {
+             const welcome = `
+                <p>Welcome to Terminal Chat v3.1.0 - Now with sliding panels!</p>
+                <p>System is operational. Type '<span class="text-yellow-400">help</span>' to see available commands.</p>
+                <br>
+            `;
+             output.innerHTML = welcome;
+        };
+
+        const setAsciiArt = () => {
+            const art = `
+                       _____                 _                                _____ 
+                      / ___ \\               | |                _         /\\  (_____)
+                     | |   | |____   ____   | |      ____  ___| |_      /  \\    _   
+                    | |   | |  _ \\ / _  )  | |     / _  |/___)  _)    / /\\ \\  | |  
+                     | |___| | | | ( (/ /   | |____( ( | |___ | |__   | |__| |_| |_ 
+                      \\_____/|_| |_|\\____)  |_______)_||_(___/ \___)  |______(_____) 
+                                                           
+                                                           
+            `;
+            asciiBackground.textContent = art;
+        };
+        
+        // --- EVENT LISTENERS & INITIALIZATION ---
+
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                const command = input.value.trim();
+                if (command) {
+                   executeCommand(command);
+                }
+                input.value = '';
+            }
+        });
+        
+        output.parentElement.addEventListener('click', () => {
+            input.focus();
+        });
+
+        const leftPanel = document.getElementById('left-panel');
+        const rightPanel = document.getElementById('right-panel');
+        const toggleLeftPanelBtn = document.getElementById('toggle-left-panel');
+        const toggleRightPanelBtn = document.getElementById('toggle-right-panel');
+
+        toggleLeftPanelBtn.addEventListener('click', () => {
+            leftPanel.classList.toggle('-translate-x-full');
+        });
+
+        toggleRightPanelBtn.addEventListener('click', () => {
+            rightPanel.classList.toggle('translate-x-full');
+        });
+
+        const setSessionId = () => {
+            const sessionId = Math.random().toString(36).substring(2, 10);
+            document.getElementById('session-id').textContent = sessionId;
+        };
+
+        window.onload = () => {
+            input.focus();
+            welcomeMessage();
+            setAsciiArt();
+            setSessionId();
+        };
+
+    </script>
+</body>
+</html>

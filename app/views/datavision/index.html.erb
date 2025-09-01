@@ -22,7 +22,7 @@
       color: #00d4ff;
       min-height: 100vh;
       overflow-x: hidden;
-      padding-top: 0; /* NeoChat has its own menu, no global menu needed */
+      padding-top: 0;
     }
     
     /* Hide global menu for terminal interface */
@@ -156,10 +156,16 @@
     .terminal-container {
       background: #000000;
       border: 2px solid #00d4ff;
-      border-radius: 12px;
+      border-radius: 0 0 12px 12px; /* Only bottom corners rounded to connect with menu */
       box-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
       overflow: hidden;
       position: relative;
+      border-top: none; /* Remove top border when menu is active */
+    }
+
+    .terminal-container.no-menu {
+      border-radius: 12px; /* Full rounded corners when menu is hidden */
+      border-top: 2px solid #00d4ff; /* Restore top border when menu is hidden */
     }
     
     .terminal-titlebar {
@@ -215,18 +221,51 @@
       background: #00a8cc;
     }
 
-    /* Sticky Menu Bar */
+    /* Menu Bar - Positioned above terminal */
     .menu-bar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
       background: linear-gradient(90deg, #0a0a0a 0%, #1a1a2e 50%, #0a0a0a 100%);
-      border-bottom: 2px solid #00d4ff;
+      border: 2px solid #00d4ff;
+      border-radius: 12px 12px 0 0;
       box-shadow: 0 2px 10px rgba(0, 212, 255, 0.3);
-      z-index: 1000;
       padding: 0.5rem 1rem;
       font-family: 'Consolas', 'Monaco', monospace;
+      position: relative;
+      z-index: 1000;
+      display: none; /* Hidden by default, shown via toggle */
+    }
+
+    .menu-bar.active {
+      display: block;
+    }
+
+    /* Menu Toggle Button */
+    .menu-toggle {
+      position: absolute;
+      top: -2.5rem;
+      right: 1rem;
+      background: linear-gradient(45deg, #00d4ff, #0099cc);
+      border: 2px solid #00d4ff;
+      border-radius: 8px 8px 0 0;
+      color: #000;
+      padding: 0.5rem 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 12px;
+      transition: all 0.3s ease;
+      z-index: 1001;
+    }
+
+    .menu-toggle:hover {
+      background: linear-gradient(45deg, #00a8cc, #007aa3);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(0, 212, 255, 0.4);
+    }
+
+    .menu-toggle.active {
+      background: linear-gradient(45deg, #ff6b6b, #ff5252);
+      border-color: #ff6b6b;
+      color: #fff;
     }
 
     .menu-items {
@@ -524,9 +563,50 @@
 </head>
 
 <body>
-  <!-- Sticky Menu Bar -->
-  <nav class="menu-bar">
-    <div class="menu-items">
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <div class="agent-logo">📊</div>
+      <h1 class="agent-title">DataVision</h1>
+      <p class="agent-tagline">Advanced Data Analytics & Visualization AI</p>
+      <p class="agent-description">
+        I am DataVision, your expert in transforming complex data into stunning visualizations. 
+        I create interactive charts, perform statistical analysis, build real-time dashboards, 
+        and generate insights that make your data tell compelling stories.
+      </p>
+      
+      <div class="agent-stats">
+        <div class="stat-item">
+          <span class="stat-value"><%= @agent_stats[:total_conversations] %></span>
+          <span class="stat-label">Conversations</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value"><%= @agent_stats[:average_rating] %></span>
+          <span class="stat-label">Rating</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value"><%= @agent_stats[:response_time] %></span>
+          <span class="stat-label">Response Time</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Terminal Section -->
+  <section class="terminal-section">
+    <div class="terminal-header">
+      <h2 class="terminal-title">📊 DataVision Analytics Terminal</h2>
+      <p class="terminal-subtitle">Enter commands or upload data to create stunning visualizations and insights</p>
+    </div>
+    
+    <!-- Menu Toggle Button -->
+    <button class="menu-toggle" onclick="toggleMainMenu()" id="menu-toggle">
+      📋 MENU
+    </button>
+
+    <!-- Menu Bar (above terminal) -->
+    <nav class="menu-bar" id="main-menu">
+      <div class="menu-items">
       <div class="menu-item">
         <button class="menu-button" onclick="toggleDropdown('file-menu')">File</button>
         <div id="file-menu" class="dropdown">
@@ -686,7 +766,7 @@
       <p class="terminal-subtitle">Enter commands or upload data to create stunning visualizations and insights</p>
     </div>
     
-    <div class="terminal-container">
+    <div class="terminal-container no-menu" id="terminal-container">
       <div class="terminal-titlebar">
         <div class="terminal-button"></div>
         <div class="terminal-button yellow"></div>
@@ -745,6 +825,27 @@ Upload your CSV/Excel files or describe your visualization needs!
   </section>
 
   <script>
+    // Main Menu Toggle Function
+    function toggleMainMenu() {
+      const menu = document.getElementById('main-menu');
+      const toggle = document.getElementById('menu-toggle');
+      const terminal = document.getElementById('terminal-container');
+      
+      if (menu.classList.contains('active')) {
+        // Hide menu
+        menu.classList.remove('active');
+        toggle.classList.remove('active');
+        toggle.textContent = '📋 MENU';
+        terminal.classList.add('no-menu');
+      } else {
+        // Show menu
+        menu.classList.add('active');
+        toggle.classList.add('active');
+        toggle.textContent = '✕ CLOSE';
+        terminal.classList.remove('no-menu');
+      }
+    }
+
     // Menu System Functions
     function toggleDropdown(menuId) {
       // Close all other dropdowns first

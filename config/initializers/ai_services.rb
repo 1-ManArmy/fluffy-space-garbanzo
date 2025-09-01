@@ -11,12 +11,12 @@ Rails.application.configure do
     temperature: ENV['OPENAI_TEMPERATURE']&.to_f || 0.7
   }
 
-  # Google AI / Gemini Configuration
+  # Google AI / agent Configuration
   config.google_ai = {
     api_key: ENV['GOOGLE_AI_API_KEY'],
     project_id: ENV['GOOGLE_AI_PROJECT_ID'],
     location: ENV['GOOGLE_AI_LOCATION'] || 'us-central1',
-    default_model: ENV['GOOGLE_AI_DEFAULT_MODEL'] || 'gemini-1.5-flash'
+    default_model: ENV['GOOGLE_AI_DEFAULT_MODEL'] || 'agent-1.5-flash'
   }
 
   # RunwayML Configuration

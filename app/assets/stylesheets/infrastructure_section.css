@@ -1,0 +1,206 @@
+/* ================================
+   Infrastructure Section Styling
+================================= */
+.infrastructure-section {
+  position: relative;
+  padding-top: 6rem;
+  padding-bottom: 6rem;
+  overflow: hidden;
+  background: linear-gradient(to bottom right, #111827, #1f2937, #000);
+  margin-bottom: 0;
+  z-index: 1;
+}
+
+/* Background Layers */
+.infrastructure-section::before,
+.infrastructure-section::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.infrastructure-section::before {
+  background: linear-gradient(to bottom right,
+    rgba(15, 23, 42, 0.85),
+    rgba(17, 24, 39, 0.65),
+    rgba(24, 24, 27, 0.55),
+    rgba(0, 0, 0, 0.75)
+  );
+}
+
+.infrastructure-section::after {
+  background: linear-gradient(to top,
+    rgba(0, 0, 0, 0.65),
+    rgba(0, 0, 0, 0.3)
+  );
+}
+
+/* Fix fog not overextending */
+.infrastructure-smoky-fog,
+.infrastructure-ambient-fog {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  opacity: 0.12;
+  z-index: 1;
+}
+
+/* Ensure content is above background layers */
+.infrastructure-section > .relative {
+  position: relative;
+  z-index: 10;
+}
+
+/* Headings */
+.infrastructure-section h2 {
+  font-size: 2.5rem;
+  line-height: 1.2;
+  color: #f8fafc;
+}
+
+.infrastructure-section p {
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.6;
+  color: #cbd5e1;
+}
+
+/* Tech Stack Cards */
+.tech-stack-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 1rem;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.tech-stack-card:hover {
+  border-color: rgba(147, 197, 253, 0.4);
+  transform: translateY(-4px);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* Icons */
+.tech-icon {
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  border-radius: 0.75rem;
+  padding: 0.75rem;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+}
+
+/* Linux Terminal */
+.linux-terminal {
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 1rem;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  overflow: hidden;
+  font-family: "Fira Code", "Monaco", "Consolas", monospace;
+  font-size: 0.9rem;
+  box-shadow: 0 0 25px rgba(0,0,0,0.6);
+  backdrop-filter: blur(10px);
+}
+
+/* Terminal Header */
+.terminal-header {
+  background: rgba(59, 130, 246, 0.1);
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(59, 130, 246, 0.1);
+}
+
+.terminal-dots {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.terminal-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.terminal-title {
+  font-size: 0.85rem;
+  color: #93c5fd;
+  font-weight: 500;
+}
+
+/* Terminal Content */
+.terminal-content {
+  padding: 1.25rem;
+  color: #e5e5e5;
+  background: rgba(0, 0, 0, 0.9);
+}
+
+.terminal-prompt {
+  margin-bottom: 0.4rem;
+  font-weight: 500;
+  color: #10b981;
+}
+
+.terminal-command {
+  color: #86efac;
+  margin-bottom: 0.5rem;
+}
+
+.terminal-output {
+  color: #d1d5db;
+  margin-left: 1rem;
+  font-family: inherit;
+}
+
+.terminal-key {
+  color: #93c5fd;
+}
+
+.terminal-value {
+  color: #f9a8d4;
+}
+
+.terminal-success {
+  color: #4ade80;
+}
+
+.terminal-cursor {
+  display: inline-block;
+  width: 8px;
+  height: 1rem;
+  background: #4ade80;
+  animation: blink 1s infinite;
+  margin-left: 2px;
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+/* Responsive fixes */
+@media (max-width: 768px) {
+  .infrastructure-section {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+  
+  .infrastructure-section h2 {
+    font-size: 2rem;
+  }
+  
+  .linux-terminal {
+    font-size: 0.8rem;
+  }
+  
+  .terminal-content {
+    padding: 1rem;
+  }
+}

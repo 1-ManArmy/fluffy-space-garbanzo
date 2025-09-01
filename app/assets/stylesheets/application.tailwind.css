@@ -545,7 +545,7 @@
 }
 
 .feature-crystal-card {
-    @apply relative p-8 rounded-2xl backdrop-blur-lg transition-all duration-500 group cursor-pointer;
+    @apply relative p-8 rounded-2xl backdrop-blur-lg transition-all duration-500 cursor-pointer;
     background: rgba(15, 15, 23, 0.7);
     border: 1px solid rgba(139, 92, 246, 0.2);
     box-shadow: 
@@ -930,7 +930,7 @@
 }
 
 .integration-card {
-    @apply text-center p-6 rounded-xl backdrop-blur-lg transition-all duration-500 group;
+    @apply text-center p-6 rounded-xl backdrop-blur-lg transition-all duration-500;
     background: rgba(15, 15, 23, 0.8);
     border: 1px solid rgba(139, 92, 246, 0.2);
 }
@@ -2511,7 +2511,7 @@
 }
 
 .feature-action-btn {
-    @apply font-medium transition-all duration-300 group inline-flex items-center;
+    @apply font-medium transition-all duration-300 inline-flex items-center;
     text-decoration: none;
 }
 

@@ -2,7 +2,7 @@ class InfrastructureController < ApplicationController
   before_action :set_page_title
 
   def index
-    @page_title = "Infrastructure - Enterprise-Grade Platform"
+    @page_title = 'Infrastructure - Enterprise-Grade Platform'
     @tech_stack = [
       {
         name: 'AWS EC2',
@@ -16,7 +16,7 @@ class InfrastructureController < ApplicationController
         description: 'Secure, scalable NoSQL database with automated backups',
         icon: '🍃',
         category: 'database',
-        features: ['Auto-scaling', 'Backups', 'Security']
+        features: %w[Auto-scaling Backups Security]
       },
       {
         name: 'Passage Auth',
@@ -36,7 +36,7 @@ class InfrastructureController < ApplicationController
   end
 
   def tech_stack
-    @page_title = "Technology Stack - Infrastructure"
+    @page_title = 'Technology Stack - Infrastructure'
     @technologies = {
       cloud: [
         { name: 'AWS EC2', description: 'Elastic compute cloud platform', status: 'active' },
@@ -51,14 +51,14 @@ class InfrastructureController < ApplicationController
       ai: [
         { name: 'OpenAI', description: 'GPT models and APIs', status: 'active' },
         { name: 'Anthropic', description: 'Claude AI integration', status: 'active' },
-        { name: 'Google AI', description: 'Gemini and Vertex AI', status: 'active' },
+        { name: 'Google AI', description: 'agent and Vertex AI', status: 'active' },
         { name: 'Runway ML', description: 'Video generation platform', status: 'active' }
       ]
     }
   end
 
   def security
-    @page_title = "Security Infrastructure"
+    @page_title = 'Security Infrastructure'
     @security_features = [
       {
         title: 'Zero Trust Architecture',
@@ -79,9 +79,9 @@ class InfrastructureController < ApplicationController
   end
 
   def deployment
-    @page_title = "Deployment Infrastructure"
+    @page_title = 'Deployment Infrastructure'
     @deployment_info = {
-      environments: ['Development', 'Staging', 'Production'],
+      environments: %w[Development Staging Production],
       ci_cd: 'GitHub Actions',
       monitoring: ['DataDog', 'Sentry', 'New Relic'],
       uptime: '99.9%'
@@ -91,6 +91,6 @@ class InfrastructureController < ApplicationController
   private
 
   def set_page_title
-    @page_title ||= "Infrastructure"
+    @page_title ||= 'Infrastructure'
   end
 end

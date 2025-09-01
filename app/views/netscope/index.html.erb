@@ -1,14 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NeoChat - AI Conversation Terminal | onelastai.com</title>
-  
-  <%= csrf_meta_tags %>
-  <%= csp_meta_tag %>
-  
-  <!-- Custom NeoChat Styles -->
+<% content_for :head do %>
+  <!-- Custom NetScope Styles -->
   <style>
     * {
       margin: 0;
@@ -18,24 +9,19 @@
     
     body {
       font-family: 'Consolas', 'Monaco', 'Lucida Console', monospace;
-      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
-      color: #00d4ff;
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a2e1a 50%, #16213e 100%);
+      color: #00ff41;
       min-height: 100vh;
       overflow-x: hidden;
-      padding-top: 0; /* NeoChat has its own menu, no global menu needed */
-    }
-    
-    /* Hide global menu for terminal interface */
-    .global-menu-bar {
-      display: none !important;
+      padding-top: 0;
     }
     
     /* Hero Section */
     .hero-section {
       padding: 4rem 2rem;
       text-align: center;
-      background: radial-gradient(ellipse at center, rgba(0, 212, 255, 0.1) 0%, rgba(0, 0, 0, 0.3) 70%);
-      border-bottom: 2px solid #00d4ff;
+      background: radial-gradient(ellipse at center, rgba(0, 255, 65, 0.1) 0%, rgba(0, 0, 0, 0.3) 70%);
+      border-bottom: 2px solid #00ff41;
       position: relative;
     }
     
@@ -46,7 +32,7 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="%2300d4ff" stroke-width="0.5" opacity="0.3"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="%2300ff41" stroke-width="0.5" opacity="0.3"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
       opacity: 0.2;
       animation: gridMove 20s linear infinite;
     }
@@ -64,7 +50,7 @@
     .agent-logo {
       font-size: 4rem;
       margin-bottom: 1rem;
-      text-shadow: 0 0 20px #00d4ff;
+      text-shadow: 0 0 20px #00ff41;
       animation: pulse 2s infinite;
     }
     
@@ -77,8 +63,8 @@
       font-size: 3rem;
       font-weight: bold;
       margin-bottom: 0.5rem;
-      text-shadow: 0 0 10px #00d4ff;
-      background: linear-gradient(45deg, #00d4ff, #ffffff);
+      text-shadow: 0 0 10px #00ff41;
+      background: linear-gradient(45deg, #00ff41, #ffffff);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -108,8 +94,8 @@
     }
     
     .stat-item {
-      background: rgba(0, 212, 255, 0.1);
-      border: 1px solid #00d4ff;
+      background: rgba(0, 255, 65, 0.1);
+      border: 1px solid #00ff41;
       border-radius: 8px;
       padding: 1rem;
       min-width: 120px;
@@ -119,7 +105,7 @@
     .stat-value {
       font-size: 1.5rem;
       font-weight: bold;
-      color: #00d4ff;
+      color: #00ff41;
       display: block;
     }
     
@@ -128,6 +114,117 @@
       color: #b3b3b3;
       text-transform: uppercase;
       letter-spacing: 0.5px;
+    }
+    
+    /* Network Dashboard Section */
+    .network-dashboard {
+      padding: 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    .dashboard-panel {
+      background: rgba(0, 0, 0, 0.8);
+      border: 2px solid #00ff41;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
+    }
+    
+    .panel-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      color: #00ff41;
+      font-weight: bold;
+      border-bottom: 1px solid rgba(0, 255, 65, 0.3);
+      padding-bottom: 0.5rem;
+    }
+    
+    .panel-content {
+      color: #cccccc;
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+    
+    .metric-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+      padding: 0.3rem 0;
+    }
+    
+    .metric-label {
+      color: #b3b3b3;
+    }
+    
+    .metric-value {
+      color: #00ff41;
+      font-weight: bold;
+    }
+    
+    .status-indicator {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-right: 0.5rem;
+    }
+    
+    .status-online { background: #00ff41; }
+    .status-warning { background: #ffff00; }
+    .status-offline { background: #ff4444; }
+    
+    /* Security Tools Section */
+    .security-tools {
+      margin-bottom: 2rem;
+    }
+    
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+    
+    .tool-card {
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid #00ff41;
+      border-radius: 8px;
+      padding: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+    
+    .tool-card:hover {
+      background: rgba(0, 255, 65, 0.1);
+      box-shadow: 0 0 15px rgba(0, 255, 65, 0.3);
+      transform: translateY(-2px);
+    }
+    
+    .tool-icon {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+    
+    .tool-name {
+      font-weight: bold;
+      color: #00ff41;
+      margin-bottom: 0.5rem;
+    }
+    
+    .tool-description {
+      font-size: 0.8rem;
+      color: #b3b3b3;
     }
     
     /* Terminal Section */
@@ -144,7 +241,7 @@
     
     .terminal-title {
       font-size: 1.5rem;
-      color: #00d4ff;
+      color: #00ff41;
       margin-bottom: 0.5rem;
     }
     
@@ -155,15 +252,15 @@
     
     .terminal-container {
       background: #000000;
-      border: 2px solid #00d4ff;
+      border: 2px solid #00ff41;
       border-radius: 12px;
-      box-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+      box-shadow: 0 0 30px rgba(0, 255, 65, 0.3);
       overflow: hidden;
       position: relative;
     }
     
     .terminal-titlebar {
-      background: linear-gradient(90deg, #00d4ff 0%, #0099cc 100%);
+      background: linear-gradient(90deg, #00ff41 0%, #00cc33 100%);
       padding: 0.75rem 1rem;
       display: flex;
       align-items: center;
@@ -192,7 +289,7 @@
       padding: 1rem;
       overflow-y: auto;
       background: #000000;
-      color: #00ff00;
+      color: #00ff41;
       font-family: 'Consolas', 'Monaco', monospace;
       font-size: 14px;
       line-height: 1.4;
@@ -207,12 +304,12 @@
     }
     
     .terminal-output::-webkit-scrollbar-thumb {
-      background: #00d4ff;
+      background: #00ff41;
       border-radius: 4px;
     }
     
     .terminal-output::-webkit-scrollbar-thumb:hover {
-      background: #00a8cc;
+      background: #00cc33;
     }
 
     /* Sticky Menu Bar */
@@ -221,9 +318,9 @@
       top: 0;
       left: 0;
       right: 0;
-      background: linear-gradient(90deg, #0a0a0a 0%, #1a1a2e 50%, #0a0a0a 100%);
-      border-bottom: 2px solid #00d4ff;
-      box-shadow: 0 2px 10px rgba(0, 212, 255, 0.3);
+      background: linear-gradient(90deg, #0a0a0a 0%, #1a2e1a 50%, #0a0a0a 100%);
+      border-bottom: 2px solid #00ff41;
+      box-shadow: 0 2px 10px rgba(0, 255, 65, 0.3);
       z-index: 1000;
       padding: 0.5rem 1rem;
       font-family: 'Consolas', 'Monaco', monospace;
@@ -243,7 +340,7 @@
     .menu-button {
       background: transparent;
       border: 1px solid transparent;
-      color: #00d4ff;
+      color: #00ff41;
       padding: 0.5rem 1rem;
       cursor: pointer;
       font-family: inherit;
@@ -253,14 +350,14 @@
     }
 
     .menu-button:hover {
-      background: rgba(0, 212, 255, 0.1);
-      border-color: #00d4ff;
-      box-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+      background: rgba(0, 255, 65, 0.1);
+      border-color: #00ff41;
+      box-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
     }
 
     .menu-button.active {
-      background: rgba(0, 212, 255, 0.2);
-      border-color: #00d4ff;
+      background: rgba(0, 255, 65, 0.2);
+      border-color: #00ff41;
     }
 
     /* Terminal-style Dropdown */
@@ -269,10 +366,10 @@
       top: 100%;
       left: 0;
       background: #000000;
-      border: 2px solid #00d4ff;
+      border: 2px solid #00ff41;
       border-radius: 8px;
-      box-shadow: 0 5px 20px rgba(0, 212, 255, 0.4);
-      min-width: 250px;
+      box-shadow: 0 5px 20px rgba(0, 255, 65, 0.4);
+      min-width: 280px;
       max-height: 400px;
       overflow-y: auto;
       opacity: 0;
@@ -289,18 +386,18 @@
     }
 
     .dropdown-header {
-      background: linear-gradient(90deg, #00d4ff 0%, #0099cc 100%);
+      background: linear-gradient(90deg, #00ff41 0%, #00cc33 100%);
       color: #000;
       padding: 0.5rem 1rem;
       font-weight: bold;
       font-size: 12px;
-      border-bottom: 1px solid #00d4ff;
+      border-bottom: 1px solid #00ff41;
     }
 
     /* Linux Tree Structure */
     .tree-container {
       padding: 0.5rem;
-      color: #00ff00;
+      color: #00ff41;
       font-family: 'Consolas', 'Monaco', monospace;
       font-size: 12px;
       line-height: 1.3;
@@ -314,7 +411,7 @@
     }
 
     .tree-item:hover {
-      background: rgba(0, 255, 0, 0.1);
+      background: rgba(0, 255, 65, 0.1);
     }
 
     .tree-item.expandable {
@@ -323,12 +420,12 @@
 
     .tree-item.expandable::before {
       content: "├── ";
-      color: #00d4ff;
+      color: #00ff41;
     }
 
     .tree-item.last::before {
       content: "└── ";
-      color: #00d4ff;
+      color: #00ff41;
     }
 
     .tree-item.folder::after {
@@ -337,7 +434,7 @@
     }
 
     .tree-item.executable {
-      color: #00ff00;
+      color: #00ff41;
       font-weight: bold;
     }
 
@@ -362,12 +459,12 @@
 
     .tree-children .tree-item::before {
       content: "├── ";
-      color: #00d4ff;
+      color: #00ff41;
     }
 
     .tree-children .tree-item:last-child::before {
       content: "└── ";
-      color: #00d4ff;
+      color: #00ff41;
     }
 
     /* Sub-menu arrow */
@@ -388,12 +485,12 @@
     }
     
     .user-message {
-      color: #00d4ff;
+      color: #00ff41;
     }
     
     .user-message::before {
       content: '$ ';
-      color: #00ff00;
+      color: #00ff41;
       font-weight: bold;
     }
     
@@ -420,7 +517,7 @@
     }
     
     .terminal-prompt {
-      color: #00ff00;
+      color: #00ff41;
       font-weight: bold;
       flex-shrink: 0;
     }
@@ -429,7 +526,7 @@
       flex: 1;
       background: transparent;
       border: none;
-      color: #00d4ff;
+      color: #00ff41;
       font-family: inherit;
       font-size: 14px;
       outline: none;
@@ -441,7 +538,7 @@
     }
     
     .send-button {
-      background: linear-gradient(45deg, #00d4ff, #0099cc);
+      background: linear-gradient(45deg, #00ff41, #00cc33);
       border: none;
       border-radius: 6px;
       color: #000;
@@ -454,7 +551,7 @@
     
     .send-button:hover {
       transform: translateY(-2px);
-      box-shadow: 0 4px 15px rgba(0, 212, 255, 0.4);
+      box-shadow: 0 4px 15px rgba(0, 255, 65, 0.4);
     }
     
     .send-button:active {
@@ -467,7 +564,7 @@
     }
     
     .typing-indicator {
-      color: #00ff00;
+      color: #00ff41;
       display: none;
     }
     
@@ -488,7 +585,7 @@
     
     /* Welcome message */
     .welcome-message {
-      color: #00ff00;
+      color: #00ff41;
       margin-bottom: 1rem;
     }
     
@@ -498,6 +595,15 @@
       margin-bottom: 1rem;
     }
     
+    /* Override global menu z-index to appear above NetScope elements */
+    .global-menu-bar {
+      z-index: 1100 !important;
+    }
+    
+    .menu-toggle-btn {
+      z-index: 1101 !important;
+    }
+
     /* Responsive */
     @media (max-width: 768px) {
       .hero-section {
@@ -512,6 +618,18 @@
         gap: 1rem;
       }
       
+      .network-dashboard {
+        padding: 1rem;
+      }
+      
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .tools-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      }
+      
       .terminal-section {
         padding: 1rem;
       }
@@ -521,67 +639,69 @@
       }
     }
   </style>
-</head>
+<% end %>
 
-<body>
+<div class="netscope-container">
   <!-- Sticky Menu Bar -->
   <nav class="menu-bar">
     <div class="menu-items">
       <div class="menu-item">
-        <button class="menu-button" onclick="toggleDropdown('file-menu')">File</button>
-        <div id="file-menu" class="dropdown">
-          <div class="dropdown-header">File Operations</div>
+        <button class="menu-button" onclick="toggleDropdown('scan-menu')">Scan</button>
+        <div id="scan-menu" class="dropdown">
+          <div class="dropdown-header">Network Scanning Tools</div>
           <div class="tree-container">
             <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
-              conversations
+              reconnaissance
               <div class="tree-children">
-                <div class="tree-item executable" onclick="newConversation()">new_chat.sh</div>
-                <div class="tree-item config" onclick="loadHistory()">history.log</div>
-                <div class="tree-item config" onclick="exportChat()">export.json</div>
-                <div class="tree-item last config" onclick="clearHistory()">clear.sh</div>
+                <div class="tree-item executable" onclick="performScan('port')">port_scanner.py</div>
+                <div class="tree-item executable" onclick="performScan('network')">network_discovery.sh</div>
+                <div class="tree-item executable" onclick="performScan('service')">service_enum.rb</div>
+                <div class="tree-item last executable" onclick="performScan('vulnerability')">vuln_scan.nse</div>
               </div>
             </div>
-            <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
-              settings
-              <div class="tree-children">
-                <div class="tree-item config" onclick="openSettings()">config.yml</div>
-                <div class="tree-item config" onclick="openPreferences()">preferences.ini</div>
-                <div class="tree-item last link" onclick="openThemes()">themes.conf → /usr/share/themes/</div>
-              </div>
-            </div>
-            <div class="tree-item last executable" onclick="exitChat()">exit.sh</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="menu-item">
-        <button class="menu-button" onclick="toggleDropdown('features-menu')">Features</button>
-        <div id="features-menu" class="dropdown">
-          <div class="dropdown-header">AI Capabilities</div>
-          <div class="tree-container">
             <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
               intelligence
               <div class="tree-children">
-                <div class="tree-item executable" onclick="setMode('question')">question_answering.py</div>
-                <div class="tree-item executable" onclick="setMode('creative')">creative_writing.py</div>
-                <div class="tree-item executable" onclick="setMode('problem')">problem_solving.py</div>
-                <div class="tree-item last executable" onclick="setMode('analysis')">data_analysis.py</div>
+                <div class="tree-item executable" onclick="performScan('whois')">whois_lookup.py</div>
+                <div class="tree-item executable" onclick="performScan('dns')">dns_resolver.sh</div>
+                <div class="tree-item executable" onclick="performScan('ssl')">ssl_analyzer.py</div>
+                <div class="tree-item last config" onclick="performScan('geolocation')">geo_lookup.json</div>
+              </div>
+            </div>
+            <div class="tree-item last executable" onclick="performScan('comprehensive')">full_scan.sh</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-item">
+        <button class="menu-button" onclick="toggleDropdown('monitor-menu')">Monitor</button>
+        <div id="monitor-menu" class="dropdown">
+          <div class="dropdown-header">Network Monitoring</div>
+          <div class="tree-container">
+            <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
+              traffic
+              <div class="tree-children">
+                <div class="tree-item executable" onclick="startMonitoring('bandwidth')">bandwidth_monitor.py</div>
+                <div class="tree-item executable" onclick="startMonitoring('packets')">packet_capture.sh</div>
+                <div class="tree-item executable" onclick="startMonitoring('flows')">netflow_analyzer.rb</div>
+                <div class="tree-item last config" onclick="startMonitoring('anomaly')">anomaly_detect.ai</div>
               </div>
             </div>
             <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
-              tools
+              security
               <div class="tree-children">
-                <div class="tree-item executable" onclick="openCodeGen()">code_generator.sh</div>
-                <div class="tree-item executable" onclick="openTranslator()">translator.py</div>
-                <div class="tree-item executable" onclick="openSummarizer()">summarizer.rb</div>
-                <div class="tree-item last config" onclick="openCalculator()">calculator.js</div>
+                <div class="tree-item executable" onclick="startMonitoring('intrusion')">ids_monitor.py</div>
+                <div class="tree-item executable" onclick="startMonitoring('firewall')">fw_log_parser.sh</div>
+                <div class="tree-item executable" onclick="startMonitoring('threat')">threat_intel.py</div>
+                <div class="tree-item last link" onclick="startMonitoring('siem')">siem_connector.api</div>
               </div>
             </div>
             <div class="tree-item last folder has-submenu" onclick="toggleSubmenu(this)">
-              memory
+              alerts
               <div class="tree-children">
-                <div class="tree-item config" onclick="showMemory()">context.db</div>
-                <div class="tree-item last link" onclick="showKnowledge()">knowledge_base.sqlite → /var/lib/neochat/</div>
+                <div class="tree-item config" onclick="viewAlerts()">active_alerts.log</div>
+                <div class="tree-item config" onclick="configureAlerts()">alert_rules.yml</div>
+                <div class="tree-item last link" onclick="alertHistory()">history.db → /var/log/netscope/</div>
               </div>
             </div>
           </div>
@@ -589,34 +709,29 @@
       </div>
 
       <div class="menu-item">
-        <button class="menu-button" onclick="toggleDropdown('agents-menu')">Agents</button>
-        <div id="agents-menu" class="dropdown">
-          <div class="dropdown-header">Agent Network</div>
+        <button class="menu-button" onclick="toggleDropdown('analyze-menu')">Analyze</button>
+        <div id="analyze-menu" class="dropdown">
+          <div class="dropdown-header">Security Analysis</div>
           <div class="tree-container">
             <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
-              active
+              forensics
               <div class="tree-children">
-                <div class="tree-item executable config">neochat.service ● running</div>
-                <div class="tree-item last link" onclick="switchAgent('mood')">mood_engine.agent → /agents/mood/</div>
+                <div class="tree-item executable" onclick="runAnalysis('packet')">packet_forensics.py</div>
+                <div class="tree-item executable" onclick="runAnalysis('network')">network_timeline.sh</div>
+                <div class="tree-item executable" onclick="runAnalysis('malware')">malware_detector.ai</div>
+                <div class="tree-item last config" onclick="runAnalysis('incident')">incident_report.md</div>
               </div>
             </div>
             <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
-              available
+              compliance
               <div class="tree-children">
-                <div class="tree-item executable" onclick="switchAgent('rapstar')">rapstar_ai.agent</div>
-                <div class="tree-item executable" onclick="switchAgent('storyteller')">storyteller.agent</div>
-                <div class="tree-item executable" onclick="switchAgent('zen')">zen_agent.agent</div>
-                <div class="tree-item last config" onclick="createAgent()">custom.template</div>
+                <div class="tree-item executable" onclick="runAnalysis('pci')">pci_dss_check.py</div>
+                <div class="tree-item executable" onclick="runAnalysis('iso')">iso27001_audit.sh</div>
+                <div class="tree-item executable" onclick="runAnalysis('nist')">nist_framework.rb</div>
+                <div class="tree-item last config" onclick="runAnalysis('gdpr')">gdpr_compliance.json</div>
               </div>
             </div>
-            <div class="tree-item last folder has-submenu" onclick="toggleSubmenu(this)">
-              network
-              <div class="tree-children">
-                <div class="tree-item config">agents.onelastai.com</div>
-                <div class="tree-item config">cluster.status</div>
-                <div class="tree-item last link">api.endpoint → https://api.onelastai.com/</div>
-              </div>
-            </div>
+            <div class="tree-item last executable" onclick="runAnalysis('risk')">risk_assessment.ai</div>
           </div>
         </div>
       </div>
@@ -629,21 +744,20 @@
             <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
               docs
               <div class="tree-children">
-                <div class="tree-item config" onclick="showDocs('getting-started')">getting_started.md</div>
-                <div class="tree-item config" onclick="showDocs('commands')">commands.txt</div>
-                <div class="tree-item config" onclick="showDocs('api')">api_reference.html</div>
-                <div class="tree-item last config" onclick="showDocs('examples')">examples.json</div>
+                <div class="tree-item config" onclick="showDocs('commands')">netscope_commands.txt</div>
+                <div class="tree-item config" onclick="showDocs('protocols')">network_protocols.md</div>
+                <div class="tree-item config" onclick="showDocs('security')">security_guide.html</div>
+                <div class="tree-item last config" onclick="showDocs('examples')">scan_examples.json</div>
               </div>
             </div>
             <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
               support
               <div class="tree-children">
-                <div class="tree-item link" onclick="openSupport()">github.com/onelastai/neochat</div>
-                <div class="tree-item link" onclick="openDiscord()">discord.gg/onelastai</div>
-                <div class="tree-item last config" onclick="reportBug()">bug_report.template</div>
+                <div class="tree-item link" onclick="openSupport()">github.com/onelastai/netscope</div>
+                <div class="tree-item last config" onclick="reportIssue()">security_report.template</div>
               </div>
             </div>
-            <div class="tree-item last executable" onclick="showAbout()">about.sh</div>
+            <div class="tree-item last executable" onclick="showAbout()">about_netscope.sh</div>
           </div>
         </div>
       </div>
@@ -655,25 +769,159 @@
     <div class="hero-content">
       <div class="agent-logo">🌐</div>
       <h1 class="agent-title">NetScope</h1>
-      <p class="agent-tagline">Advanced network analysis and security specialist</p>
+      <p class="agent-tagline">Network Intelligence & Security Reconnaissance</p>
       <p class="agent-description">
-        I am NetScope, your expert in network analysis, security monitoring, and infrastructure 
-        optimization. I help analyze network traffic, detect security threats, optimize 
-        performance, and ensure robust network architecture and security protocols.
+        Advanced network analysis, security monitoring, and infrastructure intelligence. 
+        I provide comprehensive network reconnaissance, threat detection, vulnerability assessment, 
+        and security compliance analysis for enterprise networks and infrastructure.
       </p>
       
       <div class="agent-stats">
         <div class="stat-item">
           <span class="stat-value"><%= @agent_stats[:total_conversations] %></span>
-          <span class="stat-label">Conversations</span>
+          <span class="stat-label">Scans Performed</span>
         </div>
         <div class="stat-item">
           <span class="stat-value"><%= @agent_stats[:average_rating] %></span>
-          <span class="stat-label">Rating</span>
+          <span class="stat-label">Security Rating</span>
         </div>
         <div class="stat-item">
           <span class="stat-value"><%= @agent_stats[:response_time] %></span>
-          <span class="stat-label">Response Time</span>
+          <span class="stat-label">Scan Time</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Network Dashboard -->
+  <section class="network-dashboard">
+    <div class="dashboard-grid">
+      <!-- Network Status Panel -->
+      <div class="dashboard-panel">
+        <div class="panel-header">
+          🖥️ Network Status
+        </div>
+        <div class="panel-content">
+          <div class="metric-row">
+            <span class="metric-label">Active Connections</span>
+            <span class="metric-value"><%= @network_stats[:active_connections] %></span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Monitored Hosts</span>
+            <span class="metric-value"><%= @network_stats[:monitored_hosts] %></span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Security Alerts</span>
+            <span class="metric-value"><%= @network_stats[:security_alerts] %></span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Bandwidth Usage</span>
+            <span class="metric-value"><%= @network_stats[:bandwidth_usage] %></span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Last Scan</span>
+            <span class="metric-value"><%= @network_stats[:last_scan_time] %></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Security Overview Panel -->
+      <div class="dashboard-panel">
+        <div class="panel-header">
+          🛡️ Security Overview
+        </div>
+        <div class="panel-content">
+          <div class="metric-row">
+            <span class="metric-label"><span class="status-indicator status-online"></span>Firewall Status</span>
+            <span class="metric-value">Active</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label"><span class="status-indicator status-online"></span>IDS/IPS</span>
+            <span class="metric-value">Monitoring</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label"><span class="status-indicator status-warning"></span>Open Ports</span>
+            <span class="metric-value">23 detected</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label"><span class="status-indicator status-offline"></span>Vulnerabilities</span>
+            <span class="metric-value">3 critical</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Threat Level</span>
+            <span class="metric-value">Medium</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Performance Metrics Panel -->
+      <div class="dashboard-panel">
+        <div class="panel-header">
+          📊 Performance Metrics
+        </div>
+        <div class="panel-content">
+          <div class="metric-row">
+            <span class="metric-label">Network Latency</span>
+            <span class="metric-value">12ms avg</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Packet Loss</span>
+            <span class="metric-value">0.02%</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Throughput</span>
+            <span class="metric-value">985 Mbps</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">CPU Usage</span>
+            <span class="metric-value">34%</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Memory Usage</span>
+            <span class="metric-value">67%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Security Tools -->
+    <div class="security-tools">
+      <h3 style="color: #00ff41; margin-bottom: 1rem; text-align: center;">🔧 Security Analysis Tools</h3>
+      <div class="tools-grid">
+        <div class="tool-card" onclick="performScan('port')">
+          <span class="tool-icon">🔍</span>
+          <div class="tool-name">Port Scanner</div>
+          <div class="tool-description">Discover open ports and services</div>
+        </div>
+        
+        <div class="tool-card" onclick="performScan('vulnerability')">
+          <span class="tool-icon">🛡️</span>
+          <div class="tool-name">Vulnerability Scan</div>
+          <div class="tool-description">Identify security weaknesses</div>
+        </div>
+        
+        <div class="tool-card" onclick="performScan('whois')">
+          <span class="tool-icon">🌐</span>
+          <div class="tool-name">WHOIS Lookup</div>
+          <div class="tool-description">Domain registration information</div>
+        </div>
+        
+        <div class="tool-card" onclick="performScan('dns')">
+          <span class="tool-icon">📡</span>
+          <div class="tool-name">DNS Analysis</div>
+          <div class="tool-description">DNS records and resolution</div>
+        </div>
+        
+        <div class="tool-card" onclick="performScan('ssl')">
+          <span class="tool-icon">🔐</span>
+          <div class="tool-name">SSL Certificate</div>
+          <div class="tool-description">Certificate validation and analysis</div>
+        </div>
+        
+        <div class="tool-card" onclick="performScan('network')">
+          <span class="tool-icon">🗺️</span>
+          <div class="tool-name">Network Discovery</div>
+          <div class="tool-description">Map network topology</div>
         </div>
       </div>
     </div>
@@ -682,8 +930,8 @@
   <!-- Terminal Section -->
   <section class="terminal-section">
     <div class="terminal-header">
-      <h2 class="terminal-title">🖥️ NeoChat Terminal Interface</h2>
-      <p class="terminal-subtitle">Type your questions or commands below and press Enter to chat with NeoChat</p>
+      <h2 class="terminal-title">🖥️ NetScope Security Terminal</h2>
+      <p class="terminal-subtitle">Network reconnaissance and security analysis interface</p>
     </div>
     
     <div class="terminal-container">
@@ -691,48 +939,56 @@
         <div class="terminal-button"></div>
         <div class="terminal-button yellow"></div>
         <div class="terminal-button green"></div>
-        <span class="terminal-title-text">neochat@onelastai.com:~$</span>
+        <span class="terminal-title-text">netscope@security-ops:~$</span>
       </div>
       
       <div class="terminal-output" id="terminal-output">
         <div class="welcome-message">
 ╔══════════════════════════════════════════════════════════════════╗
-║                       Welcome to NetScope                        ║
-║              Your AI Conversation Terminal                       ║
+║                       NetScope v2.1.0                           ║
+║            Network Intelligence & Security Platform              ║
 ╚══════════════════════════════════════════════════════════════════╝
 
-<div class="system-info">System: NeoChat v1.0 | Status: Online | Agent ID: <%= @agent.id %>
-<%= Time.current.strftime("Date: %Y-%m-%d %H:%M:%S") %> | Session: Active</div>
+<div class="system-info">System: NetScope Security Terminal | Status: Online | Agent ID: netscope-001 |
+<%= Time.current.strftime("Date: %Y-%m-%d %H:%M:%S") %> | Session: Active | Security Level: HIGH</div>
 
-<span style="color: #00d4ff;">Welcome! I'm NeoChat, your intelligent AI assistant.</span>
+<span style="color: #00ff41;">Welcome to NetScope! I'm your network security specialist.</span>
 
-I can help you with:
-• 💭 Questions & Answers on any topic
-• 🛠 Problem solving and analysis  
-• 💡 Creative brainstorming and ideas
-• 📚 Information research and learning
-• 🎯 Suggestions and helpful advice
-• 💬 Friendly conversation
+🛡️ Security Capabilities:
+• � Network reconnaissance and port scanning
+• 🌐 Domain intelligence and WHOIS analysis
+• � DNS enumeration and subdomain discovery
+• 🔐 SSL/TLS certificate analysis
+• �️ Vulnerability assessment and security auditing
+• 📊 Network performance monitoring
+• 🚨 Threat detection and incident response
+• � Compliance reporting (PCI DSS, ISO 27001, NIST)
 
-Type your message below and let's start chatting!
+Type your network analysis request below or use the menu tools above.
+
+Examples:
+- "Scan 192.168.1.0/24 for open ports"
+- "Analyze SSL certificate for example.com"
+- "Perform WHOIS lookup on domain.com"
+- "Check DNS records for subdomain discovery"
 
         </div>
         
         <div class="typing-indicator" id="typing-indicator">
-          NeoChat is thinking
+          NetScope is analyzing
         </div>
       </div>
       
       <div class="terminal-input-container">
-        <span class="terminal-prompt">neochat@terminal:~$ </span>
+        <span class="terminal-prompt">netscope@sec-ops:~$ </span>
         <input 
           type="text" 
           class="terminal-input" 
           id="user-input"
-          placeholder="Type your message here..."
+          placeholder="Enter target IP, domain, or security command..."
           autocomplete="off"
         >
-        <button class="send-button" id="send-button">Send</button>
+        <button class="send-button" id="send-button">Execute</button>
       </div>
     </div>
   </section>
@@ -781,105 +1037,96 @@ Type your message below and let's start chatting!
       }
     });
 
-    // Menu Action Functions
-    function newConversation() {
+    // NetScope Security Functions
+    function performScan(scanType) {
       if (window.terminal) {
-        window.terminal.addMessage('system', '$ ./new_chat.sh\nStarting new conversation session...\nConversation cleared. How can I help you today?');
-        window.terminal.output.innerHTML = '';
-        window.terminal.focusInput();
-      }
-    }
-
-    function loadHistory() {
-      if (window.terminal) {
-        window.terminal.addMessage('system', '$ cat history.log\nLoading conversation history...\n[Feature coming soon - conversation persistence]');
-      }
-    }
-
-    function exportChat() {
-      if (window.terminal) {
-        const chatData = {
-          timestamp: new Date().toISOString(),
-          agent: 'neochat',
-          messages: []
+        const scanCommands = {
+          port: '$ nmap -sS -O target_ip\nInitiating TCP SYN Stealth Scan...\nScanning for open ports and services...',
+          network: '$ netdiscover -r 192.168.1.0/24\nActive network discovery in progress...\nMapping network topology...',
+          service: '$ nmap -sV -sC target_ip\nService version detection active...\nEnumerating service banners...',
+          vulnerability: '$ nessus --scan-policy="Full Scan" target\nVulnerability assessment initiated...\nScanning for known security issues...',
+          whois: '$ whois domain.com | grep -E "(Registrar|Creation|Expiration)"\nQuerying WHOIS database...\nRetrieving domain registration data...',
+          dns: '$ dig domain.com ANY +short\nDNS enumeration in progress...\nResolving all record types...',
+          ssl: '$ sslscan --show-certificate target:443\nSSL/TLS analysis initiated...\nChecking certificate validity and ciphers...',
+          geolocation: '$ geoiplookup target_ip\nGeoIP lookup in progress...\nDetermining geographical location...',
+          comprehensive: '$ ./full_security_audit.sh target\nComprehensive security assessment started...\nThis may take several minutes...'
         };
         
-        const blob = new Blob([JSON.stringify(chatData, null, 2)], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `neochat-export-${Date.now()}.json`;
-        a.click();
-        URL.revokeObjectURL(url);
+        window.terminal.addMessage('system', scanCommands[scanType] || 'Scan initiated...');
         
-        window.terminal.addMessage('system', '$ ./export.json\nExporting conversation data...\nChat exported successfully!');
+        // Simulate scan progress for demonstration
+        setTimeout(() => {
+          if (scanType === 'port') {
+            window.terminal.addMessage('system', 'Port scan results:\n22/tcp   open  ssh     OpenSSH 8.0\n80/tcp   open  http    Apache 2.4.41\n443/tcp  open  https   Apache 2.4.41\n3306/tcp open  mysql   MySQL 8.0.25\n\nScan complete. 4 open ports detected.');
+          } else if (scanType === 'whois') {
+            window.terminal.addMessage('system', 'WHOIS Results:\nRegistrar: GoDaddy.com\nCreation Date: 2020-01-15\nExpiration Date: 2025-01-15\nName Servers: ns1.example.com, ns2.example.com\nStatus: clientTransferProhibited');
+          } else {
+            window.terminal.addMessage('system', `${scanType} scan completed successfully.\nResults saved to /var/log/netscope/${scanType}_$(date +%Y%m%d_%H%M%S).log`);
+          }
+        }, 2000);
       }
     }
 
-    function clearHistory() {
-      if (window.terminal && confirm('Clear all conversation history? This cannot be undone.')) {
-        window.terminal.output.innerHTML = '';
-        window.terminal.addMessage('system', '$ ./clear.sh\nClearing conversation history...\nHistory cleared successfully!');
-      }
-    }
-
-    function openSettings() {
+    function startMonitoring(monitorType) {
       if (window.terminal) {
-        window.terminal.addMessage('system', '$ nano config.yml\nOpening NeoChat configuration...\n[Settings panel coming soon]');
-      }
-    }
-
-    function openPreferences() {
-      if (window.terminal) {
-        window.terminal.addMessage('system', '$ vim preferences.ini\nOpening user preferences...\n[Preferences panel coming soon]');
-      }
-    }
-
-    function openThemes() {
-      if (window.terminal) {
-        window.terminal.addMessage('system', '$ ls /usr/share/themes/\nAvailable themes:\n├── matrix-green\n├── cyber-blue\n├── neon-purple\n└── classic-amber\n[Theme switching coming soon]');
-      }
-    }
-
-    function exitChat() {
-      if (confirm('Exit NeoChat? Any unsaved conversation will be lost.')) {
-        window.location.href = '/';
-      }
-    }
-
-    function setMode(mode) {
-      if (window.terminal) {
-        const modeMessages = {
-          question: '$ python3 question_answering.py\nActivating Q&A mode...\nReady to answer your questions!',
-          creative: '$ python3 creative_writing.py\nActivating creative mode...\nReady for creative tasks and brainstorming!',
-          problem: '$ python3 problem_solving.py\nActivating problem-solving mode...\nReady to tackle complex problems!',
-          analysis: '$ python3 data_analysis.py\nActivating analysis mode...\nReady for data analysis and insights!'
+        const monitorCommands = {
+          bandwidth: '$ iftop -i eth0 -t -s 60\nBandwidth monitoring started...\nCapturing traffic on interface eth0...',
+          packets: '$ tcpdump -i any -w capture_$(date +%s).pcap\nPacket capture initiated...\nSaving to /var/log/netscope/captures/',
+          flows: '$ nfcapd -l /var/netflow -p 9995\nNetFlow monitoring active...\nCollecting flow data...',
+          anomaly: '$ python3 /opt/netscope/anomaly_detector.py --realtime\nAI anomaly detection engine started...\nMonitoring for suspicious patterns...',
+          intrusion: '$ sudo systemctl start suricata && tail -f /var/log/suricata/fast.log\nIntrusion Detection System activated...\nMonitoring for threats...',
+          firewall: '$ tail -f /var/log/iptables.log | grep -E "(DROP|REJECT)"\nFirewall log monitoring active...\nTracking blocked connections...',
+          threat: '$ python3 /opt/netscope/threat_intel.py --feed-update\nThreat intelligence feeds updating...\nCross-referencing IOCs...',
+          siem: '$ curl -X POST "https://siem.company.com/api/events" -H "Authorization: Bearer $API_KEY"\nSIEM connector initialized...\nForwarding security events...'
         };
         
-        window.terminal.addMessage('system', modeMessages[mode] || 'Mode activated');
+        window.terminal.addMessage('system', monitorCommands[monitorType] || 'Monitoring started...');
       }
     }
 
-    function switchAgent(agentType) {
-      if (confirm(`Switch to ${agentType} agent? This will redirect to a new agent session.`)) {
-        // This would redirect to the appropriate agent subdomain/path
-        window.terminal.addMessage('system', `$ systemctl switch-agent ${agentType}\nSwitching to ${agentType} agent...\n[Agent switching coming soon]`);
-      }
-    }
-
-    function createAgent() {
+    function runAnalysis(analysisType) {
       if (window.terminal) {
-        window.terminal.addMessage('system', '$ cp custom.template my_agent.py\nCreating custom agent...\n[Custom agent creation coming soon]');
+        const analysisCommands = {
+          packet: '$ wireshark -r capture.pcap -Y "tcp.flags.syn==1"\nPacket forensics analysis started...\nExamining network communications...',
+          network: '$ python3 /opt/netscope/timeline_analyzer.py --pcap capture.pcap\nNetwork timeline reconstruction...\nBuilding chronological event map...',
+          malware: '$ yara -r /opt/yara-rules/ /var/log/captures/\nMalware detection scan initiated...\nScanning for known signatures...',
+          incident: '$ python3 /opt/netscope/incident_reporter.py --template security\nGenerating incident report...\nCompiling security event data...',
+          pci: '$ python3 /opt/compliance/pci_dss_scanner.py --network 192.168.1.0/24\nPCI DSS compliance check initiated...\nValidating security controls...',
+          iso: '$ /opt/compliance/iso27001_auditor.sh --full-audit\nISO 27001 audit starting...\nChecking information security controls...',
+          nist: '$ python3 /opt/compliance/nist_framework_assess.py\nNIST Cybersecurity Framework assessment...\nEvaluating security posture...',
+          gdpr: '$ /opt/compliance/gdpr_privacy_scanner.py --data-flow-analysis\nGDPR compliance scan initiated...\nAnalyzing data processing activities...',
+          risk: '$ python3 /opt/netscope/ai_risk_assessor.py --comprehensive\nAI-powered risk assessment starting...\nEvaluating threat landscape...'
+        };
+        
+        window.terminal.addMessage('system', analysisCommands[analysisType] || 'Analysis started...');
+      }
+    }
+
+    function viewAlerts() {
+      if (window.terminal) {
+        window.terminal.addMessage('system', '$ tail -20 /var/log/netscope/alerts.log\n[2025-08-29 02:54:32] HIGH: Suspicious port scan detected from 192.168.1.100\n[2025-08-29 02:52:15] MEDIUM: Failed SSH login attempts from 203.0.113.45\n[2025-08-29 02:49:03] LOW: Unusual DNS query pattern detected\n[2025-08-29 02:45:22] CRITICAL: Potential SQL injection attempt blocked\n[2025-08-29 02:40:11] HIGH: Unauthorized network access attempt');
+      }
+    }
+
+    function configureAlerts() {
+      if (window.terminal) {
+        window.terminal.addMessage('system', '$ nano /etc/netscope/alert_rules.yml\nOpening alert configuration...\n[Alert rules configuration panel would open here]');
+      }
+    }
+
+    function alertHistory() {
+      if (window.terminal) {
+        window.terminal.addMessage('system', '$ sqlite3 /var/lib/netscope/alerts.db "SELECT * FROM alerts ORDER BY timestamp DESC LIMIT 10;"\nRetrieving alert history from database...\nDisplaying recent security events...');
       }
     }
 
     function showDocs(docType) {
       if (window.terminal) {
         const docs = {
-                    'getting-started': 'Welcome to NetScope!\n\nBasic Commands:\n- Type your message and press Enter\n- Use the menu for advanced features\n- Export conversations as JSON\n',,
-          'commands': 'Available Commands:\n- /help - Show this help\n- /clear - Clear conversation\n- /export - Export chat\n- /mode [type] - Switch AI mode\n',
-          'api': 'NeoChat API Reference:\n\nEndpoints:\n- POST /chat - Send message\n- GET /status - Agent status\n- GET /history - Chat history\n',
-          'examples': '{\n  "examples": [\n    {"input": "Hello", "output": "Hello! How can I help?"},\n    {"input": "What is AI?", "output": "AI explanation..."}\n  ]\n}'
+          'commands': 'NetScope Command Reference:\n\nScanning Commands:\n- scan --port <target>     Port scanning\n- scan --vuln <target>     Vulnerability assessment\n- whois <domain>           Domain information\n- dns --enum <domain>      DNS enumeration\n\nMonitoring Commands:\n- monitor --traffic <iface>  Traffic monitoring\n- monitor --ids             Intrusion detection\n- alert --view              View active alerts\n\nAnalysis Commands:\n- analyze --packet <file>   Packet analysis\n- analyze --compliance <std> Compliance checking\n- report --security         Security report\n',
+          'protocols': 'Supported Network Protocols:\n\n• TCP/UDP - Transport layer analysis\n• ICMP - Network diagnostics\n• HTTP/HTTPS - Web traffic inspection\n• DNS - Domain name resolution\n• SMTP/POP3/IMAP - Email protocols\n• FTP/SFTP - File transfer protocols\n• SSH - Secure shell analysis\n• SNMP - Network management\n• NetFlow/sFlow - Flow monitoring\n• SSL/TLS - Encryption analysis\n',
+          'security': 'Security Analysis Guide:\n\n1. Reconnaissance Phase:\n   - Network discovery\n   - Port scanning\n   - Service enumeration\n\n2. Vulnerability Assessment:\n   - Known CVE checking\n   - Configuration analysis\n   - Patch level verification\n\n3. Threat Detection:\n   - Anomaly detection\n   - Behavioral analysis\n   - IOC correlation\n\n4. Compliance Checking:\n   - PCI DSS validation\n   - ISO 27001 controls\n   - NIST framework alignment\n',
+          'examples': '{\n  "scan_examples": [\n    {"command": "scan --port 192.168.1.1", "description": "Port scan single host"},\n    {"command": "whois google.com", "description": "Domain WHOIS lookup"},\n    {"command": "dns --enum example.com", "description": "DNS record enumeration"}\n  ],\n  "monitor_examples": [\n    {"command": "monitor --traffic eth0", "description": "Monitor network traffic"},\n    {"command": "alert --config high", "description": "Configure high-priority alerts"}\n  ]\n}'
         };
         
         window.terminal.addMessage('system', `$ cat ${docType}.md\n${docs[docType] || 'Documentation not found'}`);
@@ -887,40 +1134,37 @@ Type your message below and let's start chatting!
     }
 
     function openSupport() {
-      window.open('https://github.com/onelastai/neochat', '_blank');
+      window.open('https://github.com/onelastai/netscope', '_blank');
     }
 
-    function openDiscord() {
-      window.open('https://discord.gg/onelastai', '_blank');
-    }
-
-    function reportBug() {
+    function reportIssue() {
       if (window.terminal) {
-        window.terminal.addMessage('system', '$ nano bug_report.template\nOpening bug report template...\n[Bug reporting system coming soon]');
+        window.terminal.addMessage('system', '$ nano security_report.template\nOpening security issue template...\n[Security issue reporting form would open here]');
       }
     }
 
     function showAbout() {
       if (window.terminal) {
-        window.terminal.addMessage('system', `$ ./about.sh
+        window.terminal.addMessage('system', `$ ./about_netscope.sh
 ╔══════════════════════════════════════╗
-║              NeoChat v1.0            ║
+║           NetScope v2.1.0            ║
 ║                                      ║
-║     AI Conversation Terminal         ║
+║   Network Intelligence & Security    ║
 ║     Built by onelastai.com          ║
 ║                                      ║
-║  • Intelligent conversation AI       ║
-║  • Terminal-style interface          ║
-║  • Multi-modal capabilities          ║
-║  • Real-time responses              ║
+║  • Advanced network reconnaissance   ║
+║  • Real-time security monitoring    ║
+║  • Vulnerability assessment         ║
+║  • Compliance reporting             ║
+║  • Threat intelligence              ║
 ║                                      ║
 ║  © 2025 onelastai.com               ║
 ╚══════════════════════════════════════╝`);
       }
     }
 
-    // Terminal Chat Functionality
-    class NeoChatTerminal {
+    // NetScope Terminal Chat Functionality
+    class NetScopeTerminal {
       constructor() {
         this.output = document.getElementById('terminal-output');
         this.input = document.getElementById('user-input');
@@ -966,7 +1210,7 @@ Type your message below and let's start chatting!
         this.showTyping(true);
         
         try {
-          const response = await fetch('/chat', {
+          const response = await fetch('/netscope/chat', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -978,13 +1222,24 @@ Type your message below and let's start chatting!
           const data = await response.json();
           
           if (data.success) {
-            this.addMessage('agent', data.response, data.timestamp);
+            this.addMessage('agent', data.message, data.timestamp);
+            
+            // Display additional security analysis data if available
+            if (data.network_analysis) {
+              this.addMessage('analysis', `Network Analysis:\n${JSON.stringify(data.network_analysis, null, 2)}`);
+            }
+            if (data.security_insights) {
+              this.addMessage('security', `Security Insights:\n${data.security_insights}`);
+            }
+            if (data.scan_recommendations) {
+              this.addMessage('recommendation', `Recommendations:\n${data.scan_recommendations}`);
+            }
           } else {
-            this.addMessage('error', data.error || 'Sorry, there was an error processing your message.');
+            this.addMessage('error', data.message || 'Security analysis failed. Please check your input and try again.');
           }
         } catch (error) {
-          console.error('Chat error:', error);
-          this.addMessage('error', 'Connection error. Please check your internet and try again.');
+          console.error('NetScope error:', error);
+          this.addMessage('error', 'Connection error. Please check your network and try again.');
         } finally {
           this.setLoading(false);
           this.showTyping(false);
@@ -1002,8 +1257,16 @@ Type your message below and let's start chatting!
           messageDiv.innerHTML = `<span class="user-message">${this.escapeHtml(content)}</span><span class="timestamp">[${time}]</span>`;
         } else if (type === 'agent') {
           messageDiv.innerHTML = `<div class="agent-message">${this.escapeHtml(content)}</div><span class="timestamp">[${time}]</span>`;
+        } else if (type === 'analysis') {
+          messageDiv.innerHTML = `<div class="agent-message" style="color: #00d4ff; border-left: 3px solid #00d4ff; padding-left: 1rem;">📊 ${this.escapeHtml(content)}</div>`;
+        } else if (type === 'security') {
+          messageDiv.innerHTML = `<div class="agent-message" style="color: #ff9900; border-left: 3px solid #ff9900; padding-left: 1rem;">🛡️ ${this.escapeHtml(content)}</div>`;
+        } else if (type === 'recommendation') {
+          messageDiv.innerHTML = `<div class="agent-message" style="color: #00ff41; border-left: 3px solid #00ff41; padding-left: 1rem;">💡 ${this.escapeHtml(content)}</div>`;
         } else if (type === 'error') {
           messageDiv.innerHTML = `<div class="agent-message" style="color: #ff6b6b;">❌ ${this.escapeHtml(content)}</div>`;
+        } else if (type === 'system') {
+          messageDiv.innerHTML = `<div class="agent-message" style="color: #ffff00;">⚡ ${this.escapeHtml(content)}</div>`;
         }
         
         this.output.appendChild(messageDiv);
@@ -1015,10 +1278,10 @@ Type your message below and let's start chatting!
         this.input.disabled = isLoading;
         
         if (isLoading) {
-          this.sendButton.textContent = 'Sending...';
+          this.sendButton.textContent = 'Analyzing...';
           this.sendButton.classList.add('loading');
         } else {
-          this.sendButton.textContent = 'Send';
+          this.sendButton.textContent = 'Execute';
           this.sendButton.classList.remove('loading');
         }
       }
@@ -1043,10 +1306,8 @@ Type your message below and let's start chatting!
       }
     }
     
-    // Initialize terminal when page loads
+    // Initialize NetScope terminal when page loads
     document.addEventListener('DOMContentLoaded', () => {
-      window.terminal = new NeoChatTerminal();
+      window.terminal = new NetScopeTerminal();
     });
   </script>
-</body>
-</html>

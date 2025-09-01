@@ -118,7 +118,7 @@ nano .env
 OPENAI_API_KEY=sk-...                    # OpenAI GPT models
 ANTHROPIC_API_KEY=sk-ant-...             # Claude models
 RUNWAYML_API_KEY=...                     # Creative AI
-GOOGLE_AI_API_KEY=...                    # Gemini models
+GOOGLE_AI_API_KEY=...                    # agent models
 
 # Database & Infrastructure
 MONGODB_URI=mongodb+srv://...            # MongoDB Atlas

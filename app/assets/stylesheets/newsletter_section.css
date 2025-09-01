@@ -1,0 +1,301 @@
+/* ================================
+   Newsletter Section Styling
+================================= */
+.newsletter-section {
+  position: relative;
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+  overflow: hidden;
+  background: linear-gradient(to bottom right, #0f0f23, #1a1a2e, #000);
+  margin-top: 0;
+  z-index: 2;
+  clear: both;
+  box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.8);
+}
+
+/* Background Effects */
+.newsletter-border-top {
+  background: linear-gradient(to right, transparent, rgba(75, 85, 99, 0.3), transparent);
+  z-index: 1;
+  animation: borderPulse 4s ease-in-out infinite;
+}
+
+.terminal-overlay,
+.newsletter-screenshot {
+  z-index: 0;
+  opacity: 0.08;
+  filter: brightness(0.3) contrast(1.2);
+}
+
+.newsletter-bg-layers {
+  z-index: 1;
+  animation: layerShift 12s ease-in-out infinite;
+}
+
+/* Fog Layers */
+.newsletter-primary-fog,
+.newsletter-secondary-fog,
+.newsletter-depth-fog {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(40px);
+  animation: float 15s ease-in-out infinite;
+  opacity: 0.15;
+}
+
+.fog-layer-newsletter-1 {
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(55, 65, 81, 0.4), transparent);
+  top: 20%;
+  left: 10%;
+  animation: float 15s ease-in-out infinite;
+  animation-delay: 0s;
+}
+
+.fog-layer-newsletter-2 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(31, 41, 55, 0.3), transparent);
+  bottom: 20%;
+  right: 15%;
+  animation: float 20s ease-in-out infinite reverse;
+  animation-delay: -5s;
+}
+
+.fog-layer-newsletter-3 {
+  width: 250px;
+  height: 250px;
+  background: radial-gradient(circle, rgba(17, 24, 39, 0.4), transparent);
+  top: 60%;
+  left: 60%;
+  animation: float 18s ease-in-out infinite;
+  animation-delay: -10s;
+}
+
+/* Particles */
+.newsletter-particles .newsletter-particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  animation: particleFloat 12s ease-in-out infinite;
+  opacity: 0.6;
+}
+
+.particle-glow-1 {
+  background: radial-gradient(circle, rgba(75, 85, 99, 0.8), transparent);
+  top: 15%;
+  left: 20%;
+  animation: particleFloat 12s ease-in-out infinite;
+  animation-delay: 0s;
+}
+
+.particle-glow-2 {
+  background: radial-gradient(circle, rgba(55, 65, 81, 0.8), transparent);
+  top: 70%;
+  right: 25%;
+  animation: particleFloat 14s ease-in-out infinite reverse;
+  animation-delay: -3s;
+}
+
+.particle-glow-3 {
+  background: radial-gradient(circle, rgba(31, 41, 55, 0.8), transparent);
+  bottom: 30%;
+  left: 70%;
+  animation: particleFloat 16s ease-in-out infinite;
+  animation-delay: -6s;
+}
+
+.particle-glow-4 {
+  background: radial-gradient(circle, rgba(17, 24, 39, 0.8), transparent);
+  top: 40%;
+  right: 60%;
+  animation: particleFloat 13s ease-in-out infinite reverse;
+  animation-delay: -9s;
+}
+
+.particle-glow-5 {
+  background: radial-gradient(circle, rgba(55, 65, 81, 0.8), transparent);
+  bottom: 60%;
+  left: 30%;
+  animation: particleFloat 15s ease-in-out infinite;
+  animation-delay: -12s;
+}
+
+@keyframes particleFloat {
+  0%, 100% { transform: translateY(0px) translateX(0px) scale(1); opacity: 0.4; }
+  25% { transform: translateY(-15px) translateX(10px) scale(1.1); opacity: 0.6; }
+  50% { transform: translateY(-30px) translateX(-8px) scale(0.9); opacity: 0.3; }
+  75% { transform: translateY(-20px) translateX(12px) scale(1.05); opacity: 0.5; }
+}
+
+/* Lightweight Linear Animations */
+@keyframes borderPulse {
+  0%, 100% { opacity: 0.3; transform: scaleY(1); }
+  50% { opacity: 0.6; transform: scaleY(1.02); }
+}
+
+@keyframes layerShift {
+  0%, 100% { transform: translateX(0px) translateY(0px); }
+  33% { transform: translateX(5px) translateY(-3px); }
+  66% { transform: translateX(-3px) translateY(5px); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) translateX(0px) rotate(0deg); opacity: 0.15; }
+  25% { transform: translateY(-10px) translateX(5px) rotate(1deg); opacity: 0.25; }
+  50% { transform: translateY(-20px) translateX(-3px) rotate(0deg); opacity: 0.1; }
+  75% { transform: translateY(-15px) translateX(8px) rotate(-1deg); opacity: 0.2; }
+}
+
+/* UI Fragments */
+.ui-fragments .fragment {
+  border-radius: 8px;
+  filter: blur(1px);
+}
+
+.animate-float-slow {
+  animation: floatSlow 8s ease-in-out infinite;
+}
+
+.animate-float-fast {
+  animation: floatFast 6s ease-in-out infinite;
+}
+
+@keyframes floatSlow {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-15px) rotate(2deg); }
+}
+
+@keyframes floatFast {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-25px) rotate(-2deg); }
+}
+
+/* Newsletter Content */
+.newsletter-crystal-container {
+  position: relative;
+  z-index: 10;
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 2rem;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(75, 85, 99, 0.2);
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 8px 32px rgba(0, 0, 0, 0.6);
+  animation: containerPulse 8s ease-in-out infinite;
+}
+
+.newsletter-gradient-bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(31, 41, 55, 0.1), rgba(17, 24, 39, 0.05));
+  border-radius: inherit;
+  z-index: -1;
+  animation: gradientShift 6s ease-in-out infinite;
+}
+
+/* Form Styling */
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+@media (min-width: 640px) {
+  .form-container {
+    flex-direction: row;
+    align-items: stretch;
+  }
+  
+  .newsletter-input {
+    flex: 1;
+  }
+}
+
+.newsletter-input {
+  min-height: 48px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.newsletter-input:focus {
+  border-color: rgba(147, 51, 234, 0.5);
+  box-shadow: 0 0 0 3px rgba(147, 51, 234, 0.1);
+}
+
+.newsletter-button {
+  min-height: 48px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.newsletter-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(147, 51, 234, 0.3);
+}
+
+/* Squad Stats */
+.squad-stats {
+  backdrop-filter: blur(5px);
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.squad-stats > div {
+  padding: 0.5rem;
+  transition: transform 0.3s ease;
+}
+
+.squad-stats > div:hover {
+  transform: translateY(-2px);
+}
+
+@keyframes containerPulse {
+  0%, 100% { 
+    transform: translateY(0px); 
+    box-shadow: 
+      inset 0 1px 0 rgba(255, 255, 255, 0.05),
+      0 8px 32px rgba(0, 0, 0, 0.6);
+  }
+  50% { 
+    transform: translateY(-2px); 
+    box-shadow: 
+      inset 0 1px 0 rgba(255, 255, 255, 0.08),
+      0 12px 40px rgba(0, 0, 0, 0.8);
+  }
+}
+
+@keyframes gradientShift {
+  0%, 100% { opacity: 0.8; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.01); }
+}
+
+/* Ensure proper section separation */
+.newsletter-section + .infrastructure-section,
+.infrastructure-section + .newsletter-section {
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .newsletter-section {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+  
+  .newsletter-crystal-container {
+    padding: 1.5rem;
+  }
+  
+  .ui-fragments .fragment {
+    display: none;
+  }
+}

@@ -1,4 +1,4 @@
-require "active_support/core_ext/integer/time"
+require 'active_support/core_ext/integer/time'
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
@@ -19,13 +19,13 @@ Rails.application.configure do
 
   # Enable/disable caching. By default caching is disabled.
   # Run rails dev:cache to toggle caching.
-  if Rails.root.join("tmp/caching-dev.txt").exist?
+  if Rails.root.join('tmp/caching-dev.txt').exist?
     config.action_controller.perform_caching = true
     config.action_controller.enable_fragment_cache_logging = true
 
     config.cache_store = :memory_store
     config.public_file_server.headers = {
-      "Cache-Control" => "public, max-age=#{2.days.to_i}"
+      'Cache-Control' => "public, max-age=#{2.days.to_i}"
     }
   else
     config.action_controller.perform_caching = false
@@ -34,7 +34,7 @@ Rails.application.configure do
   end
 
   # Store uploaded files on the local file system (see config/storage.yml for options).
-  config.active_storage.service = :local
+  # config.active_storage.service = :local  # Commented out - using Mongoid instead of ActiveRecord
 
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
@@ -50,7 +50,7 @@ Rails.application.configure do
   # Tell Active Support which deprecation messages to disallow.
   config.active_support.disallowed_deprecation_warnings = []
 
-    # MongoDB/Mongoid specific configuration
+  # MongoDB/Mongoid specific configuration
   # config.active_record.migration_error = :page_load  # Not needed for Mongoid
 
   # Highlight code that triggered database queries in logs.
@@ -76,7 +76,10 @@ Rails.application.configure do
   # Allow requests from our preview domain.
   pf_host = "#{ENV['CODESPACE_NAME']}-3000.#{pf_domain}"
   config.hosts << pf_host
-  config.hosts << "localhost:3000"
+  config.hosts << 'localhost:3000'
 
-  config.action_cable.allowed_request_origins = ["https://#{pf_host}", "http://localhost:3000"]
+  # Allow any subdomain for Codespaces
+  config.hosts << /.*\.app\.github\.dev/
+
+  config.action_cable.allowed_request_origins = ["https://#{pf_host}", 'http://localhost:3000']
 end

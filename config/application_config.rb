@@ -30,10 +30,10 @@ module OneLastAI
     config_accessor :anthropic_model, default: 'claude-3-sonnet-20240229'
     config_accessor :anthropic_max_tokens, default: 4000
 
-    # Google AI / Gemini Configuration
+    # Google AI / agent Configuration
     config_accessor :google_ai_api_key, default: ENV['GOOGLE_AI_API_KEY']
     config_accessor :google_cloud_project_id, default: ENV['GOOGLE_CLOUD_PROJECT_ID']
-    config_accessor :google_ai_model, default: 'gemini-pro'
+    config_accessor :google_ai_model, default: 'agent-pro'
 
     # Hugging Face Configuration
     config_accessor :huggingface_api_key, default: ENV['HUGGINGFACE_API_KEY']

@@ -42,7 +42,7 @@ OPENAI_API_KEY=sk-...
 # Anthropic (For Claude models)
 ANTHROPIC_API_KEY=sk-ant-...
 
-# Google AI (For Gemini models)
+# Google AI (For agent models)
 GOOGLE_AI_API_KEY=...
 
 # Hugging Face (For open-source models)
@@ -120,7 +120,7 @@ kubectl apply -f config/deploy/k8s/
 
 1. **ChatGPT Pro** - Advanced conversational AI
 2. **Claude Expert** - Anthropic's reasoning specialist
-3. **Gemini Ultra** - Google's multimodal AI
+3. **agent Ultra** - Google's multimodal AI
 4. **Llama Master** - Meta's open-source champion
 5. **Code Pilot** - Programming assistant
 6. **Data Scientist** - Analytics and ML expert
