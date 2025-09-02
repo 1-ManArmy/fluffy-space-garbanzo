@@ -6,7 +6,7 @@ services:
     image: ollama/ollama:latest
     container_name: llama32_model
     ports:
-      - "11434:11434"
+      - 11434:11434
     volumes:
       - llama32_data:/root/.ollama
     environment:
@@ -28,7 +28,7 @@ services:
           memory: 6G
           cpus: '2.0'
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:11434/api/version"]
+      test: [CMD, curl, -f, http://localhost:11434/api/version]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -40,7 +40,7 @@ services:
     image: ollama/ollama:latest
     container_name: gemma3_qat_model
     ports:
-      - "11435:11434"
+      - 11435:11434
     volumes:
       - gemma3_data:/root/.ollama
     environment:
@@ -62,7 +62,7 @@ services:
           memory: 6G
           cpus: '2.0'
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:11434/api/version"]
+      test: [CMD, curl, -f, http://localhost:11434/api/version]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -74,7 +74,7 @@ services:
     image: ollama/ollama:latest
     container_name: phi4_model
     ports:
-      - "11436:11434"
+      - 11436:11434
     volumes:
       - phi4_data:/root/.ollama
     environment:
@@ -91,12 +91,12 @@ services:
     deploy:
       resources:
         reservations:
-          memory: 16G
+          memory: 12G
         limits:
-          memory: 20G
-          cpus: '4.0'
+          memory: 16G
+          cpus: '3.0'
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:11434/api/version"]
+      test: [CMD, curl, -f, http://localhost:11434/api/version]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -108,7 +108,7 @@ services:
     image: ollama/ollama:latest
     container_name: deepseek_r1_model
     ports:
-      - "11437:11434"
+      - 11437:11434
     volumes:
       - deepseek_data:/root/.ollama
     environment:
@@ -125,12 +125,12 @@ services:
     deploy:
       resources:
         reservations:
-          memory: 8G
+          memory: 6G
         limits:
-          memory: 12G
-          cpus: '3.0'
+          memory: 10G
+          cpus: '2.0'
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:11434/api/version"]
+      test: [CMD, curl, -f, http://localhost:11434/api/version]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -142,7 +142,7 @@ services:
     image: ollama/ollama:latest
     container_name: gpt_oss_model
     ports:
-      - "11438:11434"
+      - 11438:11434
     volumes:
       - gpt_oss_data:/root/.ollama
     environment:
@@ -159,12 +159,12 @@ services:
     deploy:
       resources:
         reservations:
-          memory: 8G
+          memory: 6G
         limits:
-          memory: 12G
-          cpus: '3.0'
+          memory: 10G
+          cpus: '2.0'
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:11434/api/version"]
+      test: [CMD, curl, -f, http://localhost:11434/api/version]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -176,7 +176,7 @@ services:
     image: ollama/ollama:latest
     container_name: smollm2_model
     ports:
-      - "11439:11434"
+      - 11439:11434
     volumes:
       - smollm2_data:/root/.ollama
     environment:
@@ -198,7 +198,7 @@ services:
           memory: 2G
           cpus: '1.0'
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:11434/api/version"]
+      test: [CMD, curl, -f, http://localhost:11434/api/version]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -210,7 +210,7 @@ services:
     image: ollama/ollama:latest
     container_name: mistral_model
     ports:
-      - "11440:11434"
+      - 11440:11434
     volumes:
       - mistral_data:/root/.ollama
     environment:
@@ -227,12 +227,12 @@ services:
     deploy:
       resources:
         reservations:
-          memory: 8G
+          memory: 6G
         limits:
-          memory: 12G
-          cpus: '3.0'
+          memory: 10G
+          cpus: '2.0'
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:11434/api/version"]
+      test: [CMD, curl, -f, http://localhost:11434/api/version]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -244,7 +244,7 @@ services:
     image: nginx:alpine
     container_name: ai_model_gateway
     ports:
-      - "8080:80"
+      - 8080:80
     volumes:
       - ./config/nginx/ai_models.conf:/etc/nginx/conf.d/default.conf
     depends_on:
@@ -257,7 +257,7 @@ services:
       - mistral
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      test: [CMD, curl, -f, http://localhost/health]
       interval: 30s
       timeout: 10s
       retries: 3

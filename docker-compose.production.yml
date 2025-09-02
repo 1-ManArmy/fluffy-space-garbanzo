@@ -17,7 +17,11 @@ services:
       - DOMAIN_NAME=onelastai.com
       - DATABASE_URL=postgresql://onelastai:${POSTGRES_PASSWORD}@postgres:5432/onelastai_production
       - REDIS_URL=redis://redis:6379/0
-      - MONGODB_URI=mongodb://mongodb:27017/onelastai_production
+      - KEYCLOAK_URL=http://keycloak:8080
+      - KEYCLOAK_REALM=onelastai
+      - KEYCLOAK_CLIENT_ID=onelastai-web
+      - KEYCLOAK_CLIENT_SECRET=${KEYCLOAK_CLIENT_SECRET}
+      - SECRET_KEY_BASE=${SECRET_KEY_BASE}
     volumes:
       - app_storage:/app/storage
       - app_logs:/app/log
@@ -25,7 +29,7 @@ services:
     depends_on:
       - postgres
       - redis
-      - mongodb
+      - keycloak
     networks:
       - onelastai_network
     healthcheck:
@@ -80,7 +84,39 @@ services:
       timeout: 10s
       retries: 3
 
-  # MongoDB for AI Data
+  # Keycloak Authentication Server
+  keycloak:
+    image: quay.io/keycloak/keycloak:23.0
+    container_name: onelastai_keycloak
+    restart: unless-stopped
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-admin_password}
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres:5432/keycloak
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: ${KEYCLOAK_DB_PASSWORD:-keycloak_password}
+      KC_HOSTNAME: ${KEYCLOAK_HOSTNAME:-auth.onelastai.com}
+      KC_HTTP_ENABLED: true
+      KC_HOSTNAME_STRICT_HTTPS: false
+    volumes:
+      - keycloak_data:/opt/keycloak/data
+      - ./config/keycloak/realm-export.json:/opt/keycloak/data/import/realm-export.json:ro
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - onelastai_network
+    command: start --import-realm
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/health/ready || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # MongoDB for AI Data (Legacy - will be removed after migration)
   mongodb:
     image: mongo:7.0
     container_name: onelastai_mongodb
@@ -234,6 +270,8 @@ networks:
 
 volumes:
   postgres_data:
+    driver: local
+  keycloak_data:
     driver: local
   mongodb_data:
     driver: local

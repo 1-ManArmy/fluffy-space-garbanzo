@@ -3,12 +3,12 @@ require_relative "boot"
 require "rails"
 require "active_model/railtie"
 require "active_job/railtie"
-# require "active_record/railtie"  # Commented out for Mongoid
-# require "active_storage/engine"  # Commented out for Mongoid (depends on ActiveRecord)
+require "active_record/railtie"  # Enabled for PostgreSQL
+require "active_storage/engine"  # Enabled for PostgreSQL
 require "action_controller/railtie"
 require "action_mailer/railtie"
-# require "action_mailbox/engine"  # Commented out for Mongoid (depends on ActiveRecord)
-# require "action_text/engine"     # Commented out for Mongoid (depends on ActiveRecord)
+require "action_mailbox/engine"  # Enabled for PostgreSQL
+require "action_text/engine"     # Enabled for PostgreSQL
 require "action_view/railtie"
 require "action_cable/engine"
 require "rails/test_unit/railtie"

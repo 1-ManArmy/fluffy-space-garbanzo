@@ -1,0 +1,20 @@
+{
+  "name": "onelastai",
+  "version": "1.0.0",
+  "description": "OneLastAI - AI Agent Platform",
+  "main": "index.js",
+  "scripts": {
+    "build": "tailwindcss -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/tailwind.css --watch",
+    "build:css": "tailwindcss -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/tailwind.css"
+  },
+  "dependencies": {
+    "tailwindcss": "^3.4.0",
+    "@tailwindcss/forms": "^0.5.7",
+    "@tailwindcss/typography": "^0.5.10",
+    "@tailwindcss/container-queries": "^0.1.1"
+  },
+  "devDependencies": {},
+  "keywords": ["rails", "tailwindcss", "ai", "agents"],
+  "author": "OneLastAI Team",
+  "license": "MIT"
+}

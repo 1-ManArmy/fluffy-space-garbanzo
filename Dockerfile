@@ -1,38 +1,64 @@
-# OneLastAI Production Dockerfile
-FROM ruby:3.3.0-alpine
+# OneLastAI Multi-stage Production Dockerfile
 
-# Install system dependencies
+# Base stage with common dependencies  
+FROM ruby:3.4.2-alpine AS base
+
+# Install system dependencies (alphabetically sorted and pinned)
 RUN apk add --no-cache \
-    build-base \
-    postgresql-dev \
-    sqlite-dev \
-    nodejs \
-    npm \
-    git \
-    tzdata \
-    imagemagick \
-    curl \
-    bash
+    bash=5.2.21-r0 \
+    build-base=0.5-r3 \
+    curl=8.5.0-r0 \
+    git=2.43.0-r0 \
+    imagemagick=7.1.1.29-r0 \
+    nodejs=20.11.1-r0 \
+    npm=10.2.5-r0 \
+    postgresql-dev=16.1-r0 \
+    sqlite-dev=3.44.2-r0 \
+    tzdata=2024a-r0 \
+    yaml-dev=0.2.5-r2 && \
+    gem install bundler -v 2.4.10
 
 # Set working directory
 WORKDIR /app
 
-# Install bundler
-RUN gem install bundler -v 2.4.10
+# Development stage
+FROM base AS development
 
-# Copy Gemfile and install gems
+# Copy Gemfile and install all gems (including dev/test)
+COPY Gemfile Gemfile.lock ./
+RUN bundle install --jobs 4 --retry 3
+
+# Copy application code
+COPY . .
+
+# Expose port
+EXPOSE 3000
+
+# Start development server
+CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0", "-p", "3000"]
+
+# Production stage
+FROM base AS production
+
+# Copy Gemfile and install only production gems
 COPY Gemfile Gemfile.lock ./
 RUN bundle config set --local deployment 'true' && \
     bundle config set --local without 'development test' && \
     bundle install --jobs 4 --retry 3
 
+# Copy package.json and install Node.js dependencies
+COPY package.json ./
+RUN npm install --production
+
 # Copy application code
 COPY . .
 
-# Precompile assets
+# Precompile assets with proper SECRET_KEY_BASE and skip CSS install
 RUN RAILS_ENV=production \
-    SECRET_KEY_BASE=dummy \
-    bundle exec rails assets:precompile
+    SECRET_KEY_BASE=d5f8a7b9c3e1f2a6b8d0c4e7f9a2b5c8e1f4a7b0c3e6f9a2b5c8e1f4a7b0c3e6f9a2b5c8e1f4a7b0c3e6 \
+    npm run build:css && \
+    bundle exec rails assets:precompile && \
+    rm -rf node_modules tmp/cache/assets/.sprockets-manifest* tmp/cache/assets/*/
 
 # Create non-root user
 RUN addgroup -g 1001 -S appuser && \

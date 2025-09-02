@@ -1,0 +1,233 @@
+# AI Models Configuration for OneLastAI Platform
+# Production-ready configuration for local AI models integration
+
+# AI Models Configuration
+ai_models:
+  # Local AI Models Configuration
+  local_models:
+    llama3_2:
+      name: "Llama 3.2"
+      size: "3.21B"
+      quantization: "IQ2_XXS/Q4_K_M"
+      port: 11434
+      endpoint: "http://localhost:11434"
+      capabilities: ["general_conversation", "code_assistance", "reasoning"]
+      memory_requirement: "4GB"
+      suitable_agents: ["neochat", "codemaster", "infoseek", "taskmaster"]
+      
+    gemma3_qat:
+      name: "Gemma 3 QAT"
+      size: "3.88B"
+      quantization: "Q4_0"
+      port: 11435
+      endpoint: "http://localhost:11435"
+      capabilities: ["specialized_tasks", "efficient_processing", "domain_specific"]
+      memory_requirement: "4GB"
+      suitable_agents: ["emotisense", "authwise", "configai", "reportly"]
+      
+    phi4:
+      name: "Phi-4"
+      size: "14.66B"
+      quantization: "IQ2_XXS/Q4_K_M"
+      port: 11436
+      endpoint: "http://localhost:11436"
+      capabilities: ["advanced_reasoning", "code_generation", "complex_analysis"]
+      memory_requirement: "8GB"
+      suitable_agents: ["codemaster", "configai", "infoseek", "datavision"]
+      
+    deepseek_r1:
+      name: "DeepSeek R1 Distill Llama"
+      size: "8.03B"
+      quantization: "IQ2_XXS/Q4_K_M"
+      port: 11437
+      endpoint: "http://localhost:11437"
+      capabilities: ["reasoning", "analysis", "problem_solving"]
+      memory_requirement: "6GB"
+      suitable_agents: ["datasphere", "datavision", "spylens", "authwise"]
+      
+    gpt_oss:
+      name: "GPT-OSS"
+      size: "7B"
+      quantization: "Q4_K_M"
+      port: 11438
+      endpoint: "http://localhost:11438"
+      capabilities: ["open_source_gpt", "general_purpose", "conversation"]
+      memory_requirement: "6GB"
+      suitable_agents: ["neochat", "contentcrafter", "ideaforge", "dreamweaver"]
+      
+    smollm2:
+      name: "SmolLM2"
+      size: "361.82M"
+      quantization: "IQ2_XXS/Q4_K_M"
+      port: 11439
+      endpoint: "http://localhost:11439"
+      capabilities: ["lightweight_processing", "fast_responses", "edge_deployment"]
+      memory_requirement: "512MB"
+      suitable_agents: ["callghost", "vocamind", "personax", "emotisense"]
+      
+    mistral:
+      name: "Mistral"
+      size: "7.25B"
+      quantization: "IQ2_XXS/Q4_K_M"
+      port: 11440
+      endpoint: "http://localhost:11440"
+      capabilities: ["multilingual", "code_generation", "instruction_following"]
+      memory_requirement: "6GB"
+      suitable_agents: ["codemaster", "contentcrafter", "documind", "translator"]
+
+  # Cloud AI Models (Fallback/Premium)
+  cloud_models:
+    openai:
+      models: ["gpt-4", "gpt-4-turbo", "gpt-3.5-turbo"]
+      endpoint: "https://api.openai.com/v1"
+      api_key_env: "OPENAI_API_KEY"
+      timeout: 30
+      
+    anthropic:
+      models: ["claude-3-opus", "claude-3-sonnet", "claude-3-haiku"]
+      endpoint: "https://api.anthropic.com/v1"
+      api_key_env: "ANTHROPIC_API_KEY"
+      timeout: 30
+      
+    google:
+      models: ["gemini-pro", "gemini-pro-vision"]
+      endpoint: "https://generativelanguage.googleapis.com/v1"
+      api_key_env: "GOOGLE_API_KEY"
+      timeout: 30
+
+# Model Selection Strategy
+model_selection:
+  strategy: "local_first_with_fallback"
+  load_balancing: true
+  health_check_interval: 30
+  failover_timeout: 10
+  retry_attempts: 3
+  retry_delay: 2
+  
+  # Agent to Model Mapping
+  agent_mappings:
+    # Conversation Agents
+    neochat: ["llama3_2", "gpt_oss", "openai:gpt-4"]
+    personax: ["smollm2", "llama3_2", "openai:gpt-3.5-turbo"]
+    girlfriend: ["llama3_2", "smollm2", "anthropic:claude-3-haiku"]
+    emotisense: ["gemma3_qat", "smollm2", "openai:gpt-4"]
+    callghost: ["smollm2", "llama3_2", "openai:gpt-3.5-turbo"]
+    memora: ["llama3_2", "deepseek_r1", "openai:gpt-4"]
+    
+    # Technical Agents
+    configai: ["phi4", "gemma3_qat", "openai:gpt-4"]
+    infoseek: ["phi4", "llama3_2", "openai:gpt-4"]
+    documind: ["mistral", "llama3_2", "openai:gpt-4"]
+    netscope: ["deepseek_r1", "phi4", "openai:gpt-4"]
+    authwise: ["gemma3_qat", "deepseek_r1", "openai:gpt-4"]
+    spylens: ["deepseek_r1", "phi4", "openai:gpt-4"]
+    
+    # Creative Agents
+    cinegen: ["mistral", "llama3_2", "openai:gpt-4"]
+    contentcrafter: ["mistral", "gpt_oss", "openai:gpt-4"]
+    dreamweaver: ["gpt_oss", "llama3_2", "anthropic:claude-3-opus"]
+    ideaforge: ["gpt_oss", "mistral", "openai:gpt-4"]
+    aiblogster: ["mistral", "llama3_2", "openai:gpt-4"]
+    vocamind: ["smollm2", "llama3_2", "openai:gpt-3.5-turbo"]
+    
+    # Business Intelligence
+    datasphere: ["deepseek_r1", "phi4", "openai:gpt-4"]
+    datavision: ["phi4", "deepseek_r1", "openai:gpt-4"]
+    taskmaster: ["llama3_2", "gemma3_qat", "openai:gpt-4"]
+    reportly: ["gemma3_qat", "mistral", "openai:gpt-4"]
+    dnaforge: ["deepseek_r1", "phi4", "anthropic:claude-3-opus"]
+    carebot: ["gemma3_qat", "llama3_2", "openai:gpt-4"]
+    
+    # Code Generation Agents
+    codemaster: ["phi4", "mistral", "openai:gpt-4"]
+
+# Performance and Resource Management
+resource_management:
+  max_concurrent_requests: 5
+  request_timeout: 60
+  model_warmup_time: 30
+  memory_limit_per_model: "8GB"
+  cpu_limit_per_model: 2
+  
+  # Auto-scaling configuration
+  auto_scaling:
+    enabled: false
+    min_instances: 1
+    max_instances: 2
+    scale_up_threshold: 70
+    scale_down_threshold: 30
+    cooldown_period: 180
+
+# Model Deployment Configuration
+deployment:
+  # Ollama Configuration
+  ollama:
+    enabled: true
+    host: "localhost"
+    base_port: 11434
+    models_directory: "./models"
+    gpu_enabled: false
+    gpu_memory: "4GB"
+    
+  # Docker Configuration (alternative)
+  docker:
+    enabled: false
+    base_image: "ollama/ollama"
+    network: "ai_models_network"
+    volumes:
+      - "./models:/root/.ollama"
+
+# Health Monitoring and Error Handling
+monitoring:
+  enabled: true
+  health_check_endpoint: "/api/health"
+  health_check_interval: 60
+  metrics_collection: true
+  log_level: "info"
+  performance_tracking: true
+  
+  # Error Handling
+  error_handling:
+    max_retries: 3
+    retry_delay: 5
+    circuit_breaker_enabled: true
+    circuit_breaker_threshold: 5
+    circuit_breaker_timeout: 300
+  
+  # Alerts Configuration
+  alerts:
+    model_down: true
+    high_latency: true
+    memory_usage: true
+    error_rate_threshold: 10
+    latency_threshold: 30
+
+# Security Configuration
+security:
+  api_rate_limiting:
+    enabled: true
+    requests_per_minute: 60
+    burst_limit: 10
+  
+  authentication:
+    required: true
+    token_validation: true
+    
+  encryption:
+    data_at_rest: false
+    data_in_transit: true
+
+# Environment-specific Configuration
+development:
+  debug_mode: true
+  verbose_logging: true
+  model_testing_enabled: true
+  benchmark_mode: false
+  
+production:
+  debug_mode: false
+  verbose_logging: false
+  model_testing_enabled: false
+  benchmark_mode: true
+  cache_enabled: true
+  cache_ttl: 3600

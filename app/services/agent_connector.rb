@@ -35,14 +35,14 @@ class AgentConnector
           Rails.logger.warn "⚠️ AgentConnector: No active agent of type '#{type}' found"
           create_fallback_agent(type)
         end
-      rescue Mongo::Error::NoServerAvailable => e
-        Rails.logger.error "🔴 MongoDB server unavailable for #{type} agent: #{e.message}"
+      rescue ActiveRecord::ConnectionNotEstablished => e
+        Rails.logger.error "🔴 PostgreSQL server unavailable for #{type} agent: #{e.message}"
         handle_connection_retry(type, attempt, retries, e)
-      rescue Mongo::Error::AuthenticationFailure => e
-        Rails.logger.error "🔑 MongoDB authentication failed for #{type} agent: #{e.message}"
+      rescue ActiveRecord::StatementInvalid => e
+        Rails.logger.error "🔑 PostgreSQL query failed for #{type} agent: #{e.message}"
         handle_auth_error(type, e)
-      rescue Mongo::Error::SocketTimeoutError => e
-        Rails.logger.error "⏱️ MongoDB socket timeout for #{type} agent: #{e.message}"
+      rescue ActiveRecord::StatementTimeout => e
+        Rails.logger.error "⏱️ PostgreSQL query timeout for #{type} agent: #{e.message}"
         handle_connection_retry(type, attempt, retries, e)
       rescue StandardError => e
         Rails.logger.error "💥 Unexpected error during #{type} agent boot: #{e.message}"
@@ -63,13 +63,13 @@ class AgentConnector
       results
     end
 
-    # Health check for MongoDB connection
+    # Health check for PostgreSQL connection
     def health_check
-      Mongoid.default_client.command(ping: 1)
+      ActiveRecord::Base.connection.execute('SELECT 1')
       {
         status: STATES[:connected],
         timestamp: Time.current,
-        database: Mongoid.default_client.database.name,
+        database: ActiveRecord::Base.connection.current_database,
         server_info: get_server_info
       }
     rescue StandardError => e
@@ -83,11 +83,11 @@ class AgentConnector
 
     # Get connection statistics
     def connection_stats
-      client = Mongoid.default_client
+      connection = ActiveRecord::Base.connection
       {
-        cluster_topology: client.cluster.topology.class.name,
-        servers: client.cluster.servers.map(&:address),
-        max_pool_size: client.options[:max_pool_size],
+        adapter: connection.adapter_name,
+        database: connection.current_database,
+        pool_size: ActiveRecord::Base.connection_pool.size,
         current_connections: client.pool.size,
         database: client.database.name
       }
@@ -98,8 +98,8 @@ class AgentConnector
     private
 
     def test_connection!
-      # Quick ping to test connectivity
-      Mongoid.default_client.command(ping: 1)
+      # Quick query to test connectivity
+      ActiveRecord::Base.connection.execute('SELECT 1')
     end
 
     def find_agent(type)

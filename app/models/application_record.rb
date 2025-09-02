@@ -1,4 +1,3 @@
-class ApplicationRecord
-  include Mongoid::Document
-  include Mongoid::Timestamps
+class ApplicationRecord < ActiveRecord::Base
+  self.abstract_class = true
 end

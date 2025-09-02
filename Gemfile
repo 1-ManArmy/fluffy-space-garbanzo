@@ -9,8 +9,8 @@ gem 'rails', '~> 7.1.5', '>= 7.1.5.2'
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem 'sprockets-rails'
 
-# Use MongoDB as the database with Mongoid ODM
-gem 'mongoid', '~> 9.0'
+# Use PostgreSQL as the database with ActiveRecord
+gem 'pg', '~> 1.5'
 
 # Use the Puma web server [https://github.com/puma/puma]
 gem 'puma', '~> 6'
@@ -25,7 +25,7 @@ gem 'turbo-rails'
 gem 'stimulus-rails'
 
 # Modern Frontend Stack for Railway.com-inspired design
-gem 'cssbundling-rails'                  # CSS bundling for modern workflows
+gem 'cssbundling-rails'                  # CSS bundling for modern workflows - temporarily disabled
 gem 'tailwindcss-rails', '~> 2.0'        # Modern utility-first CSS framework
 gem 'view_component', '~> 4.0'           # Reusable component system
 
@@ -73,6 +73,19 @@ gem 'dotenv-rails', '~> 3.1'
 gem 'figaro', '~> 1.2'
 
 # =============================================================================
+# DATABASE & MIGRATIONS
+# =============================================================================
+
+# Database migration tools
+gem 'data_migrate', '~> 9.0'        # For data migrations separate from schema
+gem 'strong_migrations', '~> 1.6'   # For safe migrations
+gem 'activerecord-import', '~> 1.5' # For bulk data migration
+
+# Search and indexing
+gem 'pg_search', '~> 2.3'           # For full-text search
+gem 'scenic', '~> 1.7'              # For database views
+
+# =============================================================================
 # AI & API INTEGRATIONS
 # =============================================================================
 
@@ -91,7 +104,7 @@ gem 'ruby-openai', '~> 8.2'
 # AUTHENTICATION & AUTHORIZATION
 # =============================================================================
 
-# Authentication
+# Authentication (will be replaced with Keycloak)
 gem 'devise', '~> 4.9'
 
 # Authorization
@@ -168,6 +181,9 @@ gem 'rswag', '~> 2.12'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
+  # SQLite for development and test
+  gem 'sqlite3', '~> 1.4'
+  
   # Testing framework
   gem 'factory_bot_rails', '~> 6.4'
   gem 'rspec-rails', '~> 7.1'
