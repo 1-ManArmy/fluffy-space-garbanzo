@@ -1,20 +1,43 @@
-# Skip CSS build tasks when SKIP_CSS_BUILD is set
-if ENV['SKIP_CSS_BUILD'] == 'true'
-  puts "🔥💀 BROTHERHOOD: Overriding Tailwind CSS tasks for Docker build 💀🔥"
+# Completely disable CSS and Tailwind build tasks in Docker
+if ENV['SKIP_CSS_BUILD'] == 'true' || ENV['DISABLE_TAILWINDCSS'] == 'true'
+  puts "🔥💀 BROTHERHOOD: Completely disabling all CSS build tasks for Docker 💀🔥"
   
-  # Override the main tailwindcss:build task
-  namespace :tailwindcss do
-    task :build do
-      puts "🔥 Skipping tailwindcss:build - CSS already built via npm"
+  # Override ALL possible Tailwind and CSS tasks
+  %w[
+    tailwindcss:build
+    tailwindcss:watch
+    tailwindcss:install
+    css:build
+    css:install
+    css:watch
+  ].each do |task_name|
+    Rake::Task.define_task(task_name) do
+      puts "🔥 SKIPPED: #{task_name} - CSS already built via npm"
     end
   end
   
-  # Override other CSS-related tasks  
-  Rake::Task.define_task("css:build") do
-    puts "🔥 Skipping css:build - Tailwind already built"
+  # Override namespace-based tasks
+  namespace :tailwindcss do
+    task :build do
+      puts "🔥 SKIPPED: tailwindcss:build - CSS already built via npm"
+    end
+    
+    task :install do
+      puts "🔥 SKIPPED: tailwindcss:install - Dependencies already installed"
+    end
+    
+    task :watch do
+      puts "🔥 SKIPPED: tailwindcss:watch - Not needed in Docker"
+    end
   end
   
-  Rake::Task.define_task("css:install") do
-    puts "🔥 Skipping css:install - Dependencies already installed"
+  namespace :css do
+    task :build do
+      puts "🔥 SKIPPED: css:build - CSS already built via npm"
+    end
+    
+    task :install do
+      puts "🔥 SKIPPED: css:install - Dependencies already installed"
+    end
   end
 end
