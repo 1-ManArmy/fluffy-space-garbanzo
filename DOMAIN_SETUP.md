@@ -1,355 +1,289 @@
-# OneLastAI Domain Configuration - onelastai.com
+# OneLastAI Local Development Configuration
 
 ## Overview
 
-This document outlines the complete setup and configuration for deploying OneLastAI to the `onelastai.com` domain. The platform includes 24 specialized AI agents accessible via subdomains.
+This document outlines the complete setup and configuration for running OneLastAI locally on `localhost`. The platform includes 24 specialized AI agents accessible via local ports.
 
-## Domain Structure
+## Local Development Structure
 
-### Primary Domains
-- **Main Site**: `https://onelastai.com`
-- **API**: `https://api.onelastai.com`
-- **CDN**: `https://cdn.onelastai.com`
-- **Monitoring**: `https://monitoring.onelastai.com`
+### Primary Services
+- **Main Site**: `http://localhost:3000`
+- **API**: `http://localhost:3000/api`
+- **Admin Panel**: `http://localhost:3000/admin`
+- **Monitoring**: `http://localhost:3001` (Grafana)
 
-### Agent Subdomains
-Each AI agent is accessible via its own subdomain:
+### Agent Routes
+Each AI agent is accessible via local routes:
 
-| Agent | Subdomain | Purpose |
-|-------|-----------|---------|
-| NeoChat | `neochat.onelastai.com` | Advanced conversational AI |
-| EmotiSense | `emotisense.onelastai.com` | Emotion analysis and empathy |
-| CineGen | `cinegen.onelastai.com` | Video generation and editing |
-| ContentCrafter | `contentcrafter.onelastai.com` | Content creation and optimization |
-| Memora | `memora.onelastai.com` | Memory and knowledge management |
-| NetScope | `netscope.onelastai.com` | Network analysis and security |
-| AIBlogster | `aiblogster.onelastai.com` | Blog and article generation |
-| AuthWise | `authwise.onelastai.com` | Authentication and security |
-| CallGhost | `callghost.onelastai.com` | Voice interaction system |
-| CareBot | `carebot.onelastai.com` | Healthcare assistance |
-| CodeMaster | `codemaster.onelastai.com` | Code generation and review |
-| DataSphere | `datasphere.onelastai.com` | Data analysis and visualization |
-| DataVision | `datavision.onelastai.com` | Business intelligence |
-| DNAForge | `dnaforge.onelastai.com` | Bioinformatics and genetics |
-| DocuMind | `documind.onelastai.com` | Document analysis |
-| DreamWeaver | `dreamweaver.onelastai.com` | Creative content generation |
-| Girlfriend | `girlfriend.onelastai.com` | Emotional companion AI |
-| IdeaForge | `ideaforge.onelastai.com` | Innovation and brainstorming |
-| InfoSeek | `infoseek.onelastai.com` | Information retrieval |
-| LabX | `labx.onelastai.com` | Scientific research assistant |
-| PersonaX | `personax.onelastai.com` | Personality-driven interactions |
-| QuintExa | `quintexa.onelastai.com` | Advanced analytics |
-| VirtualSpace | `virtualspace.onelastai.com` | Virtual environment creation |
-| WorldForge | `worldforge.onelastai.com` | World-building and simulation |
+| Agent | Route | Purpose |
+|-------|--------|---------|
+| NeoChat | `localhost:3000/agents/neochat` | Advanced conversational AI |
+| EmotiSense | `localhost:3000/agents/emotisense` | Emotion analysis and empathy |
+| CineGen | `localhost:3000/agents/cinegen` | Video generation and editing |
+| ContentCrafter | `localhost:3000/agents/contentcrafter` | Content creation and optimization |
+| Memora | `localhost:3000/agents/memora` | Memory and knowledge management |
+| NetScope | `localhost:3000/agents/netscope` | Network analysis and security |
+| AIBlogster | `localhost:3000/agents/aiblogster` | Blog and article generation |
+| AuthWise | `localhost:3000/agents/authwise` | Authentication and security |
+| CallGhost | `localhost:3000/agents/callghost` | Voice interaction system |
+| CareBot | `localhost:3000/agents/carebot` | Healthcare assistance |
+| CodeMaster | `localhost:3000/agents/codemaster` | Code generation and review |
+| DataSphere | `localhost:3000/agents/datasphere` | Data analysis and visualization |
+| DataVision | `localhost:3000/agents/datavision` | Business intelligence |
+| DNAForge | `localhost:3000/agents/dnaforge` | Bioinformatics and genetics |
+| DocuMind | `localhost:3000/agents/documind` | Document analysis |
+| DreamWeaver | `localhost:3000/agents/dreamweaver` | Creative content generation |
+| Girlfriend | `localhost:3000/agents/girlfriend` | Emotional companion AI |
+| IdeaForge | `localhost:3000/agents/ideaforge` | Innovation and brainstorming |
+| InfoSeek | `localhost:3000/agents/infoseek` | Information retrieval |
+| LabX | `localhost:3000/agents/labx` | Scientific research assistant |
+| PersonaX | `localhost:3000/agents/personax` | Personality-driven interactions |
+| QuintExa | `localhost:3000/agents/quintexa` | Advanced analytics |
+| VirtualSpace | `localhost:3000/agents/virtualspace` | Virtual environment creation |
+| WorldForge | `localhost:3000/agents/worldforge` | World-building and simulation |
 
-## Infrastructure Setup
+## Local Development Setup
 
-### 1. Domain and DNS Configuration
+### 1. Prerequisites
 
-#### A Records
-```
-onelastai.com                → [SERVER_IP]
-www.onelastai.com           → [SERVER_IP]
-api.onelastai.com           → [SERVER_IP]
-cdn.onelastai.com           → [CDN_IP]
-monitoring.onelastai.com    → [SERVER_IP]
-```
-
-#### Wildcard Record
-```
-*.onelastai.com             → [SERVER_IP]
-```
-
-#### CNAME Records (if using CDN)
-```
-cdn.onelastai.com           → [CDN_DOMAIN]
-```
-
-### 2. SSL Certificate Requirements
-
-#### Primary Certificate
-- **Domain**: `onelastai.com`
-- **SAN**: `www.onelastai.com`, `api.onelastai.com`
-
-#### Wildcard Certificate
-- **Domain**: `*.onelastai.com`
-- **Purpose**: All agent subdomains
-
-#### Let's Encrypt Setup
+Install the required dependencies:
 ```bash
-# Install certbot
-sudo apt-get install certbot python3-certbot-nginx
+# Ruby and Rails
+ruby --version  # Should be 3.3.0
+gem install bundler rails
 
-# Generate main domain certificate
-sudo certbot --nginx -d onelastai.com -d www.onelastai.com -d api.onelastai.com
+# Node.js for asset compilation
+node --version  # Should be 18+
+npm --version
 
-# Generate wildcard certificate
-sudo certbot certonly --manual --preferred-challenges=dns -d *.onelastai.com
+# PostgreSQL
+# Windows: Download from postgresql.org
+# macOS: brew install postgresql
+# Linux: sudo apt-get install postgresql-15
+
+# Redis (optional for caching)
+# Windows: Download from redis.io
+# macOS: brew install redis
+# Linux: sudo apt-get install redis-server
 ```
 
-### 3. NGINX Configuration
+### 2. Environment Configuration
 
-The NGINX configuration includes:
-- HTTP to HTTPS redirect
-- Subdomain routing
-- Load balancing
-- Rate limiting
-- Security headers
-- Static asset optimization
-
-Key features:
-- **Rate Limiting**: Different limits for API, agents, and general traffic
-- **SSL Termination**: All traffic encrypted
-- **WebSocket Support**: For real-time features
-- **Compression**: Gzip enabled for all text content
-
-### 4. Application Configuration
-
-#### Environment Variables
-Key environment variables for production:
+Create your local environment file:
 
 ```bash
-# Core Settings
-RAILS_ENV=production
-DOMAIN_NAME=onelastai.com
-PRODUCTION_HOST=onelastai.com
-API_BASE_URL=https://api.onelastai.com
-CDN_URL=https://cdn.onelastai.com
+# Copy the example environment file
+cp .env.example .env
 
-# Security
-FORCE_SSL=true
-SSL_REDIRECT=true
-ALLOWED_HOSTS=onelastai.com,www.onelastai.com,api.onelastai.com,*.onelastai.com
-
-# Database URLs
-DATABASE_URL=postgresql://...
-MONGODB_URI=mongodb://...
-REDIS_URL=redis://...
+# Edit with your local configuration
+# Key settings for localhost:
+RAILS_ENV=development
+DOMAIN_NAME=localhost
+DATABASE_URL=postgresql://onelastai:password@localhost:5432/onelastai_development
+REDIS_URL=redis://localhost:6379/0
 ```
 
-#### Rails Configuration
-- **Session cookies** configured for `.onelastai.com` domain
-- **CORS** enabled for subdomain communication
-- **Action Cable** configured for WebSocket connections
-- **Security headers** via SecureHeaders gem
+### 3. Database Setup
 
-### 5. Database Setup
-
-#### PostgreSQL (Primary)
-```sql
-CREATE DATABASE onelastai_production;
-CREATE USER onelastai WITH PASSWORD 'secure_password';
-GRANT ALL PRIVILEGES ON DATABASE onelastai_production TO onelastai;
-```
-
-#### MongoDB (AI Data)
-```javascript
-use onelastai_production
-db.createUser({
-  user: "onelastai",
-  pwd: "secure_password",
-  roles: [
-    { role: "readWrite", db: "onelastai_production" }
-  ]
-})
-```
-
-#### Redis (Caching/Sessions)
-```bash
-# Configure in redis.conf
-requirepass secure_redis_password
-maxmemory 2gb
-maxmemory-policy allkeys-lru
-```
-
-## Deployment Process
-
-### 1. Automated Deployment
-
-Use the provided deployment script:
+#### PostgreSQL Setup
 
 ```bash
-# Basic deployment
-./deploy_onelastai.sh
+# Create database and user
+createdb onelastai_development
+createuser -s onelastai
 
-# With Let's Encrypt SSL
-./deploy_onelastai.sh --letsencrypt
-
-# With database seeding
-./deploy_onelastai.sh --seed
-
-# Full deployment with SSL and seeding
-./deploy_onelastai.sh --letsencrypt --seed
+# Run migrations
+rails db:create db:migrate db:seed
 ```
 
-### 2. Docker Deployment
+## Local Development Process
 
-For containerized deployment:
+### 1. Quick Start
+
+Run OneLastAI locally with these simple commands:
+
+```bash
+# Clone and setup
+git clone https://github.com/1-ManArmy/fluffy-space-garbanzo.git
+cd fluffy-space-garbanzo
+
+# Install dependencies
+bundle install
+npm install
+
+# Setup environment
+cp .env.example .env
+# Edit .env with your local settings
+
+# Setup database
+rails db:create db:migrate db:seed
+
+# Start the server
+rails server
+# Visit http://localhost:3000
+```
+
+### 2. Docker Development
+
+For a complete local environment with all services:
 
 ```bash
 # Copy environment file
-cp .env.example .env.production
+cp .env.example .env
 
-# Edit environment variables
-nano .env.production
-
-# Deploy with Docker Compose
-docker-compose -f docker-compose.production.yml up -d
+# Start all services
+docker-compose up -d
 
 # Check status
-docker-compose -f docker-compose.production.yml ps
+docker-compose ps
+
+# View logs
+docker-compose logs -f app
 ```
 
-### 3. Manual Deployment Steps
+### 3. Development Tools
 
-If deploying manually:
+Access these tools during development:
 
-1. **Prepare Server**:
-   ```bash
-   sudo apt-get update
-   sudo apt-get install ruby nodejs postgresql mongodb redis-server nginx
-   ```
+- **Rails Console**: `rails console`
+- **Database Console**: `rails dbconsole`
+- **Logs**: `tail -f log/development.log`
+- **Routes**: `rails routes`
+- **Tests**: `rails test` or `rspec`
 
-2. **Clone Repository**:
-   ```bash
-   git clone https://github.com/1-ManArmy/fluffy-space-garbanzo.git /var/www/onelastai
-   cd /var/www/onelastai
-   git checkout domain-onelastai-setup
-   ```
-
-3. **Install Dependencies**:
-   ```bash
-   bundle install --deployment --without development test
-   npm install --production
-   ```
-
-4. **Configure Environment**:
-   ```bash
-   cp .env.example .env
-   # Edit .env with your configuration
-   ```
-
-5. **Setup Database**:
-   ```bash
-   RAILS_ENV=production bundle exec rails db:create db:migrate
-   ```
-
-6. **Compile Assets**:
-   ```bash
-   RAILS_ENV=production bundle exec rails assets:precompile
-   ```
-
-7. **Configure NGINX**:
-   ```bash
-   sudo cp config/nginx/onelastai.conf /etc/nginx/sites-available/
-   sudo ln -s /etc/nginx/sites-available/onelastai.conf /etc/nginx/sites-enabled/
-   sudo nginx -t && sudo systemctl reload nginx
-   ```
-
-8. **Start Application**:
-   ```bash
-   RAILS_ENV=production bundle exec rails server -p 3000 -d
-   ```
-
-## Monitoring and Maintenance
+## Local Testing and Development
 
 ### Health Checks
 
 The application includes health check endpoints:
-- **Main**: `https://onelastai.com/health`
-- **API**: `https://api.onelastai.com/health`
-- **Agents**: `https://[agent].onelastai.com/health`
+
+- **Main**: `http://localhost:3000/health`
+- **API**: `http://localhost:3000/api/health`
+- **Agents**: `http://localhost:3000/agents/[agent]/health`
+
+### Development Workflow
+
+1. **Start Services**:
+   ```bash
+   # PostgreSQL
+   brew services start postgresql  # macOS
+   sudo systemctl start postgresql  # Linux
+   
+   # Redis (optional)
+   brew services start redis  # macOS
+   sudo systemctl start redis-server  # Linux
+   
+   # Rails server
+   rails server
+   ```
+
+2. **Access the Application**:
+   - Main site: `http://localhost:3000`
+   - Admin panel: `http://localhost:3000/admin`
+   - API documentation: `http://localhost:3000/api/docs`
+
+3. **Database Management**:
+   ```bash
+   # Reset database
+   rails db:drop db:create db:migrate db:seed
+   
+   # Generate new migration
+   rails generate migration AddColumnToModel column:type
+   
+   # Run specific migration
+   rails db:migrate:up VERSION=20240101000000
+   ```
 
 ### Log Locations
-- **Application**: `/var/log/onelastai/`
-- **NGINX**: `/var/log/nginx/`
-- **PostgreSQL**: `/var/log/postgresql/`
-- **MongoDB**: `/var/log/mongodb/`
 
-### Backup Strategy
+During local development:
 
-Automated backups include:
-- **Database dumps**: Daily PostgreSQL and MongoDB backups
-- **Application files**: Weekly full backups
-- **User uploads**: Daily incremental backups
-- **Configuration**: Version controlled
+- **Application**: `log/development.log`
+- **Rails Server**: Terminal output
+- **PostgreSQL**: Check with `brew services list` or `systemctl status postgresql`
+- **Redis**: Check with `brew services list` or `systemctl status redis-server`
 
-### Performance Optimization
+### Development Tips
 
-1. **Database Optimization**:
-   - Connection pooling
-   - Query optimization
-   - Index optimization
+1. **Performance Optimization**:
+   - Use `rails dev:cache` to toggle caching in development
+   - Monitor database queries with the Rails logger
+   - Use `bullet` gem to detect N+1 queries
 
-2. **Caching**:
-   - Redis for session storage
-   - Application-level caching
-   - CDN for static assets
+2. **Asset Pipeline**:
+   - Assets auto-compile in development mode
+   - Use `rails assets:precompile` for production builds
+   - Tailwind CSS automatically rebuilds on file changes
 
-3. **Asset Optimization**:
-   - Gzip compression
-   - Asset fingerprinting
-   - CDN distribution
+3. **Environment Variables**:
+   - Use `dotenv-rails` for local environment management
+   - Keep sensitive data out of version control
+   - Use different .env files for different environments
 
-## Security Considerations
+## Development Security
 
-### SSL/TLS Configuration
-- **TLS 1.2/1.3 only**
-- **Strong cipher suites**
-- **HSTS headers**
-- **Certificate pinning**
+### Local Security Considerations
 
-### Application Security
-- **Content Security Policy**
-- **XSS protection**
-- **CSRF protection**
-- **Rate limiting**
-- **Input validation**
+- **Environment Variables**: Never commit `.env` files
+- **Database**: Use development-specific credentials
+- **HTTPS**: Not required for localhost development
+- **CORS**: Configure for local development if using separate frontend
+- **API Keys**: Use development/sandbox keys when possible
 
-### Infrastructure Security
-- **Firewall configuration**
-- **Regular security updates**
-- **Access logging**
-- **Intrusion detection**
+### Code Quality
+
+```bash
+# Run tests
+rails test
+# or
+rspec
+
+# Code linting
+rubocop
+rubocop -a  # Auto-fix issues
+
+# Security scanning
+bundle audit
+```
 
 ## Troubleshooting
 
-### Common Issues
+### Common Development Issues
 
-1. **Subdomain Not Working**:
-   - Check DNS propagation
-   - Verify NGINX configuration
-   - Check SSL certificate validity
+1. **Server Won't Start**:
+   - Check if port 3000 is in use: `lsof -i :3000`
+   - Kill existing process: `kill -9 $(lsof -ti :3000)`
+   - Check for syntax errors: `ruby -c config/application.rb`
 
 2. **Database Connection Issues**:
-   - Verify credentials in .env
-   - Check database service status
-   - Review connection limits
+   - Verify PostgreSQL is running: `brew services list` or `systemctl status postgresql`
+   - Check credentials in `.env` file
+   - Ensure database exists: `rails db:create`
 
-3. **SSL Certificate Problems**:
-   - Check certificate expiration
-   - Verify certificate chain
-   - Review NGINX SSL configuration
+3. **Asset Issues**:
+   - Clear asset cache: `rails tmp:clear`
+   - Recompile assets: `rails assets:clobber assets:precompile`
+   - Check Tailwind build: `npm run build:css`
 
 ### Debugging Tools
 
 ```bash
-# Check NGINX configuration
-sudo nginx -t
+# Check application status
+rails runner "puts 'Rails app loaded successfully'"
 
-# Test SSL certificate
-openssl s_client -connect onelastai.com:443 -servername onelastai.com
+# Test database connection
+rails runner "puts User.count"
 
-# Check application logs
-tail -f /var/log/onelastai/production.log
+# Check environment
+rails runner "puts Rails.env"
 
-# Monitor system resources
-htop
+# View routes
+rails routes | grep agent
 ```
 
 ## API Documentation
 
-The OneLastAI API is available at `https://api.onelastai.com` with the following endpoints:
+The OneLastAI API is available at `http://localhost:3000/api` with the following endpoints:
 
 ### Authentication
 - `POST /api/auth/login`
@@ -366,32 +300,35 @@ The OneLastAI API is available at `https://api.onelastai.com` with the following
 - `PUT /api/user/profile`
 - `GET /api/user/usage`
 
-## Support and Maintenance
+## Development Support
 
-### Regular Maintenance Tasks
+### Getting Help
 
-1. **Weekly**:
-   - Review application logs
-   - Check system resource usage
-   - Verify backup integrity
+For development questions and support:
 
-2. **Monthly**:
-   - Update dependencies
-   - Review security patches
-   - Performance optimization
+- **Documentation**: Check the `docs/` directory
+- **GitHub Issues**: Report bugs and feature requests
+- **Local Testing**: Use `rails console` for interactive debugging
+- **Development Tools**: Use Rails generators and built-in debugging tools
 
-3. **Quarterly**:
-   - Security audit
-   - Capacity planning
-   - Disaster recovery testing
+### Development Best Practices
 
-### Contact Information
+1. **Daily Workflow**:
+   - Pull latest changes: `git pull origin main`
+   - Run migrations: `rails db:migrate`
+   - Check test suite: `rails test`
 
-For technical support or questions about the OneLastAI platform:
-- **Email**: mail@onelastai.com
-- **Documentation**: https://docs.onelastai.com
-- **GitHub**: https://github.com/1-ManArmy/fluffy-space-garbanzo
+2. **Code Quality**:
+   - Write tests for new features
+   - Follow Rails conventions
+   - Use meaningful commit messages
+   - Keep dependencies updated: `bundle update`
+
+3. **Performance Monitoring**:
+   - Monitor development logs for slow queries
+   - Use Rails performance tools
+   - Test with realistic data volumes
 
 ---
 
-*This documentation is maintained as part of the OneLastAI project. Last updated: August 2025*
+*This documentation is for local OneLastAI development. Last updated: September 2025*

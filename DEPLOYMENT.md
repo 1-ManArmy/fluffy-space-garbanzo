@@ -54,8 +54,8 @@ COHERE_API_KEY=...
 
 #### Database & Storage
 ```bash
-# Database (MongoDB for production)
-MONGODB_URI=mongodb+srv://user:password@cluster.mongodb.net/onelastai
+# Database (PostgreSQL for production)
+DATABASE_URL=postgresql://user:password@host:5432/onelastai_production
 
 # Storage (Cloudinary recommended for production)
 CLOUDINARY_URL=cloudinary://api_key:api_secret@cloud_name

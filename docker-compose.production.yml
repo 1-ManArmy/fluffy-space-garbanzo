@@ -116,28 +116,6 @@ services:
       timeout: 10s
       retries: 3
 
-  # MongoDB for AI Data (Legacy - will be removed after migration)
-  mongodb:
-    image: mongo:7.0
-    container_name: onelastai_mongodb
-    restart: unless-stopped
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=onelastai
-      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD}
-      - MONGO_INITDB_DATABASE=onelastai_production
-    volumes:
-      - mongodb_data:/data/db
-      - mongodb_backups:/backups
-      - ./config/mongodb/mongod.conf:/etc/mongod.conf:ro
-    networks:
-      - onelastai_network
-    command: --config /etc/mongod.conf
-    healthcheck:
-      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-
   # Redis for Caching and Sessions
   redis:
     image: redis:7-alpine
@@ -173,7 +151,6 @@ services:
     depends_on:
       - postgres
       - redis
-      - mongodb
     networks:
       - onelastai_network
     command: bundle exec sidekiq -C config/sidekiq.yml
@@ -250,14 +227,12 @@ services:
       - S3_BUCKET=onelastai-backups
     volumes:
       - postgres_backups:/backup/postgres
-      - mongodb_backups:/backup/mongodb
       - app_storage:/backup/storage:ro
       - ./scripts/backup.sh:/backup.sh:ro
     networks:
       - onelastai_network
     depends_on:
       - postgres
-      - mongodb
     command: /bin/sh -c "while true; do sleep 86400; done"  # Keep container running
 
 networks:
@@ -273,8 +248,6 @@ volumes:
     driver: local
   keycloak_data:
     driver: local
-  mongodb_data:
-    driver: local
   redis_data:
     driver: local
   app_storage:
@@ -284,8 +257,6 @@ volumes:
   nginx_logs:
     driver: local
   postgres_backups:
-    driver: local
-  mongodb_backups:
     driver: local
   prometheus_data:
     driver: local

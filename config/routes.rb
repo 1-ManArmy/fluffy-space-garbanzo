@@ -283,7 +283,7 @@ Rails.application.routes.draw do
   post '/datavision/analyze_dataset', to: 'datavision#analyze_dataset'
   post '/datavision/generate_dashboard', to: 'datavision#generate_dashboard'
   get '/datavision/status', to: 'datavision#status'
-  get '/datavision/mongodb_health', to: 'datavision#mongodb_health'
+  get '/datavision/postgresql_health', to: 'datavision#postgresql_health'
 
   # InfoSeek routes
   get '/infoseek', to: 'infoseek#index'

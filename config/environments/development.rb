@@ -68,6 +68,12 @@ Rails.application.configure do
   config.hosts << 'localhost'
   config.hosts << '127.0.0.1'
   config.hosts << /.*\.localhost/
+  
+  # Allow ngrok tunnels for external access
+  config.hosts << /.*\.ngrok\.io/
+  config.hosts << /.*\.ngrok-free\.app/
+  config.hosts << /.*\.ngrok\.app/
+  config.hosts << "donkey-together-personally.ngrok-free.app"
 
   # Action Cable configuration for local development
   config.action_cable.allowed_request_origins = [

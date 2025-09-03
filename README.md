@@ -130,7 +130,7 @@ Built with ❤️ for enterprise AI applications
 
 - Ruby 3.3.0+
 - Node.js 18+
-- MongoDB Atlas account
+- PostgreSQL 12+
 - Redis 6+ (optional, for caching)
 
 ### **1. Clone & Setup**
@@ -166,7 +166,7 @@ RUNWAYML_API_KEY=...                     # Creative AI
 GOOGLE_AI_API_KEY=...                    # agent models
 
 # Database & Infrastructure
-MONGODB_URI=mongodb+srv://...            # MongoDB Atlas
+DATABASE_URL=postgresql://...            # PostgreSQL Database
 
 # Authentication
 PASSAGE_APP_ID=...                       # Passage auth
@@ -198,8 +198,8 @@ docker-compose up -d
 
 ### **Cloud Architecture**
 
-- **Database**: MongoDB Atlas with automatic backups
-- **Compute**: Render with automatic scaling
+- **Database**: PostgreSQL with automatic backups
+- **Compute**: Railway with automatic scaling
 - **Storage**: Cloudinary for media assets
 - **Caching**: Redis for sessions and data caching
 - **Monitoring**: New Relic, Sentry error tracking
@@ -278,7 +278,7 @@ curl -X POST https://api.onelastai.com/v1/agents/neochat/chat \
 │   │   └── passage_auth_service.rb
 │   └── views/              # Agent interfaces
 ├── config/
-│   ├── mongoid.yml         # MongoDB configuration
+│   ├── database.yml        # PostgreSQL configuration
 │   ├── routes.rb           # Application routes
 │   └── nginx/              # Production web server
 ├── docker-compose.yml      # Multi-service orchestration
@@ -424,8 +424,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Anthropic** - Claude model support
 - **RunwayML** - Creative AI capabilities
 - **Passage** - Authentication infrastructure
-- **MongoDB** - Database platform
-- **Render** - Cloud deployment platform
+- **PostgreSQL** - Database platform
+- **Railway** - Cloud deployment platform
 
 ---
 

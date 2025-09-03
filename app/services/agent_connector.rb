@@ -1,5 +1,5 @@
-# AgentConnector - Cinematic Boot Logic for AI Agents
-# Provides resilient MongoDB connection handling for all agents
+# AgentConnector - AI Agent Connection Management
+# Provides resilient PostgreSQL connection handling for all agents
 
 class AgentConnector
   include Singleton
@@ -21,7 +21,7 @@ class AgentConnector
         attempt += 1
         Rails.logger.info "🤖 AgentConnector: Attempting to connect to #{type} agent (attempt #{attempt}/#{retries})"
 
-        # Test MongoDB connection first
+        # Test PostgreSQL connection first
         test_connection!
 
         # Find the requested agent
@@ -113,7 +113,7 @@ class AgentConnector
         # If Agent model doesn't exist, return a mock object
         create_mock_agent(type)
       end
-    rescue Mongoid::Errors::DocumentNotFound
+    rescue ActiveRecord::RecordNotFound
       Rails.logger.info "📝 Creating new #{type} agent record"
       create_fallback_agent(type)
     end
@@ -162,7 +162,7 @@ class AgentConnector
     end
 
     def handle_auth_error(type, _error)
-      Rails.logger.error '🔐 Authentication issue detected. Check MongoDB credentials.'
+      Rails.logger.error '🔐 Authentication issue detected. Check PostgreSQL credentials.'
       create_mock_agent(type)
     end
 
@@ -176,22 +176,23 @@ class AgentConnector
     end
 
     def get_server_info
-      info = Mongoid.default_client.command(buildInfo: 1).first
+      result = ActiveRecord::Base.connection.execute("SELECT version()")
+      version = result.first['version'] if result.first
       {
-        version: info['version'],
-        platform: info['platform']
+        version: version || 'unknown',
+        platform: 'postgresql'
       }
     rescue StandardError
-      { version: 'unknown', platform: 'unknown' }
+      { version: 'unknown', platform: 'postgresql' }
     end
 
     def connection_troubleshooting_tips
       [
-        '1. Verify MongoDB Atlas cluster is running',
-        '2. Check IP whitelist includes your current IP',
-        '3. Validate MONGODB_URI environment variable',
-        '4. Ensure database user has proper permissions',
-        '5. Check network connectivity to MongoDB Atlas'
+        '1. Verify PostgreSQL server is running',
+        '2. Check DATABASE_URL environment variable',
+        '3. Validate database user credentials',
+        '4. Ensure database exists and is accessible',
+        '5. Check network connectivity to PostgreSQL server'
       ]
     end
   end

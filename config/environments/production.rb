@@ -37,7 +37,7 @@ Rails.application.configure do
   # config.action_dispatch.x_sendfile_header = "X-Accel-Redirect" # for NGINX
 
   # Store uploaded files on the local file system (see config/storage.yml for options).
-  # config.active_storage.service = :local  # Commented out for Mongoid
+  # config.active_storage.service = :local  # Using default PostgreSQL storage
 
   # Mount Action Cable outside main process or domain.
   # config.action_cable.mount_path = nil
@@ -96,6 +96,6 @@ Rails.application.configure do
     config.logger    = ActiveSupport::TaggedLogging.new(logger)
   end
 
-  # MongoDB/Mongoid configuration - schema dumps not applicable
-  # config.active_record.dump_schema_after_migration = false  # Not needed for Mongoid
+  # PostgreSQL configuration - schema dumps enabled
+  # config.active_record.dump_schema_after_migration = true  # Default for PostgreSQL
 end

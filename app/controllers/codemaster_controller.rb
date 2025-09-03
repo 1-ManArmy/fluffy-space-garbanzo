@@ -27,7 +27,7 @@ class CodemasterController < ApplicationController
       mobile: %w[React_Native Flutter SwiftUI Android],
       data: %w[TensorFlow PyTorch Pandas NumPy Spark],
       cloud: %w[AWS Azure GCP Docker Kubernetes],
-      databases: %w[PostgreSQL MongoDB Redis ElasticSearch]
+      databases: %w[PostgreSQL Redis ElasticSearch]
     }
 
     @recent_projects = generate_recent_projects

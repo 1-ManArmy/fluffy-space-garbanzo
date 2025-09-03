@@ -12,7 +12,7 @@ class InfrastructureController < ApplicationController
         features: ['Auto-scaling', 'Load Balancing', 'Global CDN']
       },
       {
-        name: 'MongoDB Atlas',
+        name: 'PostgreSQL Database',
         description: 'Secure, scalable NoSQL database with automated backups',
         icon: '🍃',
         category: 'database',
@@ -44,7 +44,7 @@ class InfrastructureController < ApplicationController
         { name: 'Docker', description: 'Container orchestration', status: 'active' }
       ],
       database: [
-        { name: 'MongoDB Atlas', description: 'Primary NoSQL database', status: 'active' },
+        { name: 'PostgreSQL Database', description: 'Primary SQL database', status: 'active' },
         { name: 'Redis', description: 'In-memory caching', status: 'active' },
         { name: 'PostgreSQL', description: 'Relational data backup', status: 'standby' }
       ],

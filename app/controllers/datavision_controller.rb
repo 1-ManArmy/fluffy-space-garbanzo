@@ -99,7 +99,7 @@ class DatavisionController < ApplicationController
     render json: {
       status: health[:status] == AgentConnector::STATES[:connected] ? 'available' : 'degraded',
       message: health[:message],
-      mongodb_connected: health[:status] == AgentConnector::STATES[:connected]
+      postgresql_connected: health[:status] == AgentConnector::STATES[:connected]
     }
   end
 

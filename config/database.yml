@@ -7,17 +7,17 @@ default: &default
 
 development:
   <<: *default
-  host: db
+  host: 127.0.0.1
   database: onelastai_development
-  username: postgres
-  password: postgres
+  username: onelastai
+  password: password
 
 test:
   <<: *default
-  host: db
+  host: 127.0.0.1
   database: onelastai_test
-  username: postgres
-  password: postgres
+  username: onelastai
+  password: password
 
 production:
   <<: *default
