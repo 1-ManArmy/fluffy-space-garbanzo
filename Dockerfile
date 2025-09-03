@@ -64,10 +64,9 @@ RUN npm run build:css || echo "/* Tailwind CSS will be built at runtime */" > ap
 RUN cp app/assets/stylesheets/application.tailwind.css app/assets/tailwind/application.css || \
     echo "/* Copied from application.tailwind.css */" > app/assets/tailwind/application.css
 
-# Precompile Rails assets using environment variables (Railway will provide SECRET_KEY_BASE)
-# Completely disable Tailwind tasks during asset precompilation
+# Precompile Rails assets using environment variables (Railway will provide all keys)
+# Completely disable Tailwind tasks during asset precompilation  
 RUN RAILS_ENV=production \
-    OPENAI_API_KEY=dummy_key_for_precompile \
     SECRET_KEY_BASE=${SECRET_KEY_BASE:-5e92c23a402c53408ed1ed85c5597b965a6ca2c3916ee0cd68205e8a7066503194446603bcef60c0b78dcf3f0b14c1f4c693b3030a25ee469ed0eee275dcf157} \
     DISABLE_TAILWINDCSS=true \
     bundle exec rails assets:precompile --trace
