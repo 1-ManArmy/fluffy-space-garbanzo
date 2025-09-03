@@ -33,7 +33,7 @@ gem 'view_component', '~> 4.0'           # Reusable component system
 gem 'jbuilder'
 
 # Use Redis adapter to run Action Cable in production
-gem 'redis', '~> 4.0'
+gem 'redis', '~> 5.4'
 
 # Security Updates - Fix vulnerabilities detected by bundle audit
 gem 'net-imap', '>= 0.5.7' # Fix DoS vulnerabilities
