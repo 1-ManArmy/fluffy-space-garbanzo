@@ -1,0 +1,122 @@
+trunk_cli_version: 1.25.0
+title: markdownlint timed out after 600 seconds
+report:
+  - markdownlint timed out after 600 seconds
+  - linter:
+      command: |
+        'C:/Users/HP/AppData/Local/trunk/tools/git-bash/2.40.1-da0c3e1526d36e62bf43d06ec46c5052/bin\sh.exe' 'C:\Users\HP\AppData\Local\trunk\tools\markdownlint\0.45.0-da472dd5f95f73715df1d29b2cc457f4/node_modules/.bin\markdownlint' API_KEYS_REQUIREMENTS_DOCKER_FIRST.md --json
+      stdin_path: (none)
+      run_from: C:\Users\HP\AppData\Local\Temp\trunk\ln3l5el\4banabk\
+      timeout: 10m
+      rerun: (cd C:\Users\HP\AppData\Local\Temp\trunk\ln3l5el\4banabk\; env -i 'COMSPEC=C:\Windows\system32\cmd.exe' HOME= 'NODE_PATH=C:\Users\HP\AppData\Local\trunk\tools\markdownlint\0.45.0-da472dd5f95f73715df1d29b2cc457f4/node_modules' 'PATH=C:/Users/HP/AppData/Local/trunk/tools/git-bash/2.40.1-da0c3e1526d36e62bf43d06ec46c5052/bin;C:/Users/HP/AppData/Local/trunk/tools/git-bash/2.40.1-da0c3e1526d36e62bf43d06ec46c5052/usr/bin;C:\Users\HP\AppData\Local\trunk\tools\markdownlint\0.45.0-da472dd5f95f73715df1d29b2cc457f4/node_modules/.bin;C:\Users\HP\AppData\Local\trunk\tools\node\22.16.0-12da8a4c27b144aedaf7d975e067667c/bin;C:\Users\HP\AppData\Local\trunk\tools\node\22.16.0-12da8a4c27b144aedaf7d975e067667c;C:\Users\HP\AppData\Local\trunk\tools\git-bash\2.40.1-da0c3e1526d36e62bf43d06ec46c5052/bin;C:\Users\HP\AppData\Local\trunk\tools\git-bash\2.40.1-da0c3e1526d36e62bf43d06ec46c5052/usr/bin;C:\Ruby34-x64\bin;C:\Python313\Scripts\;C:\Python313\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\Git\cmd;C:\ProgramData\chocolatey\bin;C:\Program Files (x86)\gnupg\bin;C:\Program Files\dotnet\;C:\Program Files\GitHub CLI\;C:\Program Files\PowerShell\7\;C:\ngrok;C:\ngrok;C:\ngrok;C:\ngrok;C:\ngrok;C:\Program Files\Go\bin;C:\Program Files\Docker\Docker\resources\bin;C:\Users\HP\AppData\Local\nvm;C:\nvm4w\nodejs;C:\Program Files\nodejs\;C:\Users\HP\.console-ninja\.bin;C:\Users\HP\AppData\Local\Programs\Python\Python313\Scripts\;C:\Users\HP\AppData\Local\Programs\Python\Python313\;C:\Users\HP\AppData\Local\Programs\Python\Launcher\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\Git\cmd;C:\ProgramData\chocolatey\bin;C:\Program Files\nodejs\;C:\Program Files (x86)\gnupg\bin;C:\Program Files\dotnet\;C:\Program Files\GitHub CLI\;C:\Program Files\PowerShell\7\;C:\ngrok;C:\ngrok;C:\ngrok;C:\ngrok;C:\ngrok;C:\Program Files\Go\bin;C:\Program Files\Docker\Docker\resources\bin;C:\Users\HP\.local\bin;C:\Users\HP\AppData\Local\Programs\Python\Python312\Scripts\;C:\Users\HP\AppData\Local\Programs\Python\Python312\;C:\Users\HP\AppData\Local\Microsoft\WindowsApps;C:\Users\HP\AppData\Local\Programs\Microsoft VS Code\bin;C:\Program Files (x86)\Nmap;C:\Users\HP\.dotnet\tools;C:\Users\HP\AppData\Local\Microsoft\WinGet\Links;C:\ProgramData\HP\GitHubDesktop\bin;C:\Users\HP\AppData\Local\GitHubDesktop\bin;C:\Users\HP\go\bin;C:\Users\HP\AppData\Roaming\npm;C:\Users\HP\AppData\Loc' 'C:/Users/HP/AppData/Local/trunk/tools/git-bash/2.40.1-da0c3e1526d36e62bf43d06ec46c5052/bin\sh.exe' 'C:\Users\HP\AppData\Local\trunk\tools\markdownlint\0.45.0-da472dd5f95f73715df1d29b2cc457f4/node_modules/.bin\markdownlint' API_KEYS_REQUIREMENTS_DOCKER_FIRST.md --json)
+      affects_cache:
+        []
+      direct_configs:
+        - .markdownlint.yaml
+      exit_status: timeout
+      exit_code: -1
+      stdout: (none)
+      stderr: |
+        [
+          {
+            "fileName": "API_KEYS_REQUIREMENTS_DOCKER_FIRST.md",
+            "lineNumber": 20,
+            "ruleNames": [
+              "MD036",
+              "no-emphasis-as-heading"
+            ],
+            "ruleDescription": "Emphasis used instead of a heading",
+            "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.38.0/doc/md036.md",
+            "errorDetail": null,
+            "errorContext": "Total: 7 models running locall...",
+            "errorRange": null,
+            "fixInfo": null
+          },
+          {
+            "fileName": "API_KEYS_REQUIREMENTS_DOCKER_FIRST.md",
+            "lineNumber": 34,
+            "ruleNames": [
+              "MD034",
+              "no-bare-urls"
+            ],
+            "ruleDescription": "Bare URL used",
+            "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.38.0/doc/md034.md",
+            "errorDetail": null,
+            "errorContext": "https://platform.openai.com/ap...",
+            "errorRange": [
+              17,
+              36
+            ],
+            "fixInfo": {
+              "editColumn": 17,
+              "deleteCount": 36,
+              "insertText": "<https://platform.openai.com/api-keys>"
+            }
+          },
+          {
+            "fileName": "API_KEYS_REQUIREMENTS_DOCKER_FIRST.md",
+            "lineNumber": 41,
+            "ruleNames": [
+              "MD034",
+              "no-bare-urls"
+            ],
+            "ruleDescription": "Bare URL used",
+            "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.38.0/doc/md034.md",
+            "errorDetail": null,
+            "errorContext": "https://huggingface.co/setting...",
+            "errorRange": [
+              17,
+              38
+            ],
+            "fixInfo": {
+              "editColumn": 17,
+              "deleteCount": 38,
+              "insertText": "<https://huggingface.co/settings/tokens>"
+            }
+          },
+          {
+            "fileName": "API_KEYS_REQUIREMENTS_DOCKER_FIRST.md",
+            "lineNumber": 48,
+            "ruleNames": [
+              "MD034",
+              "no-bare-urls"
+            ],
+            "ruleDescription": "Bare URL used",
+            "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.38.0/doc/md034.md",
+            "errorDetail": null,
+            "errorContext": "https://console.anthropic.com/",
+            "errorRange": [
+              17,
+              30
+            ],
+            "fixInfo": {
+              "editColumn": 17,
+              "deleteCount": 30,
+              "insertText": "<https://console.anthropic.com/>"
+            }
+          },
+          {
+            "fileName": "API_KEYS_REQUIREMENTS_DOCKER_FIRST.md",
+            "lineNumber": 55,
+            "ruleNames": [
+              "MD034",
+              "no-bare-urls"
+            ],
+            "ruleDescription": "Bare URL used",
+            "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.38.0/doc/md034.md",
+            "errorDetail": null,
+            "errorContext": "https://aistudio.google.com/ap...",
+            "errorRange": [
+              17,
+              38
+            ],
+            "fixInfo": {
+              "editColumn": 17,
+              "deleteCount": 38,
+              "insertText": "<https://aistudio.google.com/app/apikey>"
+            }
+          }
+        ]
+
+    parser: |
+      (none)

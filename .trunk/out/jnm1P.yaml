@@ -1,0 +1,23 @@
+trunk_cli_version: 1.25.0
+title: prettier timed out after 600 seconds
+report:
+  - prettier timed out after 600 seconds
+  - linter:
+      command: |
+        'C:/Users/HP/AppData/Local/trunk/tools/git-bash/2.40.1-da0c3e1526d36e62bf43d06ec46c5052/bin\sh.exe' 'C:\Users\HP\AppData\Local\trunk\tools\prettier\3.6.2-5f97d52b5ebf101d73ce0489ebcdf874/node_modules/.bin\prettier' -w docker-compose.simple.yml
+      stdin_path: (none)
+      run_from: C:\Users\HP\AppData\Local\Temp\trunk\o5ujaxa\lvitp3h\
+      timeout: 10m
+      rerun: (cd C:\Users\HP\AppData\Local\Temp\trunk\o5ujaxa\lvitp3h\; env -i HOME= 'NODE_PATH=C:\Users\HP\AppData\Local\trunk\tools\prettier\3.6.2-5f97d52b5ebf101d73ce0489ebcdf874/node_modules' 'COMSPEC=C:\Windows\system32\cmd.exe' 'PATH=C:/Users/HP/AppData/Local/trunk/tools/git-bash/2.40.1-da0c3e1526d36e62bf43d06ec46c5052/bin;C:/Users/HP/AppData/Local/trunk/tools/git-bash/2.40.1-da0c3e1526d36e62bf43d06ec46c5052/usr/bin;C:\Users\HP\AppData\Local\trunk\tools\prettier\3.6.2-5f97d52b5ebf101d73ce0489ebcdf874/node_modules/.bin;C:\Users\HP\AppData\Local\trunk\tools\node\22.16.0-12da8a4c27b144aedaf7d975e067667c/bin;C:\Users\HP\AppData\Local\trunk\tools\node\22.16.0-12da8a4c27b144aedaf7d975e067667c;C:\Users\HP\AppData\Local\trunk\tools\git-bash\2.40.1-da0c3e1526d36e62bf43d06ec46c5052/bin;C:\Users\HP\AppData\Local\trunk\tools\git-bash\2.40.1-da0c3e1526d36e62bf43d06ec46c5052/usr/bin;C:\Ruby34-x64\bin;C:\Python313\Scripts\;C:\Python313\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\Git\cmd;C:\ProgramData\chocolatey\bin;C:\Program Files (x86)\gnupg\bin;C:\Program Files\dotnet\;C:\Program Files\GitHub CLI\;C:\Program Files\PowerShell\7\;C:\ngrok;C:\ngrok;C:\ngrok;C:\ngrok;C:\ngrok;C:\Program Files\Go\bin;C:\Program Files\Docker\Docker\resources\bin;C:\Users\HP\AppData\Local\nvm;C:\nvm4w\nodejs;C:\Program Files\nodejs\;C:\Users\HP\.console-ninja\.bin;C:\Users\HP\AppData\Local\Programs\Python\Python313\Scripts\;C:\Users\HP\AppData\Local\Programs\Python\Python313\;C:\Users\HP\AppData\Local\Programs\Python\Launcher\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\Git\cmd;C:\ProgramData\chocolatey\bin;C:\Program Files\nodejs\;C:\Program Files (x86)\gnupg\bin;C:\Program Files\dotnet\;C:\Program Files\GitHub CLI\;C:\Program Files\PowerShell\7\;C:\ngrok;C:\ngrok;C:\ngrok;C:\ngrok;C:\ngrok;C:\Program Files\Go\bin;C:\Program Files\Docker\Docker\resources\bin;C:\Users\HP\.local\bin;C:\Users\HP\AppData\Local\Programs\Python\Python312\Scripts\;C:\Users\HP\AppData\Local\Programs\Python\Python312\;C:\Users\HP\AppData\Local\Microsoft\WindowsApps;C:\Users\HP\AppData\Local\Programs\Microsoft VS Code\bin;C:\Program Files (x86)\Nmap;C:\Users\HP\.dotnet\tools;C:\Users\HP\AppData\Local\Microsoft\WinGet\Links;C:\ProgramData\HP\GitHubDesktop\bin;C:\Users\HP\AppData\Local\GitHubDesktop\bin;C:\Users\HP\go\bin;C:\Users\HP\AppData\Roaming\npm;C:\Users\HP\AppData\Loc' 'C:/Users/HP/AppData/Local/trunk/tools/git-bash/2.40.1-da0c3e1526d36e62bf43d06ec46c5052/bin\sh.exe' 'C:\Users\HP\AppData\Local\trunk\tools\prettier\3.6.2-5f97d52b5ebf101d73ce0489ebcdf874/node_modules/.bin\prettier' -w docker-compose.simple.yml)
+      affects_cache:
+        - package.json
+      direct_configs:
+        []
+      exit_status: timeout
+      exit_code: -1
+      stdout: |
+        docker-compose.simple.yml 37993ms
+
+      stderr: (none)
+    parser: |
+      (none)

@@ -1,0 +1,4 @@
+trunk_cli_version: 1.25.0
+title: "Error while executing: Installing hermetic tool shfmt v3.6.0"
+report:
+  - PATH not found

@@ -1,0 +1,24 @@
+trunk_cli_version: 1.25.0
+title: trufflehog timed out after 600 seconds
+report:
+  - trufflehog timed out after 600 seconds
+  - linter:
+      command: |
+        'C:\Users\HP\AppData\Local\trunk\tools\trufflehog\3.90.5-2177eb721238c2942ac39a262ccc90eb\trufflehog.exe' filesystem --json --fail --only-verified --no-update API_KEYS_REQUIREMENTS_DOCKER_FIRST.md
+      stdin_path: (none)
+      run_from: C:\Users\HP\AppData\Local\Temp\trunk\g1oezod\
+      timeout: 10m
+      rerun: (cd C:\Users\HP\AppData\Local\Temp\trunk\g1oezod\; env -i 'PATH=C:\Users\HP\AppData\Local\trunk\tools\trufflehog\3.90.5-2177eb721238c2942ac39a262ccc90eb;C:/Users/HP/AppData/Local/trunk/tools/git-bash/2.40.1-da0c3e1526d36e62bf43d06ec46c5052/bin;C:/Users/HP/AppData/Local/trunk/tools/git-bash/2.40.1-da0c3e1526d36e62bf43d06ec46c5052/usr/bin;C:\Users\HP\AppData\Local\trunk\tools\trufflehog\3.90.5-2177eb721238c2942ac39a262ccc90eb;C:\Users\HP\AppData\Local\trunk\tools\git-bash\2.40.1-da0c3e1526d36e62bf43d06ec46c5052/bin;C:\Users\HP\AppData\Local\trunk\tools\git-bash\2.40.1-da0c3e1526d36e62bf43d06ec46c5052/usr/bin' 'C:\Users\HP\AppData\Local\trunk\tools\trufflehog\3.90.5-2177eb721238c2942ac39a262ccc90eb\trufflehog.exe' filesystem --json --fail --only-verified --no-update API_KEYS_REQUIREMENTS_DOCKER_FIRST.md)
+      affects_cache:
+        []
+      direct_configs:
+        []
+      exit_status: timeout
+      exit_code: -1
+      stdout: (none)
+      stderr: |
+        {"level":"info-0","ts":"2025-09-02T09:45:25-07:00","logger":"trufflehog","msg":"running source","source_manager_worker_id":"JfiZP","with_units":true}
+        {"level":"info-0","ts":"2025-09-02T09:45:25-07:00","logger":"trufflehog","msg":"finished scanning","chunks":1,"bytes":4518,"verified_secrets":0,"unverified_secrets":0,"scan_duration":"31.3092ms","trufflehog_version":"3.90.5","verification_caching":{"Hits":0,"Misses":0,"HitsWasted":0,"AttemptsSaved":0,"VerificationTimeSpentMS":0}}
+
+    parser: |
+      (none)

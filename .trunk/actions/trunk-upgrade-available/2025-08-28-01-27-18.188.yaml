@@ -1,0 +1,34 @@
+action_id: trunk-upgrade-available
+date: 2025-08-28 01:27:18
+run: trunk upgrade --notify --allow-daemon-start=false
+run_from: ""
+trigger: schedule 1h
+result:
+  exit_code: 0
+  out: "notifications:\r\n  - commands:\r\n      - run: trunk upgrade\r\n        title: all\r\n      - run: trunk upgrade check\r\n        title: Linters\r\n      - run: trunk upgrade plugins\r\n        title: Plugins\r\n    id: trunk-upgrade\r\n    message: \" 8 linter upgrades\\n 1 plugin upgrade\\n\"\r\n    priority: low\r\n    rendered: \"\\x1b[90mRun \\x1b[0m\\x1b[96mtrunk upgrade\\x1b[0m\\x1b[90m to upgrade \\x1b[0m\\x1b[90m1 plugin and 8 linters\\n\\x1b[0m\"\r\n    title: Upgrades Available\r\nnotifications_to_delete:\r\n  - trunk-check-upgrade\r\n"
+  err: ""
+timestamp: 1756344438
+full_timestamp:
+  nanos: 188943000
+  seconds: 1756344438
+trunk_version: 1.25.0
+action_output:
+  notifications:
+    - commands:
+        - run: trunk upgrade
+          title: all
+        - run: trunk upgrade check
+          title: Linters
+        - run: trunk upgrade plugins
+          title: Plugins
+      full_timestamp:
+        nanos: 188943000
+        seconds: 1756344438
+      id: trunk-upgrade
+      message: " 8 linter upgrades\n 1 plugin upgrade\n"
+      priority: low
+      rendered: "\x1b[90mRun \x1b[0m\x1b[96mtrunk upgrade\x1b[0m\x1b[90m to upgrade \x1b[0m\x1b[90m1 plugin and 8 linters\n\x1b[0m"
+      timestamp: 1756344438
+      title: Upgrades Available
+  notifications_to_delete:
+    - trunk-check-upgrade

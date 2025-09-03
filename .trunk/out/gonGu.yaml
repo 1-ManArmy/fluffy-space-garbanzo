@@ -1,0 +1,46 @@
+trunk_cli_version: 1.25.0
+title: "Error while executing: Installing hermetic tool brakeman v5.4.0"
+report:
+  - command: |
+      'C:\Users\HP\AppData\Local\trunk\tools\ruby-install\3.4.2-48c42caf766d6ee994183ce5a331a231/bin\gem.cmd' install --no-document brakeman:5.4.0
+    stdin_path: (none)
+    run_from: C:\Users\HP\AppData\Local\trunk\tools\brakeman\5.4.0-881707de794bf533a7939536b07acc10
+    timeout: 10m
+    rerun: "(cd C:\\Users\\HP\\AppData\\Local\\trunk\\tools\\brakeman\\5.4.0-881707de794bf533a7939536b07acc10; env -i 'LD_LIBRARY_PATH=C:\\Users\\HP\\AppData\\Local\\trunk\\tools\\ruby-install\\3.4.2-48c42caf766d6ee994183ce5a331a231/lib' HOME= 'PATH=C:\\Users\\HP\\AppData\\Local\\trunk\\tools\\brakeman\\5.4.0-881707de794bf533a7939536b07acc10/bin;C:\\Users\\HP\\AppData\\Local\\trunk\\tools\\git-bash\\2.40.1-da0c3e1526d36e62bf43d06ec46c5052/bin;C:\\Users\\HP\\AppData\\Local\\trunk\\tools\\git-bash\\2.40.1-da0c3e1526d36e62bf43d06ec46c5052/usr/bin;C:\\Users\\HP\\AppData\\Local\\trunk\\tools\\ruby-install\\3.4.2-48c42caf766d6ee994183ce5a331a231/bin' 'GEM_HOME=C:\\Users\\HP\\AppData\\Local\\trunk\\tools\\brakeman\\5.4.0-881707de794bf533a7939536b07acc10' 'GEM_PATH=C:\\Users\\HP\\AppData\\Local\\trunk\\tools\\brakeman\\5.4.0-881707de794bf533a7939536b07acc10' SYSTEMDRIVE=C: 'HOMEPATH=\\Users\\HP' 'SystemRoot=C:\\Windows' 'windir=C:\\Windows' 'APPDATA=C:\\Users\\HP\\AppData\\Roaming' 'LOCALAPPDATA=C:\\Users\\HP\\AppData\\Local' 'USERPROFILE=C:\\Users\\HP' 'TMP=C:\\Users\\HP\\AppData\\Local\\Temp' 'TEMP=C:\\Users\\HP\\AppData\\Local\\Temp' 'Path=C:\\Ruby34-x64\\bin;C:\\Python313\\Scripts\\;C:\\Python313\\;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Windows\\System32\\OpenSSH\\;C:\\Program Files\\Git\\cmd;C:\\ProgramData\\chocolatey\\bin;C:\\Program Files (x86)\\gnupg\\bin;C:\\Program Files\\dotnet\\;C:\\Program Files\\GitHub CLI\\;C:\\Program Files\\PowerShell\\7\\;C:\\ngrok;C:\\ngrok;C:\\ngrok;C:\\ngrok;C:\\ngrok;C:\\Program Files\\Go\\bin;C:\\Program Files\\Docker\\Docker\\resources\\bin;C:\\Users\\HP\\AppData\\Local\\nvm;C:\\nvm4w\\nodejs;C:\\Program Files\\nodejs\\;C:\\Users\\HP\\.console-ninja\\.bin;C:\\Users\\HP\\AppData\\Local\\Programs\\Python\\Python313\\Scripts\\;C:\\Users\\HP\\AppData\\Local\\Programs\\Python\\Python313\\;C:\\Users\\HP\\AppData\\Local\\Programs\\Python\\Launcher\\;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Windows\\System32\\OpenSSH\\;C:\\Program Files\\Git\\cmd;C:\\ProgramData\\chocolatey\\bin;C:\\Program Files\\nodejs\\;C:\\Program Files (x86)\\gnupg\\bin;C:\\Program Files\\dotnet\\;C:\\Program Files\\GitHub CLI\\;C:\\Program Files\\PowerShell\\7\\;C:\\ngrok;C:\\ngrok;C:\\ngrok;C:\\ngrok;C:\\ngrok;C:\\Program Files\\Go\\bin;C:\\Program Files\\Docker\\Docker\\resources\\bin;C:\\Users\\HP\\.local\\bin;C:\\Users\\HP\\AppData\\Local\\Programs\\Python\\Python312\\Scripts\\;C:\\Users\\HP\\AppData\\Local\\Programs\\Python\\Python312\\;C:\\Users\\HP\\AppData\\Local\\Microsoft\\WindowsApps;C:\\Users\\HP\\AppData\\Local\\Programs\\Microsoft VS Code\\bin;C:\\Program Files (x86)\\Nmap;C:\\Users\\HP\\.dotnet\\tools;C:\\Users\\HP\\AppData\\Local\\Microsoft\\WinGet\\Links;C:\\ProgramData\\HP\\GitHubDesktop\\bin;C:\\Users\\HP\\AppData\\Local\\GitHubDesktop\\bin;C:\\Users\\HP\\go\\bin;C:\\Users\\HP\\AppData\\Roaming\\npm;C:\\Users\\HP\\AppData\\Loc' 'C:\\Users\\HP\\AppData\\Local\\trunk\\tools\\ruby-install\\3.4.2-48c42caf766d6ee994183ce5a331a231/bin\\gem.cmd' install --no-document brakeman:5.4.0)"
+    exit_status: exited
+    exit_code: 1
+    stdout: (none)
+    stderr: |
+      ERROR:  While executing gem ... (Gem::Exception)
+          OpenSSL is not available. Install OpenSSL and rebuild Ruby or use non-HTTPS sources (Gem::Exception)
+      	C:/Users/HP/AppData/Local/trunk/tools/ruby-install/3.4.2-48c42caf766d6ee994183ce5a331a231/lib/ruby/3.4.0/rubygems/request.rb:53:in 'Gem::Request.configure_connection_for_https'
+      	C:/Users/HP/AppData/Local/trunk/tools/ruby-install/3.4.2-48c42caf766d6ee994183ce5a331a231/lib/ruby/3.4.0/rubygems/request/https_pool.rb:7:in 'Gem::Request::HTTPSPool#setup_connection'
+      	C:/Users/HP/AppData/Local/trunk/tools/ruby-install/3.4.2-48c42caf766d6ee994183ce5a331a231/lib/ruby/3.4.0/rubygems/request/http_pool.rb:40:in 'Gem::Request::HTTPPool#make_connection'
+      	C:/Users/HP/AppData/Local/trunk/tools/ruby-install/3.4.2-48c42caf766d6ee994183ce5a331a231/lib/ruby/3.4.0/rubygems/request/http_pool.rb:21:in 'Gem::Request::HTTPPool#checkout'
+      	C:/Users/HP/AppData/Local/trunk/tools/ruby-install/3.4.2-48c42caf766d6ee994183ce5a331a231/lib/ruby/3.4.0/rubygems/request.rb:135:in 'Gem::Request#connection_for'
+      	C:/Users/HP/AppData/Local/trunk/tools/ruby-install/3.4.2-48c42caf766d6ee994183ce5a331a231/lib/ruby/3.4.0/rubygems/request.rb:193:in 'Gem::Request#perform_request'
+      	C:/Users/HP/AppData/Local/trunk/tools/ruby-install/3.4.2-48c42caf766d6ee994183ce5a331a231/lib/ruby/3.4.0/rubygems/request.rb:160:in 'Gem::Request#fetch'
+      	C:/Users/HP/AppData/Local/trunk/tools/ruby-install/3.4.2-48c42caf766d6ee994183ce5a331a231/lib/ruby/3.4.0/rubygems/remote_fetcher.rb:317:in 'Gem::RemoteFetcher#request'
+      	C:/Users/HP/AppData/Local/trunk/tools/ruby-install/3.4.2-48c42caf766d6ee994183ce5a331a231/lib/ruby/3.4.0/rubygems/remote_fetcher.rb:213:in 'Gem::RemoteFetcher#fetch_http'
+      	C:/Users/HP/AppData/Local/trunk/tools/ruby-install/3.4.2-48c42caf766d6ee994183ce5a331a231/lib/ruby/3.4.0/rubygems/remote_fetcher.rb:252:in 'Gem::RemoteFetcher#fetch_path'
+      	C:/Users/HP/AppData/Local/trunk/tools/ruby-install/3.4.2-48c42caf766d6ee994183ce5a331a231/lib/ruby/3.4.0/rubygems/source.rb:86:in 'Gem::Source#dependency_resolver_set'
+      	C:/Users/HP/AppData/Local/trunk/tools/ruby-install/3.4.2-48c42caf766d6ee994183ce5a331a231/lib/ruby/3.4.0/rubygems/resolver/best_set.rb:24:in 'block in Gem::Resolver::BestSet#pick_sets'
+      	C:/Users/HP/AppData/Local/trunk/tools/ruby-install/3.4.2-48c42caf766d6ee994183ce5a331a231/lib/ruby/3.4.0/rubygems/source_list.rb:94:in 'Array#each'
+      	C:/Users/HP/AppData/Local/trunk/tools/ruby-install/3.4.2-48c42caf766d6ee994183ce5a331a231/lib/ruby/3.4.0/rubygems/source_list.rb:94:in 'Gem::SourceList#each_source'
+      	C:/Users/HP/AppData/Local/trunk/tools/ruby-install/3.4.2-48c42caf766d6ee994183ce5a331a231/lib/ruby/3.4.0/rubygems/resolver/best_set.rb:23:in 'Gem::Resolver::BestSet#pick_sets'
+      	C:/Users/HP/AppData/Local/trunk/tools/ruby-install/3.4.2-48c42caf766d6ee994183ce5a331a231/lib/ruby/3.4.0/rubygems/resolver/best_set.rb:29:in 'Gem::Resolver::BestSet#find_all'
+      	C:/Users/HP/AppData/Local/trunk/tools/ruby-install/3.4.2-48c42caf766d6ee994183ce5a331a231/lib/ruby/3.4.0/rubygems/resolver/installer_set.rb:174:in 'Gem::Resolver::InstallerSet#find_all'
+      	C:/Users/HP/AppData/Local/trunk/tools/ruby-install/3.4.2-48c42caf766d6ee994183ce5a331a231/lib/ruby/3.4.0/rubygems/resolver/installer_set.rb:62:in 'Gem::Resolver::InstallerSet#add_always_install'
+      	C:/Users/HP/AppData/Local/trunk/tools/ruby-install/3.4.2-48c42caf766d6ee994183ce5a331a231/lib/ruby/3.4.0/rubygems/dependency_installer.rb:318:in 'Gem::DependencyInstaller#resolve_dependencies'
+      	C:/Users/HP/AppData/Local/trunk/tools/ruby-install/3.4.2-48c42caf766d6ee994183ce5a331a231/lib/ruby/3.4.0/rubygems/commands/install_command.rb:198:in 'Gem::Commands::InstallCommand#install_gem'
+      	C:/Users/HP/AppData/Local/trunk/tools/ruby-install/3.4.2-48c42caf766d6ee994183ce5a331a231/lib/ruby/3.4.0/rubygems/commands/install_command.rb:223:in 'block in Gem::Commands::InstallCommand#install_gems'
+      	C:/Users/HP/AppData/Local/trunk/tools/ruby-install/3.4.2-48c42caf766d6ee994183ce5a331a231/lib/ruby/3.4.0/rubygems/commands/install_command.rb:216:in 'Array#each'
+      	C:/Users/HP/AppData/Local/trunk/tools/ruby-install/3.4.2-48c42caf766d6ee994183ce5a331a231/lib/ruby/3.4.0/rubygems/commands/install_command.rb:216:in 'Gem::Commands::InstallCommand#install_gems'
+      	C:/Users/HP/AppData/Local/trunk/tools/ruby-install/3.4.2-48c42caf766d6ee994183ce5a331a231/lib/ruby/3.4.0/rubygems/commands/install_command.rb:162:in 'Gem::Commands::InstallCommand#execute'
+      	C:/Users/HP/AppData/Local/trunk/tools/ruby-install/3.4.2-48c42caf766d6ee994183ce5a331a231/lib/ruby/3.4.0/rubygems/command.rb:326:in 'Gem::Command#invoke_with_build_args'
+      	C:/Users/HP/AppData/Local/trunk/tools/ruby-install/3.4.2-48c42caf766d6ee994183ce5a331a231/lib/ruby/3.4.0/rubygems/command_manager.rb:253:in 'Gem::CommandManager#invoke_command'
+      	C:/Users/HP/AppData/Local/trunk/tools/ruby-install/3.4.2-48c42caf766d6ee994183ce5a331a231/lib/ruby/3.4.0/rubygems/command_manager.rb:194:in 'Gem::CommandManager#process_args'
+      	C:/Users/HP/AppData/Local/trunk/tools/ruby-install/3.4.2-48c42caf766d6ee994183ce5a331a231/lib/ruby/3.4.0/rubygems/command_manager.rb:152:in 'Gem::CommandManager#run'
+      	C:/Users/HP/AppData/Local/trunk/tools/ruby-install/3.4.2-48c42caf766d6ee994183ce5a331a231/lib/ruby/3.4.0/rubygems/gem_runner.rb:57:in 'Gem::GemRunner#run'
+      	C:/Users/HP/AppData/Local/trunk/tools/ruby-install/3.4.2-48c42caf766d6ee994183ce5a331a231/bin/gem.cmd:20:in '<main>'
+
