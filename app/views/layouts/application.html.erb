@@ -7,9 +7,9 @@
     <%= csp_meta_tag %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
-    
+
     <%= yield :head %>
-    
+
     <!-- Global Menu Bar Styles -->
     <style>
       /* Global Menu Bar */
@@ -170,14 +170,14 @@
         max-height: 400px;
         overflow-y: auto;
         z-index: 1001;
-        
+
         /* Initial state - rolled up like a window blind */
         max-height: 0;
         transform: translateY(-20px) scaleY(0);
         transform-origin: top;
         opacity: 0;
         overflow: hidden;
-        
+
         /* Smooth rolling animation */
         transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       }
@@ -332,7 +332,7 @@
         .main-menu {
           display: none;
         }
-        
+
         .mobile-menu-toggle {
           display: block;
           background: transparent;
@@ -612,7 +612,7 @@
               </div>
             </div>
           </div>
-          
+
           <!-- Mobile Menu Toggle -->
           <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">☰</button>
         </div>
@@ -634,10 +634,10 @@
       function toggleGlobalMenu() {
         const menuBar = document.getElementById('globalMenuBar');
         const toggleBtn = document.getElementById('menuToggleBtn');
-        
+
         menuBar.classList.toggle('menu-visible');
         toggleBtn.classList.toggle('active');
-        
+
         // Update button arrow
         if (menuBar.classList.contains('menu-visible')) {
           toggleBtn.textContent = '▲';
@@ -654,11 +654,11 @@
             dropdown.classList.remove('active');
           }
         });
-        
+
         // Toggle the target dropdown
         const dropdown = document.getElementById(menuId);
         dropdown.classList.toggle('active');
-        
+
         // Toggle active state on menu button
         const button = dropdown.previousElementSibling;
         button.classList.toggle('active');
@@ -682,11 +682,11 @@
         if (!e.target.closest('.menu-item') && !e.target.closest('.menu-toggle-btn')) {
           const allDropdowns = document.querySelectorAll('.dropdown');
           const allButtons = document.querySelectorAll('.menu-button');
-          
+
           allDropdowns.forEach(dropdown => {
             dropdown.classList.remove('active');
           });
-          
+
           allButtons.forEach(button => {
             button.classList.remove('active');
           });
@@ -695,7 +695,7 @@
           if (document.body.classList.contains('agent-page')) {
             const menuBar = document.getElementById('globalMenuBar');
             const toggleBtn = document.getElementById('menuToggleBtn');
-            
+
             if (menuBar && menuBar.classList.contains('menu-visible')) {
               menuBar.classList.remove('menu-visible');
               toggleBtn.classList.remove('active');
@@ -716,7 +716,7 @@
         });
       });
     </script>
-    
+
     <%= yield :javascript %>
   </body>
 </html>
