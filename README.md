@@ -1,53 +1,98 @@
-# 🌌 OneLastAI - Enterprise AI Agent Network Platform
+# 🚀 OneLastAI - Enterprise AI Platform
 
-<div align="center">
+A comprehensive AI platform with local Docker models and cloud API fallbacks, built with Ruby on Rails 7.1.5.
 
-![OneLastAI Logo](https://img.shields.io/badge/OneLastAI-Enterprise%20Platform-blue?style=for-the-badge&logo=robot)
-[![Ruby Version](https://img.shields.io/badge/Ruby-3.3.0-red?style=flat-square&logo=ruby)](https://www.ruby-lang.org/)
-[![Rails Version](https://img.shields.io/badge/Rails-7.1.3-red?style=flat-square&logo=rubyonrails)](https://rubyonrails.org/)
-[![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
-[![Build Status](https://img.shields.io/badge/Build-Passing-brightgreen?style=flat-square)](https://github.com/1-ManArmy/fluffy-space-garbanzo)
+## ⚡ Quick Start
 
-**The Ultimate AI Agent Network - 24 Specialized AI Agents in One Powerful Platform**
+### 1. Start Services
+```powershell
+# Start database and cache
+docker-compose up -d postgres redis
 
-[🚀 Live Demo](https://onelastai.com) • [📖 Documentation](docs/) • [🛠️ API Reference](docs/api.md) • [💬 Community](https://github.com/1-ManArmy/fluffy-space-garbanzo/discussions)
+# Start AI models (7 local models)
+docker-compose -f docker-compose.ai-models.yml up -d
 
-</div>
+# Start Rails server
+rails server
+```
+
+### 2. Access Your Platform
+- **Web App**: http://localhost:3000
+- **AI Models**: Ports 11434-11440 (Ollama)
+- **Database**: PostgreSQL on 5432
+- **Cache**: Redis on 6379
+
+## 🏗️ Architecture
+
+- **Framework**: Ruby on Rails 7.1.5
+- **Database**: PostgreSQL (migrated from MongoDB)
+- **Cache**: Redis
+- **AI Models**: 7 local Docker models via Ollama
+- **Web Server**: Puma
+- **Frontend**: Tailwind CSS + ViewComponent
+
+## 🤖 AI Models (Local)
+
+1. **Llama 3.2** (3B) - General purpose
+2. **Gemma 2** (2B) - Lightweight tasks
+3. **Phi-4** (14B) - Advanced reasoning
+4. **DeepSeek Coder** (6.7B) - Code generation
+5. **SmolLM2** (1.7B) - Fast responses
+6. **Mistral** (7B) - Balanced performance
+7. **TinyLlama** (1.1B) - Ultra-fast tasks
+
+## 🔑 API Integrations
+
+- **OpenAI**: GPT models (fallback)
+- **Google AI**: Gemini models
+- **HuggingFace**: Model downloads
+- **Groq**: Fast inference
+- **Pinecone**: Vector database
+- **Security APIs**: VirusTotal, AbuseIPDB, Shodan
+
+## 🛠️ Development
+
+```powershell
+# Install dependencies
+bundle install
+
+# Setup database
+rails db:create db:migrate db:seed
+
+# Start development server
+rails server
+```
+
+## 🚀 Production Deployment
+
+```powershell
+# Build production image
+docker build -t onelastai .
+
+# Deploy with Docker Compose
+docker-compose -f docker-compose.production.yml up -d
+```
+
+## 🔒 Security Features
+
+- **CSRF Protection**: Built-in Rails protection
+- **API Rate Limiting**: Configurable limits
+- **Secure Headers**: CSP, HSTS, etc.
+- **Environment Isolation**: Docker containers
+- **Encrypted Credentials**: Rails encrypted credentials
+
+## 🎯 Key Features
+
+- **Local-First AI**: No cloud dependency required
+- **Multi-Model Support**: 7 local + cloud models
+- **Agent Framework**: Specialized AI agents
+- **Enterprise Security**: Multiple security integrations
+- **Scalable Architecture**: Docker-based deployment
+- **Real-time Features**: Action Cable support
 
 ---
 
-## ✨ **Platform Overview**
-
-OneLastAI is an enterprise-grade AI agent network that brings together 24 specialized AI agents, each designed for specific use cases. From creative content generation to business intelligence, our platform provides everything you need for AI-powered productivity.
-
-### 🎯 **Key Features**
-
-- **24 Specialized AI Agents** - Each with unique capabilities and personalities
-- **Enterprise Authentication** - Passwordless auth powered by Passage & 1Password
-- **Multi-Payment Gateway** - Stripe, PayPal, and Lemon Squeezy support
-- **Creative AI Integration** - RunwayML for video/image generation
-- **Production Infrastructure** - MongoDB Atlas, Render deployment, Docker orchestration
-- **Real-time Monitoring** - Health checks, analytics, and error tracking
-- **API-First Design** - RESTful APIs for all platform features
-
----
-
-## 🌌 **AI Agent Network**
-
-<table>
-  <tr>
-    <td align="center"><strong>🌌 Conversation</strong></td>
-    <td align="center"><strong>💻 Technical</strong></td>
-    <td align="center"><strong>🎨 Creative</strong></td>
-    <td align="center"><strong>📊 Business</strong></td>
-  </tr>
-  <tr>
-    <td>
-      • 🔥 <strong>NeoChat</strong> - Advanced conversational AI<br>
-      • 👥 <strong>PersonaX</strong> - Personality-driven chat<br>
-      • 💕 <strong>Girlfriend</strong> - Emotional companion<br>
-      • 🧘 <strong>EmotiSense</strong> - Emotion analysis<br>
-      • 📞 <strong>CallGhost</strong> - Voice interactions<br>
+Built with ❤️ for enterprise AI applications
       • 🌌 <strong>Memora</strong> - Memory-enhanced AI
     </td>
     <td>

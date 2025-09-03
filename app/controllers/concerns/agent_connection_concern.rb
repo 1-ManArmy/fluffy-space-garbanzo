@@ -1,15 +1,15 @@
-# AgentConnectionConcern - Mixin for controllers requiring agent connectivity
-# Provides standardized agent loading with error handling
+# AgentConnectionConcern - Mixin for controllers requiring database connectivity
+# Provides standardized database connection handling with PostgreSQL support
 
 module AgentConnectionConcern
   extend ActiveSupport::Concern
 
   included do
-    # Add error handling for MongoDB connection issues
-    rescue_from Mongo::Error::NoServerAvailable, with: :handle_mongodb_unavailable
-    rescue_from Mongo::Error::SocketTimeoutError, with: :handle_mongodb_timeout
-
-    before_action :ensure_mongodb_connection, if: :requires_database?
+    # Add error handling for PostgreSQL connection issues
+    rescue_from ActiveRecord::ConnectionNotEstablished, with: :handle_database_unavailable
+    rescue_from PG::ConnectionBad, with: :handle_database_connection_error
+    rescue_from PG::UnableToSend, with: :handle_database_timeout
+    before_action :ensure_database_connection, if: :requires_database?
   end
 
   class_methods do
@@ -23,32 +23,27 @@ module AgentConnectionConcern
 
   private
 
-  # Ensure MongoDB connection is available
-  def ensure_mongodb_connection
-    health = AgentConnector.health_check
-
-    return if health[:status] == AgentConnector::STATES[:connected]
-
-    Rails.logger.warn "🔶 MongoDB connection issues detected: #{health[:error]}"
-
-    # Try to establish connection
+  # Ensure PostgreSQL connection is available
+  def ensure_database_connection
     begin
-      Mongoid.default_client.command(ping: 1)
+      ActiveRecord::Base.connection.execute('SELECT 1')
     rescue StandardError => e
-      handle_mongodb_connection_failure(e)
+      Rails.logger.warn "🔶 Database connection issues detected: #{e.message}"
+      handle_database_connection_failure(e)
     end
   end
 
   # Load agent with connection handling
   def load_agent_safely(type)
-    agent = AgentConnector.connect(type: type)
-
-    if agent && agent.respond_to?(:fallback) && agent.fallback
-      flash.now[:warning] = '⚠️ Running in fallback mode. Some features may be limited.'
-      Rails.logger.warn "🔶 Controller #{self.class.name} using fallback agent for #{type}"
-    end
-
-    agent
+    # For now, return mock data since we don't have agent models yet
+    OpenStruct.new(
+      agent_type: type,
+      name: type.to_s.humanize,
+      status: 'active',
+      fallback: false,
+      id: "agent_#{SecureRandom.hex(4)}",
+      created_at: Time.current
+    )
   end
 
   # Enhanced agent stats for dashboard
@@ -62,37 +57,35 @@ module AgentConnectionConcern
 
     begin
       # Try to get real stats from database
-      if @agent && !@agent.fallback
-        # Add real database queries here when models are available
+      if ActiveRecord::Base.connection.active?
         base_stats.merge({
-                           status: '🟢 Connected',
-                           database: 'Primary',
-                           last_updated: Time.current.strftime('%H:%M:%S')
-                         })
+          status: '🟢 Connected',
+          database: 'PostgreSQL',
+          last_updated: Time.current.strftime('%H:%M:%S')
+        })
       else
         base_stats.merge({
-                           status: '🟡 Fallback Mode',
-                           database: 'Simulated',
-                           last_updated: Time.current.strftime('%H:%M:%S')
-                         })
+          status: '🟡 Fallback Mode',
+          database: 'Simulated',
+          last_updated: Time.current.strftime('%H:%M:%S')
+        })
       end
     rescue StandardError => e
       Rails.logger.error "Failed to load agent stats: #{e.message}"
       base_stats.merge({
-                         status: '🔴 Limited',
-                         database: 'Unavailable',
-                         last_updated: Time.current.strftime('%H:%M:%S')
-                       })
+        status: '🔴 Limited',
+        database: 'Unavailable',
+        last_updated: Time.current.strftime('%H:%M:%S')
+      })
     end
   end
 
-  # MongoDB connection error handlers
-  def handle_mongodb_unavailable(exception)
-    Rails.logger.error "🔴 MongoDB unavailable in #{controller_name}: #{exception.message}"
-
+  # Database connection error handlers
+  def handle_database_unavailable(exception)
+    Rails.logger.error "🔴 Database unavailable in #{controller_name}: #{exception.message}"
     respond_to do |format|
       format.html do
-        @agent = create_fallback_response('mongodb_unavailable')
+        @agent = create_fallback_response('database_unavailable')
         render_with_fallback
       end
       format.json do
@@ -105,9 +98,25 @@ module AgentConnectionConcern
     end
   end
 
-  def handle_mongodb_timeout(exception)
-    Rails.logger.error "⏱️ MongoDB timeout in #{controller_name}: #{exception.message}"
+  def handle_database_connection_error(exception)
+    Rails.logger.error "🔴 PostgreSQL connection error in #{controller_name}: #{exception.message}"
+    respond_to do |format|
+      format.html do
+        @agent = create_fallback_response('connection_error')
+        render_with_fallback
+      end
+      format.json do
+        render json: {
+          error: 'Database connection error',
+          status: 'connection_failed',
+          timestamp: Time.current.iso8601
+        }, status: :service_unavailable
+      end
+    end
+  end
 
+  def handle_database_timeout(exception)
+    Rails.logger.error "⏱️ Database timeout in #{controller_name}: #{exception.message}"
     respond_to do |format|
       format.html do
         @agent = create_fallback_response('timeout')
@@ -123,12 +132,11 @@ module AgentConnectionConcern
     end
   end
 
-  def handle_mongodb_connection_failure(exception)
-    Rails.logger.error "💥 MongoDB connection failure: #{exception.message}"
-
+  def handle_database_connection_failure(exception)
+    Rails.logger.error "💥 Database connection failure: #{exception.message}"
     # Store connection failure details for monitoring
     Rails.cache.write(
-      "mongodb_failure_#{controller_name}",
+      "database_failure_#{controller_name}",
       {
         timestamp: Time.current,
         error: exception.message,
@@ -164,13 +172,16 @@ module AgentConnectionConcern
   end
 
   # Health check endpoint for monitoring
-  def mongodb_health
-    health = AgentConnector.health_check
-    connection_stats = AgentConnector.connection_stats
+  def database_health
+    health_status = begin
+      ActiveRecord::Base.connection.execute('SELECT 1')
+      { status: 'healthy', database: 'postgresql' }
+    rescue StandardError => e
+      { status: 'unhealthy', error: e.message }
+    end
 
     render json: {
-      mongodb: health,
-      connection: connection_stats,
+      database: health_status,
       controller: controller_name,
       timestamp: Time.current.iso8601
     }

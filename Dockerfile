@@ -5,17 +5,17 @@ FROM ruby:3.4.2-alpine AS base
 
 # Install system dependencies (alphabetically sorted and pinned)
 RUN apk add --no-cache \
-    bash=5.2.21-r0 \
-    build-base=0.5-r3 \
-    curl=8.5.0-r0 \
-    git=2.43.0-r0 \
-    imagemagick=7.1.1.29-r0 \
-    nodejs=20.11.1-r0 \
-    npm=10.2.5-r0 \
-    postgresql-dev=16.1-r0 \
-    sqlite-dev=3.44.2-r0 \
-    tzdata=2024a-r0 \
-    yaml-dev=0.2.5-r2 && \
+    bash \
+    build-base \
+    curl \
+    git \
+    imagemagick \
+    nodejs \
+    npm \
+    postgresql-dev \
+    sqlite-dev \
+    tzdata \
+    yaml-dev && \
     gem install bundler -v 2.4.10
 
 # Set working directory
