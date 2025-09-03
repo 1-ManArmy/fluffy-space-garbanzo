@@ -51,6 +51,7 @@ Rails.application.configure do
   config.hosts << "onelastai.com"
   config.hosts << "www.onelastai.com"
   config.hosts << "api.onelastai.com"
+  config.hosts << "humbly-tidy-coral.ngrok-free.app"
   
   # Allow all agent subdomains
   config.hosts << /.*\.onelastai\.com/

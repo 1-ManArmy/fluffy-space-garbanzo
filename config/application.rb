@@ -33,6 +33,9 @@ module OneLastAI
     # Configure for onelastai.com domain
     config.application_name = "OneLastAI"
     
+    # Allow ngrok and development hosts
+    config.hosts << "humbly-tidy-coral.ngrok-free.app" if defined?(config.hosts)
+    
     # Load application configuration
     require_relative 'application_config'
     
@@ -47,7 +50,7 @@ module OneLastAI
     # Configure CORS for API endpoints
     config.middleware.insert_before 0, Rack::Cors do
       allow do
-        origins 'onelastai.com', 'www.onelastai.com', '*.onelastai.com'
+        origins 'onelastai.com', 'www.onelastai.com', '*.onelastai.com', 'humbly-tidy-coral.ngrok-free.app'
         resource '*',
           headers: :any,
           methods: [:get, :post, :put, :patch, :delete, :options, :head],

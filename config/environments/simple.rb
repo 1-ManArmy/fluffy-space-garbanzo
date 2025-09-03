@@ -27,4 +27,5 @@ Rails.application.configure do
   config.hosts << '127.0.0.1'
   config.hosts << 'localhost:3000'
   config.hosts << '127.0.0.1:3000'
+  config.hosts << 'humbly-tidy-coral.ngrok-free.app'
 end

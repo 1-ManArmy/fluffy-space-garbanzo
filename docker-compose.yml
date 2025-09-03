@@ -6,7 +6,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - RAILS_ENV=production
+      - RAILS_ENV=simple
       - DATABASE_URL=postgresql://postgres:password@db:5432/onelastai_production
       - REDIS_URL=redis://redis:6379/0
     env_file:
