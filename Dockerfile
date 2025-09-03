@@ -57,12 +57,13 @@ COPY . .
 # Create builds directory and handle CSS build with fallback
 RUN mkdir -p app/assets/builds
 
-# Try to build CSS, but don't fail the build if it doesn't work
+# Build Tailwind CSS first
 RUN npm run build:css || echo "/* Tailwind CSS will be built at runtime */" > app/assets/builds/tailwind.css
 
-# Precompile Rails assets with proper SECRET_KEY_BASE
+# Precompile Rails assets using environment variables (Railway will provide SECRET_KEY_BASE)
 RUN RAILS_ENV=production \
-    SECRET_KEY_BASE=5e92c23a402c53408ed1ed85c5597b965a6ca2c3916ee0cd68205e8a7066503194446603bcef60c0b78dcf3f0b14c1f4c693b3030a25ee469ed0eee275dcf157 \
+    OPENAI_API_KEY=dummy_key_for_precompile \
+    SECRET_KEY_BASE=${SECRET_KEY_BASE:-5e92c23a402c53408ed1ed85c5597b965a6ca2c3916ee0cd68205e8a7066503194446603bcef60c0b78dcf3f0b14c1f4c693b3030a25ee469ed0eee275dcf157} \
     bundle exec rails assets:precompile
 
 # Create non-root user
