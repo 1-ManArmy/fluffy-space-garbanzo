@@ -127,7 +127,7 @@ gem 'omniauth-rails_csrf_protection', '~> 1.0'
 gem 'rack-attack', '~> 6.7'
 
 # CORS handling
-gem 'rack-cors', '~> 2.0'
+gem 'rack-cors', '~> 3.0'
 
 # Security headers
 gem 'secure_headers', '~> 7.1'
