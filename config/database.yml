@@ -1,0 +1,25 @@
+# PostgreSQL configuration for OneLastAI platform
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  timeout: 5000
+
+development:
+  <<: *default
+  host: db
+  database: onelastai_development
+  username: postgres
+  password: postgres
+
+test:
+  <<: *default
+  host: db
+  database: onelastai_test
+  username: postgres
+  password: postgres
+
+production:
+  <<: *default
+  url: <%= ENV['DATABASE_URL'] %>
+  # Railway will provide DATABASE_URL automatically
