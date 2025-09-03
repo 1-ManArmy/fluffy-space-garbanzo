@@ -26,7 +26,7 @@ gem 'stimulus-rails'
 
 # Modern Frontend Stack for Railway.com-inspired design
 gem 'cssbundling-rails'                  # CSS bundling for modern workflows - temporarily disabled
-gem 'tailwindcss-rails', '~> 2.0'        # Modern utility-first CSS framework
+gem 'tailwindcss-rails', '~> 4.3'        # Modern utility-first CSS framework
 gem 'view_component', '~> 4.0'           # Reusable component system
 
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
