@@ -1,0 +1,4 @@
+trunk_cli_version: 1.25.0
+title: "Error while executing: app\\controllers\\datavision_controller.rb (config scanning)"
+report:
+  - "open() failed for path 'C:\\Users\\HP\\fluffy-space-garbanzo\\app\\controllers\\datavision_controller.rb': No such file or directory"

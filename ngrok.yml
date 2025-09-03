@@ -1,0 +1,8 @@
+version: '2'
+authtoken: 2xKTdivrFl1fkSSap1QcGhicJcZ_3QhJyn6mviXK1Ck6b67rV
+tunnels:
+  onelastai:
+    proto: http
+    addr: 3000
+    hostname: humbly-tidy-coral.ngrok-free.app
+    host_header: localhost:3000

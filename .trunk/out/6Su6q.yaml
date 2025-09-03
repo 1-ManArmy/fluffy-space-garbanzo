@@ -1,0 +1,23 @@
+trunk_cli_version: 1.25.0
+title: trufflehog exited with exit_code=1
+report:
+  - trufflehog exited with exit_code=1
+  - linter:
+      command: |
+        'C:\Users\HP\AppData\Local\trunk\tools\trufflehog\3.90.5-2177eb721238c2942ac39a262ccc90eb\trufflehog.exe' filesystem --json --fail --only-verified --no-update setup.sh
+      stdin_path: (none)
+      run_from: C:\Users\HP\AppData\Local\Temp\trunk\eui44hb\
+      timeout: 10m
+      rerun: (cd C:\Users\HP\AppData\Local\Temp\trunk\eui44hb\; env -i 'PATH=C:\Users\HP\AppData\Local\trunk\tools\trufflehog\3.90.5-2177eb721238c2942ac39a262ccc90eb;C:/Users/HP/AppData/Local/trunk/tools/git-bash/2.40.1-da0c3e1526d36e62bf43d06ec46c5052/bin;C:/Users/HP/AppData/Local/trunk/tools/git-bash/2.40.1-da0c3e1526d36e62bf43d06ec46c5052/usr/bin;C:\Users\HP\AppData\Local\trunk\tools\trufflehog\3.90.5-2177eb721238c2942ac39a262ccc90eb;C:\Users\HP\AppData\Local\trunk\tools\git-bash\2.40.1-da0c3e1526d36e62bf43d06ec46c5052/bin;C:\Users\HP\AppData\Local\trunk\tools\git-bash\2.40.1-da0c3e1526d36e62bf43d06ec46c5052/usr/bin' 'C:\Users\HP\AppData\Local\trunk\tools\trufflehog\3.90.5-2177eb721238c2942ac39a262ccc90eb\trufflehog.exe' filesystem --json --fail --only-verified --no-update setup.sh)
+      affects_cache:
+        []
+      direct_configs:
+        []
+      exit_status: exited
+      exit_code: 1
+      stdout: (none)
+      stderr: |
+        {"level":"info-0","ts":"2025-08-27T18:11:02-07:00","logger":"trufflehog","msg":"running source","source_manager_worker_id":"hmSOE","with_units":true}
+
+    parser: |
+      (none)
