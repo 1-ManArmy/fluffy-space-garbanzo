@@ -55,10 +55,14 @@ RUN npm install
 COPY . .
 
 # Create builds directory and handle CSS build with fallback
-RUN mkdir -p app/assets/builds
+RUN mkdir -p app/assets/builds app/assets/tailwind
 
 # Build Tailwind CSS first
 RUN npm run build:css || echo "/* Tailwind CSS will be built at runtime */" > app/assets/builds/tailwind.css
+
+# Create the file that tailwindcss-rails expects
+RUN cp app/assets/stylesheets/application.tailwind.css app/assets/tailwind/application.css || \
+    echo "/* Copied from application.tailwind.css */" > app/assets/tailwind/application.css
 
 # Precompile Rails assets using environment variables (Railway will provide SECRET_KEY_BASE)
 # Skip CSS build since Tailwind is already built

@@ -6,11 +6,11 @@ commands:
   - run: trunk upgrade plugins
     title: Plugins
 full_timestamp:
-  nanos: 865558000
-  seconds: 1756923602
+  nanos: 43937000
+  seconds: 1756927204
 id: trunk-upgrade
 message: " 6 linter upgrades\n 1 plugin upgrade\n"
 priority: low
 rendered: "\x1b[90mRun \x1b[0m\x1b[96mtrunk upgrade\x1b[0m\x1b[90m to upgrade \x1b[0m\x1b[90m1 plugin and 6 linters\n\x1b[0m"
-timestamp: 1756923602
+timestamp: 1756927204
 title: Upgrades Available
