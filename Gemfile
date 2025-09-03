@@ -26,7 +26,7 @@ gem 'stimulus-rails'
 
 # Modern Frontend Stack for Railway.com-inspired design
 gem 'cssbundling-rails'                  # CSS bundling for modern workflows - temporarily disabled
-gem 'tailwindcss-rails', '~> 2.0'        # Modern utility-first CSS framework
+gem 'tailwindcss-rails', '~> 4.3'        # Modern utility-first CSS framework
 gem 'view_component', '~> 4.0'           # Reusable component system
 
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
@@ -98,7 +98,7 @@ gem 'httparty', '~> 0.21'
 gem 'oj', '~> 3.16'
 
 # OpenAI API client
-gem 'ruby-openai', '~> 8.2'
+gem 'ruby-openai', '~> 8.3'
 
 # =============================================================================
 # AUTHENTICATION & AUTHORIZATION
@@ -194,7 +194,7 @@ group :development, :test do
   # Code quality
   gem 'rubocop', '~> 1.57', require: false
   gem 'rubocop-rails', '~> 2.22', require: false
-  gem 'rubocop-rspec', '~> 2.25', require: false
+  gem 'rubocop-rspec', '~> 3.7', require: false
 end
 
 group :development, :test do
