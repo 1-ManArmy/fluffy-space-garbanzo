@@ -23,3 +23,9 @@ production:
   <<: *default
   url: <%= ENV['DATABASE_URL'] %>
   # Railway will provide DATABASE_URL automatically
+  # Fallback configuration if DATABASE_URL is not available
+  host: <%= ENV['DATABASE_HOST'] || 'localhost' %>
+  port: <%= ENV['DATABASE_PORT'] || 5432 %>
+  database: <%= ENV['DATABASE_NAME'] || 'onelastai_production' %>
+  username: <%= ENV['DATABASE_USERNAME'] || 'postgres' %>
+  password: <%= ENV['DATABASE_PASSWORD'] || '' %>
