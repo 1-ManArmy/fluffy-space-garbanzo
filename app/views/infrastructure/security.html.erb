@@ -1,53 +1,156 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= @page_title %> - OneLast AI</title>
-    <meta name="description" content="Enterprise security and compliance information">
-    
-    <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
-    
-    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-    <%= javascript_importmap_tags %>
-</head>
-<body class="bg-gray-900 text-gray-100">
+<% content_for :title, @page_title %>
+<% content_for :meta_description, "OneLastAI security infrastructure with Keycloak identity management and enterprise-grade protection." %>
+
+<div class="min-h-screen bg-gradient-to-br from-slate-50 to-red-50">
+  <div class="container mx-auto px-4 py-12">
     <!-- Header -->
-    <header class="bg-black/50 backdrop-blur-md border-b border-gray-800 fixed w-full top-0 z-50">
-        <div class="container mx-auto px-6 py-4">
-            <div class="flex items-center justify-between">
-                <a href="/" class="text-2xl font-bold text-white">OneLast AI</a>
-                <nav class="hidden md:flex space-x-8">
-                    <a href="/" class="text-gray-300 hover:text-white transition-colors">Home</a>
-                    <a href="/features" class="text-gray-300 hover:text-white transition-colors">Features</a>
-                    <a href="/infrastructure" class="text-green-400 font-medium">Infrastructure</a>
-                    <a href="/about" class="text-gray-300 hover:text-white transition-colors">About</a>
-                    <a href="/contact" class="text-gray-300 hover:text-white transition-colors">Contact</a>
-                </nav>
-            </div>
+    <div class="text-center mb-12">
+      <h1 class="text-4xl font-bold text-gray-900 mb-4">
+        <span class="text-red-600">🔐</span> Security Infrastructure
+      </h1>
+      <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+        Enterprise-grade security with Keycloak identity management protecting all 27 AI agents
+      </p>
+    </div>
+
+    <!-- Keycloak Identity Provider -->
+    <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
+      <div class="flex items-center mb-6">
+        <div class="w-12 h-12 bg-red-600 rounded-lg flex items-center justify-center mr-4">
+          <span class="text-white text-2xl">🛡️</span>
         </div>
-    </header>
-
-    <!-- Main Content -->
-    <main class="pt-20">
-        <!-- Hero Section -->
-        <section class="py-20 bg-gradient-to-br from-gray-900 via-red-900/20 to-gray-900">
-            <div class="container mx-auto px-6 text-center">
-                <div class="text-6xl mb-6">🔐</div>
-                <h1 class="text-5xl lg:text-6xl font-bold text-white mb-6">
-                    Enterprise Security
-                </h1>
-                <p class="text-xl text-gray-300 max-w-3xl mx-auto mb-8">
-                    Military-grade security protecting your data and privacy
-                </p>
+        <div>
+          <h2 class="text-2xl font-bold text-gray-900"><%= @security_info[:identity_provider][:name] %></h2>
+          <p class="text-gray-600"><%= @security_info[:identity_provider][:description] %></p>
+        </div>
+      </div>
+      
+      <div class="grid md:grid-cols-2 gap-6 mb-6">
+        <div>
+          <h3 class="text-lg font-semibold text-gray-800 mb-3">Identity Features</h3>
+          <ul class="space-y-2">
+            <% @security_info[:identity_provider][:features].each do |feature| %>
+              <li class="flex items-center text-gray-600">
+                <span class="text-green-500 mr-2">✅</span>
+                <%= feature %>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+        
+        <div>
+          <h3 class="text-lg font-semibold text-gray-800 mb-3">Authentication Flows</h3>
+          <div class="space-y-3">
+            <div class="p-3 bg-blue-50 rounded-lg">
+              <h4 class="font-medium text-blue-900">Standard Login</h4>
+              <p class="text-blue-700 text-sm">Username/password with MFA</p>
             </div>
-        </section>
+            <div class="p-3 bg-green-50 rounded-lg">
+              <h4 class="font-medium text-green-900">Social Login</h4>
+              <p class="text-green-700 text-sm">Google, GitHub, Microsoft</p>
+            </div>
+            <div class="p-3 bg-purple-50 rounded-lg">
+              <h4 class="font-medium text-purple-900">Enterprise SSO</h4>
+              <p class="text-purple-700 text-sm">SAML, LDAP integration</p>
+            </div>
+          </div>
+        </div>
+      </div>
 
-        <!-- Security Overview -->
-        <section class="py-20">
-            <div class="container mx-auto px-6">
-                <div class="text-center mb-16">
+      <div class="p-4 bg-green-50 rounded-lg">
+        <div class="flex items-center justify-between">
+          <span class="font-semibold text-green-900">Deployment Status</span>
+          <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">
+            <%= @security_info[:identity_provider][:status] %>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SSL Security -->
+    <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">
+        <span class="text-green-600">🔒</span> SSL/TLS Security
+      </h2>
+      
+      <div class="grid md:grid-cols-2 gap-6">
+        <div>
+          <h3 class="text-lg font-semibold text-gray-800 mb-3">SSL Provider</h3>
+          <div class="p-4 bg-green-50 rounded-lg">
+            <p class="font-semibold text-green-900"><%= @security_info[:ssl_security][:provider] %></p>
+            <p class="text-green-700 text-sm">Dual certificate strategy for maximum uptime</p>
+          </div>
+        </div>
+        
+        <div>
+          <h3 class="text-lg font-semibold text-gray-800 mb-3">Certificate Features</h3>
+          <ul class="space-y-2">
+            <% @security_info[:ssl_security][:features].each do |feature| %>
+              <li class="flex items-center text-gray-600">
+                <span class="text-green-500 mr-2">🔐</span>
+                <%= feature %>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Application Security -->
+    <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">
+        <span class="text-blue-600">🛡️</span> Application Security
+      </h2>
+      
+      <div class="grid md:grid-cols-3 gap-6">
+        <% @security_info[:application_security][:features].each_with_index do |feature, index| %>
+          <div class="text-center p-6 bg-gray-50 rounded-lg">
+            <div class="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+              <span class="text-white text-2xl">
+                <%= ['🚫', '⚡', '🔍', '💉', '🚨', '🎫'][index] || '🔒' %>
+              </span>
+            </div>
+            <h3 class="font-semibold text-gray-800 mb-2"><%= feature %></h3>
+            <p class="text-gray-600 text-sm">Active protection layer</p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Compliance & Standards -->
+    <div class="bg-white rounded-xl shadow-lg p-8">
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">
+        <span class="text-purple-600">📜</span> Compliance & Standards
+      </h2>
+      
+      <div class="grid md:grid-cols-3 gap-6">
+        <% @security_info[:compliance].each_with_index do |standard, index| %>
+          <div class="text-center p-6 bg-purple-50 rounded-lg">
+            <div class="w-16 h-16 bg-purple-500 rounded-full flex items-center justify-center mx-auto mb-4">
+              <span class="text-white text-2xl">
+                <%= ['🇪🇺', '🏛️', '🌍'][index] || '📋' %>
+              </span>
+            </div>
+            <h3 class="font-semibold text-gray-800 mb-2"><%= standard %></h3>
+            <div class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm font-medium">
+              Compliant
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="mt-12 text-center">
+      <div class="space-x-4">
+        <%= link_to "← View Database Config", infrastructure_database_path, 
+            class: "px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors" %>
+        <%= link_to "View Payment Systems →", infrastructure_payments_path, 
+            class: "px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors" %>
+      </div>
+    </div>
+  </div>
+</div>
                     <h2 class="text-4xl font-bold text-white mb-6">Security Architecture</h2>
                     <p class="text-xl text-gray-300 max-w-3xl mx-auto">
                         Multi-layered security approach with zero-trust architecture

@@ -88,6 +88,133 @@ class InfrastructureController < ApplicationController
     }
   end
 
+  def cloud
+    @page_title = 'Cloud Infrastructure - Railway Platform'
+    @cloud_info = {
+      provider: 'Railway',
+      description: 'Modern cloud platform with automatic scaling and deployment',
+      features: [
+        'Automatic deployments from GitHub',
+        'Built-in PostgreSQL database',
+        'Custom domain support (onelastai.com)',
+        'SSL certificates (automatic)',
+        'Global CDN via Cloudflare',
+        'Auto-scaling based on traffic'
+      ],
+      benefits: [
+        'Zero server management',
+        'Instant deployments',
+        'Cost-effective pricing',
+        'Developer-friendly'
+      ],
+      pricing: '$5-10/month',
+      status: 'Planned for deployment'
+    }
+  end
+
+  def database
+    @page_title = 'Database Infrastructure'
+    @database_info = {
+      primary: {
+        name: 'PostgreSQL 15',
+        provider: 'Railway',
+        description: 'Production-ready PostgreSQL with automatic backups',
+        features: ['ACID compliance', 'Full-text search', 'JSON support', 'Auto-backups']
+      },
+      cache: {
+        name: 'Redis 7',
+        provider: 'Railway/Docker',
+        description: 'In-memory cache for session storage and performance',
+        features: ['Session storage', 'Rate limiting', 'Real-time features']
+      },
+      current_config: {
+        environment: 'Docker Compose',
+        postgres_version: '15-alpine',
+        redis_version: '7-alpine',
+        connection_pooling: 'Enabled'
+      }
+    }
+  end
+
+  def security
+    @page_title = 'Security Infrastructure - Keycloak Identity Management'
+    @security_info = {
+      identity_provider: {
+        name: 'Keycloak',
+        description: 'Open-source identity and access management solution',
+        features: [
+          'Single Sign-On (SSO)',
+          'Multi-factor authentication (MFA)',
+          'Social login integration',
+          'Role-based access control (RBAC)',
+          'OAuth 2.0 / OpenID Connect',
+          'User federation'
+        ],
+        status: 'Configured for deployment'
+      },
+      ssl_security: {
+        provider: 'Cloudflare + Let\'s Encrypt',
+        features: ['Wildcard SSL for *.onelastai.com', 'TLS 1.3', 'HSTS', 'Certificate auto-renewal']
+      },
+      application_security: {
+        features: [
+          'CORS protection',
+          'Rate limiting',
+          'Input validation',
+          'SQL injection prevention',
+          'XSS protection',
+          'CSRF tokens'
+        ]
+      },
+      compliance: ['GDPR ready', 'SOC 2 Type II preparation', 'ISO 27001 aligned']
+    }
+  end
+
+  def payments
+    @page_title = 'Payment Infrastructure'
+    @payment_info = {
+      primary_providers: [
+        {
+          name: 'Stripe',
+          description: 'Primary payment processor with global reach',
+          features: ['Credit/Debit cards', 'Apple Pay', 'Google Pay', 'ACH', 'International'],
+          fees: '2.9% + 30¢',
+          status: 'Active'
+        },
+        {
+          name: 'PayPal',
+          description: 'Alternative payment method for user preference',
+          features: ['PayPal balance', 'Credit cards', 'Bank transfers', 'Pay in 4'],
+          fees: '2.9% + fixed fee',
+          status: 'Integrated'
+        }
+      ],
+      additional_providers: [
+        {
+          name: 'Lemon Squeezy',
+          description: 'Modern payment platform for digital products',
+          features: ['Global tax compliance', 'Subscription management', 'Digital receipts'],
+          fees: '5% + payment processing',
+          status: 'Planned'
+        }
+      ],
+      subscription_features: [
+        'Automatic billing cycles',
+        'Pro-rated upgrades/downgrades',
+        'Dunning management',
+        'Tax calculation',
+        'Invoice generation',
+        'Payment analytics'
+      ],
+      security: [
+        'PCI DSS Level 1 compliance',
+        'Tokenized card storage',
+        'Fraud detection',
+        '3D Secure authentication'
+      ]
+    }
+  end
+
   private
 
   def set_page_title

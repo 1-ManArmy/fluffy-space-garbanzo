@@ -544,8 +544,11 @@ Rails.application.routes.draw do
 
   # Infrastructure Routes
   get '/infrastructure', to: 'infrastructure#index'
-  get '/infrastructure/tech-stack', to: 'infrastructure#tech_stack'
+  get '/infrastructure/cloud', to: 'infrastructure#cloud'
+  get '/infrastructure/database', to: 'infrastructure#database'
   get '/infrastructure/security', to: 'infrastructure#security'
+  get '/infrastructure/payments', to: 'infrastructure#payments'
+  get '/infrastructure/tech-stack', to: 'infrastructure#tech_stack'
   get '/infrastructure/deployment', to: 'infrastructure#deployment'
 
   # Newsletter Routes

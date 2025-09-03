@@ -1,0 +1,191 @@
+<% content_for :title, @page_title %>
+<% content_for :meta_description, "OneLastAI payment infrastructure with Stripe, PayPal, and Lemon Squeezy for global accessibility." %>
+
+<div class="min-h-screen bg-gradient-to-br from-slate-50 to-yellow-50">
+  <div class="container mx-auto px-4 py-12">
+    <!-- Header -->
+    <div class="text-center mb-12">
+      <h1 class="text-4xl font-bold text-gray-900 mb-4">
+        <span class="text-yellow-600">💳</span> Payment Infrastructure
+      </h1>
+      <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+        Multiple payment providers for global accessibility and subscription management
+      </p>
+    </div>
+
+    <!-- Primary Payment Providers -->
+    <div class="space-y-8 mb-8">
+      <% @payment_info[:primary_providers].each_with_index do |provider, index| %>
+        <div class="bg-white rounded-xl shadow-lg p-8">
+          <div class="flex items-center mb-6">
+            <div class="w-12 h-12 bg-<%= ['blue', 'purple'][index] %>-600 rounded-lg flex items-center justify-center mr-4">
+              <span class="text-white text-2xl"><%= ['💎', '🅿️'][index] %></span>
+            </div>
+            <div class="flex-1">
+              <div class="flex items-center justify-between">
+                <div>
+                  <h2 class="text-2xl font-bold text-gray-900"><%= provider[:name] %></h2>
+                  <p class="text-gray-600"><%= provider[:description] %></p>
+                </div>
+                <div class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">
+                  <%= provider[:status] %>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="grid md:grid-cols-3 gap-6">
+            <div>
+              <h3 class="text-lg font-semibold text-gray-800 mb-3">Payment Methods</h3>
+              <ul class="space-y-2">
+                <% provider[:features].each do |feature| %>
+                  <li class="flex items-center text-gray-600">
+                    <span class="text-green-500 mr-2">✅</span>
+                    <%= feature %>
+                  </li>
+                <% end %>
+              </ul>
+            </div>
+            
+            <div>
+              <h3 class="text-lg font-semibold text-gray-800 mb-3">Processing Fees</h3>
+              <div class="p-4 bg-<%= ['blue', 'purple'][index] %>-50 rounded-lg">
+                <p class="font-semibold text-<%= ['blue', 'purple'][index] %>-900"><%= provider[:fees] %></p>
+                <p class="text-<%= ['blue', 'purple'][index] %>-700 text-sm">Per transaction</p>
+              </div>
+            </div>
+            
+            <div>
+              <h3 class="text-lg font-semibold text-gray-800 mb-3">Global Reach</h3>
+              <div class="space-y-2">
+                <div class="flex items-center text-gray-600">
+                  <span class="text-blue-500 mr-2">🌍</span>
+                  190+ countries
+                </div>
+                <div class="flex items-center text-gray-600">
+                  <span class="text-green-500 mr-2">💱</span>
+                  135+ currencies
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Additional Providers -->
+    <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">
+        <span class="text-orange-600">🍋</span> Additional Payment Options
+      </h2>
+      
+      <% @payment_info[:additional_providers].each do |provider| %>
+        <div class="border border-gray-200 rounded-lg p-6">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <h3 class="text-xl font-bold text-gray-900"><%= provider[:name] %></h3>
+              <p class="text-gray-600"><%= provider[:description] %></p>
+            </div>
+            <div class="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-medium">
+              <%= provider[:status] %>
+            </div>
+          </div>
+          
+          <div class="grid md:grid-cols-2 gap-6">
+            <div>
+              <h4 class="font-semibold text-gray-800 mb-2">Features</h4>
+              <ul class="space-y-1">
+                <% provider[:features].each do |feature| %>
+                  <li class="flex items-center text-gray-600">
+                    <span class="text-orange-500 mr-2">🔸</span>
+                    <%= feature %>
+                  </li>
+                <% end %>
+              </ul>
+            </div>
+            
+            <div>
+              <h4 class="font-semibold text-gray-800 mb-2">Pricing</h4>
+              <div class="p-3 bg-orange-50 rounded-lg">
+                <p class="font-semibold text-orange-900"><%= provider[:fees] %></p>
+                <p class="text-orange-700 text-sm">All-inclusive pricing</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Subscription Management -->
+    <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">
+        <span class="text-green-600">🔄</span> Subscription Management
+      </h2>
+      
+      <div class="grid md:grid-cols-2 gap-6">
+        <div>
+          <h3 class="text-lg font-semibold text-gray-800 mb-3">Billing Features</h3>
+          <ul class="space-y-2">
+            <% @payment_info[:subscription_features].each do |feature| %>
+              <li class="flex items-center text-gray-600">
+                <span class="text-green-500 mr-2">⚙️</span>
+                <%= feature %>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+        
+        <div>
+          <h3 class="text-lg font-semibold text-gray-800 mb-3">Subscription Plans</h3>
+          <div class="space-y-3">
+            <div class="p-3 bg-gray-50 rounded-lg">
+              <h4 class="font-medium text-gray-800">Free Tier</h4>
+              <p class="text-gray-600 text-sm">Basic access to 3 AI agents</p>
+            </div>
+            <div class="p-3 bg-blue-50 rounded-lg">
+              <h4 class="font-medium text-blue-900">Pro Plan</h4>
+              <p class="text-blue-700 text-sm">Full access to all 27 agents</p>
+            </div>
+            <div class="p-3 bg-purple-50 rounded-lg">
+              <h4 class="font-medium text-purple-900">Enterprise</h4>
+              <p class="text-purple-700 text-sm">Custom deployment & support</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Security & Compliance -->
+    <div class="bg-white rounded-xl shadow-lg p-8">
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">
+        <span class="text-red-600">🔒</span> Payment Security
+      </h2>
+      
+      <div class="grid md:grid-cols-4 gap-6">
+        <% @payment_info[:security].each_with_index do |feature, index| %>
+          <div class="text-center p-6 bg-red-50 rounded-lg">
+            <div class="w-16 h-16 bg-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
+              <span class="text-white text-2xl">
+                <%= ['🏆', '🔐', '🛡️', '🔍'][index] || '🔒' %>
+              </span>
+            </div>
+            <h3 class="font-semibold text-gray-800 mb-2"><%= feature %></h3>
+            <div class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">
+              Active
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="mt-12 text-center">
+      <div class="space-x-4">
+        <%= link_to "← View Security Config", infrastructure_security_path, 
+            class: "px-6 py-3 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors" %>
+        <%= link_to "Back to Infrastructure", infrastructure_path, 
+            class: "px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors" %>
+      </div>
+    </div>
+  </div>
+</div>
