@@ -1,6 +1,6 @@
 # OneLastAI Multi-stage Production Dockerfile
 
-# Base stage with common dependencies  
+# Base stage with common dependencies
 FROM ruby:3.4.2-alpine AS base
 
 # Install system dependencies (alphabetically sorted and pinned)
@@ -62,7 +62,7 @@ RUN npm run build:css || echo "/* Tailwind CSS will be built at runtime */" > ap
 
 # Precompile Rails assets with proper SECRET_KEY_BASE
 RUN RAILS_ENV=production \
-    SECRET_KEY_BASE=d5f8a7b9c3e1f2a6b8d0c4e7f9a2b5c8e1f4a7b0c3e6f9a2b5c8e1f4a7b0c3e6f9a2b5c8e1f4a7b0c3e6 \
+    SECRET_KEY_BASE=5e92c23a402c53408ed1ed85c5597b965a6ca2c3916ee0cd68205e8a7066503194446603bcef60c0b78dcf3f0b14c1f4c693b3030a25ee469ed0eee275dcf157 \
     bundle exec rails assets:precompile
 
 # Create non-root user
