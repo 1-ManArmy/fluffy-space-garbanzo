@@ -34,6 +34,10 @@ RUN npm install
 # Copy application code
 COPY . .
 
+# Copy and set up entrypoint
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
 # Create necessary directories
 RUN mkdir -p app/assets/builds app/assets/tailwind log tmp storage
 
@@ -49,11 +53,14 @@ RUN addgroup -g 1001 -S appuser && \
 USER appuser
 
 # Expose port (Railway will override this)
-EXPOSE $PORT
+EXPOSE 3000
 
-# Health check
+# Health check using dynamic port
 HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
-  CMD curl -f http://localhost:$PORT/health || exit 1
+  CMD curl -f http://localhost:${PORT:-3000}/health || exit 1
+
+# Set entrypoint
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 
 # Start command with dynamic port
-CMD ["sh", "-c", "bundle exec rails server -b 0.0.0.0 -p $PORT -e production"]
+CMD ["sh", "-c", "bundle exec rails server -b 0.0.0.0 -p ${PORT:-3000} -e production"]
