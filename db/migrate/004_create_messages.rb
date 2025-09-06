@@ -18,8 +18,8 @@ class CreateMessages < ActiveRecord::Migration[7.1]
       t.index :model_used
     end
 
-    # Full-text search on content
-    add_index :messages, :content, using: :gin, opclass: :gin_trgm_ops
+    # Full-text search on content (using btree index instead of gin_trgm_ops)
+    add_index :messages, :content
 
     # Add constraints
     add_check_constraint :messages, "role IN ('user', 'assistant', 'system')", name: 'messages_role_check'
