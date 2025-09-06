@@ -18,7 +18,7 @@ class CreateConversations < ActiveRecord::Migration[7.1]
       t.index :session_id
     end
 
-    # Full-text search on title
-    add_index :conversations, :title, using: :gin, opclass: :gin_trgm_ops
+    # Full-text search on title (using btree index instead of gin_trgm_ops)
+    add_index :conversations, :title
   end
 end
