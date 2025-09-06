@@ -14,9 +14,9 @@ else
   echo "⚠️ No database URL found, skipping migrations"
 fi
 
-# Skip asset precompilation for Railway deployment (using pre-built CSS)
-echo "🎨 Using pre-built assets..."
-echo "✅ Skipping asset compilation to avoid Tailwind issues"
+# Assets are already precompiled in Dockerfile for better performance
+echo "🎨 Using precompiled assets from build stage..."
+echo "✅ Assets ready for production serving"
 
 echo "🔥 Starting Rails server on port ${PORT:-3000}..."
 exec "$@"

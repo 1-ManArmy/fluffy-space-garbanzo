@@ -1,5 +1,24 @@
 <!-- Comprehensive Footer Section -->
 <footer class="footer-crystal-section relative py-16 overflow-hidden">
+  <!-- Footer-specific scoped styles -->
+  <style>
+    /* Scope footer particles to only this footer section */
+    .footer-crystal-section .footer-particle {
+      position: absolute !important;
+      pointer-events: none !important;
+      z-index: 5 !important;
+    }
+    
+    /* Ensure footer particles stay within footer container */
+    .footer-crystal-section .footer-particles {
+      position: absolute !important;
+      inset: 0 !important;
+      pointer-events: none !important;
+      z-index: 5 !important;
+      overflow: hidden !important;
+    }
+  </style>
+  
   <!-- Advanced Crystal Background Effects -->
   <div class="footer-bg-layers absolute inset-0">
     <div class="footer-crystal-fog-layer footer-fog-1"></div>
@@ -13,7 +32,7 @@
   <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-slate-800/60 to-black/80"></div>
   <div class="absolute inset-0 bg-gradient-radial from-purple-600/15 via-blue-600/10 to-transparent"></div>
   
-  <!-- Floating Footer Particles -->
+  <!-- Floating Footer Particles - Contained within footer -->
   <div class="footer-particles absolute inset-0 pointer-events-none">
     <div class="footer-particle footer-particle-1"></div>
     <div class="footer-particle footer-particle-2"></div>

@@ -36,28 +36,31 @@
             animation: flow 8s linear infinite;
         }
 
-        /* Floating animation for quantum particles */
-        @keyframes float {
+        /* Floating animation for quantum particles - SCOPED TO THIS SECTION ONLY */
+        .quantum-nexus-section .quantum-particle {
+            position: absolute !important;
+            border-radius: 50% !important;
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.5) 0%, rgba(59, 130, 246, 0.3) 50%, transparent 70%) !important;
+            animation: quantumNexusFloat linear infinite !important;
+            pointer-events: none !important;
+        }
+
+        /* Contained animation for quantum particles in nexus section */
+        @keyframes quantumNexusFloat {
             0% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0; }
             50% { opacity: 0.4; }
             100% { transform: translateY(-100vh) translateX(var(--x-end)) rotate(360deg); opacity: 0; }
         }
-        .quantum-particle {
-            position: absolute;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(168, 85, 247, 0.5) 0%, rgba(59, 130, 246, 0.3) 50%, transparent 70%);
-            animation: float linear infinite;
-        }
 
-        /* Assigning random positions and animation durations to particles */
-        .quantum-particle-nexus-1 { width: 5px; height: 5px; left: 10%; animation-duration: 15s; --x-end: 20px; }
-        .quantum-particle-nexus-2 { width: 8px; height: 8px; left: 25%; animation-duration: 12s; animation-delay: 2s; --x-end: -15px; }
-        .quantum-particle-nexus-3 { width: 4px; height: 4px; left: 40%; animation-duration: 18s; animation-delay: 4s; --x-end: 25px; }
-        .quantum-particle-nexus-4 { width: 6px; height: 6px; left: 55%; animation-duration: 10s; animation-delay: 1s; --x-end: -20px; }
-        .quantum-particle-nexus-5 { width: 7px; height: 7px; left: 70%; animation-duration: 16s; animation-delay: 3s; --x-end: 10px; }
-        .quantum-particle-nexus-6 { width: 5px; height: 5px; left: 85%; animation-duration: 13s; animation-delay: 5s; --x-end: -25px; }
-        .quantum-particle-nexus-7 { width: 9px; height: 9px; left: 5%; animation-duration: 20s; animation-delay: 6s; --x-end: 30px; }
-        .quantum-particle-nexus-8 { width: 4px; height: 4px; left: 95%; animation-duration: 11s; animation-delay: 7s; --x-end: -10px; }
+        /* Assigning random positions and animation durations to particles - SCOPED */
+        .quantum-nexus-section .quantum-particle-nexus-1 { width: 5px; height: 5px; left: 10%; animation-duration: 15s; --x-end: 20px; }
+        .quantum-nexus-section .quantum-particle-nexus-2 { width: 8px; height: 8px; left: 25%; animation-duration: 12s; animation-delay: 2s; --x-end: -15px; }
+        .quantum-nexus-section .quantum-particle-nexus-3 { width: 4px; height: 4px; left: 40%; animation-duration: 18s; animation-delay: 4s; --x-end: 25px; }
+        .quantum-nexus-section .quantum-particle-nexus-4 { width: 6px; height: 6px; left: 55%; animation-duration: 10s; animation-delay: 1s; --x-end: -20px; }
+        .quantum-nexus-section .quantum-particle-nexus-5 { width: 7px; height: 7px; left: 70%; animation-duration: 16s; animation-delay: 3s; --x-end: 10px; }
+        .quantum-nexus-section .quantum-particle-nexus-6 { width: 5px; height: 5px; left: 85%; animation-duration: 13s; animation-delay: 5s; --x-end: -25px; }
+        .quantum-nexus-section .quantum-particle-nexus-7 { width: 9px; height: 9px; left: 5%; animation-duration: 20s; animation-delay: 6s; --x-end: 30px; }
+        .quantum-nexus-section .quantum-particle-nexus-8 { width: 4px; height: 4px; left: 95%; animation-duration: 11s; animation-delay: 7s; --x-end: -10px; }
     </style>
 </head>
 <body class="bg-black text-white">

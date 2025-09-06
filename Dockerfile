@@ -1,7 +1,7 @@
 # OneLastAI Railway Production Dockerfile
 FROM ruby:3.4.2-alpine
 
-# Install system dependencies
+# Install system dependencies including Node.js for asset compilation
 RUN apk add --no-cache \
     bash \
     build-base \
@@ -28,11 +28,17 @@ RUN bundle config set --local deployment 'true' && \
     bundle install --jobs 4 --retry 3
 
 # Copy package.json and install Node dependencies
-COPY package.json ./
-RUN npm install
+COPY package.json package-lock.json* ./
+RUN npm ci --only=production
 
 # Copy application code
 COPY . .
+
+# Build Tailwind CSS for production
+RUN npm run build:css
+
+# Precompile Rails assets for production
+RUN RAILS_ENV=production bundle exec rake assets:precompile
 
 # Copy and set up entrypoint
 COPY docker-entrypoint.sh /usr/local/bin/
@@ -55,7 +61,7 @@ EXPOSE 3000
 
 # Health check using dynamic port
 HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
-  CMD curl -f http://localhost:${PORT:-3000}/health || exit 1
+  CMD sh -c 'curl -f http://localhost:${PORT:-3000}/health || exit 1'
 
 # Set entrypoint
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]

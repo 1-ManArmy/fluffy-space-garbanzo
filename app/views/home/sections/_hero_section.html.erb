@@ -90,9 +90,9 @@
 <% end %>
 
     <!-- Enhanced Hero Section with Canvas and Realistic Terminal -->
-    <section class="relative pt-20 pb-32 overflow-hidden">
-        <!-- Canvas Background -->
-        <canvas id="particle-canvas" class="absolute top-0 left-0 w-full h-full z-0"></canvas>
+    <section class="hero-section relative pt-20 pb-32 overflow-hidden">
+        <!-- Canvas Background - Scoped to hero section only -->
+        <canvas id="hero-particle-canvas" class="absolute top-0 left-0 w-full h-full z-0"></canvas>
 
         <div class="container mx-auto px-6 relative z-10">
             <div class="flex flex-col lg:flex-row items-center gap-12">
@@ -165,8 +165,8 @@
     <script>
     document.addEventListener('DOMContentLoaded', function() {
 
-        // --- Particle Canvas Animation ---
-        const canvas = document.getElementById('particle-canvas');
+        // --- Particle Canvas Animation - Scoped to Hero Section ---
+        const canvas = document.getElementById('hero-particle-canvas');
         if (canvas) {
             const ctx = canvas.getContext('2d');
             let particles = [];
