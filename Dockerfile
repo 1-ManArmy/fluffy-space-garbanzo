@@ -38,11 +38,8 @@ COPY . .
 COPY docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
-# Create necessary directories
+# Create necessary directories and ensure CSS file exists
 RUN mkdir -p app/assets/builds app/assets/tailwind log tmp storage
-
-# Copy pre-built CSS to avoid compilation issues
-COPY app/assets/builds/tailwind.css app/assets/builds/
 
 # Create non-root user
 RUN addgroup -g 1001 -S appuser && \
