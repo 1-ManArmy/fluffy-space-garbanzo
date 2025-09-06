@@ -476,3 +476,75 @@ input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focu
   color: white;
   font-family: system-ui, -apple-system, sans-serif;
 }
+
+/* Responsive Design - Mobile First */
+@media (min-width: 640px) {
+  .sm\:flex-row { flex-direction: row; }
+  .sm\:text-sm { font-size: 0.875rem; }
+}
+
+@media (min-width: 768px) {
+  .md\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .md\:flex-row { flex-direction: row; }
+  .md\:text-lg { font-size: 1.125rem; }
+}
+
+@media (min-width: 1024px) {
+  .lg\:flex-row { flex-direction: row; }
+  .lg\:w-1\/2 { width: 50%; }
+  .lg\:text-left { text-align: left; }
+  .lg\:text-7xl { font-size: 4.5rem; line-height: 1; }
+  .lg\:justify-start { justify-content: flex-start; }
+  .lg\:mx-0 { margin-left: 0; margin-right: 0; }
+}
+
+/* Missing Layout Classes */
+.max-w-2xl { max-width: 42rem; }
+.max-w-4xl { max-width: 56rem; }
+.ml-2 { margin-left: 0.5rem; }
+.mr-1 { margin-right: 0.25rem; }
+.mr-2 { margin-right: 0.5rem; }
+.mb-6 { margin-bottom: 1.5rem; }
+.pt-20 { padding-top: 5rem; }
+.pb-32 { padding-bottom: 8rem; }
+.gap-12 { gap: 3rem; }
+
+/* Missing Size Classes */
+.w-2 { width: 0.5rem; }
+.w-3 { width: 0.75rem; }
+.h-2 { height: 0.5rem; }
+.h-3 { height: 0.75rem; }
+.text-7xl { font-size: 4.5rem; line-height: 1; }
+
+/* Missing Background Colors */
+.bg-red-500 { background-color: #ef4444; }
+.bg-yellow-500 { background-color: #eab308; }
+.bg-green-500 { background-color: #22c55e; }
+.bg-green-400 { background-color: #4ade80; }
+.bg-blue-400 { background-color: #60a5fa; }
+.bg-purple-400 { background-color: #a78bfa; }
+
+/* Missing Border Colors */
+.border-purple-500\/30 { border-color: rgba(139, 92, 246, 0.3); }
+
+/* Missing Background Opacity */
+.bg-purple-600\/20 { background-color: rgba(124, 58, 237, 0.2); }
+.bg-black\/80 { background-color: rgba(0, 0, 0, 0.8); }
+
+/* Missing Transform */
+.transform { transform: translateX(0) translateY(0) rotate(0) skewX(0) skewY(0) scaleX(1) scaleY(1); }
+.group:hover .group-hover\:translate-x-1 { transform: translateX(0.25rem); }
+
+/* Missing Transition */
+.transition-transform { transition-property: transform; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 150ms; }
+.transition-all { transition-property: all; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 150ms; }
+.duration-300 { transition-duration: 300ms; }
+
+/* Backdrop Blur */
+.backdrop-blur-sm { backdrop-filter: blur(4px); }
+
+/* Text Shadow */
+.shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); }
+
+/* Font Mono */
+.font-mono { font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace; }
