@@ -53,6 +53,7 @@ RUN addgroup -g 1001 -S appuser && \
 USER appuser
 
 # Expose port (Railway will override this)
+# Expose the port for Railway
 EXPOSE 3000
 
 # Health check using dynamic port
