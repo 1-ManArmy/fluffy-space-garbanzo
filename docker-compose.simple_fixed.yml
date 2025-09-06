@@ -1,6 +1,3 @@
-# Simple Docker Compose for OneLastAI - Core Services Only
-version: '3.8'
-
 services:
   # PostgreSQL Database
   postgres:
@@ -18,7 +15,7 @@ services:
     networks:
       - app_network
     healthcheck:
-      test: [CMD-SHELL, pg_isready -U onelastai -d onelastai_production]
+      test: ["CMD-SHELL", "pg_isready -U onelastai -d onelastai_production"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -35,7 +32,7 @@ services:
     networks:
       - app_network
     healthcheck:
-      test: [CMD, redis-cli, ping]
+      test: ["CMD", "redis-cli", "ping"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -48,11 +45,15 @@ services:
       target: production
     container_name: onelastai_app
     restart: unless-stopped
+    env_file:
+      - .env
     environment:
       - RAILS_ENV=production
       - SECRET_KEY_BASE=${SECRET_KEY_BASE}
       - DATABASE_URL=postgresql://onelastai:${POSTGRES_PASSWORD:-your_secure_postgres_password_here}@postgres:5432/onelastai_production
       - REDIS_URL=redis://redis:6379/0
+      - SKIP_ASSETS=1
+      - RUN_MIGRATIONS=true
     ports:
       - 3000:3000
     volumes:
@@ -66,7 +67,7 @@ services:
     networks:
       - app_network
     healthcheck:
-      test: [CMD, curl, -f, http://localhost:3000/health]
+      test: ["CMD-SHELL", "wget -qO- http://localhost:3000/health >/dev/null 2>&1"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -80,6 +81,8 @@ services:
       target: production
     container_name: onelastai_sidekiq
     restart: unless-stopped
+    env_file:
+      - .env
     environment:
       - RAILS_ENV=production
       - SECRET_KEY_BASE=${SECRET_KEY_BASE}

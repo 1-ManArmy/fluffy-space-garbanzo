@@ -54,6 +54,10 @@ RUN npm install
 # Copy application code
 COPY . .
 
+# Copy and set up entrypoint script
+COPY entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
 # Create builds directory and handle CSS build with fallback
 RUN mkdir -p app/assets/builds app/assets/tailwind
 
@@ -86,5 +90,5 @@ EXPOSE 3000
 HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
   CMD curl -f http://localhost:3000/health || exit 1
 
-# Start command
-CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0", "-p", "3000"]
+# Start command with entrypoint script
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]

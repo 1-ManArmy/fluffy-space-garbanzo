@@ -1,16 +1,22 @@
-[build]
-builder = "railpack"
+zo> docker ps --format "{{.Names}}: {{.Image}}"
+stupefied_antonelli: docker/lsp:golang
+admiring_mendel: mcr.microsoft.com/devcontainers/ruby:3
+devcrown_redis: redis:7-alpine
+devcrown_postgres: postgres:15-alpine
+PS C:\Users\HP\OneDrive\Desktop\Docker-AXEyAXE\fluffy-space-garbanzo>[build]
+builder = "nixpacks"
 
 [deploy]
 healthcheckPath = "/health"
-healthcheckTimeout = 600
+healthcheckTimeout = 300
 restartPolicyType = "on_failure"
-restartPolicyMaxRetries = 10
+restartPolicyMaxRetries = 3
 
 [environment]
 RAILS_ENV = "production"
 RAILS_SERVE_STATIC_FILES = "true"
 RAILS_LOG_TO_STDOUT = "true"
+NODE_ENV = "production"
 
 [variables]
 PORT = "3000"

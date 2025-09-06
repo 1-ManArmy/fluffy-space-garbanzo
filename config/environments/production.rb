@@ -47,12 +47,16 @@ Rails.application.configure do
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   config.force_ssl = true
 
-  # Configure allowed hosts for onelastai.com
+  # Configure allowed hosts for Railway and custom domains
   config.hosts << "onelastai.com"
   config.hosts << "www.onelastai.com"
   config.hosts << "api.onelastai.com"
   config.hosts << "humbly-tidy-coral.ngrok-free.app"
-
+  
+  # Allow Railway domains
+  config.hosts << /.*\.railway\.app$/
+  config.hosts << /.*\.up\.railway\.app$/
+  
   # Allow all agent subdomains
   config.hosts << /.*\.onelastai\.com/
 
