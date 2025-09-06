@@ -14,13 +14,9 @@ else
   echo "⚠️ No database URL found, skipping migrations"
 fi
 
-# Precompile assets if needed (skip if pre-built CSS exists)
-echo "🎨 Handling assets..."
-if [ ! -f app/assets/builds/tailwind.css ]; then
-  bundle exec rails assets:precompile || echo "⚠️ Asset precompile failed, continuing..."
-else
-  echo "✅ Pre-built CSS found, skipping asset compilation"
-fi
+# Skip asset precompilation for Railway deployment (using pre-built CSS)
+echo "🎨 Using pre-built assets..."
+echo "✅ Skipping asset compilation to avoid Tailwind issues"
 
 echo "🔥 Starting Rails server on port ${PORT:-3000}..."
 exec "$@"
