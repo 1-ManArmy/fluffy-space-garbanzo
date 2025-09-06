@@ -89,7 +89,7 @@ class AgentConnector
         database: connection.current_database,
         pool_size: ActiveRecord::Base.connection_pool.size,
         current_connections: client.pool.size,
-        database: client.database.name
+        redis_database: client.database.name
       }
     rescue StandardError => e
       { error: e.message }

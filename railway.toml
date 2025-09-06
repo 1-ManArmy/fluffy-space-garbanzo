@@ -1,9 +1,4 @@
-zo> docker ps --format "{{.Names}}: {{.Image}}"
-stupefied_antonelli: docker/lsp:golang
-admiring_mendel: mcr.microsoft.com/devcontainers/ruby:3
-devcrown_redis: redis:7-alpine
-devcrown_postgres: postgres:15-alpine
-PS C:\Users\HP\OneDrive\Desktop\Docker-AXEyAXE\fluffy-space-garbanzo>[build]
+[build]
 builder = "nixpacks"
 
 [deploy]

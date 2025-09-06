@@ -30,7 +30,7 @@ Rails.application.configure do
   # Feature Flags for AI Services
   config.ai_features = {
     openai_enabled: ENV['OPENAI_API_KEY'].present?,
-    google_ai_enabled: false, # Disabled for deployment - ENV['GOOGLE_AI_API_KEY'].present?,
+    google_ai_enabled: false, # Disabled for deployment
     runwayml_enabled: ENV['RUNWAYML_API_KEY'].present?,
     enable_ai_services: ENV['ENABLE_AI_SERVICES'] == 'true'
   }
@@ -47,9 +47,8 @@ end
 
 # Validation - Ensure required keys are present
 required_keys = {
-  'OPENAI_API_KEY' => ENV['OPENAI_API_KEY']
-  # 'GOOGLE_AI_API_KEY' => ENV['GOOGLE_AI_API_KEY'], # Disabled for deployment
-  # 'RUNWAYML_API_KEY' => ENV['RUNWAYML_API_KEY'] # Disabled for deployment
+  'OPENAI_API_KEY' => ENV['OPENAI_API_KEY'],
+  'RUNWAYML_API_KEY' => ENV['RUNWAYML_API_KEY']
 }
 
 missing_keys = required_keys.select { |_key, value| value.blank? }

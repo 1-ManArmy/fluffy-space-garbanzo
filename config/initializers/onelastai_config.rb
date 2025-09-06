@@ -31,6 +31,6 @@ $redis = Redis.new(url: OneLastAI::Configuration.config.redis_url) if OneLastAI:
 # Log configuration status
 Rails.logger.info "OneLastAI Configuration loaded for #{Rails.env} environment"
 Rails.logger.info "OpenAI API: #{OneLastAI::Configuration.ai_api_configured?(:openai) ? 'Configured' : 'Not configured'}"
-Rails.logger.info "Anthropic API: #{OneLastAI::Configuration.ai_api_configured?(:anthropic) ? 'Configured' : 'Not configured'}"
+# Rails.logger.info "Anthropic API: #{OneLastAI::Configuration.ai_api_configured?(:anthropic) ? 'Configured' : 'Not configured'}" # Disabled for deployment
 # Rails.logger.info "Google AI API: #{OneLastAI::Configuration.ai_api_configured?(:google) ? 'Configured' : 'Not configured'}" # Disabled for deployment
 Rails.logger.info "Redis: #{OneLastAI::Configuration.config.redis_url.present? ? 'Configured' : 'Not configured'}"
