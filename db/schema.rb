@@ -12,7 +12,6 @@
 
 ActiveRecord::Schema[7.1].define(version: 2025_09_01_201303) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension "pg_trgm"
   enable_extension "plpgsql"
 
   create_table "agent_interactions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
