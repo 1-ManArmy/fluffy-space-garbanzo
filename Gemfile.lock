@@ -94,7 +94,7 @@ GEM
       erubi (~> 1.4)
       parser (>= 2.4)
       smart_properties
-    bigdecimal (3.2.2)
+    bigdecimal (3.2.3)
     bootsnap (1.18.6)
       msgpack (~> 1.2)
     builder (3.3.0)
@@ -114,7 +114,7 @@ GEM
     cssbundling-rails (1.4.3)
       railties (>= 6.0.0)
     csv (3.3.5)
-    data_migrate (9.4.2)
+    data_migrate (11.3.0)
       activerecord (>= 6.1)
       railties (>= 6.1)
     date (3.4.1)
@@ -620,7 +620,7 @@ DEPENDENCIES
   bootsnap
   capybara
   cssbundling-rails
-  data_migrate (~> 9.0)
+  data_migrate (~> 11.3)
   debug
   devise (~> 4.9)
   dotenv-rails (~> 3.1)
