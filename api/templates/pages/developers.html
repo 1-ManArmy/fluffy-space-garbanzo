@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Developers - OneLastAI</title>
+
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <%= javascript_importmap_tags %>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+      background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+      color: #ffffff;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .hero-section {
+      padding: 6rem 2rem 4rem;
+      text-align: center;
+      background: radial-gradient(ellipse at center, rgba(0, 212, 255, 0.15) 0%, rgba(0, 0, 0, 0.3) 70%);
+      border-bottom: 2px solid #00d4ff;
+    }
+
+    .hero-title {
+      font-size: 3.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 20px #00d4ff;
+      background: linear-gradient(45deg, #00d4ff, #0099cc, #66d9ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 30px #00d4ff;
+    }
+
+    .hero-tagline {
+      font-size: 1.5rem;
+      color: #e0e0e0;
+      margin-bottom: 2rem;
+      font-weight: 300;
+    }
+
+    .content-section {
+      padding: 4rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .coming-soon {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(0, 212, 255, 0.3);
+      border-radius: 20px;
+      padding: 4rem;
+      backdrop-filter: blur(10px);
+    }
+
+    .coming-soon h2 {
+      font-size: 2.5rem;
+      color: #00d4ff;
+      margin-bottom: 2rem;
+    }
+
+    .coming-soon p {
+      font-size: 1.2rem;
+      color: #b8b8b8;
+      line-height: 1.7;
+      margin-bottom: 2rem;
+    }
+
+    .back-button {
+      display: inline-block;
+      background: linear-gradient(45deg, #00d4ff, #0099cc);
+      color: #ffffff;
+      padding: 1rem 2rem;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .back-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(0, 212, 255, 0.4);
+    }
+  </style>
+</head>
+
+<body>
+  <section class="hero-section">
+    <div class="hero-icon">👨‍💻</div>
+    <h1 class="hero-title">Developers</h1>
+    <p class="hero-tagline">Resources and tools for developers</p>
+  </section>
+
+  <section class="content-section">
+    <div class="coming-soon">
+      <h2>🚧 Coming Soon</h2>
+      <p>
+        This feature is currently under development. We're working hard to bring you 
+        the best experience possible. Stay tuned for updates!
+      </p>
+      <p>
+        In the meantime, feel free to explore our AI agents or contact our support team 
+        if you have any questions.
+      </p>
+      <a href="/" class="back-button">← Back to Home</a>
+    </div>
+  </section>
+</body>
+</html>

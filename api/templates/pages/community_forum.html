@@ -1,0 +1,199 @@
+<% content_for :title, "Community Forum - OneLastAI" %>
+<% content_for :description, "Join our developer community, ask questions, and share knowledge with thousands of AI developers worldwide." %>
+
+<div class="min-h-screen bg-slate-900 text-white">
+  <!-- Hero Section -->
+  <section class="relative py-20 overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-blue-900/20 via-purple-900/10 to-slate-900"></div>
+    <div class="container mx-auto px-6 relative">
+      <div class="text-center max-w-4xl mx-auto">
+        <h1 class="text-5xl lg:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+          Community Forum
+        </h1>
+        <p class="text-xl text-gray-300 mb-8">
+          Connect with thousands of developers, get support, and share knowledge about AI development
+        </p>
+        
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a href="#new-discussion" class="px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-medium hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-200 text-center">
+            Start a Discussion
+          </a>
+          <a href="#forum-categories" class="px-8 py-4 border border-gray-600 text-white rounded-xl font-medium hover:bg-gray-700 transition-all duration-200 text-center">
+            Browse Topics
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Forum Stats -->
+  <section class="py-16 border-b border-gray-800">
+    <div class="container mx-auto px-6">
+      <div class="grid md:grid-cols-4 gap-8 text-center">
+        <div class="bg-gradient-to-br from-blue-600/10 to-purple-600/10 p-6 rounded-xl border border-gray-700">
+          <div class="text-3xl font-bold text-blue-400 mb-2">15,234</div>
+          <div class="text-gray-300">Active Members</div>
+        </div>
+        <div class="bg-gradient-to-br from-green-600/10 to-teal-600/10 p-6 rounded-xl border border-gray-700">
+          <div class="text-3xl font-bold text-green-400 mb-2">45,678</div>
+          <div class="text-gray-300">Discussions</div>
+        </div>
+        <div class="bg-gradient-to-br from-purple-600/10 to-pink-600/10 p-6 rounded-xl border border-gray-700">
+          <div class="text-3xl font-bold text-purple-400 mb-2">128,456</div>
+          <div class="text-gray-300">Solutions Shared</div>
+        </div>
+        <div class="bg-gradient-to-br from-orange-600/10 to-red-600/10 p-6 rounded-xl border border-gray-700">
+          <div class="text-3xl font-bold text-orange-400 mb-2">24/7</div>
+          <div class="text-gray-300">Community Support</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- New Discussion Section -->
+  <section id="new-discussion" class="py-20 border-t border-gray-800">
+    <div class="container mx-auto px-6">
+      <div class="max-w-4xl mx-auto">
+        <h2 class="text-3xl font-bold text-center mb-12">Start a New Discussion</h2>
+        
+        <div class="bg-gray-800/50 border border-gray-700 rounded-xl p-8">
+          <form class="space-y-6">
+            <div>
+              <label for="discussion-title" class="block text-sm font-medium text-gray-300 mb-2">Discussion Title</label>
+              <input type="text" id="discussion-title" class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none" placeholder="What would you like to discuss?">
+            </div>
+            
+            <div>
+              <label for="discussion-category" class="block text-sm font-medium text-gray-300 mb-2">Category</label>
+              <select id="discussion-category" class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:border-blue-500 focus:outline-none">
+                <option value="">Select a category</option>
+                <option value="general">💬 General Discussion</option>
+                <option value="support">🔧 Technical Support</option>
+                <option value="features">💡 Feature Requests</option>
+                <option value="showcase">🚀 Showcase</option>
+              </select>
+            </div>
+            
+            <div>
+              <label for="discussion-content" class="block text-sm font-medium text-gray-300 mb-2">Message</label>
+              <textarea id="discussion-content" rows="6" class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none" placeholder="Share your thoughts, ask questions, or start a conversation..."></textarea>
+            </div>
+            
+            <div class="flex flex-col sm:flex-row gap-4">
+              <button type="submit" class="px-8 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-medium hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-200">
+                Post Discussion
+              </button>
+              <button type="button" class="px-8 py-3 border border-gray-600 text-white rounded-xl font-medium hover:bg-gray-700 transition-all duration-200">
+                Preview
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Forum Categories -->
+  <section id="forum-categories" class="py-20">
+    <div class="container mx-auto px-6">
+      <h2 class="text-3xl font-bold text-center mb-12">Forum Categories</h2>
+      
+      <div class="grid lg:grid-cols-2 gap-8">
+        <!-- General Discussion -->
+        <a href="/community/forum/general" class="bg-gradient-to-br from-gray-800/50 to-gray-900/50 p-8 rounded-xl border border-gray-700 hover:border-gray-600 transition-colors cursor-pointer group">
+          <div class="flex items-center mb-4">
+            <span class="text-3xl mr-4">💬</span>
+            <h3 class="text-xl font-bold group-hover:text-blue-400 transition-colors">General Discussion</h3>
+          </div>
+          <p class="text-gray-300 mb-4">
+            General discussions about AI development, industry trends, and community news
+          </p>
+          <div class="text-sm text-gray-400">
+            <span class="mr-4">1,234 topics</span>
+            <span>5,678 posts</span>
+          </div>
+        </a>
+
+        <!-- Technical Support -->
+        <a href="/community/forum/support" class="bg-gradient-to-br from-gray-800/50 to-gray-900/50 p-8 rounded-xl border border-gray-700 hover:border-gray-600 transition-colors cursor-pointer group">
+          <div class="flex items-center mb-4">
+            <span class="text-3xl mr-4">🔧</span>
+            <h3 class="text-xl font-bold group-hover:text-green-400 transition-colors">Technical Support</h3>
+          </div>
+          <p class="text-gray-300 mb-4">
+            Get help with technical issues, API questions, and troubleshooting
+          </p>
+          <div class="text-sm text-gray-400">
+            <span class="mr-4">2,345 topics</span>
+            <span>8,901 posts</span>
+          </div>
+        </a>
+
+        <!-- Feature Requests -->
+        <a href="/community/forum/features" class="bg-gradient-to-br from-gray-800/50 to-gray-900/50 p-8 rounded-xl border border-gray-700 hover:border-gray-600 transition-colors cursor-pointer group">
+          <div class="flex items-center mb-4">
+            <span class="text-3xl mr-4">💡</span>
+            <h3 class="text-xl font-bold group-hover:text-purple-400 transition-colors">Feature Requests</h3>
+          </div>
+          <p class="text-gray-300 mb-4">
+            Suggest new features, improvements, and share your ideas with the community
+          </p>
+          <div class="text-sm text-gray-400">
+            <span class="mr-4">567 topics</span>
+            <span>2,345 posts</span>
+          </div>
+        </a>
+
+        <!-- Showcase -->
+        <a href="/community/forum/showcase" class="bg-gradient-to-br from-gray-800/50 to-gray-900/50 p-8 rounded-xl border border-gray-700 hover:border-gray-600 transition-colors cursor-pointer group">
+          <div class="flex items-center mb-4">
+            <span class="text-3xl mr-4">🚀</span>
+            <h3 class="text-xl font-bold group-hover:text-orange-400 transition-colors">Showcase</h3>
+          </div>
+          <p class="text-gray-300 mb-4">
+            Share your projects, success stories, and inspire others with your creations
+          </p>
+          <div class="text-sm text-gray-400">
+            <span class="mr-4">890 topics</span>
+            <span>3,456 posts</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Community Guidelines -->
+  <section class="py-16 bg-gradient-to-br from-blue-900/10 to-purple-900/5">
+    <div class="container mx-auto px-6">
+      <div class="text-center max-w-3xl mx-auto">
+        <h2 class="text-3xl font-bold mb-6">Community Guidelines</h2>
+        <p class="text-gray-300 mb-8">
+          Our community thrives on respect, collaboration, and knowledge sharing. Please follow these guidelines to help maintain a positive environment for everyone.
+        </p>
+        
+        <div class="grid md:grid-cols-3 gap-6 text-left">
+          <div class="bg-gray-800/50 p-6 rounded-xl border border-gray-700">
+            <h3 class="font-bold mb-3 text-blue-400">Be Respectful</h3>
+            <p class="text-gray-300 text-sm">
+              Treat all community members with respect and kindness. No harassment, hate speech, or discrimination.
+            </p>
+          </div>
+          
+          <div class="bg-gray-800/50 p-6 rounded-xl border border-gray-700">
+            <h3 class="font-bold mb-3 text-green-400">Stay On Topic</h3>
+            <p class="text-gray-300 text-sm">
+              Keep discussions relevant to AI development and the OneLastAI platform. Use appropriate categories.
+            </p>
+          </div>
+          
+          <div class="bg-gray-800/50 p-6 rounded-xl border border-gray-700">
+            <h3 class="font-bold mb-3 text-purple-400">Help Others</h3>
+            <p class="text-gray-300 text-sm">
+              Share your knowledge, help solve problems, and contribute to making our community stronger.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

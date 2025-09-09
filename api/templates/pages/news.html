@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Latest News - OneLastAI & One Man Army AI</title>
+
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <%= javascript_importmap_tags %>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+      background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+      color: #ffffff;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .hero-section {
+      padding: 4rem 2rem 3rem;
+      text-align: center;
+      background: radial-gradient(ellipse at center, rgba(0, 212, 255, 0.15) 0%, rgba(0, 0, 0, 0.3) 70%);
+      border-bottom: 2px solid #00d4ff;
+    }
+
+    .hero-title {
+      font-size: 3.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 20px #00d4ff;
+      background: linear-gradient(45deg, #00d4ff, #0099cc, #66d9ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 30px #00d4ff;
+    }
+
+    .hero-tagline {
+      font-size: 1.5rem;
+      color: #e0e0e0;
+      margin-bottom: 1rem;
+      font-weight: 300;
+    }
+
+    .hero-subtitle {
+      font-size: 1.1rem;
+      color: #b8b8b8;
+      margin-bottom: 2rem;
+    }
+
+    .content-section {
+      padding: 3rem 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .news-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      margin-bottom: 3rem;
+    }
+
+    .news-section {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(0, 212, 255, 0.2);
+      border-radius: 20px;
+      padding: 2.5rem;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+    }
+
+    .news-section:hover {
+      border-color: #00d4ff;
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(0, 212, 255, 0.2);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid rgba(0, 212, 255, 0.3);
+    }
+
+    .section-icon {
+      font-size: 3rem;
+      margin-right: 1.5rem;
+      text-shadow: 0 0 15px #00d4ff;
+    }
+
+    .section-title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #00d4ff;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-subtitle {
+      color: #b8b8b8;
+      font-size: 1rem;
+    }
+
+    .news-articles {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .news-article {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(0, 212, 255, 0.1);
+      border-radius: 15px;
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .news-article:hover {
+      border-color: #00d4ff;
+      background: rgba(0, 212, 255, 0.1);
+      transform: translateX(5px);
+    }
+
+    .article-date {
+      color: #00ff88;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .article-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 0.8rem;
+      line-height: 1.4;
+    }
+
+    .article-excerpt {
+      color: #e0e0e0;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+      font-size: 0.95rem;
+    }
+
+    .article-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .article-tag {
+      background: linear-gradient(45deg, #00d4ff, #0099cc);
+      color: #ffffff;
+      padding: 0.3rem 0.8rem;
+      border-radius: 15px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .live-indicator {
+      background: linear-gradient(45deg, #ff6b6b, #ff5722);
+      color: #fff;
+      padding: 0.3rem 0.8rem;
+      border-radius: 15px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      animation: pulse 2s infinite;
+    }
+
+    .breaking-badge {
+      background: linear-gradient(45deg, #ffaa00, #ff8800);
+      color: #fff;
+      padding: 0.3rem 0.8rem;
+      border-radius: 15px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    .back-button {
+      display: inline-block;
+      background: linear-gradient(45deg, #666, #888);
+      color: #ffffff;
+      padding: 1rem 2rem;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      margin-top: 2rem;
+    }
+
+    .back-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(136, 136, 136, 0.4);
+    }
+
+    @media (max-width: 768px) {
+      .hero-title {
+        font-size: 2.5rem;
+      }
+      
+      .news-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+      
+      .section-title {
+        font-size: 1.8rem;
+      }
+      
+      .news-section {
+        padding: 2rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <section class="hero-section">
+    <div class="hero-icon">📰</div>
+    <h1 class="hero-title">Latest News</h1>
+    <p class="hero-tagline">Stay updated with our latest announcements and developments</p>
+    <p class="hero-subtitle">Breaking news from OneLastAI and One Man Army AI</p>
+  </section>
+
+  <section class="content-section">
+    <div class="news-grid">
+      <!-- OneLastAI News Card -->
+      <div class="news-section" onclick="window.location.href='/news/onelastai'" style="cursor: pointer;">
+        <div class="section-header">
+          <div class="section-icon">🤖</div>
+          <div>
+            <h2 class="section-title">OneLastAI</h2>
+            <p class="section-subtitle">Next-Generation AI Platform</p>
+          </div>
+        </div>
+        
+        <div class="news-articles">
+          <article class="news-article">
+            <div class="article-date">
+              <span class="breaking-badge">� LAUNCHING 2026</span>
+              Coming Soon
+            </div>
+            <h3 class="article-title">🌟 Revolutionary AI Platform Launching in 2026</h3>
+            <p class="article-excerpt">
+              Get ready for the future of artificial intelligence! OneLastAI is preparing to launch the most advanced AI platform ever created. 
+              Featuring cutting-edge neural networks, revolutionary learning algorithms, and unprecedented AI capabilities that will transform how we interact with technology.
+            </p>
+            <div class="article-tags">
+              <span class="article-tag">AI Platform</span>
+              <span class="article-tag">Innovation</span>
+              <span class="article-tag">Future Tech</span>
+            </div>
+          </article>
+
+          <article class="news-article">
+            <div class="article-date">
+              <span class="live-indicator">� UPDATE SOON</span>
+              Stay Tuned
+            </div>
+            <h3 class="article-title">🔥 Major Announcements Coming</h3>
+            <p class="article-excerpt">
+              Big things are happening behind the scenes! We're working on groundbreaking features, strategic partnerships, 
+              and revolutionary AI technologies that will be announced very soon. Don't miss out on the latest updates.
+            </p>
+            <div class="article-tags">
+              <span class="article-tag">Updates</span>
+              <span class="article-tag">Announcements</span>
+              <span class="article-tag">Coming Soon</span>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <!-- One Man Army AI News Card -->
+      <div class="news-section" onclick="window.location.href='/news/onemanarmy'" style="cursor: pointer;">
+        <div class="section-header">
+          <div class="section-icon">⚔️</div>
+          <div>
+            <h2 class="section-title">One Man Army AI</h2>
+            <p class="section-subtitle">Advanced Tactical AI System</p>
+          </div>
+        </div>
+        
+        <div class="news-articles">
+          <article class="news-article">
+            <div class="article-date">
+              <span class="breaking-badge">�️ LAUNCHING 2026</span>
+              Coming Soon
+            </div>
+            <h3 class="article-title">⚡ Ultimate AI Defense Platform Launching 2026</h3>
+            <p class="article-excerpt">
+              The most advanced AI defense system ever conceived is coming in 2026! One Man Army AI will feature military-grade security protocols, 
+              autonomous threat detection, and unparalleled protection capabilities. Be ready for the future of AI security.
+            </p>
+            <div class="article-tags">
+              <span class="article-tag">AI Defense</span>
+              <span class="article-tag">Security</span>
+              <span class="article-tag">Military Grade</span>
+            </div>
+          </article>
+
+          <article class="news-article">
+            <div class="article-date">
+              <span class="live-indicator">🎯 UPDATE SOON</span>
+              Stay Alert
+            </div>
+            <h3 class="article-title">🔒 Classified Projects in Development</h3>
+            <p class="article-excerpt">
+              Top-secret AI projects are under development with breakthrough technologies that will revolutionize digital security and AI defense systems. 
+              Major updates and reveals coming soon - stay tuned for classified intelligence.
+            </p>
+            <div class="article-tags">
+              <span class="article-tag">Classified</span>
+              <span class="article-tag">Development</span>
+              <span class="article-tag">Top Secret</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align: center;">
+      <a href="/" class="back-button">← Back to Home</a>
+    </div>
+  </section>
+</body>
+</html>

@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Documentation Hub - Phantom AI</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body class="bg-gray-900 text-white">
+    <!-- Documentation Header -->
+    <section class="docs-header relative py-20 overflow-hidden">
+      <div class="absolute inset-0 bg-gradient-to-br from-blue-900/70 via-indigo-900/60 to-purple-900/50"></div>
+      <div class="absolute inset-0 bg-gradient-radial from-blue-500/15 via-indigo-500/10 to-transparent"></div>
+      
+      <div class="container mx-auto px-4 relative z-10">
+        <div class="text-center mb-12">
+          <h1 class="text-5xl lg:text-6xl font-black mb-6">
+            <span class="community-gradient-text">Documentation</span>
+            <span class="nexus-hologram-text">Hub</span>
+          </h1>
+          <p class="text-xl lg:text-2xl text-gray-300 max-w-4xl mx-auto mb-8">
+            Complete guides, API references, and tutorials for <span class="community-highlight">Phantom AI Platform</span>
+          </p>
+          
+          <!-- Search Bar -->
+          <div class="docs-search max-w-2xl mx-auto">
+            <div class="search-container">
+              <svg class="search-icon w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+              </svg>
+              <input type="text" placeholder="Search documentation..." class="search-input">
+              <div class="search-suggestions">
+                <div class="suggestion">Getting Started</div>
+                <div class="suggestion">API Authentication</div>
+                <div class="suggestion">Model Training</div>
+                <div class="suggestion">Deployment Guide</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick Navigation -->
+    <section class="quick-nav py-16">
+      <div class="container mx-auto px-4">
+        <div class="nav-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <a href="/docs/getting-started" class="nav-card getting-started">
+            <div class="nav-icon">
+              <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+              </svg>
+            </div>
+            <h3 class="nav-title">Getting Started</h3>
+            <p class="nav-description">Quick setup and first steps</p>
+          </a>
+          
+          <a href="/docs/api" class="nav-card api-reference">
+            <div class="nav-icon">
+              <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+              </svg>
+            </div>
+            <h3 class="nav-title">API Reference</h3>
+            <p class="nav-description">Complete API documentation</p>
+          </a>
+          
+          <a href="/docs/tutorials" class="nav-card tutorials">
+            <div class="nav-icon">
+              <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+              </svg>
+            </div>
+            <h3 class="nav-title">Tutorials</h3>
+            <p class="nav-description">Step-by-step guides</p>
+          </a>
+          
+          <a href="/docs/examples" class="nav-card examples">
+            <div class="nav-icon">
+              <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+              </svg>
+            </div>
+            <h3 class="nav-title">Code Examples</h3>
+            <p class="nav-description">Ready-to-use snippets</p>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Documentation Sections -->
+    <section class="docs-sections py-16 bg-gray-800/50">
+      <div class="container mx-auto px-4">
+        <div class="section-header text-center mb-12">
+          <h2 class="text-3xl lg:text-4xl font-bold mb-4 community-gradient-text">Documentation Sections</h2>
+          <p class="text-xl text-gray-400">Comprehensive guides organized by topic</p>
+        </div>
+        
+        <div class="sections-grid grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <% @doc_sections.each do |section| %>
+            <div class="section-card">
+              <div class="section-header">
+                <div class="section-icon <%= section[:color] %>-gradient">
+                  <%= section[:icon] %>
+                </div>
+                <div class="section-info">
+                  <h3 class="section-title"><%= section[:name] %></h3>
+                  <p class="section-description"><%= section[:description] %></p>
+                </div>
+              </div>
+              
+              <div class="section-topics">
+                <% section[:topic_list].each do |topic| %>
+                  <a href="/docs/<%= section[:slug] %>/<%= topic[:slug] %>" class="topic-link">
+                    <span class="topic-title"><%= topic[:title] %></span>
+                    <span class="topic-badge"><%= topic[:difficulty] %></span>
+                  </a>
+                <% end %>
+              </div>
+              
+              <div class="section-footer">
+                <a href="/docs/<%= section[:slug] %>" class="view-all-link">
+                  View all <%= section[:name].downcase %> docs
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                  </svg>
+                </a>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </section>
+
+    <!-- Popular Articles -->
+    <section class="popular-articles py-16">
+      <div class="container mx-auto px-4">
+        <div class="section-header text-center mb-12">
+          <h2 class="text-3xl lg:text-4xl font-bold mb-4 community-gradient-text">Popular Articles</h2>
+          <p class="text-xl text-gray-400">Most viewed documentation this month</p>
+        </div>
+        
+        <div class="articles-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <% @popular_articles.each do |article| %>
+            <div class="article-card">
+              <div class="article-header">
+                <div class="article-category <%= article[:category].downcase.gsub(' ', '-') %>-category">
+                  <%= article[:category] %>
+                </div>
+                <div class="article-meta">
+                  <span class="reading-time"><%= article[:reading_time] %> min read</span>
+                  <span class="view-count"><%= article[:views] %> views</span>
+                </div>
+              </div>
+              
+              <div class="article-content">
+                <h3 class="article-title">
+                  <a href="/docs/article/<%= article[:slug] %>"><%= article[:title] %></a>
+                </h3>
+                <p class="article-excerpt"><%= article[:excerpt] %></p>
+              </div>
+              
+              <div class="article-footer">
+                <div class="article-tags">
+                  <% article[:tags].each do |tag| %>
+                    <span class="tag">#<%= tag %></span>
+                  <% end %>
+                </div>
+                <div class="article-date">
+                  Updated <%= article[:updated_at] %>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </section>
+
+    <!-- API Explorer -->
+    <section class="api-explorer py-16 bg-gray-800/30">
+      <div class="container mx-auto px-4">
+        <div class="explorer-content max-w-6xl mx-auto">
+          <div class="section-header text-center mb-12">
+            <h2 class="text-3xl lg:text-4xl font-bold mb-4 community-gradient-text">Interactive API Explorer</h2>
+            <p class="text-xl text-gray-400">Test endpoints directly in your browser</p>
+          </div>
+          
+          <div class="explorer-grid grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="explorer-panel">
+              <div class="panel-header">
+                <h3 class="panel-title">API Endpoints</h3>
+                <div class="panel-status online">
+                  <div class="status-indicator"></div>
+                  <span>API Online</span>
+                </div>
+              </div>
+              
+              <div class="endpoints-list">
+                <% @api_endpoints.each do |endpoint| %>
+                  <div class="endpoint-item">
+                    <div class="endpoint-method <%= endpoint[:method].downcase %>"><%= endpoint[:method] %></div>
+                    <div class="endpoint-path"><%= endpoint[:path] %></div>
+                    <div class="endpoint-description"><%= endpoint[:description] %></div>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+            
+            <div class="explorer-panel">
+              <div class="panel-header">
+                <h3 class="panel-title">Try It Out</h3>
+                <div class="panel-tools">
+                  <button class="tool-button">Generate Code</button>
+                  <button class="tool-button">Export Collection</button>
+                </div>
+              </div>
+              
+              <div class="api-tester">
+                <div class="request-builder">
+                  <div class="request-header">
+                    <select class="method-select">
+                      <option value="GET">GET</option>
+                      <option value="POST">POST</option>
+                      <option value="PUT">PUT</option>
+                      <option value="DELETE">DELETE</option>
+                    </select>
+                    <input type="text" class="endpoint-input" placeholder="/api/v1/models" value="/api/v1/models">
+                    <button class="send-button">Send</button>
+                  </div>
+                  
+                  <div class="request-tabs">
+                    <button class="tab-button active" data-tab="headers">Headers</button>
+                    <button class="tab-button" data-tab="body">Body</button>
+                    <button class="tab-button" data-tab="auth">Auth</button>
+                  </div>
+                  
+                  <div class="tab-content">
+                    <div class="tab-panel active" id="headers-panel">
+                      <div class="header-row">
+                        <input type="text" placeholder="Authorization" class="header-key">
+                        <input type="text" placeholder="Bearer your-api-key" class="header-value">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="response-viewer">
+                  <div class="response-header">
+                    <span class="response-status">200 OK</span>
+                    <span class="response-time">245ms</span>
+                  </div>
+                  <pre class="response-body"><code>{
+  "models": [
+    {
+      "id": "phantom-gpt-4",
+      "name": "Phantom GPT-4",
+      "type": "language-model",
+      "status": "active"
+    }
+  ]
+}</code></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Help & Support -->
+    <section class="help-support py-16">
+      <div class="container mx-auto px-4">
+        <div class="support-content max-w-4xl mx-auto">
+          <div class="section-header text-center mb-12">
+            <h2 class="text-3xl lg:text-4xl font-bold mb-4 community-gradient-text">Need Help?</h2>
+            <p class="text-xl text-gray-400">Get support from our community and team</p>
+          </div>
+          
+          <div class="support-grid grid grid-cols-1 md:grid-cols-3 gap-6">
+            <a href="/community/forum" class="support-card">
+              <div class="support-icon">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a2 2 0 01-2-2v-6a2 2 0 012-2h8z"></path>
+                </svg>
+              </div>
+              <h3 class="support-title">Community Forum</h3>
+              <p class="support-description">Ask questions and get help from the community</p>
+            </a>
+            
+            <a href="/docs/support" class="support-card">
+              <div class="support-icon">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192L5.636 18.364M12 2.5A9.5 9.5 0 1022.5 12 9.5 9.5 0 0012 2.5z"></path>
+                </svg>
+              </div>
+              <h3 class="support-title">Support Center</h3>
+              <p class="support-description">Official support and troubleshooting guides</p>
+            </a>
+            
+            <a href="/docs/changelog" class="support-card">
+              <div class="support-icon">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                </svg>
+              </div>
+              <h3 class="support-title">Changelog</h3>
+              <p class="support-description">Latest updates and platform changes</p>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Navigation Back to Home -->
+    <div class="fixed bottom-6 right-6 z-50">
+      <a href="/" class="home-nav-button">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+        </svg>
+        <span>Home</span>
+      </a>
+    </div>
+
+    <style>
+      /* Documentation Styles */
+      .docs-header {
+        background: 
+          radial-gradient(circle at 25% 25%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
+          radial-gradient(circle at 75% 75%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+          linear-gradient(135deg, rgba(30, 58, 138, 0.4) 0%, rgba(88, 28, 135, 0.4) 100%);
+      }
+
+      /* Search Bar */
+      .search-container {
+        position: relative;
+        background: rgba(15, 23, 42, 0.8);
+        backdrop-filter: blur(20px);
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        overflow: hidden;
+      }
+
+      .search-input {
+        width: 100%;
+        padding: 1rem 1rem 1rem 3rem;
+        background: transparent;
+        border: none;
+        color: #ffffff;
+        font-size: 1.125rem;
+        outline: none;
+      }
+
+      .search-input::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+      }
+
+      .search-icon {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: rgba(255, 255, 255, 0.5);
+        z-index: 10;
+      }
+
+      .search-suggestions {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: rgba(15, 23, 42, 0.95);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-top: none;
+        border-radius: 0 0 16px 16px;
+        z-index: 20;
+        display: none;
+      }
+
+      .search-input:focus + .search-suggestions {
+        display: block;
+      }
+
+      .suggestion {
+        padding: 0.75rem 1rem;
+        color: rgba(255, 255, 255, 0.7);
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .suggestion:hover {
+        background: rgba(59, 130, 246, 0.1);
+        color: #3b82f6;
+      }
+
+      /* Quick Navigation */
+      .nav-grid {
+        gap: 1.5rem;
+      }
+
+      .nav-card {
+        background: rgba(15, 23, 42, 0.8);
+        backdrop-filter: blur(20px);
+        border-radius: 20px;
+        padding: 2rem;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        text-decoration: none;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .nav-card:hover {
+        transform: translateY(-4px);
+        border-color: rgba(59, 130, 246, 0.3);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+      }
+
+      .nav-card.getting-started { border-color: rgba(16, 185, 129, 0.2); }
+      .nav-card.api-reference { border-color: rgba(59, 130, 246, 0.2); }
+      .nav-card.tutorials { border-color: rgba(139, 92, 246, 0.2); }
+      .nav-card.examples { border-color: rgba(245, 158, 11, 0.2); }
+
+      .nav-icon {
+        width: 4rem;
+        height: 4rem;
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(139, 92, 246, 0.2));
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        color: #3b82f6;
+      }
+
+      .nav-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #ffffff;
+        margin-bottom: 0.75rem;
+      }
+
+      .nav-description {
+        color: rgba(255, 255, 255, 0.7);
+      }
+
+      /* Documentation Sections */
+      .section-card {
+        background: rgba(15, 23, 42, 0.8);
+        backdrop-filter: blur(20px);
+        border-radius: 20px;
+        padding: 2rem;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+      }
+
+      .section-card:hover {
+        transform: translateY(-2px);
+        border-color: rgba(59, 130, 246, 0.3);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+      }
+
+      .section-header {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .section-icon {
+        width: 3rem;
+        height: 3rem;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        flex-shrink: 0;
+      }
+
+      .blue-gradient { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
+      .purple-gradient { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+      .emerald-gradient { background: linear-gradient(135deg, #10b981, #059669); }
+      .amber-gradient { background: linear-gradient(135deg, #f59e0b, #d97706); }
+
+      .section-info {
+        flex: 1;
+      }
+
+      .section-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #ffffff;
+        margin-bottom: 0.5rem;
+      }
+
+      .section-description {
+        color: rgba(255, 255, 255, 0.7);
+        line-height: 1.6;
+      }
+
+      .section-topics {
+        margin-bottom: 1.5rem;
+        space-y: 0.5rem;
+      }
+
+      .topic-link {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.75rem;
+        background: rgba(59, 130, 246, 0.05);
+        border: 1px solid rgba(59, 130, 246, 0.1);
+        border-radius: 8px;
+        color: #ffffff;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        margin-bottom: 0.5rem;
+      }
+
+      .topic-link:hover {
+        background: rgba(59, 130, 246, 0.1);
+        border-color: rgba(59, 130, 246, 0.3);
+        color: #3b82f6;
+      }
+
+      .topic-title {
+        font-weight: 500;
+      }
+
+      .topic-badge {
+        padding: 0.25rem 0.5rem;
+        background: rgba(59, 130, 246, 0.2);
+        border-radius: 4px;
+        font-size: 0.75rem;
+        color: #3b82f6;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .view-all-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #3b82f6;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s ease;
+      }
+
+      .view-all-link:hover {
+        color: #ffffff;
+      }
+
+      /* Articles */
+      .article-card {
+        background: rgba(15, 23, 42, 0.6);
+        backdrop-filter: blur(15px);
+        border-radius: 16px;
+        padding: 1.5rem;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+      }
+
+      .article-card:hover {
+        transform: translateY(-2px);
+        border-color: rgba(59, 130, 246, 0.3);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+      }
+
+      .article-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+      }
+
+      .article-category {
+        padding: 0.25rem 0.75rem;
+        border-radius: 8px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .getting-started-category { background: rgba(16, 185, 129, 0.2); color: #10b981; }
+      .api-category { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
+      .tutorial-category { background: rgba(139, 92, 246, 0.2); color: #8b5cf6; }
+
+      .article-meta {
+        display: flex;
+        gap: 0.75rem;
+        font-size: 0.875rem;
+        color: rgba(255, 255, 255, 0.6);
+      }
+
+      .article-title a {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: #ffffff;
+        text-decoration: none;
+        transition: color 0.3s ease;
+      }
+
+      .article-title a:hover {
+        color: #3b82f6;
+      }
+
+      .article-excerpt {
+        color: rgba(255, 255, 255, 0.7);
+        line-height: 1.6;
+        margin: 1rem 0;
+      }
+
+      .article-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 1rem;
+      }
+
+      .article-tags {
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      .tag {
+        color: #3b82f6;
+        font-size: 0.75rem;
+      }
+
+      .article-date {
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.5);
+      }
+
+      /* API Explorer */
+      .explorer-panel {
+        background: rgba(15, 23, 42, 0.8);
+        backdrop-filter: blur(20px);
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        overflow: hidden;
+      }
+
+      .panel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.5rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .panel-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #ffffff;
+      }
+
+      .panel-status.online {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #10b981;
+        font-size: 0.875rem;
+      }
+
+      .status-indicator {
+        width: 0.5rem;
+        height: 0.5rem;
+        background: #10b981;
+        border-radius: 50%;
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+      }
+
+      .endpoint-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      }
+
+      .endpoint-method {
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        min-width: 4rem;
+        text-align: center;
+      }
+
+      .endpoint-method.get { background: rgba(16, 185, 129, 0.2); color: #10b981; }
+      .endpoint-method.post { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
+      .endpoint-method.put { background: rgba(245, 158, 11, 0.2); color: #f59e0b; }
+      .endpoint-method.delete { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+
+      .endpoint-path {
+        font-family: 'JetBrains Mono', monospace;
+        color: #ffffff;
+        font-weight: 500;
+      }
+
+      .endpoint-description {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.875rem;
+      }
+
+      /* Support Cards */
+      .support-card {
+        background: rgba(15, 23, 42, 0.6);
+        backdrop-filter: blur(15px);
+        border-radius: 16px;
+        padding: 2rem;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        text-decoration: none;
+        text-align: center;
+        transition: all 0.3s ease;
+      }
+
+      .support-card:hover {
+        transform: translateY(-4px);
+        border-color: rgba(59, 130, 246, 0.3);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+      }
+
+      .support-icon {
+        width: 4rem;
+        height: 4rem;
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(139, 92, 246, 0.2));
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+        color: #3b82f6;
+      }
+
+      .support-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #ffffff;
+        margin-bottom: 0.75rem;
+      }
+
+      .support-description {
+        color: rgba(255, 255, 255, 0.7);
+        line-height: 1.6;
+      }
+
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        .nav-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+
+        .sections-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .articles-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .explorer-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .support-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </body>
+</html>

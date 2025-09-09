@@ -1,0 +1,150 @@
+<% content_for :title, "#{@category_info[:name]} - Community Forum" %>
+<% content_for :description, "Browse discussions and topics in #{@category_info[:name]} category." %>
+
+<div class="min-h-screen bg-slate-900 text-white">
+  <!-- Category Header -->
+  <section class="relative py-20 overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-<%= @category_info[:color] %>-900/20 via-purple-900/10 to-slate-900"></div>
+    <div class="container mx-auto px-6 relative">
+      <div class="max-w-4xl mx-auto">
+        <!-- Breadcrumb -->
+        <nav class="mb-8">
+          <ol class="flex items-center gap-2 text-sm text-gray-400">
+            <li><a href="/community/forum" class="hover:text-white transition-colors">Community Forum</a></li>
+            <li>→</li>
+            <li class="text-white"><%= @category_info[:name] %></li>
+          </ol>
+        </nav>
+        
+        <div class="flex items-center gap-6 mb-6">
+          <div class="w-16 h-16 bg-<%= @category_info[:color] %>-600/20 rounded-2xl flex items-center justify-center">
+            <span class="text-2xl"><%= @category_info[:icon] %></span>
+          </div>
+          <div>
+            <h1 class="text-4xl lg:text-5xl font-bold text-white mb-2"><%= @category_info[:name] %></h1>
+            <p class="text-xl text-gray-300"><%= @category_info[:description] %></p>
+          </div>
+        </div>
+        
+        <div class="flex items-center gap-4 text-sm text-gray-400">
+          <span><%= @posts.length %> discussions</span>
+          <span>•</span>
+          <span>Active community</span>
+          <span>•</span>
+          <span>Moderated content</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Discussion Posts -->
+  <section class="py-20 border-t border-gray-800">
+    <div class="container mx-auto px-6">
+      <div class="max-w-6xl mx-auto">
+        <div class="flex justify-between items-center mb-8">
+          <h2 class="text-2xl font-bold">Recent Discussions</h2>
+          <a href="/community/forum#new-discussion" class="px-6 py-3 bg-gradient-to-r from-<%= @category_info[:color] %>-600 to-purple-600 text-white rounded-xl font-medium hover:shadow-lg transition-all duration-200">
+            Start New Discussion
+          </a>
+        </div>
+        
+        <div class="space-y-6">
+          <% @posts.each do |post| %>
+            <div class="bg-gray-800/50 border border-gray-700 rounded-xl p-6 hover:border-<%= @category_info[:color] %>-500/50 transition-colors">
+              <div class="flex items-start justify-between mb-4">
+                <div class="flex-1">
+                  <h3 class="text-xl font-bold text-white mb-2 hover:text-<%= @category_info[:color] %>-400 transition-colors">
+                    <a href="/community/forum/post/<%= post[:id] %>"><%= post[:title] %></a>
+                  </h3>
+                  <p class="text-gray-300 mb-3"><%= post[:excerpt] %></p>
+                  
+                  <div class="flex items-center gap-4 text-sm text-gray-400">
+                    <span>By <%= post[:author] %></span>
+                    <span>•</span>
+                    <span><%= post[:replies] %> replies</span>
+                    <span>•</span>
+                    <span><%= post[:last_activity] %></span>
+                  </div>
+                </div>
+                
+                <div class="flex items-center gap-2 ml-4">
+                  <% if post[:pinned] %>
+                    <span class="px-2 py-1 bg-yellow-600/20 text-yellow-400 rounded text-xs">Pinned</span>
+                  <% end %>
+                  <% if post[:solved] %>
+                    <span class="px-2 py-1 bg-green-600/20 text-green-400 rounded text-xs">Solved</span>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+
+        <!-- Pagination -->
+        <div class="flex justify-center mt-12">
+          <div class="flex items-center gap-2">
+            <button class="px-4 py-2 bg-gray-700 text-gray-300 rounded-lg hover:bg-gray-600 transition-colors" disabled>
+              Previous
+            </button>
+            <button class="px-4 py-2 bg-<%= @category_info[:color] %>-600 text-white rounded-lg">1</button>
+            <button class="px-4 py-2 bg-gray-700 text-gray-300 rounded-lg hover:bg-gray-600 transition-colors">2</button>
+            <button class="px-4 py-2 bg-gray-700 text-gray-300 rounded-lg hover:bg-gray-600 transition-colors">3</button>
+            <button class="px-4 py-2 bg-gray-700 text-gray-300 rounded-lg hover:bg-gray-600 transition-colors">
+              Next
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Related Categories -->
+  <section class="py-16 border-t border-gray-800">
+    <div class="container mx-auto px-6">
+      <div class="max-w-6xl mx-auto">
+        <h2 class="text-2xl font-bold text-white mb-8">Other Categories</h2>
+        
+        <div class="grid lg:grid-cols-3 gap-6">
+          <a href="/community/forum/support" class="bg-gray-800/50 border border-gray-700 rounded-xl p-6 hover:border-green-500/50 transition-colors">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-12 h-12 bg-green-600/20 rounded-xl flex items-center justify-center">
+                <span class="text-xl">🔧</span>
+              </div>
+              <div>
+                <h3 class="text-lg font-bold text-white">Technical Support</h3>
+                <p class="text-sm text-gray-400">2,345 topics</p>
+              </div>
+            </div>
+            <p class="text-gray-300">Get help with technical issues and API questions</p>
+          </a>
+          
+          <a href="/community/forum/features" class="bg-gray-800/50 border border-gray-700 rounded-xl p-6 hover:border-purple-500/50 transition-colors">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-12 h-12 bg-purple-600/20 rounded-xl flex items-center justify-center">
+                <span class="text-xl">💡</span>
+              </div>
+              <div>
+                <h3 class="text-lg font-bold text-white">Feature Requests</h3>
+                <p class="text-sm text-gray-400">567 topics</p>
+              </div>
+            </div>
+            <p class="text-gray-300">Suggest new features and improvements</p>
+          </a>
+          
+          <a href="/community/forum/showcase" class="bg-gray-800/50 border border-gray-700 rounded-xl p-6 hover:border-orange-500/50 transition-colors">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-12 h-12 bg-orange-600/20 rounded-xl flex items-center justify-center">
+                <span class="text-xl">🚀</span>
+              </div>
+              <div>
+                <h3 class="text-lg font-bold text-white">Showcase</h3>
+                <p class="text-sm text-gray-400">890 topics</p>
+              </div>
+            </div>
+            <p class="text-gray-300">Share your projects and success stories</p>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

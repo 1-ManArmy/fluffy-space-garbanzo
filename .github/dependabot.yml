@@ -1,0 +1,18 @@
+# Dependabot configuration for automatic dependency updates.
+# This file enables weekly updates for Ruby (bundler), JavaScript (npm), and GitHub Actions dependencies.
+# For more details, see: https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+
+version: 2
+updates:
+  - package-ecosystem: "bundler"
+    directory: "/" # Ruby dependencies (Gemfile/Gemfile.lock)
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "npm"
+    directory: "/" # JavaScript dependencies (package.json)
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "github-actions"
+    directory: "/" # GitHub Actions workflows
+    schedule:
+      interval: "weekly"

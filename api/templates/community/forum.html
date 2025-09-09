@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Community Forum - Phantom AI</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body class="bg-gray-900 text-white">
+    <!-- Community Forum Header -->
+    <section class="community-forum-header relative py-20 overflow-hidden">
+      <div class="absolute inset-0 bg-gradient-to-br from-emerald-900/70 via-teal-900/60 to-blue-900/50"></div>
+      <div class="absolute inset-0 bg-gradient-radial from-green-500/15 via-cyan-500/10 to-transparent"></div>
+      
+      <div class="container mx-auto px-4 relative z-10">
+        <div class="text-center mb-12">
+          <h1 class="text-5xl lg:text-6xl font-black mb-6">
+            <span class="community-gradient-text">Community</span>
+            <span class="nexus-hologram-text">Forum</span>
+          </h1>
+          <p class="text-xl lg:text-2xl text-gray-300 max-w-4xl mx-auto mb-8">
+            Connect with <span class="community-highlight">50,000+ developers</span> building the future with AI
+          </p>
+          
+          <!-- Forum Stats -->
+          <div class="forum-stats grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+            <div class="stat-card">
+              <div class="stat-value"><%= @community_stats[:total_members].to_s.gsub(/(\d)(?=(\d{3})+(?!\d))/, '\1,') %></div>
+              <div class="stat-label">Total Members</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value"><%= @community_stats[:active_discussions].to_s.gsub(/(\d)(?=(\d{3})+(?!\d))/, '\1,') %></div>
+              <div class="stat-label">Active Discussions</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value"><%= @community_stats[:posts_today] %></div>
+              <div class="stat-label">Posts Today</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value"><%= @community_stats[:answers_given].to_s.gsub(/(\d)(?=(\d{3})+(?!\d))/, '\1,') %></div>
+              <div class="stat-label">Answers Given</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Forum Categories -->
+    <section class="forum-categories py-16">
+      <div class="container mx-auto px-4">
+        <div class="section-header text-center mb-12">
+          <h2 class="text-3xl lg:text-4xl font-bold mb-4 community-gradient-text">Discussion Categories</h2>
+          <p class="text-xl text-gray-400">Find the right place for your questions and discussions</p>
+        </div>
+        
+        <div class="categories-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <% @categories.each do |category| %>
+            <div class="category-card group">
+              <div class="category-header">
+                <div class="category-icon <%= category[:color] %>-gradient">
+                  <%= category[:name][0] %>
+                </div>
+                <div class="category-info">
+                  <h3 class="category-title"><%= category[:name] %></h3>
+                  <p class="category-description"><%= category[:description] %></p>
+                </div>
+              </div>
+              
+              <div class="category-stats">
+                <div class="stat">
+                  <span class="stat-number"><%= category[:post_count].to_s.gsub(/(\d)(?=(\d{3})+(?!\d))/, '\1,') %></span>
+                  <span class="stat-label">Posts</span>
+                </div>
+              </div>
+              
+              <a href="/community/forum/<%= category[:slug] %>" class="category-link">
+                <span>Browse <%= category[:name] %></span>
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+              </a>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </section>
+
+    <!-- Recent Discussions -->
+    <section class="recent-discussions py-16 bg-gray-800/50">
+      <div class="container mx-auto px-4">
+        <div class="section-header flex justify-between items-center mb-12">
+          <div>
+            <h2 class="text-3xl lg:text-4xl font-bold mb-4 community-gradient-text">Recent Discussions</h2>
+            <p class="text-xl text-gray-400">Latest conversations from our community</p>
+          </div>
+          <a href="/community/forum/new" class="new-post-button">
+            <span>Start Discussion</span>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+            </svg>
+          </a>
+        </div>
+        
+        <div class="discussions-list space-y-4">
+          <% @recent_posts.each do |post| %>
+            <div class="discussion-card group">
+              <div class="discussion-content">
+                <div class="discussion-header">
+                  <a href="/community/forum/post/<%= post[:id] %>" class="discussion-title">
+                    <%= post[:title] %>
+                  </a>
+                  <div class="discussion-category <%= post[:category].downcase.gsub(' ', '-') %>-category">
+                    <%= post[:category] %>
+                  </div>
+                </div>
+                
+                <div class="discussion-meta">
+                  <div class="author-info">
+                    <div class="author-avatar">
+                      <%= post[:author][0] %>
+                    </div>
+                    <span class="author-name"><%= post[:author] %></span>
+                    <span class="post-time">• <%= post[:created_at] %></span>
+                  </div>
+                  
+                  <div class="discussion-stats">
+                    <div class="stat">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                      </svg>
+                      <span><%= post[:replies] %></span>
+                    </div>
+                    <div class="stat">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                      </svg>
+                      <span><%= post[:views] %></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="discussion-activity">
+                <div class="last-activity">
+                  <span class="activity-label">Last reply</span>
+                  <span class="activity-time"><%= post[:last_reply] %></span>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+        
+        <div class="text-center mt-12">
+          <a href="/community/forum" class="view-all-button">
+            <span>View All Discussions</span>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7-7 7"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Trending Topics -->
+    <section class="trending-topics py-16">
+      <div class="container mx-auto px-4">
+        <div class="section-header text-center mb-12">
+          <h2 class="text-3xl lg:text-4xl font-bold mb-4 community-gradient-text">Trending Topics</h2>
+          <p class="text-xl text-gray-400">Popular discussions this week</p>
+        </div>
+        
+        <div class="trending-tags flex flex-wrap justify-center gap-4">
+          <% @trending_topics.each do |topic| %>
+            <a href="/community/forum?search=<%= topic.gsub(' ', '+') %>" class="trending-tag">
+              #<%= topic %>
+            </a>
+          <% end %>
+        </div>
+      </div>
+    </section>
+
+    <!-- Community Guidelines -->
+    <section class="community-guidelines py-16 bg-gray-800/30">
+      <div class="container mx-auto px-4">
+        <div class="guidelines-content max-w-4xl mx-auto">
+          <div class="section-header text-center mb-12">
+            <h2 class="text-3xl lg:text-4xl font-bold mb-4 community-gradient-text">Community Guidelines</h2>
+            <p class="text-xl text-gray-400">Help us maintain a welcoming and productive environment</p>
+          </div>
+          
+          <div class="guidelines-grid grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="guideline-card">
+              <div class="guideline-icon">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                </svg>
+              </div>
+              <h3 class="guideline-title">Be Respectful</h3>
+              <p class="guideline-description">Treat all community members with respect and kindness. No harassment, discrimination, or inappropriate behavior.</p>
+            </div>
+            
+            <div class="guideline-card">
+              <div class="guideline-icon">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                </svg>
+              </div>
+              <h3 class="guideline-title">Stay On Topic</h3>
+              <p class="guideline-description">Keep discussions relevant to AI development, Phantom AI platform, and related technologies.</p>
+            </div>
+            
+            <div class="guideline-card">
+              <div class="guideline-icon">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+              </div>
+              <h3 class="guideline-title">Ask Good Questions</h3>
+              <p class="guideline-description">Provide context, show what you've tried, and include relevant code or error messages when asking for help.</p>
+            </div>
+            
+            <div class="guideline-card">
+              <div class="guideline-icon">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                </svg>
+              </div>
+              <h3 class="guideline-title">No Spam or Self-Promotion</h3>
+              <p class="guideline-description">Avoid excessive self-promotion, spam, or off-topic commercial content. Focus on helping the community.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Navigation Back to Home -->
+    <div class="fixed bottom-6 right-6 z-50">
+      <a href="/" class="home-nav-button">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+        </svg>
+        <span>Home</span>
+      </a>
+    </div>
+
+    <style>
+      /* Community Forum Styles */
+      .community-forum-header {
+        background: 
+          radial-gradient(circle at 25% 25%, rgba(16, 185, 129, 0.15) 0%, transparent 50%),
+          radial-gradient(circle at 75% 75%, rgba(14, 165, 233, 0.15) 0%, transparent 50%),
+          linear-gradient(135deg, rgba(6, 78, 59, 0.4) 0%, rgba(30, 58, 138, 0.4) 100%);
+      }
+
+      .forum-stats {
+        gap: 1.5rem;
+      }
+
+      .stat-card {
+        background: rgba(15, 23, 42, 0.6);
+        backdrop-filter: blur(15px);
+        border-radius: 16px;
+        padding: 1.5rem;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        text-align: center;
+        transition: all 0.3s ease;
+      }
+
+      .stat-card:hover {
+        transform: translateY(-2px);
+        border-color: rgba(16, 185, 129, 0.3);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+      }
+
+      .stat-value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #10b981;
+        margin-bottom: 0.5rem;
+        text-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+      }
+
+      .stat-label {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      /* Category Cards */
+      .categories-grid {
+        gap: 1.5rem;
+      }
+
+      .category-card {
+        background: rgba(15, 23, 42, 0.8);
+        backdrop-filter: blur(20px);
+        border-radius: 20px;
+        padding: 2rem;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .category-card:hover {
+        transform: translateY(-4px);
+        border-color: rgba(16, 185, 129, 0.3);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+      }
+
+      .category-header {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .category-icon {
+        width: 3rem;
+        height: 3rem;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 1.25rem;
+        color: white;
+        flex-shrink: 0;
+      }
+
+      .emerald-gradient { background: linear-gradient(135deg, #10b981, #059669); }
+      .blue-gradient { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
+      .purple-gradient { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+      .cyan-gradient { background: linear-gradient(135deg, #06b6d4, #0891b2); }
+      .amber-gradient { background: linear-gradient(135deg, #f59e0b, #d97706); }
+      .rose-gradient { background: linear-gradient(135deg, #f43f5e, #e11d48); }
+
+      .category-info {
+        flex: 1;
+      }
+
+      .category-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #ffffff;
+        margin-bottom: 0.5rem;
+      }
+
+      .category-description {
+        color: rgba(255, 255, 255, 0.7);
+        line-height: 1.5;
+      }
+
+      .category-stats {
+        margin-bottom: 1.5rem;
+      }
+
+      .category-stats .stat {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .category-stats .stat-number {
+        font-weight: 600;
+        color: #10b981;
+      }
+
+      .category-stats .stat-label {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 0.9rem;
+      }
+
+      .category-link {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.75rem 1rem;
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.1));
+        border: 1px solid rgba(16, 185, 129, 0.2);
+        border-radius: 12px;
+        color: #10b981;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+      }
+
+      .category-link:hover {
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(6, 182, 212, 0.2));
+        border-color: rgba(16, 185, 129, 0.4);
+        color: #ffffff;
+      }
+
+      /* Discussion Cards */
+      .discussion-card {
+        background: rgba(15, 23, 42, 0.6);
+        backdrop-filter: blur(15px);
+        border-radius: 16px;
+        padding: 1.5rem;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .discussion-card:hover {
+        transform: translateY(-2px);
+        border-color: rgba(16, 185, 129, 0.3);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+      }
+
+      .discussion-content {
+        flex: 1;
+      }
+
+      .discussion-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      .discussion-title {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: #ffffff;
+        text-decoration: none;
+        transition: color 0.3s ease;
+      }
+
+      .discussion-title:hover {
+        color: #10b981;
+      }
+
+      .discussion-category {
+        padding: 0.25rem 0.75rem;
+        border-radius: 8px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .general-category { background: rgba(16, 185, 129, 0.2); color: #10b981; }
+      .development-category { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
+      .api-&-integration-category { background: rgba(139, 92, 246, 0.2); color: #8b5cf6; }
+      .ai-agents-category { background: rgba(6, 182, 212, 0.2); color: #06b6d4; }
+      .showcase-category { background: rgba(245, 158, 11, 0.2); color: #f59e0b; }
+
+      .discussion-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .author-info {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .author-avatar {
+        width: 2rem;
+        height: 2rem;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #10b981, #06b6d4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        color: white;
+      }
+
+      .author-name {
+        font-weight: 500;
+        color: #ffffff;
+      }
+
+      .post-time {
+        color: rgba(255, 255, 255, 0.6);
+      }
+
+      .discussion-stats {
+        display: flex;
+        gap: 1rem;
+      }
+
+      .discussion-stats .stat {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 0.875rem;
+      }
+
+      .discussion-activity {
+        text-align: right;
+      }
+
+      .activity-label {
+        display: block;
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 0.75rem;
+        margin-bottom: 0.25rem;
+      }
+
+      .activity-time {
+        color: #10b981;
+        font-weight: 500;
+      }
+
+      /* Trending Tags */
+      .trending-tags {
+        gap: 0.75rem;
+      }
+
+      .trending-tag {
+        padding: 0.5rem 1rem;
+        background: rgba(15, 23, 42, 0.6);
+        border: 1px solid rgba(16, 185, 129, 0.2);
+        border-radius: 20px;
+        color: #10b981;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+      }
+
+      .trending-tag:hover {
+        background: rgba(16, 185, 129, 0.1);
+        border-color: rgba(16, 185, 129, 0.4);
+        color: #ffffff;
+        transform: translateY(-2px);
+      }
+
+      /* Guidelines */
+      .guideline-card {
+        background: rgba(15, 23, 42, 0.6);
+        backdrop-filter: blur(15px);
+        border-radius: 16px;
+        padding: 2rem;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        text-align: center;
+        transition: all 0.3s ease;
+      }
+
+      .guideline-card:hover {
+        transform: translateY(-4px);
+        border-color: rgba(16, 185, 129, 0.3);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+      }
+
+      .guideline-icon {
+        width: 4rem;
+        height: 4rem;
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(6, 182, 212, 0.2));
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+        color: #10b981;
+      }
+
+      .guideline-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #ffffff;
+        margin-bottom: 1rem;
+      }
+
+      .guideline-description {
+        color: rgba(255, 255, 255, 0.7);
+        line-height: 1.6;
+      }
+
+      /* Buttons */
+      .new-post-button, .view-all-button, .home-nav-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(6, 182, 212, 0.2));
+        border: 1px solid rgba(16, 185, 129, 0.3);
+        border-radius: 12px;
+        color: #10b981;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+      }
+
+      .new-post-button:hover, .view-all-button:hover, .home-nav-button:hover {
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.3), rgba(6, 182, 212, 0.3));
+        border-color: rgba(16, 185, 129, 0.5);
+        color: #ffffff;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(16, 185, 129, 0.2);
+      }
+
+      .home-nav-button {
+        position: fixed;
+        bottom: 1.5rem;
+        right: 1.5rem;
+        z-index: 50;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      }
+
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        .discussion-card {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 1rem;
+        }
+
+        .discussion-meta {
+          width: 100%;
+        }
+
+        .discussion-activity {
+          text-align: left;
+          width: 100%;
+        }
+
+        .forum-stats {
+          grid-template-columns: repeat(2, 1fr);
+        }
+
+        .categories-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .guidelines-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </body>
+</html>

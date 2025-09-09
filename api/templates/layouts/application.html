@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>CodespacesTryRails</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+
+    <%= yield :head %>
+
+    <!-- Global Menu Bar Styles -->
+    <style>
+      /* Global Menu Bar */
+      .global-menu-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(90deg, #0a0a0a 0%, #1a1a2e 50%, #0a0a0a 100%);
+        border-bottom: 2px solid #00d4ff;
+        box-shadow: 0 2px 10px rgba(0, 212, 255, 0.3);
+        z-index: 1000;
+        padding: 0.5rem 1rem;
+        font-family: 'Consolas', 'Monaco', monospace;
+        transition: transform 0.3s ease;
+      }
+
+      /* Agent Page Menu - Collapsible */
+      .agent-page .global-menu-bar {
+        position: fixed;
+        transform: translateY(-100%);
+      }
+
+      .agent-page .global-menu-bar.menu-visible {
+        transform: translateY(0);
+      }
+
+      /* Menu Toggle Button for Agent Pages */
+      .menu-toggle-btn {
+        position: fixed;
+        top: 1rem;
+        right: 1rem;
+        background: linear-gradient(45deg, #0a0a0a, #1a1a2e);
+        border: 2px solid #00d4ff;
+        color: #00d4ff;
+        padding: 0.5rem;
+        border-radius: 50%;
+        cursor: pointer;
+        font-family: 'Consolas', 'Monaco', monospace;
+        font-weight: bold;
+        font-size: 16px;
+        z-index: 1001;
+        box-shadow: 0 2px 10px rgba(0, 212, 255, 0.3);
+        transition: all 0.3s ease;
+        display: none;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .agent-page .menu-toggle-btn {
+        display: flex;
+      }
+
+      .menu-toggle-btn:hover {
+        background: linear-gradient(45deg, #1a1a2e, #0a0a0a);
+        box-shadow: 0 4px 15px rgba(0, 212, 255, 0.5);
+        transform: scale(1.05);
+      }
+
+      .menu-toggle-btn.active {
+        background: linear-gradient(45deg, #00d4ff, #0099cc);
+        color: #0a0a0a;
+      }
+
+      /* Ensure agent pages have proper spacing for button */
+      .agent-page {
+        position: relative;
+      }
+
+      /* Sub-navigation adjustments for agent pages */
+      .agent-page .cinegen-subnav,
+      .agent-page .emotisense-subnav,
+      .agent-page .agent-subnav {
+        top: 0;
+        margin-top: 0;
+      }
+
+      /* Adjust menu button position when sub-nav is present */
+      .agent-page.cinegen-page .menu-toggle-btn,
+      .agent-page.emotisense-page .menu-toggle-btn {
+        top: 4.5rem; /* Below sub-navigation */
+        right: 1rem;
+      }
+
+      .menu-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .logo-section {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .logo {
+        color: #00d4ff;
+        font-size: 1.5rem;
+        font-weight: bold;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .main-menu {
+        display: flex;
+        gap: 0;
+        align-items: center;
+      }
+
+      .menu-item {
+        position: relative;
+        display: inline-block;
+      }
+
+      .menu-button {
+        background: transparent;
+        border: 1px solid transparent;
+        color: #00d4ff;
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+        font-family: inherit;
+        font-size: 14px;
+        transition: all 0.2s ease;
+        border-radius: 4px;
+        text-decoration: none;
+        display: block;
+      }
+
+      .menu-button:hover {
+        background: rgba(0, 212, 255, 0.1);
+        border-color: #00d4ff;
+        box-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+      }
+
+      .menu-button.active {
+        background: rgba(0, 212, 255, 0.2);
+        border-color: #00d4ff;
+      }
+
+      /* Rolling Dropdown - Window Blind Effect */
+      .dropdown {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background: #000000;
+        border: 2px solid #00d4ff;
+        border-radius: 8px;
+        box-shadow: 0 5px 20px rgba(0, 212, 255, 0.4);
+        min-width: 250px;
+        max-height: 400px;
+        overflow-y: auto;
+        z-index: 1001;
+
+        /* Initial state - rolled up like a window blind */
+        max-height: 0;
+        transform: translateY(-20px) scaleY(0);
+        transform-origin: top;
+        opacity: 0;
+        overflow: hidden;
+
+        /* Smooth rolling animation */
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .dropdown.active {
+        /* Rolled down - fully expanded */
+        max-height: 400px;
+        transform: translateY(0) scaleY(1);
+        opacity: 1;
+        overflow-y: auto;
+      }
+
+      .dropdown-header {
+        background: linear-gradient(90deg, #00d4ff 0%, #0099cc 100%);
+        color: #000;
+        padding: 0.5rem 1rem;
+        font-weight: bold;
+        font-size: 12px;
+        border-bottom: 1px solid #00d4ff;
+        /* Hidden initially for rolling effect */
+        opacity: 0;
+        transition: opacity 0.3s ease 0.2s;
+      }
+
+      .dropdown.active .dropdown-header {
+        opacity: 1;
+      }
+
+      /* Linux Tree Structure */
+      .tree-container {
+        padding: 0.5rem;
+        color: #00ff00;
+        font-family: 'Consolas', 'Monaco', monospace;
+        font-size: 12px;
+        line-height: 1.3;
+        /* Hidden initially for rolling effect */
+        opacity: 0;
+        transition: opacity 0.3s ease 0.2s;
+      }
+
+      .dropdown.active .tree-container {
+        opacity: 1;
+      }
+
+      .tree-item {
+        position: relative;
+        padding: 0.2rem 0;
+        cursor: pointer;
+        transition: background 0.2s ease;
+        color: #00ff00;
+        text-decoration: none;
+        display: block;
+      }
+
+      .tree-item:hover {
+        background: rgba(0, 255, 0, 0.1);
+        color: #00ff00;
+        text-decoration: none;
+      }
+
+      .tree-item.expandable::before {
+        content: "├── ";
+        color: #00d4ff;
+      }
+
+      .tree-item.last::before {
+        content: "└── ";
+        color: #00d4ff;
+      }
+
+      .tree-item.folder::after {
+        content: "/";
+        color: #ffff00;
+      }
+
+      .tree-item.executable {
+        color: #00ff00;
+        font-weight: bold;
+      }
+
+      .tree-item.config {
+        color: #ff9900;
+      }
+
+      .tree-item.link {
+        color: #ff00ff;
+      }
+
+      .tree-children {
+        margin-left: 1.5rem;
+        border-left: 1px solid #333;
+        padding-left: 0.5rem;
+        display: none;
+      }
+
+      .tree-children.expanded {
+        display: block;
+      }
+
+      .tree-children .tree-item::before {
+        content: "├── ";
+        color: #00d4ff;
+      }
+
+      .tree-children .tree-item:last-child::before {
+        content: "└── ";
+        color: #00d4ff;
+      }
+
+      .has-submenu::after {
+        content: " ▶";
+        color: #ffff00;
+        font-size: 10px;
+        margin-left: 0.5rem;
+      }
+
+      .tree-item.expanded .has-submenu::after {
+        content: " ▼";
+      }
+
+      /* Body padding for fixed menu */
+      body {
+        padding-top: 50px;
+      }
+
+      /* Agent pages don't need top padding when menu is hidden */
+      .agent-page body {
+        padding-top: 0;
+      }
+
+      /* User section */
+      .user-section {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .user-avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: linear-gradient(45deg, #00d4ff, #0099cc);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #000;
+        font-weight: bold;
+        font-size: 14px;
+      }
+
+      @media (max-width: 768px) {
+        .main-menu {
+          display: none;
+        }
+
+        .mobile-menu-toggle {
+          display: block;
+          background: transparent;
+          border: 1px solid #00d4ff;
+          color: #00d4ff;
+          padding: 0.5rem;
+          border-radius: 4px;
+          cursor: pointer;
+        }
+      }
+
+      @media (min-width: 769px) {
+        .mobile-menu-toggle {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+
+  <body class="<%= body_css_classes %> <%= 'agent-page' if is_agent_page? %>">
+    <!-- Menu Toggle Button (Only visible on agent pages) -->
+    <% if is_agent_page? %>
+      <button class="menu-toggle-btn" onclick="toggleGlobalMenu()" id="menuToggleBtn">
+        ▼
+      </button>
+    <% end %>
+
+    <!-- Global Menu Bar -->
+    <nav class="global-menu-bar" id="globalMenuBar">
+      <div class="menu-container">
+        <!-- Logo Section -->
+        <div class="logo-section">
+          <a href="/" class="logo">
+            <span>🌌</span>
+            onelastai.com
+          </a>
+        </div>
+
+        <!-- Main Navigation Menu -->
+        <div class="main-menu">
+          <div class="menu-item">
+            <button class="menu-button" onclick="toggleDropdown('agents-menu')">Agents</button>
+            <div id="agents-menu" class="dropdown">
+              <div class="dropdown-header">AI Agent Network</div>
+              <div class="tree-container">
+                <a href="/neochat" class="tree-item expandable executable">neochat.agent</a>
+                <a href="/emotisense" class="tree-item expandable executable">emotisense.agent</a>
+                <a href="/cinegen" class="tree-item expandable executable">cinegen.agent</a>
+                <a href="/contentcrafter" class="tree-item expandable executable">contentcrafter.agent</a>
+                <a href="/memora" class="tree-item expandable executable">memora.agent</a>
+                <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
+                  network_intelligence
+                  <div class="tree-children">
+                    <a href="/netscope" class="tree-item executable">netscope.agent - Network & IP Insights</a>
+                    <a href="/infoseek" class="tree-item executable">infoseek.agent - Smart Search</a>
+                    <a href="/datavision" class="tree-item executable">datavision.agent - API Analytics</a>
+                    <a href="/datasphere" class="tree-item last executable">datasphere.agent - Data Management</a>
+                  </div>
+                </div>
+                <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
+                  content_creation
+                  <div class="tree-children">
+                    <a href="/aiblogster" class="tree-item executable">aiblogster.agent - AI Blogging Assistant</a>
+                    <a href="/documind" class="tree-item executable">documind.agent - Documentation Helper</a>
+                    <a href="/ideaforge" class="tree-item executable">ideaforge.agent - AI Creativity Studio</a>
+                    <a href="/reportly" class="tree-item last executable">reportly.agent - Report Generation</a>
+                  </div>
+                </div>
+                <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
+                  support_automation
+                  <div class="tree-children">
+                    <a href="/carebot" class="tree-item executable">carebot.agent - AI Support Assistant</a>
+                    <a href="/taskmaster" class="tree-item executable">taskmaster.agent - Task Management</a>
+                    <a href="/vocamind" class="tree-item executable">vocamind.agent - Voice Interaction</a>
+                    <a href="/configai" class="tree-item last executable">configai.agent - Settings & Optimization</a>
+                  </div>
+                </div>
+                <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
+                  security_identity
+                  <div class="tree-children">
+                    <a href="/personax" class="tree-item executable">personax.agent - Profile & Identity Manager</a>
+                    <a href="/authwise" class="tree-item executable">authwise.agent - Secure Authentication</a>
+                    <a href="/labx" class="tree-item executable">labx.agent - Experimental AI Lab</a>
+                    <a href="/spylens" class="tree-item last executable">spylens.agent - Advanced Surveillance</a>
+                  </div>
+                </div>
+                <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
+                  specialized_agents
+                  <div class="tree-children">
+                    <a href="/girlfriend" class="tree-item executable">girlfriend.agent - Virtual Companion</a>
+                    <a href="/callghost" class="tree-item executable">callghost.agent - Communication Ghost</a>
+                    <a href="/dnaforge" class="tree-item executable">dnaforge.agent - Genetic Analysis</a>
+                    <a href="/dreamweaver" class="tree-item last executable">dreamweaver.agent - Dream Analysis</a>
+                  </div>
+                </div>
+                <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
+                  agent_types
+                  <div class="tree-children">
+                    <a href="#" class="tree-item executable">conversational.py</a>
+                    <a href="#" class="tree-item executable">creative.py</a>
+                    <a href="#" class="tree-item executable">analytical.py</a>
+                    <a href="#" class="tree-item last executable">specialized.py</a>
+                  </div>
+                </div>
+                <a href="#" class="tree-item last link">agent_marketplace.com → explore</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="menu-item">
+            <button class="menu-button" onclick="toggleDropdown('platform-menu')">Platform</button>
+            <div id="platform-menu" class="dropdown">
+              <div class="dropdown-header">Platform & Services</div>
+              <div class="tree-container">
+                <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
+                  account
+                  <div class="tree-children">
+                    <a href="/signup" class="tree-item executable">signup.sh</a>
+                    <a href="/login" class="tree-item executable">login.sh</a>
+                    <a href="/dashboard" class="tree-item executable">dashboard.py</a>
+                    <a href="/settings" class="tree-item config">settings.conf</a>
+                    <a href="/billing" class="tree-item config">billing.json</a>
+                    <a href="/my-agents" class="tree-item last executable">my_agents.list</a>
+                  </div>
+                </div>
+                <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
+                  platform_features
+                  <div class="tree-children">
+                    <a href="/api-docs" class="tree-item config">api_documentation.md</a>
+                    <a href="/integrations" class="tree-item executable">integrations.py</a>
+                    <a href="/templates" class="tree-item config">templates.library</a>
+                    <a href="/marketplace" class="tree-item executable">marketplace.app</a>
+                    <a href="/tutorials" class="tree-item config">tutorials.guide</a>
+                    <a href="/support" class="tree-item last executable">support_center.sh</a>
+                  </div>
+                </div>
+                <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
+                  information
+                  <div class="tree-children">
+                    <a href="/about" class="tree-item config">about_us.md</a>
+                    <a href="/blog" class="tree-item config">blog.feed</a>
+                    <a href="/news" class="tree-item config">news.rss</a>
+                    <a href="/changelog" class="tree-item config">changelog.log</a>
+                    <a href="/status-page" class="tree-item executable">status.monitor</a>
+                    <a href="/careers" class="tree-item last config">careers.jobs</a>
+                  </div>
+                </div>
+                <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
+                  developers
+                  <div class="tree-children">
+                    <a href="/developers" class="tree-item executable">dev_portal.py</a>
+                    <a href="/api-docs" class="tree-item config">api_reference.json</a>
+                    <a href="/integrations" class="tree-item config">sdk.packages</a>
+                    <a href="/partners" class="tree-item last config">partners.network</a>
+                  </div>
+                </div>
+                <a href="/contact" class="tree-item last executable">contact_us.sh</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="menu-item">
+            <button class="menu-button" onclick="toggleDropdown('features-menu')">Resources</button>
+            <div id="features-menu" class="dropdown">
+              <div class="dropdown-header">Help & Resources</div>
+              <div class="tree-container">
+                <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
+                  documentation
+                  <div class="tree-children">
+                    <a href="/faq" class="tree-item config">faq.md</a>
+                    <a href="/tutorials" class="tree-item config">tutorials.guide</a>
+                    <a href="/api-docs" class="tree-item config">api_reference.json</a>
+                    <a href="/changelog" class="tree-item config">changelog.log</a>
+                    <a href="/templates" class="tree-item last config">templates.library</a>
+                  </div>
+                </div>
+                <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
+                  community
+                  <div class="tree-children">
+                    <a href="/blog" class="tree-item config">blog.feed</a>
+                    <a href="/news" class="tree-item config">news.updates</a>
+                    <a href="/support" class="tree-item executable">support_center.sh</a>
+                    <a href="#" class="tree-item link">discord.gg/onelastai</a>
+                    <a href="#" class="tree-item last link">github.com/onelastai</a>
+                  </div>
+                </div>
+                <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
+                  business
+                  <div class="tree-children">
+                    <a href="/partners" class="tree-item config">partners.network</a>
+                    <a href="/careers" class="tree-item config">careers.jobs</a>
+                    <a href="/about" class="tree-item config">about_us.md</a>
+                    <a href="/contact" class="tree-item last executable">contact_us.sh</a>
+                  </div>
+                </div>
+                <a href="/status-page" class="tree-item last executable">system_status.monitor</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="menu-item">
+            <button class="menu-button" onclick="toggleDropdown('docs-menu')">Legal</button>
+            <div id="docs-menu" class="dropdown">
+              <div class="dropdown-header">Legal & Policies</div>
+              <div class="tree-container">
+                <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
+                  policies
+                  <div class="tree-children">
+                    <a href="/privacy" class="tree-item config">privacy_policy.md</a>
+                    <a href="/terms" class="tree-item config">terms_of_service.md</a>
+                    <a href="/cookies" class="tree-item last config">cookie_policy.md</a>
+                  </div>
+                </div>
+                <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
+                  compliance
+                  <div class="tree-children">
+                    <a href="#" class="tree-item config">gdpr_compliance.cert</a>
+                    <a href="#" class="tree-item config">soc2_audit.report</a>
+                    <a href="#" class="tree-item config">security_framework.json</a>
+                    <a href="#" class="tree-item last config">data_processing.agreement</a>
+                  </div>
+                </div>
+                <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
+                  admin_access
+                  <div class="tree-children">
+                    <a href="/admin" class="tree-item executable">admin_dashboard.sh</a>
+                    <a href="/admin/users" class="tree-item executable">user_management.py</a>
+                    <a href="/admin/reports" class="tree-item config">usage_reports.json</a>
+                    <a href="/admin/payments" class="tree-item last config">payment_logs.db</a>
+                  </div>
+                </div>
+                <a href="/contact" class="tree-item last executable">legal_contact.sh</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- User Section -->
+        <div class="user-section">
+          <div class="menu-item">
+            <button class="menu-button" onclick="toggleDropdown('user-menu')">
+              <div class="user-avatar">U</div>
+            </button>
+            <div id="user-menu" class="dropdown" style="right: 0; left: auto;">
+              <div class="dropdown-header">User Account</div>
+              <div class="tree-container">
+                <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
+                  account
+                  <div class="tree-children">
+                    <a href="/dashboard" class="tree-item executable">dashboard.py</a>
+                    <a href="/settings" class="tree-item config">settings.json</a>
+                    <a href="/my-agents" class="tree-item config">my_agents.list</a>
+                    <a href="/billing" class="tree-item config">billing.info</a>
+                    <a href="/subscriptions" class="tree-item last config">subscriptions.plan</a>
+                  </div>
+                </div>
+                <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
+                  activity
+                  <div class="tree-children">
+                    <a href="#" class="tree-item config">usage_stats.json</a>
+                    <a href="#" class="tree-item config">conversations.log</a>
+                    <a href="#" class="tree-item config">projects.db</a>
+                    <a href="#" class="tree-item last config">api_usage.metrics</a>
+                  </div>
+                </div>
+                <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
+                  quick_access
+                  <div class="tree-children">
+                    <a href="/support" class="tree-item executable">support.sh</a>
+                    <a href="/faq" class="tree-item config">faq.md</a>
+                    <a href="/api-docs" class="tree-item config">api_docs.json</a>
+                    <a href="/templates" class="tree-item last config">templates.library</a>
+                  </div>
+                </div>
+                <a href="/logout" class="tree-item executable">logout.sh</a>
+                <a href="/contact" class="tree-item last link">help.onelastai.com → support</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mobile Menu Toggle -->
+          <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">☰</button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Agent-Specific Sub-Navigation -->
+    <% if controller_name == 'cinegen' %>
+      <%= render 'shared/cinegen_subnav' %>
+    <% end %>
+
+    <%= yield %>
+
+    <!-- Conditional Footer - Hidden on Agent Pages -->
+    <%= render 'shared/footer' if show_footer? %>
+
+    <!-- Global Menu JavaScript -->
+    <script>
+      function toggleGlobalMenu() {
+        const menuBar = document.getElementById('globalMenuBar');
+        const toggleBtn = document.getElementById('menuToggleBtn');
+
+        menuBar.classList.toggle('menu-visible');
+        toggleBtn.classList.toggle('active');
+
+        // Update button arrow
+        if (menuBar.classList.contains('menu-visible')) {
+          toggleBtn.textContent = '▲';
+        } else {
+          toggleBtn.textContent = '▼';
+        }
+      }
+
+      function toggleDropdown(menuId) {
+        // Close all other dropdowns first
+        const allDropdowns = document.querySelectorAll('.dropdown');
+        allDropdowns.forEach(dropdown => {
+          if (dropdown.id !== menuId) {
+            dropdown.classList.remove('active');
+          }
+        });
+
+        // Toggle the target dropdown
+        const dropdown = document.getElementById(menuId);
+        dropdown.classList.toggle('active');
+
+        // Toggle active state on menu button
+        const button = dropdown.previousElementSibling;
+        button.classList.toggle('active');
+      }
+
+      function toggleSubmenu(element) {
+        const children = element.querySelector('.tree-children');
+        if (children) {
+          children.classList.toggle('expanded');
+          element.classList.toggle('expanded');
+        }
+      }
+
+      function toggleMobileMenu() {
+        const mainMenu = document.querySelector('.main-menu');
+        mainMenu.style.display = mainMenu.style.display === 'flex' ? 'none' : 'flex';
+      }
+
+      // Close dropdowns when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!e.target.closest('.menu-item') && !e.target.closest('.menu-toggle-btn')) {
+          const allDropdowns = document.querySelectorAll('.dropdown');
+          const allButtons = document.querySelectorAll('.menu-button');
+
+          allDropdowns.forEach(dropdown => {
+            dropdown.classList.remove('active');
+          });
+
+          allButtons.forEach(button => {
+            button.classList.remove('active');
+          });
+
+          // On agent pages, also close the global menu if clicking outside
+          if (document.body.classList.contains('agent-page')) {
+            const menuBar = document.getElementById('globalMenuBar');
+            const toggleBtn = document.getElementById('menuToggleBtn');
+
+            if (menuBar && menuBar.classList.contains('menu-visible')) {
+              menuBar.classList.remove('menu-visible');
+              toggleBtn.classList.remove('active');
+              toggleBtn.textContent = '▼';
+            }
+          }
+        }
+      });
+
+      // Prevent dropdown links from closing menu immediately
+      document.addEventListener('DOMContentLoaded', () => {
+        const dropdownLinks = document.querySelectorAll('.dropdown a');
+        dropdownLinks.forEach(link => {
+          link.addEventListener('click', (e) => {
+            // Allow the link to work normally
+            // Dropdown will close due to page navigation
+          });
+        });
+      });
+    </script>
+
+    <%= yield :javascript %>
+  </body>
+</html>

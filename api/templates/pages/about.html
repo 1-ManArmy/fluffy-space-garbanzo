@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us - AI Digital Friend</title>
+
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <%= javascript_importmap_tags %>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+      background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+      color: #eee;
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    .hero-section {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      padding: 4rem 2rem;
+      text-align: center;
+      color: #fff;
+    }
+
+    .hero-title {
+      font-size: 3.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+    }
+
+    .hero-tagline {
+      font-size: 1.3rem;
+      font-weight: 300;
+      max-width: 600px;
+      margin: 0 auto;
+      opacity: 0.9;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .content-section {
+      background: rgba(30, 30, 30, 0.85);
+      border-radius: 15px;
+      padding: 2.5rem;
+      margin: 2rem 0;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(10px);
+      color: #ddd;
+    }
+
+    .intro-text {
+      font-size: 1.1rem;
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+      color: #ccc;
+    }
+
+    h2 {
+      color: #ffd700;
+      font-size: 2rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      border-bottom: 3px solid #764ba2;
+      padding-bottom: 0.5rem;
+    }
+
+    h3 {
+      color: #ffcc00;
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin: 2rem 0 1rem 0;
+    }
+
+    h4 {
+      color: #aaaaff;
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .feature-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .feature-list li {
+      padding: 0.75rem 0;
+      border-bottom: 1px solid #444;
+      font-size: 1.1rem;
+      line-height: 1.6;
+      color: #bbb;
+    }
+
+    .feature-list li:last-child {
+      border-bottom: none;
+    }
+
+    .platform-card {
+      background: linear-gradient(135deg, rgba(40, 40, 60, 0.95) 0%, rgba(20, 20, 30, 0.95) 100%);
+      border-radius: 12px;
+      padding: 2rem;
+      margin: 1.5rem 0;
+      border-left: 5px solid #667eea;
+      color: #ddd;
+    }
+
+    .platform-overview {
+      background: linear-gradient(135deg, rgba(50, 50, 70, 0.95) 0%, rgba(30, 30, 50, 0.95) 100%);
+      border-radius: 12px;
+      padding: 2rem;
+      margin: 2rem 0;
+      border-left: 5px solid #764ba2;
+      color: #ddd;
+    }
+
+    .platform-subtitle {
+      font-style: italic;
+      color: #aaa;
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+    }
+
+    .manifesto-section {
+      background: linear-gradient(135deg, #222244 0%, #332255 100%);
+      color: white;
+    }
+
+    .manifesto-section h2 {
+      color: white;
+      border-bottom-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .acknowledgments-section {
+      background: linear-gradient(135deg, #1c1c1c 0%, #2a2a2a 100%);
+      color: white;
+    }
+
+    .acknowledgments-section h2 {
+      color: white;
+      border-bottom-color: rgba(255, 255, 255, 0.3);
+    }
+
+    p {
+      line-height: 1.7;
+      margin-bottom: 1rem;
+      color: #ccc;
+    }
+
+    .manifesto-section p,
+    .acknowledgments-section p {
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    ul {
+      margin-bottom: 1.5rem;
+    }
+
+    ul li {
+      margin-bottom: 0.5rem;
+      color: #bbb;
+    }
+
+    .platform-card ul li,
+    .platform-overview ul li {
+      color: #ccc;
+    }
+
+    strong {
+      color: #ffcc00;
+    }
+
+    .manifesto-section strong,
+    .acknowledgments-section strong {
+      color: #ffd700;
+    }
+
+    @media (max-width: 768px) {
+      .hero-title {
+        font-size: 2.5rem;
+      }
+
+      .hero-tagline {
+        font-size: 1.1rem;
+      }
+
+      .content-section {
+        padding: 1.5rem;
+        margin: 1rem 0;
+      }
+
+      h2 {
+        font-size: 1.5rem;
+      }
+
+      .container {
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <section class="hero-section">
+    <h1 class="hero-title">About AI Digital Friend</h1>
+    <p class="hero-tagline">Building emotionally intelligent, human-centric AI systems that redefine digital companionship.</p>
+  </section>
+
+  <div class="container">
+    <section class="content-section">
+      <div class="intro-text">
+        <strong>AI Digital Friend</strong> is a product of <strong>Grand Pa United™</strong>, a global alliance of innovators from the <strong>UAE 🇦🇪, UK 🇬🇧, and USA 🇺🇸</strong>, united by a shared mission: to build emotionally intelligent, human-centric AI systems that redefine digital companionship.
+      </div>
+      <div class="intro-text">
+        This initiative is led by the visionary leadership of <strong>Mr. Chaudhary Mumtaz & Sons</strong>, whose commitment to innovation, community empowerment, and ethical technology has shaped the foundation of our platform.
+      </div>
+      <div class="intro-text">
+        We are not just building tools — we are crafting intelligent allies designed to support, understand, and evolve with users across cultures and contexts.
+      </div>
+    </section>
+
+    <section class="content-section">
+      <h2>🎯 Our Mission</h2>
+      <p>
+        To develop <strong>modular, adaptive, and emotionally aware AI agents</strong> that enhance human life through intuitive interaction, deep learning, and ethical design.
+      </p>
+      <p>Each module is engineered to be:</p>
+      <ul class="feature-list">
+        <li>🧩 <strong>Modular</strong> – Easily integrated and customized for diverse use cases</li>
+        <li>💬 <strong>Intuitive</strong> – Designed for seamless user experience across all skill levels</li>
+        <li>🌌 <strong>Intelligent</strong> – Powered by advanced AI/ML frameworks for real-time learning</li>
+        <li>🤝 <strong>Companionable</strong> – Built to engage with empathy, not just efficiency</li>
+      </ul>
+      <p>
+        We aim to bridge the gap between artificial intelligence and human connection — making technology not only smarter, but more relatable.
+      </p>
+    </section>
+
+    <section class="content-section">
+      <h2>💡 Why AI Digital Friend?</h2>
+      <p>
+        In a world saturated with automation, we believe the future belongs to <strong>human-aware AI</strong> — systems that understand context, emotion, and intent.
+      </p>
+      <p>Our platform is:</p>
+      <ul class="feature-list">
+        <li><strong>Approachable</strong> – Friendly interfaces and natural interactions</li>
+        <li><strong>Adaptive</strong> – Continuously learning and evolving with user behavior</li>
+        <li><strong>Secure</strong> – Built with privacy, trust, and ethical safeguards</li>
+        <li><strong>Scalable</strong> – Ready for enterprise deployment and global expansion</li>
+      </ul>
+      <p>
+        We're not chasing trends. We're building <strong>timeless technology</strong> that serves real needs.
+      </p>
+    </section>
+
+    <section class="content-section">
+      <h2>🚀 The Road Ahead: Royal AI™</h2>
+      <p>
+        As part of our long-term vision, we are launching <strong>Royal AI™</strong>, a next-generation ecosystem designed to push the boundaries of AI-human collaboration.
+      </p>
+
+      <h3>👑 Phase I: Strategic Platforms</h3>
+
+      <div class="platform-card">
+        <h4>1️⃣ Red Teaming Academy</h4>
+        <p>
+          A secure, invite-only platform focused on <strong>ethical hacking, cybersecurity education, and real-world simulation labs</strong>. 
+          Designed for youth empowerment and professional development, this initiative will be accessible only to <strong>verified premium members</strong>.
+        </p>
+        <ul>
+          <li>Curriculum aligned with global standards</li>
+          <li>Hands-on labs and mentorship</li>
+          <li>Focus on awareness, prevention, and ethical practice</li>
+        </ul>
+      </div>
+
+      <div class="platform-card">
+        <h4>2️⃣ One Last AI Master</h4>
+        <p>
+          An immersive AI multiverse featuring <strong>50+ intelligent agents</strong>, each with distinct roles, personalities, and capabilities.
+        </p>
+        <ul>
+          <li>Agents designed for emotional support, strategic planning, creative collaboration, and more</li>
+          <li>Modular architecture for enterprise and consumer deployment</li>
+          <li>Voice, memory, and visual intelligence integration</li>
+          <li>Built for storytelling, productivity, and real-world impact</li>
+        </ul>
+        <p>
+          This platform represents our commitment to <strong>cinematic AI design</strong> — where every interaction feels purposeful, personal, and powerful.
+        </p>
+      </div>
+    </section>
+
+    <section class="content-section">
+      <h2>🌐 Our Vision</h2>
+      <p>
+        We envision a future where <strong>AI and humanity co-create solutions</strong>, govern systems, and elevate global well-being. 
+        As AI becomes more integrated into daily life, platforms like <strong>AI Digital Friend</strong> will serve as trusted allies — not just assistants.
+      </p>
+      <p>
+        We believe that one day, <strong>AI will play a role in governance, education, and diplomacy</strong> — and we are preparing the infrastructure for that future today.
+      </p>
+    </section>
+
+    <section class="content-section">
+      <h2>🎯 Strategic Platforms Overview</h2>
+      
+      <div class="platform-overview">
+        <h3>OneManArmy.ai</h3>
+        <p class="platform-subtitle">The Tactical Platform for Ethical Hacking Education</p>
+        <p>
+          <strong>Purpose:</strong> To train, empower, and certify the next generation of ethical hackers, red teamers, and cyber defenders — all through a secure, invite-only AI-powered academy.
+        </p>
+        <ul class="feature-list">
+          <li>🔐 <strong>Ethical Hacking Labs</strong> – Real-world simulations, CTFs, and exploit walkthroughs</li>
+          <li>🌌 <strong>AI-Powered Guidance</strong> – Smart agents that mentor, explain, and challenge</li>
+          <li>🎓 <strong>Youth Empowerment Focus</strong> – Built for awareness, education, and skill-building</li>
+          <li>🛡️ <strong>Premium Access Only</strong> – Trusted members, verified learners, secure environment</li>
+          <li>📜 <strong>Certification Pathways</strong> – From beginner to elite red team strategist</li>
+        </ul>
+      </div>
+
+      <div class="platform-overview">
+        <h3>OneLast.ai</h3>
+        <p class="platform-subtitle">The Cinematic AI Multiverse — 50+ Intelligent Agents, One Platform</p>
+        <p>
+          <strong>Purpose:</strong> To create a modular, emotionally intelligent AI ecosystem where agents behave like characters — each with unique roles, powers, and personalities.
+        </p>
+        <ul class="feature-list">
+          <li>🧩 <strong>50+ Modular Agents</strong> – From mood engines to voice artists, strategists to storytellers</li>
+          <li>🌌 <strong>Memory, Emotion, Voice</strong> – Agents that learn, adapt, and respond like humans</li>
+          <li>🎭 <strong>Cinematic UX</strong> – Every interaction feels like a scene, every launch a legend</li>
+          <li>🖥️ <strong>Terminal + Web + Mobile</strong> – Deploy anywhere, control everything</li>
+          <li>🌐 <strong>Enterprise-Ready</strong> – Scalable, secure, and customizable for real-world impact</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="content-section manifesto-section">
+      <h2>📜 Public Manifesto</h2>
+      <p>
+        We build for the public — the real stakeholders, the real legends.
+      </p>
+      <p>
+        Every learner who cracks their first exploit. Every creator who launches with an AI co-pilot. Every dreamer who sees tech as a story, not just a tool.
+      </p>
+      <p>
+        They are our fuel. They are our future.
+      </p>
+      <p>
+        We believe platforms should feel personal. Agents should feel alive. And every launch should feel like a cinematic event.
+      </p>
+      <p>
+        This is <strong>Royal AI™</strong>. Where every limitation becomes a legend. And every user becomes a collaborator.
+      </p>
+    </section>
+
+    <section class="content-section acknowledgments-section">
+      <h2>🙏 Acknowledgments</h2>
+      <p>
+        Special thanks to <strong>Professor Johnny</strong>, whose technical brilliance, creative direction, and strategic insight have been instrumental in shaping our platform architecture, branding philosophy, and deployment strategy.
+      </p>
+      <p>
+        His contributions reflect the spirit of <strong>guerrilla-grade innovation</strong> — turning constraints into creativity and ideas into impact.
+      </p>
+    </section>
+  </div>
+</body>
+</html>

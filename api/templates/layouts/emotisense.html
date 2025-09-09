@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>EmotiSense - Mood & Emotion Analyzer</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+    
+    <!-- EmotiSense Specific Styles -->
+    <style>
+      :root {
+        --emotisense-primary: #6c5ce7;
+        --emotisense-secondary: #a29bfe;
+        --emotisense-accent: #fd79a8;
+        --emotisense-warm: #fdcb6e;
+        --emotisense-cool: #74b9ff;
+        --emotisense-dark: #2d3436;
+        --emotisense-light: #ddd8ff;
+        --emotisense-gradient: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 50%, #fd79a8 100%);
+        --emotisense-shadow: 0 8px 32px rgba(108, 92, 231, 0.3);
+        --emotisense-glow: 0 0 20px rgba(108, 92, 231, 0.5);
+      }
+
+      body {
+        background: var(--emotisense-gradient);
+        background-attachment: fixed;
+        min-height: 100vh;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        color: var(--emotisense-dark);
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+      }
+
+      /* Animated background particles */
+      body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: 
+          radial-gradient(circle at 20% 50%, rgba(108, 92, 231, 0.3) 0%, transparent 50%),
+          radial-gradient(circle at 80% 20%, rgba(253, 121, 168, 0.3) 0%, transparent 50%),
+          radial-gradient(circle at 40% 80%, rgba(162, 155, 254, 0.3) 0%, transparent 50%);
+        animation: emotionalFlow 20s ease-in-out infinite;
+        z-index: -1;
+        pointer-events: none;
+      }
+
+      @keyframes emotionalFlow {
+        0%, 100% { opacity: 0.3; transform: scale(1) rotate(0deg); }
+        33% { opacity: 0.5; transform: scale(1.1) rotate(120deg); }
+        66% { opacity: 0.4; transform: scale(0.9) rotate(240deg); }
+      }
+
+      /* EmotiSense Header */
+      .emotisense-header {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid rgba(108, 92, 231, 0.2);
+        padding: 1rem 0;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        box-shadow: var(--emotisense-shadow);
+      }
+
+      .emotisense-nav {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 2rem;
+      }
+
+      .emotisense-logo {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        text-decoration: none;
+        color: var(--emotisense-primary);
+        font-weight: 700;
+        font-size: 1.5rem;
+      }
+
+      .emotisense-logo .logo-icon {
+        width: 40px;
+        height: 40px;
+        background: var(--emotisense-gradient);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.2rem;
+        animation: pulse 2s ease-in-out infinite;
+      }
+
+      @keyframes pulse {
+        0%, 100% { transform: scale(1); box-shadow: var(--emotisense-glow); }
+        50% { transform: scale(1.05); box-shadow: 0 0 30px rgba(108, 92, 231, 0.7); }
+      }
+
+      .emotisense-menu {
+        display: flex;
+        gap: 2rem;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      .emotisense-menu a {
+        color: var(--emotisense-dark);
+        text-decoration: none;
+        font-weight: 500;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .emotisense-menu a::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: var(--emotisense-gradient);
+        transition: left 0.3s ease;
+        z-index: -1;
+      }
+
+      .emotisense-menu a:hover::before {
+        left: 0;
+      }
+
+      .emotisense-menu a:hover {
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: var(--emotisense-shadow);
+      }
+
+      /* Emotional Status Indicator */
+      .emotion-status {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: rgba(108, 92, 231, 0.1);
+        padding: 0.5rem 1rem;
+        border-radius: 25px;
+        border: 1px solid rgba(108, 92, 231, 0.3);
+      }
+
+      .emotion-pulse {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: var(--emotisense-accent);
+        animation: emotionPulse 1.5s ease-in-out infinite;
+      }
+
+      @keyframes emotionPulse {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.7; transform: scale(1.2); }
+      }
+
+      /* Main Content Area */
+      .emotisense-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+        position: relative;
+        z-index: 1;
+      }
+
+      /* Emotion Cards */
+      .emotion-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        border-radius: 20px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: var(--emotisense-shadow);
+        border: 1px solid rgba(108, 92, 231, 0.2);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .emotion-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: var(--emotisense-gradient);
+      }
+
+      .emotion-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 40px rgba(108, 92, 231, 0.4);
+      }
+
+      .emotion-card h3 {
+        color: var(--emotisense-primary);
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      /* Interactive Elements */
+      .emotion-button {
+        background: var(--emotisense-gradient);
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 25px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .emotion-button:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--emotisense-shadow);
+      }
+
+      .emotion-button:active {
+        transform: translateY(0);
+      }
+
+      /* Mood Visualization Elements */
+      .mood-visual {
+        width: 100%;
+        height: 200px;
+        background: linear-gradient(45deg, var(--emotisense-light), rgba(255, 255, 255, 0.8));
+        border-radius: 15px;
+        position: relative;
+        overflow: hidden;
+        margin: 1rem 0;
+      }
+
+      .emotion-particle {
+        position: absolute;
+        width: 6px;
+        height: 6px;
+        background: var(--emotisense-accent);
+        border-radius: 50%;
+        animation: float 6s ease-in-out infinite;
+      }
+
+      @keyframes float {
+        0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.7; }
+        50% { transform: translateY(-20px) rotate(180deg); opacity: 1; }
+      }
+
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        .emotisense-nav {
+          flex-direction: column;
+          gap: 1rem;
+          padding: 1rem;
+        }
+
+        .emotisense-menu {
+          flex-wrap: wrap;
+          justify-content: center;
+          gap: 1rem;
+        }
+
+        .emotisense-container {
+          padding: 1rem;
+        }
+
+        .emotion-card {
+          padding: 1.5rem;
+        }
+      }
+
+      /* Custom scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: rgba(108, 92, 231, 0.1);
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: var(--emotisense-gradient);
+        border-radius: 4px;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: var(--emotisense-primary);
+      }
+
+      /* Emotional glow effect for interactive elements */
+      .glow-on-hover {
+        transition: all 0.3s ease;
+      }
+
+      .glow-on-hover:hover {
+        box-shadow: var(--emotisense-glow);
+      }
+
+      /* Hide global menu on EmotiSense pages for immersive experience */
+      .global-menu {
+        display: none;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- EmotiSense Header Navigation -->
+    <header class="emotisense-header">
+      <nav class="emotisense-nav">
+        <%= link_to "/emotisense", class: "emotisense-logo" do %>
+          <div class="logo-icon">💜</div>
+          <span>EmotiSense</span>
+        <% end %>
+        
+        <ul class="emotisense-menu">
+          <li><%= link_to "Dashboard", "/emotisense" %></li>
+          <li><%= link_to "Emotion Chat", "/emotisense/emotion_chat" %></li>
+          <li><%= link_to "Mood Journal", "/emotisense/mood_journal" %></li>
+          <li><%= link_to "Visualizations", "/emotisense/emotion_dashboard" %></li>
+          <li><%= link_to "Wellness Center", "/emotisense/wellness_center" %></li>
+          <li><%= link_to "Empathy Training", "/emotisense/empathy_training" %></li>
+        </ul>
+
+        <div class="emotion-status">
+          <div class="emotion-pulse"></div>
+          <span id="current-emotion">Analyzing...</span>
+        </div>
+      </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="emotisense-container">
+      <%= yield %>
+    </main>
+
+    <!-- Floating emotion particles -->
+    <div id="emotion-particles"></div>
+
+    <!-- EmotiSense JavaScript -->
+    <script>
+      // Initialize EmotiSense UI
+      document.addEventListener('DOMContentLoaded', function() {
+        initializeEmotionalParticles();
+        startEmotionMonitoring();
+        initializeEmotionalAnimations();
+      });
+
+      function initializeEmotionalParticles() {
+        const particleContainer = document.getElementById('emotion-particles');
+        const emotions = ['💜', '💙', '💚', '💛', '🧡', '❤️', '🤍', '💗'];
+        
+        // Create floating emotion particles
+        for (let i = 0; i < 15; i++) {
+          setTimeout(() => {
+            createEmotionParticle(particleContainer, emotions);
+          }, i * 2000);
+        }
+      }
+
+      function createEmotionParticle(container, emotions) {
+        const particle = document.createElement('div');
+        particle.textContent = emotions[Math.floor(Math.random() * emotions.length)];
+        particle.style.position = 'fixed';
+        particle.style.left = Math.random() * window.innerWidth + 'px';
+        particle.style.top = window.innerHeight + 'px';
+        particle.style.fontSize = '20px';
+        particle.style.pointerEvents = 'none';
+        particle.style.zIndex = '999';
+        particle.style.animation = `floatUp ${8 + Math.random() * 4}s ease-out forwards`;
+        
+        container.appendChild(particle);
+        
+        // Remove particle after animation
+        setTimeout(() => {
+          if (particle.parentNode) {
+            particle.parentNode.removeChild(particle);
+          }
+        }, 12000);
+      }
+
+      function startEmotionMonitoring() {
+        const emotionStatus = document.getElementById('current-emotion');
+        const emotions = ['Peaceful', 'Curious', 'Focused', 'Reflective', 'Aware'];
+        let currentIndex = 0;
+        
+        setInterval(() => {
+          emotionStatus.textContent = emotions[currentIndex];
+          currentIndex = (currentIndex + 1) % emotions.length;
+        }, 3000);
+      }
+
+      function initializeEmotionalAnimations() {
+        // Add CSS for floating particles animation
+        if (!document.getElementById('emotion-animations')) {
+          const style = document.createElement('style');
+          style.id = 'emotion-animations';
+          style.textContent = `
+            @keyframes floatUp {
+              0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0;
+              }
+              10% {
+                opacity: 1;
+              }
+              90% {
+                opacity: 1;
+              }
+              100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+              }
+            }
+          `;
+          document.head.appendChild(style);
+        }
+      }
+
+      // Emotion-based UI reactions
+      function triggerEmotionalResponse(emotion, intensity = 'moderate') {
+        const body = document.body;
+        body.classList.add(`emotion-${emotion}`);
+        body.classList.add(`intensity-${intensity}`);
+        
+        // Remove classes after animation
+        setTimeout(() => {
+          body.classList.remove(`emotion-${emotion}`);
+          body.classList.remove(`intensity-${intensity}`);
+        }, 3000);
+      }
+
+      // Global emotion state management
+      window.EmotiSense = {
+        currentEmotion: 'neutral',
+        updateEmotion: function(emotion, data) {
+          this.currentEmotion = emotion;
+          triggerEmotionalResponse(emotion, data.intensity);
+          this.updateUI(data);
+        },
+        updateUI: function(data) {
+          // Update emotion status indicator
+          const emotionStatus = document.getElementById('current-emotion');
+          if (emotionStatus) {
+            emotionStatus.textContent = data.emotion || this.currentEmotion;
+          }
+          
+          // Apply color scheme based on emotion
+          if (data.ui_triggers) {
+            this.applyEmotionalStyling(data.ui_triggers);
+          }
+        },
+        applyEmotionalStyling: function(triggers) {
+          const root = document.documentElement;
+          if (triggers.background_color) {
+            root.style.setProperty('--emotion-accent', triggers.background_color);
+          }
+        }
+      };
+    </script>
+  </body>
+</html>

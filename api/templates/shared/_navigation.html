@@ -1,0 +1,580 @@
+<!-- Main Navigation Header -->
+<nav class="main-navigation" id="mainNav">
+  <div class="nav-container">
+    <!-- Logo/Brand -->
+    <div class="nav-brand">
+      <%= link_to root_path, class: "brand-link" do %>
+        <span class="brand-icon">🌌</span>
+        <span class="brand-text">OneLastAI</span>
+      <% end %>
+    </div>
+
+    <!-- Navigation Menu -->
+    <div class="nav-menu">
+      <!-- Home Link -->
+      <div class="nav-item">
+        <%= link_to "🏠 Home", root_path, class: "nav-link #{'active' if current_page?(root_path)}" %>
+      </div>
+
+      <!-- AI Agents Dropdown -->
+      <div class="nav-item dropdown" id="agentsDropdown">
+        <button class="nav-link dropdown-toggle" onclick="toggleAgentsDropdown()">
+          🌌 AI Agents 
+          <span class="dropdown-arrow">▼</span>
+        </button>
+        
+        <!-- Rolling Dropdown Menu -->
+        <div class="dropdown-menu" id="agentsDropdownMenu">
+          <div class="dropdown-content">
+            <div class="dropdown-header">
+              <h3>🌌 AI Specialists</h3>
+              <p>Choose your AI expert</p>
+            </div>
+            
+            <div class="agents-grid">
+              <!-- Content & Writing -->
+              <div class="agent-category">
+                <h4>📝 Content & Writing</h4>
+                <div class="agent-links">
+                  <%= link_to "/aiblogster", class: "agent-link" do %>
+                    <span class="agent-emoji">🌌</span>
+                    <span class="agent-name">AIBlogster</span>
+                    <small>Blog Writing</small>
+                  <% end %>
+                  <%= link_to "/contentcrafter", class: "agent-link" do %>
+                    <span class="agent-emoji">✨</span>
+                    <span class="agent-name">ContentCrafter</span>
+                    <small>Content Creation</small>
+                  <% end %>
+                  <%= link_to "/dreamweaver", class: "agent-link" do %>
+                    <span class="agent-emoji">🌙</span>
+                    <span class="agent-name">DreamWeaver</span>
+                    <small>Story Creation</small>
+                  <% end %>
+                </div>
+              </div>
+
+              <!-- Data & Analytics -->
+              <div class="agent-category">
+                <h4>📊 Data & Analytics</h4>
+                <div class="agent-links">
+                  <%= link_to "/datasphere", class: "agent-link" do %>
+                    <span class="agent-emoji">🌐</span>
+                    <span class="agent-name">DataSphere</span>
+                    <small>Data Analytics</small>
+                  <% end %>
+                  <%= link_to "/datavision", class: "agent-link" do %>
+                    <span class="agent-emoji">📈</span>
+                    <span class="agent-name">DataVision</span>
+                    <small>Data Visualization</small>
+                  <% end %>
+                  <%= link_to "/reportly", class: "agent-link" do %>
+                    <span class="agent-emoji">📊</span>
+                    <span class="agent-name">Reportly</span>
+                    <small>Business Intelligence</small>
+                  <% end %>
+                </div>
+              </div>
+
+              <!-- Technology & Development -->
+              <div class="agent-category">
+                <h4>⚙️ Technology & Development</h4>
+                <div class="agent-links">
+                  <%= link_to "/configai", class: "agent-link" do %>
+                    <span class="agent-emoji">⚙️</span>
+                    <span class="agent-name">ConfigAI</span>
+                    <small>Configuration</small>
+                  <% end %>
+                  <%= link_to "/authwise", class: "agent-link" do %>
+                    <span class="agent-emoji">🔐</span>
+                    <span class="agent-name">AuthWise</span>
+                    <small>Authentication</small>
+                  <% end %>
+                  <%= link_to "/netscope", class: "agent-link" do %>
+                    <span class="agent-emoji">🌐</span>
+                    <span class="agent-name">NetScope</span>
+                    <small>Network Analysis</small>
+                  <% end %>
+                </div>
+              </div>
+
+              <!-- Creative & Media -->
+              <div class="agent-category">
+                <h4>🎨 Creative & Media</h4>
+                <div class="agent-links">
+                  <%= link_to "/cinegen", class: "agent-link" do %>
+                    <span class="agent-emoji">🎬</span>
+                    <span class="agent-name">CineGen</span>
+                    <small>Video Generation</small>
+                  <% end %>
+                  <%= link_to "/ideaforge", class: "agent-link" do %>
+                    <span class="agent-emoji">💡</span>
+                    <span class="agent-name">IdeaForge</span>
+                    <small>Innovation</small>
+                  <% end %>
+                  <%= link_to "/personax", class: "agent-link" do %>
+                    <span class="agent-emoji">🎭</span>
+                    <span class="agent-name">PersonaX</span>
+                    <small>Persona Development</small>
+                  <% end %>
+                </div>
+              </div>
+
+              <!-- Health & Wellness -->
+              <div class="agent-category">
+                <h4>🏥 Health & Wellness</h4>
+                <div class="agent-links">
+                  <%= link_to "/carebot", class: "agent-link" do %>
+                    <span class="agent-emoji">🏥</span>
+                    <span class="agent-name">CareBot</span>
+                    <small>Healthcare</small>
+                  <% end %>
+                  <%= link_to "/emotisense", class: "agent-link" do %>
+                    <span class="agent-emoji">😊</span>
+                    <span class="agent-name">EmotiSense</span>
+                    <small>Emotional Intelligence</small>
+                  <% end %>
+                  <%= link_to "/girlfriend", class: "agent-link" do %>
+                    <span class="agent-emoji">💕</span>
+                    <span class="agent-name">Girlfriend</span>
+                    <small>Companion AI</small>
+                  <% end %>
+                </div>
+              </div>
+
+              <!-- Research & Analysis -->
+              <div class="agent-category">
+                <h4>🔍 Research & Analysis</h4>
+                <div class="agent-links">
+                  <%= link_to "/infoseek", class: "agent-link" do %>
+                    <span class="agent-emoji">🔍</span>
+                    <span class="agent-name">InfoSeek</span>
+                    <small>Information Research</small>
+                  <% end %>
+                  <%= link_to "/spylens", class: "agent-link" do %>
+                    <span class="agent-emoji">🔍</span>
+                    <span class="agent-name">SpyLens</span>
+                    <small>Security Analysis</small>
+                  <% end %>
+                  <%= link_to "/dnaforge", class: "agent-link" do %>
+                    <span class="agent-emoji">🧬</span>
+                    <span class="agent-name">DNAForge</span>
+                    <small>Genetic Analysis</small>
+                  <% end %>
+                </div>
+              </div>
+
+              <!-- Productivity & Management -->
+              <div class="agent-category">
+                <h4>✅ Productivity & Management</h4>
+                <div class="agent-links">
+                  <%= link_to "/taskmaster", class: "agent-link" do %>
+                    <span class="agent-emoji">✅</span>
+                    <span class="agent-name">TaskMaster</span>
+                    <small>Task Management</small>
+                  <% end %>
+                  <%= link_to "/memora", class: "agent-link" do %>
+                    <span class="agent-emoji">🌌</span>
+                    <span class="agent-name">Memora</span>
+                    <small>Memory Management</small>
+                  <% end %>
+                  <%= link_to "/callghost", class: "agent-link" do %>
+                    <span class="agent-emoji">📞</span>
+                    <span class="agent-name">CallGhost</span>
+                    <small>Call Management</small>
+                  <% end %>
+                </div>
+              </div>
+
+              <!-- Communication & Learning -->
+              <div class="agent-category">
+                <h4>🗣️ Communication & Learning</h4>
+                <div class="agent-links">
+                  <%= link_to "/vocamind", class: "agent-link" do %>
+                    <span class="agent-emoji">🗣️</span>
+                    <span class="agent-name">VocaMind</span>
+                    <small>Language Learning</small>
+                  <% end %>
+                  <%= link_to "/neochat", class: "agent-link" do %>
+                    <span class="agent-emoji">💬</span>
+                    <span class="agent-name">NeoChat</span>
+                    <small>General Chat</small>
+                  <% end %>
+                  <%= link_to "/labx", class: "agent-link" do %>
+                    <span class="agent-emoji">🧪</span>
+                    <span class="agent-name">LabX</span>
+                    <small>Scientific Analysis</small>
+                  <% end %>
+                  <%= link_to "/documind", class: "agent-link" do %>
+                    <span class="agent-emoji">📄</span>
+                    <span class="agent-name">Documind</span>
+                    <small>Document Intelligence</small>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Menu Toggle -->
+    <div class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+</nav>
+
+<!-- Navigation Styles -->
+<style>
+  /* Reset and Base Styles */
+  .main-navigation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: rgba(0, 0, 0, 0.95);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+  }
+
+  .nav-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 70px;
+  }
+
+  /* Brand Styles */
+  .nav-brand {
+    display: flex;
+    align-items: center;
+  }
+
+  .brand-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 1.5rem;
+    transition: all 0.3s ease;
+  }
+
+  .brand-link:hover {
+    color: #00d4ff;
+    transform: scale(1.05);
+  }
+
+  .brand-icon {
+    font-size: 2rem;
+    margin-right: 0.5rem;
+  }
+
+  .brand-text {
+    background: linear-gradient(45deg, #00d4ff, #ff6b6b, #4ecdc4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Navigation Menu */
+  .nav-menu {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .nav-item {
+    position: relative;
+  }
+
+  .nav-link {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1.5rem;
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 500;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    font-size: 1rem;
+  }
+
+  .nav-link:hover {
+    background: rgba(0, 212, 255, 0.1);
+    color: #00d4ff;
+    transform: translateY(-2px);
+  }
+
+  .nav-link.active {
+    background: rgba(0, 212, 255, 0.2);
+    color: #00d4ff;
+  }
+
+  .dropdown-arrow {
+    margin-left: 0.5rem;
+    transition: transform 0.3s ease;
+    font-size: 0.8rem;
+  }
+
+  .dropdown.active .dropdown-arrow {
+    transform: rotate(180deg);
+  }
+
+  /* Rolling Dropdown Menu - Window Blind Effect */
+  .dropdown-menu {
+    position: absolute;
+    top: calc(100% + 10px);
+    left: -200px;
+    width: 800px;
+    background: rgba(0, 0, 0, 0.95);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    overflow: hidden;
+    
+    /* Initial state - rolled up like a window blind */
+    max-height: 0;
+    transform: translateY(-20px) scaleY(0);
+    transform-origin: top;
+    opacity: 0;
+    
+    /* Smooth rolling animation */
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .dropdown-menu.open {
+    /* Rolled down - fully expanded */
+    max-height: 600px;
+    transform: translateY(0) scaleY(1);
+    opacity: 1;
+  }
+
+  .dropdown-content {
+    padding: 2rem;
+    /* Hidden initially for rolling effect */
+    opacity: 0;
+    transition: opacity 0.3s ease 0.2s;
+  }
+
+  .dropdown-menu.open .dropdown-content {
+    opacity: 1;
+  }
+
+  .dropdown-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 1rem;
+  }
+
+  .dropdown-header h3 {
+    color: #00d4ff;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .dropdown-header p {
+    color: #b8b8b8;
+    font-size: 0.9rem;
+  }
+
+  /* Agents Grid */
+  .agents-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+  }
+
+  .agent-category {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .agent-category h4 {
+    color: #00d4ff;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    text-align: center;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+  }
+
+  .agent-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .agent-link {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem;
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid transparent;
+  }
+
+  .agent-link:hover {
+    background: rgba(0, 212, 255, 0.1);
+    border-color: rgba(0, 212, 255, 0.3);
+    transform: translateX(5px);
+  }
+
+  .agent-emoji {
+    font-size: 1.2rem;
+    margin-right: 0.75rem;
+    width: 24px;
+    text-align: center;
+  }
+
+  .agent-name {
+    font-weight: 600;
+    flex: 1;
+  }
+
+  .agent-link small {
+    color: #b8b8b8;
+    font-size: 0.8rem;
+    margin-top: 0.2rem;
+    display: block;
+  }
+
+  /* Mobile Menu Toggle */
+  .mobile-menu-toggle {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+    padding: 0.5rem;
+  }
+
+  .mobile-menu-toggle span {
+    width: 25px;
+    height: 3px;
+    background: #ffffff;
+    margin: 3px 0;
+    transition: 0.3s;
+    border-radius: 2px;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 1024px) {
+    .dropdown-menu {
+      width: 700px;
+      left: -150px;
+    }
+
+    .agents-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .nav-container {
+      padding: 0 1rem;
+    }
+
+    .nav-menu {
+      display: none;
+    }
+
+    .mobile-menu-toggle {
+      display: flex;
+    }
+
+    .dropdown-menu {
+      width: 350px;
+      left: -300px;
+    }
+
+    .agents-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* Body padding to account for fixed nav */
+  body {
+    padding-top: 70px;
+  }
+
+  /* Smooth scrolling enhancement */
+  html {
+    scroll-behavior: smooth;
+  }
+</style>
+
+<!-- Navigation JavaScript -->
+<script>
+  let dropdownOpen = false;
+
+  function toggleAgentsDropdown() {
+    const dropdown = document.getElementById('agentsDropdown');
+    const menu = document.getElementById('agentsDropdownMenu');
+    
+    dropdownOpen = !dropdownOpen;
+    
+    if (dropdownOpen) {
+      dropdown.classList.add('active');
+      menu.classList.add('open');
+    } else {
+      dropdown.classList.remove('active');
+      menu.classList.remove('open');
+    }
+  }
+
+  function toggleMobileMenu() {
+    // Mobile menu functionality can be added here
+    console.log('Mobile menu toggle clicked');
+  }
+
+  // Close dropdown when clicking outside
+  document.addEventListener('click', function(event) {
+    const dropdown = document.getElementById('agentsDropdown');
+    const menu = document.getElementById('agentsDropdownMenu');
+    
+    if (!dropdown.contains(event.target)) {
+      dropdownOpen = false;
+      dropdown.classList.remove('active');
+      menu.classList.remove('open');
+    }
+  });
+
+  // Close dropdown on escape key
+  document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape' && dropdownOpen) {
+      toggleAgentsDropdown();
+    }
+  });
+
+  // Add smooth scroll behavior for internal links
+  document.addEventListener('DOMContentLoaded', function() {
+    const agentLinks = document.querySelectorAll('.agent-link');
+    agentLinks.forEach(link => {
+      link.addEventListener('click', function() {
+        // Close dropdown when agent is selected
+        setTimeout(() => {
+          if (dropdownOpen) {
+            toggleAgentsDropdown();
+          }
+        }, 100);
+      });
+    });
+  });
+</script>

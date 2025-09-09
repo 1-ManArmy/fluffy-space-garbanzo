@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CallGhost - AI Communication Terminal | onelastai.com</title>
+  
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  
+  <!-- Custom CallGhost Styles -->
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Consolas', 'Monaco', 'Lucida Console', monospace;
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a2e1a 50%, #0f3e16 100%);
+      color: #00ff88;
+      min-height: 100vh;
+      overflow-x: hidden;
+      padding-top: 0; /* CallGhost has its own menu, no global menu needed */
+    }
+    
+    /* Hide global menu for terminal interface */
+    .global-menu-bar {
+      display: none !important;
+    }
+    
+    /* Hero Section */
+    .hero-section {
+      padding: 4rem 2rem;
+      text-align: center;
+      background: radial-gradient(ellipse at center, rgba(0, 255, 136, 0.1) 0%, rgba(0, 0, 0, 0.3) 70%);
+      border-bottom: 2px solid #00ff88;
+      position: relative;
+    }
+    
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="%2300ff88" stroke-width="0.5" opacity="0.3"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+      opacity: 0.2;
+      animation: gridMove 20s linear infinite;
+    }
+    
+    @keyframes gridMove {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(10px, 10px); }
+    }
+    
+    .hero-content {
+      position: relative;
+      z-index: 1;
+    }
+    
+    .agent-logo {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 20px #00ff88;
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.05); opacity: 0.8; }
+    }
+    
+    .agent-title {
+      font-size: 3rem;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+      text-shadow: 0 0 10px #00ff88;
+      background: linear-gradient(45deg, #00ff88, #ffffff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .agent-tagline {
+      font-size: 1.2rem;
+      color: #b3b3b3;
+      margin-bottom: 2rem;
+      opacity: 0.9;
+    }
+    
+    .agent-description {
+      max-width: 600px;
+      margin: 0 auto 2rem;
+      color: #cccccc;
+      line-height: 1.6;
+      font-size: 1rem;
+    }
+    
+    .agent-stats {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+    
+    .stat-item {
+      background: rgba(0, 255, 136, 0.1);
+      border: 1px solid #00ff88;
+      border-radius: 8px;
+      padding: 1rem;
+      min-width: 120px;
+      text-align: center;
+    }
+    
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #00ff88;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 0.8rem;
+      color: #b3b3b3;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    /* Terminal Section */
+    .terminal-section {
+      padding: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .terminal-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    
+    .terminal-title {
+      font-size: 1.5rem;
+      color: #00ff88;
+      margin-bottom: 0.5rem;
+    }
+    
+    .terminal-subtitle {
+      color: #b3b3b3;
+      font-size: 0.9rem;
+    }
+    
+    .terminal-container {
+      background: #000000;
+      border: 2px solid #00ff88;
+      border-radius: 12px;
+      box-shadow: 0 0 30px rgba(0, 255, 136, 0.3);
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .terminal-titlebar {
+      background: linear-gradient(90deg, #00ff88 0%, #00cc66 100%);
+      padding: 0.75rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .terminal-button {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ff5f56;
+    }
+    
+    .terminal-button.yellow { background: #ffbd2e; }
+    .terminal-button.green { background: #27ca3f; }
+    
+    .terminal-title-text {
+      margin-left: 1rem;
+      color: #000;
+      font-weight: bold;
+      font-size: 0.9rem;
+    }
+    
+    .terminal-output {
+      height: 400px;
+      padding: 1rem;
+      overflow-y: auto;
+      background: #000000;
+      color: #00ff00;
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+    
+    .terminal-output::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    .terminal-output::-webkit-scrollbar-track {
+      background: #1a1a1a;
+    }
+    
+    .terminal-output::-webkit-scrollbar-thumb {
+      background: #00ff88;
+      border-radius: 4px;
+    }
+    
+    .terminal-output::-webkit-scrollbar-thumb:hover {
+      background: #00cc66;
+    }
+
+    /* Sticky Menu Bar */
+    .menu-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(90deg, #0a0a0a 0%, #1a2e1a 50%, #0a0a0a 100%);
+      border-bottom: 2px solid #00ff88;
+      box-shadow: 0 2px 10px rgba(0, 255, 136, 0.3);
+      z-index: 1000;
+      padding: 0.5rem 1rem;
+      font-family: 'Consolas', 'Monaco', monospace;
+    }
+
+    .menu-items {
+      display: flex;
+      gap: 0;
+      align-items: center;
+    }
+
+    .menu-item {
+      position: relative;
+      display: inline-block;
+    }
+
+    .menu-button {
+      background: transparent;
+      border: 1px solid transparent;
+      color: #00ff88;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 14px;
+      transition: all 0.2s ease;
+      border-radius: 4px;
+    }
+
+    .menu-button:hover {
+      background: rgba(0, 255, 136, 0.1);
+      border-color: #00ff88;
+      box-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+    }
+
+    .menu-button.active {
+      background: rgba(0, 255, 136, 0.2);
+      border-color: #00ff88;
+    }
+
+    /* Terminal-style Dropdown */
+    .dropdown {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: #000000;
+      border: 2px solid #00ff88;
+      border-radius: 8px;
+      box-shadow: 0 5px 20px rgba(0, 255, 136, 0.4);
+      min-width: 250px;
+      max-height: 400px;
+      overflow-y: auto;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px);
+      transition: all 0.3s ease;
+      z-index: 1001;
+    }
+
+    .dropdown.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .dropdown-header {
+      background: linear-gradient(90deg, #00ff88 0%, #00cc66 100%);
+      color: #000;
+      padding: 0.5rem 1rem;
+      font-weight: bold;
+      font-size: 12px;
+      border-bottom: 1px solid #00ff88;
+    }
+
+    /* Linux Tree Structure */
+    .tree-container {
+      padding: 0.5rem;
+      color: #00ff00;
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 12px;
+      line-height: 1.3;
+    }
+
+    .tree-item {
+      position: relative;
+      padding: 0.2rem 0;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .tree-item:hover {
+      background: rgba(0, 255, 0, 0.1);
+    }
+
+    .tree-item.expandable {
+      position: relative;
+    }
+
+    .tree-item.expandable::before {
+      content: "├── ";
+      color: #00ff88;
+    }
+
+    .tree-item.last::before {
+      content: "└── ";
+      color: #00ff88;
+    }
+
+    .tree-item.folder::after {
+      content: "/";
+      color: #ffff00;
+    }
+
+    .tree-item.executable {
+      color: #00ff00;
+      font-weight: bold;
+    }
+
+    .tree-item.config {
+      color: #ff9900;
+    }
+
+    .tree-item.link {
+      color: #ff00ff;
+    }
+
+    .tree-children {
+      margin-left: 1.5rem;
+      border-left: 1px solid #333;
+      padding-left: 0.5rem;
+      display: none;
+    }
+
+    .tree-children.expanded {
+      display: block;
+    }
+
+    .tree-children .tree-item::before {
+      content: "├── ";
+      color: #00ff88;
+    }
+
+    .tree-children .tree-item:last-child::before {
+      content: "└── ";
+      color: #00ff88;
+    }
+
+    /* Sub-menu arrow */
+    .has-submenu::after {
+      content: " ▶";
+      color: #ffff00;
+      font-size: 10px;
+      margin-left: 0.5rem;
+    }
+
+    .tree-item.expanded .has-submenu::after {
+      content: " ▼";
+    }
+    
+    .terminal-message {
+      margin-bottom: 1rem;
+      display: block;
+    }
+    
+    .user-message {
+      color: #00ff88;
+    }
+    
+    .user-message::before {
+      content: '$ ';
+      color: #00ff00;
+      font-weight: bold;
+    }
+    
+    .agent-message {
+      color: #ffffff;
+      margin-left: 2rem;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+    
+    .timestamp {
+      color: #666666;
+      font-size: 12px;
+      margin-left: 1rem;
+    }
+    
+    .terminal-input-container {
+      background: #111111;
+      border-top: 1px solid #333333;
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .terminal-prompt {
+      color: #00ff00;
+      font-weight: bold;
+      flex-shrink: 0;
+    }
+    
+    .terminal-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: #00ff88;
+      font-family: inherit;
+      font-size: 14px;
+      outline: none;
+      padding: 0.5rem;
+    }
+    
+    .terminal-input::placeholder {
+      color: #666666;
+    }
+    
+    .send-button {
+      background: linear-gradient(45deg, #00ff88, #00cc66);
+      border: none;
+      border-radius: 6px;
+      color: #000;
+      padding: 0.5rem 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: inherit;
+    }
+    
+    .send-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(0, 255, 136, 0.4);
+    }
+    
+    .send-button:active {
+      transform: translateY(0);
+    }
+    
+    .loading {
+      opacity: 0.6;
+      pointer-events: none;
+    }
+    
+    .typing-indicator {
+      color: #00ff00;
+      display: none;
+    }
+    
+    .typing-indicator.active {
+      display: block;
+    }
+    
+    .typing-indicator::after {
+      content: '...';
+      animation: typing 1.5s infinite;
+    }
+    
+    @keyframes typing {
+      0%, 60% { content: '...'; }
+      20% { content: '.'; }
+      40% { content: '..'; }
+    }
+    
+    /* Welcome message */
+    .welcome-message {
+      color: #00ff00;
+      margin-bottom: 1rem;
+    }
+    
+    .system-info {
+      color: #666666;
+      font-size: 12px;
+      margin-bottom: 1rem;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero-section {
+        padding: 2rem 1rem;
+      }
+      
+      .agent-title {
+        font-size: 2rem;
+      }
+      
+      .agent-stats {
+        gap: 1rem;
+      }
+      
+      .terminal-section {
+        padding: 1rem;
+      }
+      
+      .terminal-output {
+        height: 300px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Sticky Menu Bar -->
+  <nav class="menu-bar">
+    <div class="menu-items">
+      <div class="menu-item">
+        <button class="menu-button" onclick="toggleDropdown('call-menu')">Call Management</button>
+        <div id="call-menu" class="dropdown">
+          <div class="dropdown-header">Call Operations</div>
+          <div class="tree-container">
+            <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
+              routing
+              <div class="tree-children">
+                <div class="tree-item executable" onclick="callFunction('routing', 'intelligent')">intelligent_routing.py</div>
+                <div class="tree-item executable" onclick="callFunction('routing', 'priority')">priority_queue.sh</div>
+                <div class="tree-item config" onclick="callFunction('routing', 'config')">routing_rules.conf</div>
+                <div class="tree-item last link" onclick="callFunction('routing', 'monitor')">monitor.log → /var/log/calls/</div>
+              </div>
+            </div>
+            <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
+              queue_management
+              <div class="tree-children">
+                <div class="tree-item executable" onclick="callFunction('queue', 'status')">queue_status.py</div>
+                <div class="tree-item executable" onclick="callFunction('queue', 'optimize')">optimize_wait.sh</div>
+                <div class="tree-item config" onclick="callFunction('queue', 'metrics')">queue_metrics.json</div>
+                <div class="tree-item last executable" onclick="callFunction('queue', 'callback')">callback_system.rb</div>
+              </div>
+            </div>
+            <div class="tree-item last executable" onclick="callFunction('general', 'analysis')">call_analysis.ai</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-item">
+        <button class="menu-button" onclick="toggleDropdown('voice-menu')">Voice Processing</button>
+        <div id="voice-menu" class="dropdown">
+          <div class="dropdown-header">Voice Analytics & Enhancement</div>
+          <div class="tree-container">
+            <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
+              analysis
+              <div class="tree-children">
+                <div class="tree-item executable" onclick="voiceFunction('analysis', 'quality')">voice_quality.py</div>
+                <div class="tree-item executable" onclick="voiceFunction('analysis', 'sentiment')">sentiment_analysis.ai</div>
+                <div class="tree-item executable" onclick="voiceFunction('analysis', 'clarity')">clarity_metrics.rb</div>
+                <div class="tree-item last config" onclick="voiceFunction('analysis', 'report')">analysis_report.json</div>
+              </div>
+            </div>
+            <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
+              enhancement
+              <div class="tree-children">
+                <div class="tree-item executable" onclick="voiceFunction('enhance', 'noise')">noise_reduction.sh</div>
+                <div class="tree-item executable" onclick="voiceFunction('enhance', 'clarity')">voice_enhance.py</div>
+                <div class="tree-item config" onclick="voiceFunction('enhance', 'settings')">enhancement.conf</div>
+                <div class="tree-item last executable" onclick="voiceFunction('enhance', 'realtime')">realtime_processor.c</div>
+              </div>
+            </div>
+            <div class="tree-item last folder has-submenu" onclick="toggleSubmenu(this)">
+              recognition
+              <div class="tree-children">
+                <div class="tree-item executable" onclick="voiceFunction('recognize', 'speech')">speech_to_text.ai</div>
+                <div class="tree-item last config" onclick="voiceFunction('recognize', 'accuracy')">accuracy_metrics.log</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-item">
+        <button class="menu-button" onclick="toggleDropdown('communication-menu')">Communication Analytics</button>
+        <div id="communication-menu" class="dropdown">
+          <div class="dropdown-header">Communication Intelligence</div>
+          <div class="tree-container">
+            <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
+              patterns
+              <div class="tree-children">
+                <div class="tree-item executable" onclick="commFunction('pattern', 'analyze')">pattern_analysis.py</div>
+                <div class="tree-item executable" onclick="commFunction('pattern', 'trends')">trend_detection.ai</div>
+                <div class="tree-item executable" onclick="commFunction('pattern', 'effectiveness')">effectiveness_score.rb</div>
+                <div class="tree-item last config" onclick="commFunction('pattern', 'report')">pattern_report.json</div>
+              </div>
+            </div>
+            <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
+              optimization
+              <div class="tree-children">
+                <div class="tree-item executable" onclick="commFunction('optimize', 'contact')">contact_strategy.py</div>
+                <div class="tree-item executable" onclick="commFunction('optimize', 'timing')">timing_optimizer.sh</div>
+                <div class="tree-item config" onclick="commFunction('optimize', 'channels')">channel_config.yml</div>
+                <div class="tree-item last executable" onclick="commFunction('optimize', 'personalize')">personalization.ai</div>
+              </div>
+            </div>
+            <div class="tree-item last folder has-submenu" onclick="toggleSubmenu(this)">
+              tracking
+              <div class="tree-children">
+                <div class="tree-item executable" onclick="commFunction('track', 'metrics')">interaction_metrics.py</div>
+                <div class="tree-item config" onclick="commFunction('track', 'dashboard')">analytics_dashboard.js</div>
+                <div class="tree-item last link" onclick="commFunction('track', 'export')">data_export.csv → /reports/</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-item">
+        <button class="menu-button" onclick="toggleDropdown('help-menu')">Help & Support</button>
+        <div id="help-menu" class="dropdown">
+          <div class="dropdown-header">Documentation & Support</div>
+          <div class="tree-container">
+            <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
+              docs
+              <div class="tree-children">
+                <div class="tree-item config" onclick="showDocs('getting-started')">getting_started.md</div>
+                <div class="tree-item config" onclick="showDocs('call-management')">call_management_guide.pdf</div>
+                <div class="tree-item config" onclick="showDocs('voice-processing')">voice_processing_api.html</div>
+                <div class="tree-item last config" onclick="showDocs('examples')">communication_examples.json</div>
+              </div>
+            </div>
+            <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
+              support
+              <div class="tree-children">
+                <div class="tree-item link" onclick="openSupport()">github.com/onelastai/callghost</div>
+                <div class="tree-item link" onclick="openDiscord()">discord.gg/callghost-support</div>
+                <div class="tree-item last config" onclick="reportBug()">bug_report.template</div>
+              </div>
+            </div>
+            <div class="tree-item last executable" onclick="showAbout()">about_callghost.sh</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <div class="agent-logo">📞</div>
+      <h1 class="agent-title">CallGhost</h1>
+      <p class="agent-tagline">Advanced Communication & Call Management Specialist</p>
+      <p class="agent-description">
+        I am CallGhost, your expert in call management, voice processing, and communication optimization. 
+        I specialize in automated call routing, voice analytics, communication pattern analysis, 
+        interaction tracking, and conversation enhancement to maximize your communication effectiveness.
+      </p>
+      
+      <div class="agent-stats">
+        <div class="stat-item">
+          <span class="stat-value"><%= @agent_stats[:total_conversations] %></span>
+          <span class="stat-label">Conversations</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value"><%= @agent_stats[:average_rating] %></span>
+          <span class="stat-label">Rating</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value"><%= @agent_stats[:response_time] %></span>
+          <span class="stat-label">Response Time</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Terminal Section -->
+  <section class="terminal-section">
+    <div class="terminal-header">
+      <h2 class="terminal-title">� CallGhost Communication Terminal</h2>
+      <p class="terminal-subtitle">Advanced call management and communication optimization interface</p>
+    </div>
+    
+    <div class="terminal-container">
+      <div class="terminal-titlebar">
+        <div class="terminal-button"></div>
+        <div class="terminal-button yellow"></div>
+        <div class="terminal-button green"></div>
+        <span class="terminal-title-text">callghost@communication.terminal:~$</span>
+      </div>
+      
+      <div class="terminal-output" id="terminal-output">
+        <div class="welcome-message">
+╔══════════════════════════════════════════════════════════════════╗
+║                       Welcome to CallGhost                        ║
+║            Advanced Communication Management Terminal             ║
+╚══════════════════════════════════════════════════════════════════╝
+
+<div class="system-info">System: CallGhost v2.0 | Status: Online | Agent ID: <%= @agent.name %>
+<%= Time.current.strftime("Date: %Y-%m-%d %H:%M:%S") %> | Session: Active</div>
+
+<span style="color: #00ff88;">Welcome! I'm CallGhost, your advanced communication management AI.</span>
+
+I specialize in:
+• � Call Management & Intelligent Routing
+• 🎤 Voice Processing & Quality Analysis  
+• � Communication Pattern Analysis
+• 🎯 Contact Strategy Optimization
+• � Interaction Metrics & Tracking
+• 💬 Conversation Quality Enhancement
+• � Automated Call Workflows
+• 📋 Call Queue Management
+
+Type your communication needs below and let's optimize your calls!
+
+        </div>
+        
+        <div class="typing-indicator" id="typing-indicator">
+          CallGhost is analyzing communication...
+        </div>
+      </div>
+      
+      <div class="terminal-input-container">
+        <span class="terminal-prompt">callghost@terminal:~$ </span>
+        <input 
+          type="text" 
+          class="terminal-input" 
+          id="user-input"
+          placeholder="Describe your communication needs..."
+          autocomplete="off"
+        >
+        <button class="send-button" id="send-button">Send</button>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // Menu System Functions
+    function toggleDropdown(menuId) {
+      // Close all other dropdowns first
+      const allDropdowns = document.querySelectorAll('.dropdown');
+      const allButtons = document.querySelectorAll('.menu-button');
+      
+      allDropdowns.forEach(dropdown => {
+        if (dropdown.id !== menuId) {
+          dropdown.classList.remove('active');
+        }
+      });
+      
+      allButtons.forEach(button => {
+        if (button.getAttribute('onclick') !== `toggleDropdown('${menuId}')`) {
+          button.classList.remove('active');
+        }
+      });
+      
+      // Toggle the target dropdown
+      const dropdown = document.getElementById(menuId);
+      if (dropdown) {
+        dropdown.classList.toggle('active');
+        
+        // Toggle active state on menu button
+        const button = dropdown.previousElementSibling;
+        if (button) {
+          button.classList.toggle('active');
+        }
+      }
+    }
+
+    function toggleSubmenu(element) {
+      const children = element.querySelector('.tree-children');
+      if (children) {
+        children.classList.toggle('expanded');
+        element.classList.toggle('expanded');
+      }
+    }
+
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.menu-item')) {
+        const allDropdowns = document.querySelectorAll('.dropdown');
+        const allButtons = document.querySelectorAll('.menu-button');
+        
+        allDropdowns.forEach(dropdown => {
+          dropdown.classList.remove('active');
+        });
+        
+        allButtons.forEach(button => {
+          button.classList.remove('active');
+        });
+      }
+    });
+
+    // Menu Action Functions
+    function newConversation() {
+      if (window.terminal) {
+        window.terminal.addMessage('system', '$ ./new_chat.sh\nStarting new conversation session...\nConversation cleared. How can I help you today?');
+        window.terminal.output.innerHTML = '';
+        window.terminal.focusInput();
+      }
+    }
+
+    function loadHistory() {
+      if (window.terminal) {
+        window.terminal.addMessage('system', '$ cat history.log\nLoading conversation history...\n[Feature coming soon - conversation persistence]');
+      }
+    }
+
+    function exportChat() {
+      if (window.terminal) {
+        const chatData = {
+          timestamp: new Date().toISOString(),
+          agent: 'neochat',
+          messages: []
+        };
+        
+        const blob = new Blob([JSON.stringify(chatData, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `neochat-export-${Date.now()}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+        
+        window.terminal.addMessage('system', '$ ./export.json\nExporting conversation data...\nChat exported successfully!');
+      }
+    }
+
+    function clearHistory() {
+      if (window.terminal && confirm('Clear all conversation history? This cannot be undone.')) {
+        window.terminal.output.innerHTML = '';
+        window.terminal.addMessage('system', '$ ./clear.sh\nClearing conversation history...\nHistory cleared successfully!');
+      }
+    }
+
+    function openSettings() {
+      if (window.terminal) {
+        window.terminal.addMessage('system', '$ nano config.yml\nOpening NeoChat configuration...\n[Settings panel coming soon]');
+      }
+    }
+
+    function openPreferences() {
+      if (window.terminal) {
+        window.terminal.addMessage('system', '$ vim preferences.ini\nOpening user preferences...\n[Preferences panel coming soon]');
+      }
+    }
+
+    function openThemes() {
+      if (window.terminal) {
+        window.terminal.addMessage('system', '$ ls /usr/share/themes/\nAvailable themes:\n├── matrix-green\n├── cyber-blue\n├── neon-purple\n└── classic-amber\n[Theme switching coming soon]');
+      }
+    }
+
+    function exitChat() {
+      if (confirm('Exit NeoChat? Any unsaved conversation will be lost.')) {
+        window.location.href = '/';
+      }
+    }
+
+    function setMode(mode) {
+      if (window.terminal) {
+        const modeMessages = {
+          question: '$ python3 question_answering.py\nActivating Q&A mode...\nReady to answer your questions!',
+          creative: '$ python3 creative_writing.py\nActivating creative mode...\nReady for creative tasks and brainstorming!',
+          problem: '$ python3 problem_solving.py\nActivating problem-solving mode...\nReady to tackle complex problems!',
+          analysis: '$ python3 data_analysis.py\nActivating analysis mode...\nReady for data analysis and insights!'
+        };
+        
+        window.terminal.addMessage('system', modeMessages[mode] || 'Mode activated');
+      }
+    }
+
+    function switchAgent(agentType) {
+      if (confirm(`Switch to ${agentType} agent? This will redirect to a new agent session.`)) {
+        // This would redirect to the appropriate agent subdomain/path
+        window.terminal.addMessage('system', `$ systemctl switch-agent ${agentType}\nSwitching to ${agentType} agent...\n[Agent switching coming soon]`);
+      }
+    }
+
+    function createAgent() {
+      if (window.terminal) {
+        window.terminal.addMessage('system', '$ cp custom.template my_agent.py\nCreating custom agent...\n[Custom agent creation coming soon]');
+      }
+    }
+
+    function showDocs(docType) {
+      if (window.terminal) {
+        const docs = {
+          'getting-started': 'Welcome to CallGhost!\n\nBasic Commands:\n- Type your message and press Enter\n- Use the menu for advanced features\n- Export conversations as JSON\n',
+          'commands': 'Available Commands:\n- /help - Show this help\n- /clear - Clear conversation\n- /export - Export chat\n- /mode [type] - Switch AI mode\n',
+          'api': 'NeoChat API Reference:\n\nEndpoints:\n- POST /chat - Send message\n- GET /status - Agent status\n- GET /history - Chat history\n',
+          'examples': '{\n  "examples": [\n    {"input": "Hello", "output": "Hello! How can I help?"},\n    {"input": "What is AI?", "output": "AI explanation..."}\n  ]\n}'
+        };
+        
+        window.terminal.addMessage('system', `$ cat ${docType}.md\n${docs[docType] || 'Documentation not found'}`);
+      }
+    }
+
+    function openSupport() {
+      window.open('https://github.com/onelastai/neochat', '_blank');
+    }
+
+    function openDiscord() {
+      window.open('https://discord.gg/onelastai', '_blank');
+    }
+
+    function reportBug() {
+      if (window.terminal) {
+        window.terminal.addMessage('system', '$ nano bug_report.template\nOpening bug report template...\n[Bug reporting system coming soon]');
+      }
+    }
+
+    function showAbout() {
+      if (window.terminal) {
+        window.terminal.addMessage('system', `$ ./about_callghost.sh
+╔══════════════════════════════════════╗
+║            CallGhost v2.0            ║
+║                                      ║
+║  Advanced Communication Terminal     ║
+║     Built by onelastai.com          ║
+║                                      ║
+║  • Call Management & Routing         ║
+║  • Voice Processing & Analysis       ║
+║  • Communication Optimization        ║
+║  • Interaction Analytics            ║
+║  • Queue Management Systems         ║
+║  • Real-time Voice Enhancement      ║
+║                                      ║
+║  © 2025 onelastai.com               ║
+╚══════════════════════════════════════╝`);
+      }
+    }
+
+    // CallGhost-specific menu functions
+    function callFunction(category, type) {
+      if (window.terminal) {
+        const messages = {
+          'routing.intelligent': '$ python3 intelligent_routing.py\nInitializing intelligent call routing system...\nML-powered routing algorithms activated.\nCall distribution optimized for maximum efficiency.',
+          'routing.priority': '$ ./priority_queue.sh\nConfiguring priority-based call queuing...\nHigh-priority calls will be processed first.\nQueue optimization complete.',
+          'routing.config': '$ nano routing_rules.conf\nOpening call routing configuration...\nConfigure routing rules, priorities, and failover options.\n[Routing configuration panel would open here]',
+          'routing.monitor': '$ tail -f /var/log/calls/monitor.log\nMonitoring call routing in real-time...\n[Live call routing data would stream here]',
+          'queue.status': '$ python3 queue_status.py\nChecking current queue status...\nActive calls: 12 | Waiting: 3 | Average wait: 45s',
+          'queue.optimize': '$ ./optimize_wait.sh\nOptimizing queue wait times...\nImplementing dynamic queue management.\nWait time reduced by 23%.',
+          'queue.metrics': '$ cat queue_metrics.json\nDisplaying queue performance metrics...\n{"avg_wait": "45s", "completion_rate": "94%", "satisfaction": "4.7/5"}',
+          'queue.callback': '$ ruby callback_system.rb\nActivating intelligent callback system...\nCustomers can request callbacks instead of waiting.\nCallback success rate: 89%.',
+          'general.analysis': '$ ./call_analysis.ai\nRunning comprehensive call analysis...\nAnalyzing patterns, quality, and outcomes.\nGenerating optimization recommendations...'
+        };
+        
+        const key = `${category}.${type}`;
+        const message = messages[key] || `$ ./${type}_${category}.sh\nExecuting ${category} ${type} operation...\nOperation completed successfully.`;
+        window.terminal.addMessage('system', message);
+        
+        // Close the dropdown after action
+        const allDropdowns = document.querySelectorAll('.dropdown');
+        const allButtons = document.querySelectorAll('.menu-button');
+        allDropdowns.forEach(dropdown => dropdown.classList.remove('active'));
+        allButtons.forEach(button => button.classList.remove('active'));
+      }
+    }
+
+    function voiceFunction(category, type) {
+      if (window.terminal) {
+        const messages = {
+          'analysis.quality': '$ python3 voice_quality.py\nAnalyzing voice quality metrics...\nClarity: 89% | Noise level: -42dB | Enhancement potential: 15%',
+          'analysis.sentiment': '$ ./sentiment_analysis.ai\nPerforming voice sentiment analysis...\nTone: Professional | Confidence: High | Engagement: 78%',
+          'analysis.clarity': '$ ruby clarity_metrics.rb\nMeasuring voice clarity and intelligibility...\nSpeech clarity score: 92/100 | Articulation quality: Excellent',
+          'analysis.report': '$ cat analysis_report.json\nDisplaying voice analysis report...\n{"quality_score": 89, "clarity": 92, "sentiment": "positive"}',
+          'enhance.noise': '$ ./noise_reduction.sh\nApplying advanced noise reduction...\nBackground noise reduced by 35dB.\nVoice clarity significantly improved.',
+          'enhance.clarity': '$ python3 voice_enhance.py\nEnhancing voice clarity and quality...\nApplying AI-powered voice optimization.\nClarity improved by 27%.',
+          'enhance.settings': '$ nano enhancement.conf\nOpening voice enhancement settings...\n[Voice enhancement configuration panel]',
+          'enhance.realtime': '$ ./realtime_processor.c\nActivating real-time voice processing...\nLow-latency enhancement: Active | Processing delay: <5ms',
+          'recognize.speech': '$ ./speech_to_text.ai\nInitializing speech recognition system...\nAccuracy: 97.3% | Languages: 25+ | Real-time transcription: Active',
+          'recognize.accuracy': '$ tail accuracy_metrics.log\nDisplaying recognition accuracy metrics...\nWord accuracy: 97.3% | Phrase accuracy: 95.8% | Error rate: 2.7%'
+        };
+        
+        const key = `${category}.${type}`;
+        const message = messages[key] || `$ ./${type}_${category}.py\nExecuting voice ${category} ${type}...\nVoice processing completed.`;
+        window.terminal.addMessage('system', message);
+        
+        // Close the dropdown after action
+        const allDropdowns = document.querySelectorAll('.dropdown');
+        const allButtons = document.querySelectorAll('.menu-button');
+        allDropdowns.forEach(dropdown => dropdown.classList.remove('active'));
+        allButtons.forEach(button => button.classList.remove('active'));
+      }
+    }
+
+    function commFunction(category, type) {
+      if (window.terminal) {
+        const messages = {
+          'pattern.analyze': '$ python3 pattern_analysis.py\nAnalyzing communication patterns...\nIdentified 12 key patterns | Success rate correlation: 84%',
+          'pattern.trends': '$ ./trend_detection.ai\nDetecting communication trends...\nUpward trend in engagement | Peak hours: 10-11 AM, 2-3 PM',
+          'pattern.effectiveness': '$ ruby effectiveness_score.rb\nCalculating communication effectiveness...\nOverall effectiveness: 87% | Top performing approach: Consultative',
+          'pattern.report': '$ cat pattern_report.json\nDisplaying pattern analysis report...\n{"effectiveness": 87, "top_patterns": ["consultative", "solution_focused"]}',
+          'optimize.contact': '$ python3 contact_strategy.py\nOptimizing contact strategies...\nBest contact time: 10:30 AM | Preferred channel: Voice | Success rate: 78%',
+          'optimize.timing': '$ ./timing_optimizer.sh\nOptimizing contact timing...\nAnalyzing response patterns and availability.\nOptimal timing strategy configured.',
+          'optimize.channels': '$ cat channel_config.yml\nDisplaying channel optimization settings...\nPrimary: Voice (85% success) | Secondary: Email (72% success)',
+          'optimize.personalize': '$ ./personalization.ai\nApplying personalization algorithms...\nCustomizing approach based on communication history.\nPersonalization score: 91%',
+          'track.metrics': '$ python3 interaction_metrics.py\nTracking interaction metrics...\nTotal interactions: 1,247 | Success rate: 84% | Avg duration: 7.3 min',
+          'track.dashboard': '$ node analytics_dashboard.js\nLaunching analytics dashboard...\nReal-time metrics display activated.\n[Analytics dashboard would open here]',
+          'track.export': '$ cp interaction_data.csv /reports/\nExporting interaction data...\nData exported to /reports/communication_analytics.csv'
+        };
+        
+        const key = `${category}.${type}`;
+        const message = messages[key] || `$ ./${type}_${category}.py\nExecuting communication ${category} ${type}...\nCommunication analysis completed.`;
+        window.terminal.addMessage('system', message);
+        
+        // Close the dropdown after action
+        const allDropdowns = document.querySelectorAll('.dropdown');
+        const allButtons = document.querySelectorAll('.menu-button');
+        allDropdowns.forEach(dropdown => dropdown.classList.remove('active'));
+        allButtons.forEach(button => button.classList.remove('active'));
+      }
+    }
+
+    // Documentation and help functions
+    function showDocs(docType) {
+      if (window.terminal) {
+        const docs = {
+          'getting-started': 'Welcome to CallGhost!\n\nQuick Start Guide:\n- Access call management tools via menu\n- Use voice processing for audio optimization\n- Analyze communication patterns for insights\n- Track interaction metrics for performance\n\nType "help" for more commands.',
+          'call-management': 'CallGhost Call Management Guide:\n\n• Intelligent Routing: ML-powered call distribution\n• Priority Queues: High-priority call handling\n• Queue Optimization: Reduce wait times\n• Callback Systems: Alternative to holding\n• Real-time Monitoring: Live call tracking\n\nCommands: routing, queue, priority, callback',
+          'voice-processing': 'Voice Processing API Reference:\n\nAnalysis Endpoints:\n- voice_quality.py - Audio quality metrics\n- sentiment_analysis.ai - Emotional tone detection\n- clarity_metrics.rb - Speech intelligibility\n\nEnhancement:\n- noise_reduction.sh - Background noise filtering\n- voice_enhance.py - AI-powered optimization\n- realtime_processor.c - Low-latency processing',
+          'communication-examples': '{\n  "examples": [\n    {"input": "Optimize call routing", "output": "Intelligent routing activated"},\n    {"input": "Analyze voice quality", "output": "Quality score: 89/100"},\n    {"input": "Track interactions", "output": "1,247 interactions analyzed"}\n  ]\n}'
+        };
+        
+        window.terminal.addMessage('system', `$ cat ${docType}.md\n${docs[docType] || 'Documentation not found'}`);
+        
+        // Close the dropdown after action
+        const allDropdowns = document.querySelectorAll('.dropdown');
+        const allButtons = document.querySelectorAll('.menu-button');
+        allDropdowns.forEach(dropdown => dropdown.classList.remove('active'));
+        allButtons.forEach(button => button.classList.remove('active'));
+      }
+    }
+
+    function openSupport() {
+      window.open('https://github.com/onelastai/callghost', '_blank');
+      
+      // Close the dropdown after action
+      const allDropdowns = document.querySelectorAll('.dropdown');
+      const allButtons = document.querySelectorAll('.menu-button');
+      allDropdowns.forEach(dropdown => dropdown.classList.remove('active'));
+      allButtons.forEach(button => button.classList.remove('active'));
+    }
+
+    function openDiscord() {
+      window.open('https://discord.gg/callghost-support', '_blank');
+      
+      // Close the dropdown after action
+      const allDropdowns = document.querySelectorAll('.dropdown');
+      const allButtons = document.querySelectorAll('.menu-button');
+      allDropdowns.forEach(dropdown => dropdown.classList.remove('active'));
+      allButtons.forEach(button => button.classList.remove('active'));
+    }
+
+    function reportBug() {
+      if (window.terminal) {
+        window.terminal.addMessage('system', '$ nano bug_report.template\nOpening CallGhost bug report template...\n\nPlease describe:\n• Issue description\n• Steps to reproduce\n• Expected vs actual behavior\n• System information\n\n[Bug reporting system would open here]');
+        
+        // Close the dropdown after action
+        const allDropdowns = document.querySelectorAll('.dropdown');
+        const allButtons = document.querySelectorAll('.menu-button');
+        allDropdowns.forEach(dropdown => dropdown.classList.remove('active'));
+        allButtons.forEach(button => button.classList.remove('active'));
+      }
+    }
+
+    // Terminal Chat Functionality
+    class CallGhostTerminal {
+      constructor() {
+        this.output = document.getElementById('terminal-output');
+        this.input = document.getElementById('user-input');
+        this.sendButton = document.getElementById('send-button');
+        this.typingIndicator = document.getElementById('typing-indicator');
+        
+        this.setupEventListeners();
+        this.focusInput();
+      }
+      
+      setupEventListeners() {
+        this.input.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            this.sendMessage();
+          }
+        });
+        
+        this.sendButton.addEventListener('click', () => {
+          this.sendMessage();
+        });
+        
+        // Auto-focus input when clicking anywhere on terminal
+        this.output.addEventListener('click', () => {
+          this.input.focus();
+        });
+      }
+      
+      focusInput() {
+        this.input.focus();
+      }
+      
+      async sendMessage() {
+        const message = this.input.value.trim();
+        if (!message) return;
+        
+        // Display user message
+        this.addMessage('user', message);
+        this.input.value = '';
+        
+        // Show loading state
+        this.setLoading(true);
+        this.showTyping(true);
+        
+        try {
+          const response = await fetch('/callghost/chat', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRF-Token': document.querySelector('[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({ message: message })
+          });
+          
+          const data = await response.json();
+          
+          if (data.success) {
+            this.addMessage('agent', data.message, data.timestamp);
+          } else {
+            this.addMessage('error', data.message || 'Sorry, there was an error processing your communication request.');
+          }
+        } catch (error) {
+          console.error('Chat error:', error);
+          this.addMessage('error', 'Connection error. Please check your internet and try again.');
+        } finally {
+          this.setLoading(false);
+          this.showTyping(false);
+          this.focusInput();
+        }
+      }
+      
+      addMessage(type, content, timestamp = null) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'terminal-message';
+        
+        const time = timestamp || new Date().toLocaleTimeString();
+        
+        if (type === 'user') {
+          messageDiv.innerHTML = `<span class="user-message">${this.escapeHtml(content)}</span><span class="timestamp">[${time}]</span>`;
+        } else if (type === 'agent') {
+          messageDiv.innerHTML = `<div class="agent-message">${this.escapeHtml(content)}</div><span class="timestamp">[${time}]</span>`;
+        } else if (type === 'error') {
+          messageDiv.innerHTML = `<div class="agent-message" style="color: #ff6b6b;">❌ ${this.escapeHtml(content)}</div>`;
+        }
+        
+        this.output.appendChild(messageDiv);
+        this.scrollToBottom();
+      }
+      
+      setLoading(isLoading) {
+        this.sendButton.disabled = isLoading;
+        this.input.disabled = isLoading;
+        
+        if (isLoading) {
+          this.sendButton.textContent = 'Sending...';
+          this.sendButton.classList.add('loading');
+        } else {
+          this.sendButton.textContent = 'Send';
+          this.sendButton.classList.remove('loading');
+        }
+      }
+      
+      showTyping(show) {
+        if (show) {
+          this.typingIndicator.classList.add('active');
+          this.scrollToBottom();
+        } else {
+          this.typingIndicator.classList.remove('active');
+        }
+      }
+      
+      scrollToBottom() {
+        this.output.scrollTop = this.output.scrollHeight;
+      }
+      
+      escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+      }
+    }
+    
+    // Initialize terminal when page loads
+    document.addEventListener('DOMContentLoaded', () => {
+      window.terminal = new CallGhostTerminal();
+    });
+  </script>
+</body>
+</html>

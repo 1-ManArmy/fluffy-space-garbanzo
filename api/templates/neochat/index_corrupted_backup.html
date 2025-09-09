@@ -1,0 +1,2989 @@
+<div class="neochat-workspace"><% content_for :head do %><% content_for :head do %>
+
+  <!-- Header Section -->
+
+  <div class="hero-section"><style><style>
+
+    <div class="agent-avatar">🧙‍♂️</div>
+
+    <h1 class="agent-title">NeoChat</h1>  .neochat-container {  .neochat-container {
+
+    <p class="agent-subtitle">Advanced AI Conversation Assistant</p>
+
+    <div class="agent-status">    min-height: calc(100vh - 60px);    min-height: calc(100vh - 60px);
+
+      <span class="status-dot"></span>
+
+      <span>Online & Ready</span>    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+
+    </div>
+
+  </div>    color: #ffffff;    color: #ffffff;
+
+
+
+  <!-- Main Chat Interface -->    position: relative;    position: relative;
+
+  <div class="chat-workspace">
+
+    <div class="chat-terminal">    overflow-x: hidden;    overflow-x: hidden;
+
+      <!-- Terminal Header -->
+
+      <div class="terminal-header">  }  }
+
+        <div class="terminal-controls">
+
+          <div class="control-btn close"></div>
+
+          <div class="control-btn minimize"></div>
+
+          <div class="control-btn maximize"></div>  .neochat-container::before {  .neochat-container::before {
+
+        </div>
+
+        <span class="terminal-title">neochat@ai-terminal:~$</span>    content: '';    content: '';
+
+        <div class="terminal-status">
+
+          <span class="status-indicator"></span>    position: absolute;    position: absolute;
+
+          <span>ONLINE</span>
+
+        </div>    top: 0;    top: 0;
+
+      </div>
+
+    left: 0;    left: 0;
+
+      <!-- Messages Area -->
+
+      <div class="chat-messages" id="chatMessages">    right: 0;    right: 0;
+
+        <div class="welcome-message">
+
+╔═══════════════════════════════════════════════════════════════════╗    bottom: 0;    bottom: 0;
+
+║                        🌌 NeoChat v2.0                           ║
+
+║                 Advanced AI Conversation System                   ║    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="%2300d4ff" stroke-width="0.3" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="%2300d4ff" stroke-width="0.3" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+
+╚═══════════════════════════════════════════════════════════════════╝
+
+    animation: gridMove 30s linear infinite;    animation: gridMove 30s linear infinite;
+
+<span class="system-info">System: <%= @agent.name %> v<%= @agent.version %> | Status: <%= @agent.status.capitalize %> | Session: <%= @agent.id[0,8] %>... | <%= Time.current.strftime("%Y-%m-%d %H:%M:%S") %></span>
+
+    pointer-events: none;    pointer-events: none;
+
+<span class="agent-greeting">🌌 NeoChat: Hello! I'm your advanced AI conversation partner with sophisticated natural language processing and problem-solving capabilities.
+
+  }  }
+
+I excel at:
+
+• 💭 Intelligent conversations and discussions
+
+• 🎯 Answering questions across various topics
+
+• 🛠️ Problem-solving and analytical thinking  @keyframes gridMove {  @keyframes gridMove {
+
+• 💡 Creative writing and brainstorming
+
+• 📚 Learning support and explanations    0% { transform: translate(0, 0); }    0% { transform: translate(0, 0); }
+
+• 🔍 Research and information synthesis
+
+    100% { transform: translate(10px, 10px); }    100% { transform: translate(10px, 10px); }
+
+What would you like to explore together today?</span>
+
+        </div>  }  }
+
+
+
+        <div class="typing-indicator" id="typingIndicator">
+
+          <span class="typing-text">🌌 NeoChat is thinking<span class="dots">...</span></span>
+
+        </div>  /* Header Section */  /* Header Section */
+
+      </div>
+
+  .neochat-header {  .neochat-header {
+
+      <!-- Input Section -->
+
+      <div class="chat-input-area">    padding: 3rem 2rem;    padding: 3rem 2rem;
+
+        <div class="input-line">
+
+          <span class="input-prompt">you@neochat:~$ </span>    text-align: center;    text-align: center;
+
+          <input 
+
+            type="text"     background: radial-gradient(ellipse at center, rgba(0, 212, 255, 0.15) 0%, transparent 70%);    background: radial-gradient(ellipse at center, rgba(0, 212, 255, 0.15) 0%, transparent 70%);
+
+            class="chat-input" 
+
+            id="messageInput"    border-bottom: 1px solid rgba(0, 212, 255, 0.3);    border-bottom: 1px solid rgba(0, 212, 255, 0.3);
+
+            placeholder="Type your message here..."
+
+            autocomplete="off"    position: relative;    position: relative;
+
+            maxlength="1000"
+
+          >    z-index: 1;    z-index: 1;
+
+          <button class="send-button" id="sendButton">
+
+            <span>Send</span>  }  }
+
+            <span class="send-arrow">→</span>
+
+          </button>
+
+        </div>
+
+      </div>  .agent-avatar {  .agent-avatar {
+
+    </div>
+
+    width: 80px;    width: 80px;
+
+    <!-- Stats and Quick Actions -->
+
+    <div class="workspace-sidebar">    height: 80px;    height: 80px;
+
+      <!-- Stats Cards -->
+
+      <div class="stats-section">    background: linear-gradient(45deg, #00d4ff, #0099cc);    background: linear-gradient(45deg, #00d4ff, #0099cc);
+
+        <h3 class="sidebar-title">📊 Statistics</h3>
+
+        <div class="stat-cards">    border-radius: 50%;    border-radius: 50%;
+
+          <div class="stat-card">
+
+            <div class="stat-value"><%= @agent_stats[:total_conversations] %></div>    display: flex;    display: flex;
+
+            <div class="stat-label">Conversations</div>
+
+          </div>    align-items: center;    align-items: center;
+
+          <div class="stat-card">
+
+            <div class="stat-value"><%= @agent_stats[:average_rating] %></div>    justify-content: center;    justify-content: center;
+
+            <div class="stat-label">Rating</div>
+
+          </div>    font-size: 2.5rem;    font-size: 2.5rem;
+
+          <div class="stat-card">
+
+            <div class="stat-value"><%= @agent_stats[:response_time] %></div>    margin: 0 auto 1.5rem;    margin: 0 auto 1.5rem;
+
+            <div class="stat-label">Response Time</div>
+
+          </div>    animation: avatarGlow 3s infinite;    animation: avatarGlow 3s infinite;
+
+        </div>
+
+      </div>    border: 3px solid rgba(0, 212, 255, 0.3);    border: 3px solid rgba(0, 212, 255, 0.3);
+
+
+
+      <!-- Quick Actions -->  }  }
+
+      <div class="actions-section">
+
+        <h3 class="sidebar-title">🚀 Quick Actions</h3>
+
+        <div class="action-buttons">
+
+          <button class="action-btn" onclick="quickAction('creative')">  @keyframes avatarGlow {  @keyframes avatarGlow {
+
+            <span class="action-icon">🎨</span>
+
+            <span class="action-text">Creative Mode</span>    0%, 100% {     0%, 100% { 
+
+          </button>
+
+          <button class="action-btn" onclick="quickAction('analytical')">      transform: scale(1);      transform: scale(1);
+
+            <span class="action-icon">🔬</span>
+
+            <span class="action-text">Analysis Mode</span>      box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);      box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+
+          </button>
+
+          <button class="action-btn" onclick="quickAction('learning')">    }    }
+
+            <span class="action-icon">📚</span>
+
+            <span class="action-text">Learning Mode</span>    50% {     50% { 
+
+          </button>
+
+          <button class="action-btn" onclick="quickAction('problem_solving')">      transform: scale(1.05);      transform: scale(1.05);
+
+            <span class="action-icon">🎯</span>
+
+            <span class="action-text">Problem Solving</span>      box-shadow: 0 0 40px rgba(0, 212, 255, 0.8);      box-shadow: 0 0 40px rgba(0, 212, 255, 0.8);
+
+          </button>
+
+        </div>    }    }
+
+      </div>
+
+    </div>  }  }
+
+  </div>
+
+</div>
+
+
+
+<%= content_for :head do %>  .agent-title {  .agent-title {
+
+<style>
+
+  .neochat-workspace {    font-size: 2.8rem;    font-size: 2.8rem;
+
+    min-height: calc(100vh - 60px);
+
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);    font-weight: 700;    font-weight: 700;
+
+    color: #ffffff;
+
+    position: relative;    margin-bottom: 0.5rem;    margin-bottom: 0.5rem;
+
+    overflow: hidden;
+
+  }    background: linear-gradient(45deg, #00d4ff, #ffffff);    background: linear-gradient(45deg, #00d4ff, #ffffff);
+
+
+
+  .neochat-workspace::before {    -webkit-background-clip: text;    -webkit-background-clip: text;
+
+    content: '';
+
+    position: absolute;    -webkit-text-fill-color: transparent;    -webkit-text-fill-color: transparent;
+
+    top: 0;
+
+    left: 0;    background-clip: text;    background-clip: text;
+
+    right: 0;
+
+    bottom: 0;  }  }
+
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="%2300d4ff" stroke-width="0.3" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+
+    animation: gridMove 30s linear infinite;
+
+    pointer-events: none;
+
+  }  .agent-subtitle {  .agent-subtitle {
+
+
+
+  @keyframes gridMove {    font-size: 1.2rem;    font-size: 1.2rem;
+
+    0% { transform: translate(0, 0); }
+
+    100% { transform: translate(10px, 10px); }    color: #b3b3b3;    color: #b3b3b3;
+
+  }
+
+    margin-bottom: 1rem;    margin-bottom: 1rem;
+
+  /* Header Section */
+
+  .hero-section {    font-weight: 300;    font-weight: 300;
+
+    padding: 2rem;
+
+    text-align: center;  }  }
+
+    background: radial-gradient(ellipse at center, rgba(0, 212, 255, 0.15) 0%, transparent 70%);
+
+    border-bottom: 1px solid rgba(0, 212, 255, 0.3);
+
+    position: relative;
+
+    z-index: 1;  .agent-status {  .agent-status {
+
+  }
+
+    display: inline-flex;    display: inline-flex;
+
+  .agent-avatar {
+
+    width: 60px;    align-items: center;    align-items: center;
+
+    height: 60px;
+
+    background: linear-gradient(45deg, #00d4ff, #0099cc);    gap: 0.5rem;    gap: 0.5rem;
+
+    border-radius: 50%;
+
+    display: flex;    background: rgba(0, 212, 255, 0.1);    background: rgba(0, 212, 255, 0.1);
+
+    align-items: center;
+
+    justify-content: center;    border: 1px solid #00d4ff;    border: 1px solid #00d4ff;
+
+    font-size: 2rem;
+
+    margin: 0 auto 1rem;    border-radius: 20px;    border-radius: 20px;
+
+    animation: avatarGlow 3s infinite;
+
+    border: 2px solid rgba(0, 212, 255, 0.3);    padding: 0.5rem 1rem;    padding: 0.5rem 1rem;
+
+  }
+
+    font-size: 0.9rem;    font-size: 0.9rem;
+
+  @keyframes avatarGlow {
+
+    0%, 100% {   }  }
+
+      transform: scale(1);
+
+      box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+
+    }
+
+    50% {   .status-dot {  .status-dot {
+
+      transform: scale(1.05);
+
+      box-shadow: 0 0 30px rgba(0, 212, 255, 0.8);    width: 8px;    width: 8px;
+
+    }
+
+  }    height: 8px;    height: 8px;
+
+
+
+  .agent-title {    background: #27ca3f;    background: #27ca3f;
+
+    font-size: 2.5rem;
+
+    font-weight: 700;    border-radius: 50%;    border-radius: 50%;
+
+    margin-bottom: 0.5rem;
+
+    background: linear-gradient(45deg, #00d4ff, #ffffff);    animation: pulse 2s infinite;    animation: pulse 2s infinite;
+
+    -webkit-background-clip: text;
+
+    -webkit-text-fill-color: transparent;  }  }
+
+    background-clip: text;
+
+  }
+
+
+
+  .agent-subtitle {  @keyframes pulse {  @keyframes pulse {
+
+    font-size: 1.1rem;
+
+    color: #b3b3b3;    0%, 100% { opacity: 1; }    0%, 100% { opacity: 1; }
+
+    margin-bottom: 1rem;
+
+    font-weight: 300;    50% { opacity: 0.5; }    50% { opacity: 0.5; }
+
+  }
+
+  }  }
+
+  .agent-status {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 0.5rem;  /* Main Chat Interface */  /* Main Chat Interface */
+
+    background: rgba(0, 212, 255, 0.1);
+
+    border: 1px solid #00d4ff;  .chat-interface {  .chat-interface {
+
+    border-radius: 15px;
+
+    padding: 0.4rem 1rem;    max-width: 1000px;    max-width: 1000px;
+
+    font-size: 0.85rem;
+
+  }    margin: 0 auto;    margin: 0 auto;
+
+
+
+  .status-dot {    padding: 2rem;    padding: 2rem;
+
+    width: 6px;
+
+    height: 6px;    position: relative;    position: relative;
+
+    background: #27ca3f;
+
+    border-radius: 50%;    z-index: 1;    z-index: 1;
+
+    animation: pulse 2s infinite;
+
+  }  }  }
+
+
+
+  @keyframes pulse {
+
+    0%, 100% { opacity: 1; }
+
+    50% { opacity: 0.5; }  .chat-container {  .chat-container {
+
+  }
+
+    background: rgba(0, 0, 0, 0.8);    background: rgba(0, 0, 0, 0.8);
+
+  /* Main Chat Workspace */
+
+  .chat-workspace {    border: 2px solid #00d4ff;    border: 2px solid #00d4ff;
+
+    display: flex;
+
+    max-width: 1400px;    border-radius: 15px;    border-radius: 15px;
+
+    margin: 0 auto;
+
+    padding: 1.5rem;    overflow: hidden;    overflow: hidden;
+
+    gap: 1.5rem;
+
+    position: relative;    box-shadow: 0 0 50px rgba(0, 212, 255, 0.3);    box-shadow: 0 0 50px rgba(0, 212, 255, 0.3);
+
+    z-index: 1;
+
+  }    backdrop-filter: blur(10px);    backdrop-filter: blur(10px);
+
+
+
+  .chat-terminal {  }  }
+
+    flex: 1;
+
+    background: rgba(0, 0, 0, 0.85);
+
+    border: 2px solid #00d4ff;
+
+    border-radius: 12px;  .chat-header {  .chat-header {
+
+    overflow: hidden;
+
+    box-shadow: 0 0 40px rgba(0, 212, 255, 0.3);    background: linear-gradient(90deg, #00d4ff 0%, #0099cc 100%);    background: linear-gradient(90deg, #00d4ff 0%, #0099cc 100%);
+
+    backdrop-filter: blur(10px);
+
+  }    padding: 1rem;    padding: 1rem;
+
+
+
+  .terminal-header {    display: flex;    display: flex;
+
+    background: linear-gradient(90deg, #00d4ff 0%, #0099cc 100%);
+
+    padding: 0.75rem 1rem;    align-items: center;    align-items: center;
+
+    display: flex;
+
+    align-items: center;    justify-content: space-between;    justify-content: space-between;
+
+    justify-content: space-between;
+
+    color: #000;  }  }
+
+    font-family: 'Consolas', 'Monaco', monospace;
+
+  }
+
+
+
+  .terminal-controls {  .chat-title {  .chat-title {
+
+    display: flex;
+
+    gap: 0.4rem;    color: #000;    color: #000;
+
+  }
+
+    font-weight: bold;    font-weight: bold;
+
+  .control-btn {
+
+    width: 10px;    font-family: 'Consolas', 'Monaco', monospace;    font-family: 'Consolas', 'Monaco', monospace;
+
+    height: 10px;
+
+    border-radius: 50%;    font-size: 1.1rem;    font-size: 1.1rem;
+
+    cursor: pointer;
+
+    transition: all 0.2s ease;  }  }
+
+  }
+
+
+
+  .control-btn.close { background: #ff5f56; }
+
+  .control-btn.minimize { background: #ffbd2e; }  .chat-controls {  .chat-controls {
+
+  .control-btn.maximize { background: #27ca3f; }
+
+    display: flex;    display: flex;
+
+  .control-btn:hover { transform: scale(1.2); }
+
+    gap: 0.5rem;    gap: 0.5rem;
+
+  .terminal-title {
+
+    font-weight: bold;  }  }
+
+    font-size: 0.9rem;
+
+  }
+
+
+
+  .terminal-status {  .control-btn {  .control-btn {
+
+    display: flex;
+
+    align-items: center;    width: 12px;    width: 12px;
+
+    gap: 0.3rem;
+
+    font-size: 0.8rem;    height: 12px;    height: 12px;
+
+  }
+
+    border-radius: 50%;    border-radius: 50%;
+
+  .status-indicator {
+
+    width: 6px;    cursor: pointer;    cursor: pointer;
+
+    height: 6px;
+
+    background: #27ca3f;    transition: all 0.2s ease;    transition: all 0.2s ease;
+
+    border-radius: 50%;
+
+    animation: pulse 2s infinite;  }  }
+
+  }
+
+
+
+  .chat-messages {
+
+    height: 500px;  .control-btn.close { background: #ff5f56; }  .control-btn.close { background: #ff5f56; }
+
+    padding: 1.5rem;
+
+    overflow-y: auto;  .control-btn.minimize { background: #ffbd2e; }  .control-btn.minimize { background: #ffbd2e; }
+
+    background: #000000;
+
+    color: #00ff00;  .control-btn.maximize { background: #27ca3f; }  .control-btn.maximize { background: #27ca3f; }
+
+    font-family: 'Consolas', 'Monaco', monospace;
+
+    font-size: 13px;
+
+    line-height: 1.4;
+
+  }  .control-btn:hover {  .control-btn:hover {
+
+
+
+  .chat-messages::-webkit-scrollbar {    transform: scale(1.2);    transform: scale(1.2);
+
+    width: 6px;
+
+  }  }  }
+
+
+
+  .chat-messages::-webkit-scrollbar-track {
+
+    background: #1a1a1a;
+
+  }  .chat-messages {  .chat-messages {
+
+
+
+  .chat-messages::-webkit-scrollbar-thumb {    height: 500px;    height: 500px;
+
+    background: #00d4ff;
+
+    border-radius: 3px;    padding: 1.5rem;    padding: 1.5rem;
+
+  }
+
+    overflow-y: auto;    overflow-y: auto;
+
+  .welcome-message {
+
+    color: #00d4ff;    background: #000000;    background: #000000;
+
+    margin-bottom: 1.5rem;
+
+    white-space: pre-line;    color: #00ff00;    color: #00ff00;
+
+  }
+
+    font-family: 'Consolas', 'Monaco', monospace;    font-family: 'Consolas', 'Monaco', monospace;
+
+  .system-info {
+
+    color: #666666;    font-size: 14px;    font-size: 14px;
+
+    font-size: 11px;
+
+    margin-bottom: 1rem;    line-height: 1.5;    line-height: 1.5;
+
+    border-bottom: 1px solid #333;
+
+    padding-bottom: 0.5rem;  }  }
+
+  }
+
+
+
+  .agent-greeting {
+
+    color: #ffffff;  .chat-messages::-webkit-scrollbar {  .chat-messages::-webkit-scrollbar {
+
+    line-height: 1.5;
+
+  }    width: 8px;    width: 8px;
+
+
+
+  .message {  }  }
+
+    margin: 1rem 0;
+
+    padding: 0.75rem;
+
+    border-radius: 6px;
+
+  }  .chat-messages::-webkit-scrollbar-track {  .chat-messages::-webkit-scrollbar-track {
+
+
+
+  .message.user {    background: #1a1a1a;    background: #1a1a1a;
+
+    background: rgba(0, 212, 255, 0.1);
+
+    border-left: 3px solid #00d4ff;  }  }
+
+    color: #00d4ff;
+
+  }
+
+
+
+  .message.agent {  .chat-messages::-webkit-scrollbar-thumb {  .chat-messages::-webkit-scrollbar-thumb {
+
+    background: rgba(0, 255, 0, 0.05);
+
+    border-left: 3px solid #00ff00;    background: #00d4ff;    background: #00d4ff;
+
+    color: #ffffff;
+
+  }    border-radius: 4px;    border-radius: 4px;
+
+
+
+  .message.error {  }  }
+
+    background: rgba(255, 0, 0, 0.1);
+
+    border-left: 3px solid #ff4444;
+
+    color: #ff6666;
+
+  }  .welcome-banner {  .welcome-banner {
+
+
+
+  .message-header {    color: #00d4ff;    color: #00d4ff;
+
+    display: flex;
+
+    justify-content: space-between;    margin-bottom: 1.5rem;    margin-bottom: 1.5rem;
+
+    align-items: center;
+
+    margin-bottom: 0.4rem;    white-space: pre-line;    white-space: pre-line;
+
+    font-size: 11px;
+
+    opacity: 0.8;    border: 1px solid #00d4ff;    border: 1px solid #00d4ff;
+
+  }
+
+    padding: 1rem;    padding: 1rem;
+
+  .typing-indicator {
+
+    color: #00ff00;    border-radius: 8px;    border-radius: 8px;
+
+    display: none;
+
+    margin: 1rem 0;    background: rgba(0, 212, 255, 0.05);    background: rgba(0, 212, 255, 0.05);
+
+    font-style: italic;
+
+  }  }  }
+
+
+
+  .typing-indicator.active {
+
+    display: block;
+
+  }  .system-status {  .system-status {
+
+
+
+  .dots {    color: #666666;    color: #666666;
+
+    animation: typingDots 1.5s infinite;
+
+  }    font-size: 12px;    font-size: 12px;
+
+
+
+  @keyframes typingDots {    margin-bottom: 1rem;    margin-bottom: 1rem;
+
+    0%, 60% { opacity: 1; }
+
+    30% { opacity: 0.5; }    display: flex;    display: flex;
+
+  }
+
+    justify-content: space-between;    justify-content: space-between;
+
+  /* Input Section */
+
+  .chat-input-area {    border-bottom: 1px solid #333;    border-bottom: 1px solid #333;
+
+    background: #111111;
+
+    border-top: 1px solid #333333;    padding-bottom: 0.5rem;    padding-bottom: 0.5rem;
+
+    padding: 1rem;
+
+  }  }  }
+
+
+
+  .input-line {
+
+    display: flex;
+
+    align-items: center;  .message {  .message {
+
+    gap: 0.5rem;
+
+  }    margin: 1rem 0;    margin: 1rem 0;
+
+
+
+  .input-prompt {    padding: 0.75rem;    padding: 0.75rem;
+
+    color: #00ff00;
+
+    font-weight: bold;    border-radius: 8px;    border-radius: 8px;
+
+    font-family: 'Consolas', 'Monaco', monospace;
+
+    flex-shrink: 0;  }  }
+
+    font-size: 13px;
+
+  }
+
+
+
+  .chat-input {  .message.user {  .message.user {
+
+    flex: 1;
+
+    background: rgba(0, 212, 255, 0.05);    background: rgba(0, 212, 255, 0.1);    background: rgba(0, 212, 255, 0.1);
+
+    border: 1px solid #333;
+
+    border-radius: 6px;    border-left: 4px solid #00d4ff;    border-left: 4px solid #00d4ff;
+
+    color: #00d4ff;
+
+    font-family: 'Consolas', 'Monaco', monospace;    color: #00d4ff;    color: #00d4ff;
+
+    font-size: 13px;
+
+    outline: none;  }  }
+
+    padding: 0.6rem;
+
+    transition: all 0.3s ease;
+
+  }
+
+  .message.agent {  .message.agent {
+
+  .chat-input:focus {
+
+    border-color: #00d4ff;    background: rgba(0, 255, 0, 0.05);    background: rgba(0, 255, 0, 0.05);
+
+    box-shadow: 0 0 8px rgba(0, 212, 255, 0.3);
+
+  }    border-left: 4px solid #00ff00;    border-left: 4px solid #00ff00;
+
+
+
+  .chat-input::placeholder {    color: #ffffff;    color: #ffffff;
+
+    color: #666666;
+
+  }  }  }
+
+
+
+  .send-button {
+
+    background: linear-gradient(45deg, #00d4ff, #0099cc);
+
+    border: none;  .message.error {  .message.error {
+
+    border-radius: 6px;
+
+    color: #000;    background: rgba(255, 0, 0, 0.1);    background: rgba(255, 0, 0, 0.1);
+
+    padding: 0.6rem 1.2rem;
+
+    font-weight: bold;    border-left: 4px solid #ff4444;    border-left: 4px solid #ff4444;
+
+    cursor: pointer;
+
+    transition: all 0.3s ease;    color: #ff6666;    color: #ff6666;
+
+    font-family: 'Consolas', 'Monaco', monospace;
+
+    display: flex;  }  }
+
+    align-items: center;
+
+    gap: 0.4rem;
+
+    font-size: 13px;
+
+  }  .message-header {  .message-header {
+
+
+
+  .send-button:hover {    display: flex;    display: flex;
+
+    transform: translateY(-1px);
+
+    box-shadow: 0 4px 15px rgba(0, 212, 255, 0.4);    justify-content: space-between;    justify-content: space-between;
+
+  }
+
+    align-items: center;    align-items: center;
+
+  .send-button:disabled {
+
+    opacity: 0.6;    margin-bottom: 0.5rem;    margin-bottom: 0.5rem;
+
+    cursor: not-allowed;
+
+    transform: none;    font-size: 12px;    font-size: 12px;
+
+  }
+
+    opacity: 0.8;    opacity: 0.8;
+
+  /* Sidebar */
+
+  .workspace-sidebar {  }  }
+
+    width: 280px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 1.5rem;  .typing-indicator {  .typing-indicator {
+
+  }
+
+    color: #00ff00;    color: #00ff00;
+
+  .sidebar-title {
+
+    font-size: 1.1rem;    display: none;    display: none;
+
+    color: #00d4ff;
+
+    margin-bottom: 1rem;    margin: 1rem 0;    margin: 1rem 0;
+
+    text-align: center;
+
+  }    font-style: italic;    font-style: italic;
+
+
+
+  /* Stats Section */  }  }
+
+  .stats-section {
+
+    background: rgba(16, 33, 62, 0.6);
+
+    border-radius: 10px;
+
+    padding: 1.5rem;  .typing-indicator.active {  .typing-indicator.active {
+
+    border: 1px solid rgba(0, 212, 255, 0.3);
+
+  }    display: block;    display: block;
+
+
+
+  .stat-cards {  }  }
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 0.8rem;
+
+  }  .typing-dots::after {  .typing-dots::after {
+
+
+
+  .stat-card {    content: '...';    content: '...';
+
+    background: rgba(0, 212, 255, 0.1);
+
+    border: 1px solid rgba(0, 212, 255, 0.3);    animation: typingAnimation 1.5s infinite;    animation: typingAnimation 1.5s infinite;
+
+    border-radius: 8px;
+
+    padding: 1rem;  }  }
+
+    text-align: center;
+
+    transition: all 0.3s ease;
+
+  }
+
+  @keyframes typingAnimation {  @keyframes typingAnimation {
+
+  .stat-card:hover {
+
+    background: rgba(0, 212, 255, 0.2);    0%, 60% { content: '...'; }    0%, 60% { content: '...'; }
+
+    transform: scale(1.02);
+
+  }    20% { content: '.'; }    20% { content: '.'; }
+
+
+
+  .stat-value {    40% { content: '..'; }    40% { content: '..'; }
+
+    font-size: 1.3rem;
+
+    font-weight: bold;  }  }
+
+    color: #00d4ff;
+
+    display: block;
+
+    margin-bottom: 0.3rem;
+
+  }  /* Input Section */  /* Input Section */
+
+
+
+  .stat-label {  .chat-input-section {  .chat-input-section {
+
+    font-size: 0.75rem;
+
+    color: #b3b3b3;    background: #111111;    background: #111111;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.5px;    border-top: 1px solid #333333;    border-top: 1px solid #333333;
+
+  }
+
+    padding: 1rem;    padding: 1rem;
+
+  /* Actions Section */
+
+  .actions-section {  }  }
+
+    background: rgba(16, 33, 62, 0.6);
+
+    border-radius: 10px;
+
+    padding: 1.5rem;
+
+    border: 1px solid rgba(0, 212, 255, 0.3);  .input-wrapper {  .input-wrapper {
+
+  }
+
+    display: flex;    display: flex;
+
+  .action-buttons {
+
+    display: flex;    align-items: center;    align-items: center;
+
+    flex-direction: column;
+
+    gap: 0.8rem;    gap: 0.75rem;    gap: 0.75rem;
+
+  }
+
+  }  }
+
+  .action-btn {
+
+    background: rgba(0, 212, 255, 0.05);
+
+    border: 1px solid rgba(0, 212, 255, 0.2);
+
+    border-radius: 8px;  .input-prompt {  .input-prompt {
+
+    padding: 0.8rem;
+
+    color: #ffffff;    color: #00ff00;    color: #00ff00;
+
+    cursor: pointer;
+
+    transition: all 0.3s ease;    font-weight: bold;    font-weight: bold;
+
+    display: flex;
+
+    align-items: center;    font-family: 'Consolas', 'Monaco', monospace;    font-family: 'Consolas', 'Monaco', monospace;
+
+    gap: 0.8rem;
+
+    font-size: 0.9rem;    flex-shrink: 0;    flex-shrink: 0;
+
+  }
+
+  }  }
+
+  .action-btn:hover {
+
+    background: rgba(0, 212, 255, 0.15);
+
+    border-color: #00d4ff;
+
+    transform: translateY(-2px);  .message-input {  .message-input {
+
+  }
+
+    flex: 1;    flex: 1;
+
+  .action-icon {
+
+    font-size: 1.2rem;    background: rgba(0, 212, 255, 0.05);    background: rgba(0, 212, 255, 0.05);
+
+  }
+
+    border: 1px solid #333;    border: 1px solid #333;
+
+  /* Responsive Design */
+
+  @media (max-width: 1024px) {    border-radius: 8px;    border-radius: 8px;
+
+    .chat-workspace {
+
+      flex-direction: column;    color: #00d4ff;    color: #00d4ff;
+
+    }
+
+        font-family: 'Consolas', 'Monaco', monospace;    font-family: 'Consolas', 'Monaco', monospace;
+
+    .workspace-sidebar {
+
+      width: 100%;    font-size: 14px;    font-size: 14px;
+
+      flex-direction: row;
+
+      gap: 1rem;    outline: none;    outline: none;
+
+    }
+
+        padding: 0.75rem;    padding: 0.75rem;
+
+    .stats-section,
+
+    .actions-section {    transition: all 0.3s ease;    transition: all 0.3s ease;
+
+      flex: 1;
+
+    }  }  }
+
+    
+
+    .stat-cards {
+
+      flex-direction: row;
+
+    }  .message-input:focus {  .message-input:focus {
+
+    
+
+    .action-buttons {    border-color: #00d4ff;    border-color: #00d4ff;
+
+      flex-direction: row;
+
+      flex-wrap: wrap;    box-shadow: 0 0 10px rgba(0, 212, 255, 0.3);    box-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+
+    }
+
+  }  }  }
+
+
+
+  @media (max-width: 768px) {
+
+    .hero-section {
+
+      padding: 1.5rem;  .message-input::placeholder {  .message-input::placeholder {
+
+    }
+
+        color: #666666;    color: #666666;
+
+    .agent-title {
+
+      font-size: 2rem;  }  }
+
+    }
+
+    
+
+    .chat-workspace {
+
+      padding: 1rem;  .send-btn {  .send-btn {
+
+    }
+
+        background: linear-gradient(45deg, #00d4ff, #0099cc);    background: linear-gradient(45deg, #00d4ff, #0099cc);
+
+    .chat-messages {
+
+      height: 400px;    border: none;    border: none;
+
+    }
+
+        border-radius: 8px;    border-radius: 8px;
+
+    .workspace-sidebar {
+
+      flex-direction: column;    color: #000;    color: #000;
+
+    }
+
+        padding: 0.75rem 1.5rem;    padding: 0.75rem 1.5rem;
+
+    .stat-cards,
+
+    .action-buttons {    font-weight: bold;    font-weight: bold;
+
+      flex-direction: column;
+
+    }    cursor: pointer;    cursor: pointer;
+
+  }
+
+</style>    transition: all 0.3s ease;    transition: all 0.3s ease;
+
+<% end %>
+
+    font-family: 'Consolas', 'Monaco', monospace;    font-family: 'Consolas', 'Monaco', monospace;
+
+<%= content_for :javascript do %>
+
+<script>    display: flex;    display: flex;
+
+class NeoChatInterface {
+
+  constructor() {    align-items: center;    align-items: center;
+
+    this.messagesContainer = document.getElementById('chatMessages');
+
+    this.messageInput = document.getElementById('messageInput');    gap: 0.5rem;    gap: 0.5rem;
+
+    this.sendButton = document.getElementById('sendButton');
+
+    this.typingIndicator = document.getElementById('typingIndicator');  }  }
+
+    
+
+    this.setupEventListeners();
+
+    this.focusInput();
+
+  }  .send-btn:hover {  .send-btn:hover {
+
+  
+
+  setupEventListeners() {    transform: translateY(-2px);    transform: translateY(-2px);
+
+    // Enter key to send message
+
+    this.messageInput.addEventListener('keypress', (e) => {    box-shadow: 0 5px 20px rgba(0, 212, 255, 0.4);    box-shadow: 0 5px 20px rgba(0, 212, 255, 0.4);
+
+      if (e.key === 'Enter' && !e.shiftKey) {
+
+        e.preventDefault();  }  }
+
+        this.sendMessage();
+
+      }
+
+    });
+
+      .send-btn:disabled {  .send-btn:disabled {
+
+    // Send button click
+
+    this.sendButton.addEventListener('click', () => {    opacity: 0.6;    opacity: 0.6;
+
+      this.sendMessage();
+
+    });    cursor: not-allowed;    cursor: not-allowed;
+
+    
+
+    // Focus input when clicking messages area    transform: none;    transform: none;
+
+    this.messagesContainer.addEventListener('click', () => {
+
+      this.messageInput.focus();  }  }
+
+    });
+
+  }
+
+  
+
+  focusInput() {  /* Features Panel */  /* Features Panel */
+
+    this.messageInput.focus();
+
+  }  .features-panel {  .features-panel {
+
+  
+
+  async sendMessage() {    margin-top: 2rem;    margin-top: 2rem;
+
+    const message = this.messageInput.value.trim();
+
+    if (!message) return;    padding: 1.5rem;    padding: 1.5rem;
+
+    
+
+    // Add user message    background: rgba(16, 33, 62, 0.6);    background: rgba(16, 33, 62, 0.6);
+
+    this.addMessage('user', message);
+
+    this.messageInput.value = '';    border-radius: 12px;    border-radius: 12px;
+
+    this.setLoading(true);
+
+        border: 1px solid rgba(0, 212, 255, 0.3);    border: 1px solid rgba(0, 212, 255, 0.3);
+
+    try {
+
+      const response = await fetch('/neochat/chat', {  }  }
+
+        method: 'POST',
+
+        headers: {
+
+          'Content-Type': 'application/json',
+
+          'X-CSRF-Token': document.querySelector('[name="csrf-token"]').getAttribute('content')  .features-title {  .features-title {
+
+        },
+
+        body: JSON.stringify({ message: message })    font-size: 1.3rem;    font-size: 1.3rem;
+
+      });
+
+          color: #00d4ff;    color: #00d4ff;
+
+      const data = await response.json();
+
+          margin-bottom: 1rem;    margin-bottom: 1rem;
+
+      if (data.success) {
+
+        setTimeout(() => {    text-align: center;    text-align: center;
+
+          this.addMessage('agent', data.response, data.timestamp);
+
+          this.setLoading(false);  }  }
+
+        }, 800); // Simulate thinking time
+
+      } else {
+
+        this.addMessage('error', data.error || 'Sorry, there was an error processing your request.');
+
+        this.setLoading(false);  .features-grid {  .features-grid {
+
+      }
+
+    } catch (error) {    display: grid;    display: grid;
+
+      console.error('Chat error:', error);
+
+      this.addMessage('error', 'Connection error. Please check your internet connection and try again.');    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+
+      this.setLoading(false);
+
+    }    gap: 1rem;    gap: 1rem;
+
+  }
+
+    }  }
+
+  addMessage(type, content, timestamp = null) {
+
+    const messageDiv = document.createElement('div');
+
+    messageDiv.className = `message ${type}`;
+
+      .feature-item {  .feature-item {
+
+    const time = timestamp || new Date().toLocaleTimeString();
+
+    const icon = type === 'user' ? '👤' : type === 'agent' ? '🌌' : '⚠️';    background: rgba(0, 212, 255, 0.05);    background: rgba(0, 212, 255, 0.05);
+
+    const sender = type === 'user' ? 'You' : type === 'agent' ? 'NeoChat' : 'System';
+
+        border: 1px solid rgba(0, 212, 255, 0.2);    border: 1px solid rgba(0, 212, 255, 0.2);
+
+    messageDiv.innerHTML = `
+
+      <div class="message-header">    border-radius: 8px;    border-radius: 8px;
+
+        <span>${icon} ${sender}</span>
+
+        <span>${time}</span>    padding: 1rem;    padding: 1rem;
+
+      </div>
+
+      <div>${this.escapeHtml(content)}</div>    text-align: center;    text-align: center;
+
+    `;
+
+        transition: all 0.3s ease;    transition: all 0.3s ease;
+
+    this.messagesContainer.appendChild(messageDiv);
+
+    this.scrollToBottom();    cursor: pointer;    cursor: pointer;
+
+  }
+
+    }  }
+
+  setLoading(isLoading) {
+
+    this.sendButton.disabled = isLoading;
+
+    this.messageInput.disabled = isLoading;
+
+      .feature-item:hover {  .feature-item:hover {
+
+    if (isLoading) {
+
+      this.typingIndicator.classList.add('active');    background: rgba(0, 212, 255, 0.1);    background: rgba(0, 212, 255, 0.1);
+
+      this.scrollToBottom();
+
+    } else {    border-color: #00d4ff;    border-color: #00d4ff;
+
+      this.typingIndicator.classList.remove('active');
+
+    }    transform: translateY(-3px);    transform: translateY(-3px);
+
+    
+
+    this.focusInput();  }  }
+
+  }
+
+  
+
+  scrollToBottom() {
+
+    this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;  .feature-icon {  .feature-icon {
+
+  }
+
+      font-size: 1.5rem;    font-size: 1.5rem;
+
+  escapeHtml(text) {
+
+    const div = document.createElement('div');    margin-bottom: 0.5rem;    margin-bottom: 0.5rem;
+
+    div.textContent = text;
+
+    return div.innerHTML.replace(/\n/g, '<br>');  }  }
+
+  }
+
+}
+
+
+
+// Quick action functions  .feature-name {  .feature-name {
+
+function quickAction(mode) {
+
+  const prompts = {    font-size: 0.9rem;    font-size: 0.9rem;
+
+    creative: "Hi NeoChat! I'd like to explore some creative ideas. Can you help me brainstorm?",
+
+    analytical: "Hello! I need help analyzing a problem. Can you assist me with logical thinking?",    color: #ffffff;    color: #ffffff;
+
+    learning: "Hi there! I'd like to learn something new today. What can you teach me?",
+
+    problem_solving: "Hello NeoChat! I have a challenge I need to solve. Can you help me think through it?"    font-weight: 500;    font-weight: 500;
+
+  };
+
+    }  }
+
+  if (window.neoChatInterface && prompts[mode]) {
+
+    window.neoChatInterface.messageInput.value = prompts[mode];
+
+    window.neoChatInterface.focusInput();
+
+  }  /* Stats Bar */  /* Stats Bar */
+
+}
+
+  .stats-bar {  .stats-bar {
+
+// Initialize interface when page loads
+
+document.addEventListener('DOMContentLoaded', () => {    display: flex;    display: flex;
+
+  window.neoChatInterface = new NeoChatInterface();
+
+      justify-content: center;    justify-content: center;
+
+  // Add subtle loading animations
+
+  const statCards = document.querySelectorAll('.stat-card');    gap: 2rem;    gap: 2rem;
+
+  statCards.forEach((card, index) => {
+
+    setTimeout(() => {    margin: 2rem 0;    margin: 2rem 0;
+
+      card.style.opacity = '0';
+
+      card.style.transform = 'translateY(15px)';    flex-wrap: wrap;    flex-wrap: wrap;
+
+      card.style.transition = 'all 0.4s ease';
+
+      setTimeout(() => {  }  }
+
+        card.style.opacity = '1';
+
+        card.style.transform = 'translateY(0)';
+
+      }, 50);
+
+    }, index * 150);  .stat-card {  .stat-card {
+
+  });
+
+      background: rgba(0, 212, 255, 0.1);    background: rgba(0, 212, 255, 0.1);
+
+  const actionBtns = document.querySelectorAll('.action-btn');
+
+  actionBtns.forEach((btn, index) => {    border: 1px solid #00d4ff;    border: 1px solid #00d4ff;
+
+    setTimeout(() => {
+
+      btn.style.opacity = '0';    border-radius: 10px;    border-radius: 10px;
+
+      btn.style.transform = 'translateX(-15px)';
+
+      btn.style.transition = 'all 0.4s ease';    padding: 1rem;    padding: 1rem;
+
+      setTimeout(() => {
+
+        btn.style.opacity = '1';    text-align: center;    text-align: center;
+
+        btn.style.transform = 'translateX(0)';
+
+      }, 50);    min-width: 120px;    min-width: 120px;
+
+    }, (index + statCards.length) * 150);
+
+  });    transition: all 0.3s ease;    transition: all 0.3s ease;
+
+});
+
+</script>  }  }
+
+<% end %>
+
+
+  .stat-card:hover {  .stat-card:hover {
+
+    background: rgba(0, 212, 255, 0.2);    background: rgba(0, 212, 255, 0.2);
+
+    transform: scale(1.05);    transform: scale(1.05);
+
+  }  }
+
+
+
+  .stat-value {  .stat-value {
+
+    font-size: 1.5rem;    font-size: 1.5rem;
+
+    font-weight: bold;    font-weight: bold;
+
+    color: #00d4ff;    color: #00d4ff;
+
+    display: block;    display: block;
+
+  }  }
+
+
+
+  .stat-label {  .stat-label {
+
+    font-size: 0.8rem;    font-size: 0.8rem;
+
+    color: #b3b3b3;    color: #b3b3b3;
+
+    text-transform: uppercase;    text-transform: uppercase;
+
+    letter-spacing: 0.5px;    letter-spacing: 0.5px;
+
+  }  }
+
+
+
+  /* Responsive Design */  /* Responsive Design */
+
+  @media (max-width: 768px) {  @media (max-width: 768px) {
+
+    .neochat-header {    .neochat-header {
+
+      padding: 2rem 1rem;      padding: 2rem 1rem;
+
+    }    }
+
+        
+
+    .agent-title {    .agent-title {
+
+      font-size: 2rem;      font-size: 2rem;
+
+    }    }
+
+        
+
+    .chat-interface {    .chat-interface {
+
+      padding: 1rem;      padding: 1rem;
+
+    }    }
+
+        
+
+    .chat-messages {    .chat-messages {
+
+      height: 400px;      height: 400px;
+
+    }    }
+
+        
+
+    .features-grid {    .features-grid {
+
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+
+    }    }
+
+        
+
+    .stats-bar {    .stats-bar {
+
+      gap: 1rem;      gap: 1rem;
+
+    }    }
+
+  }  }
+
+</style></style>
+
+<% end %><% end %>
+
+
+
+<div class="neochat-container"><div class="neochat-container">
+
+  <!-- Header Section -->  <!-- Header Section -->
+
+  <div class="neochat-header">  <div class="neochat-header">
+
+    <div class="agent-avatar">🌌</div>    <div class="agent-avatar">🌌</div>
+
+    <h1 class="agent-title">NeoChat</h1>    <h1 class="agent-title">NeoChat</h1>
+
+    <p class="agent-subtitle">Advanced AI Conversation Assistant</p>    <p class="agent-subtitle">Advanced AI Conversation Assistant</p>
+
+    <div class="agent-status">    <div class="agent-status">
+
+      <span class="status-dot"></span>      <span class="status-dot"></span>
+
+      <span>Online & Ready</span>      <span>Online & Ready</span>
+
+    </div>    </div>
+
+  </div>  </div>
+
+
+
+  <!-- Main Chat Interface -->  <!-- Main Chat Interface -->
+
+  <div class="chat-interface">  <div class="chat-interface">
+
+    <div class="chat-container">    <div class="chat-container">
+
+      <!-- Chat Header -->      <!-- Chat Header -->
+
+      <div class="chat-header">      <div class="chat-header">
+
+        <span class="chat-title">neochat@terminal:~$ active_session</span>        <span class="chat-title">neochat@terminal:~$ active_session</span>
+
+        <div class="chat-controls">        <div class="chat-controls">
+
+          <div class="control-btn close"></div>          <div class="control-btn close"></div>
+
+          <div class="control-btn minimize"></div>          <div class="control-btn minimize"></div>
+
+          <div class="control-btn maximize"></div>          <div class="control-btn maximize"></div>
+
+        </div>        </div>
+
+      </div>      </div>
+
+
+
+      <!-- Messages Area -->      <!-- Messages Area -->
+
+      <div class="chat-messages" id="chatMessages">      <div class="chat-messages" id="chatMessages">
+
+        <div class="welcome-banner">        <div class="welcome-banner">
+
+╔═══════════════════════════════════════════════════════════════════╗╔═══════════════════════════════════════════════════════════════════╗
+
+║                        🌌 NeoChat v2.0                           ║║                        🌌 NeoChat v2.0                           ║
+
+║                 Advanced AI Conversation System                   ║║                 Advanced AI Conversation System                   ║
+
+╚═══════════════════════════════════════════════════════════════════╝╚═══════════════════════════════════════════════════════════════════╝
+
+        </div>        </div>
+
+
+
+        <div class="system-status">        <div class="system-status">
+
+          <span>System: <%= @agent.name %> v<%= @agent.version %></span>          <span>System: <%= @agent.name %> v<%= @agent.version %></span>
+
+          <span>Status: <%= @agent.status.capitalize %></span>          <span>Status: <%= @agent.status.capitalize %></span>
+
+          <span>Session: <%= @agent.id[0,8] %>...</span>          <span>Session: <%= @agent.id[0,8] %>...</span>
+
+          <span><%= Time.current.strftime("%Y-%m-%d %H:%M:%S") %></span>          <span><%= Time.current.strftime("%Y-%m-%d %H:%M:%S") %></span>
+
+        </div>        </div>
+
+
+
+        <div class="message agent">        <div class="message agent">
+
+          <div class="message-header">          <div class="message-header">
+
+            <span>🌌 NeoChat</span>            <span>🌌 NeoChat</span>
+
+            <span><%= Time.current.strftime("%H:%M:%S") %></span>            <span><%= Time.current.strftime("%H:%M:%S") %></span>
+
+          </div>          </div>
+
+          <div>Hello! I'm NeoChat, your advanced AI conversation partner. I'm equipped with sophisticated natural language processing, creative thinking capabilities, and problem-solving skills.          <div>Hello! I'm NeoChat, your advanced AI conversation partner. I'm equipped with sophisticated natural language processing, creative thinking capabilities, and problem-solving skills.
+
+
+
+I can assist you with:I can assist you with:
+
+• 💭 Intelligent conversations and discussions• 💭 Intelligent conversations and discussions
+
+• 🎯 Answering questions across various topics• 🎯 Answering questions across various topics
+
+• 🛠️ Problem-solving and analytical thinking• 🛠️ Problem-solving and analytical thinking
+
+• 💡 Creative writing and brainstorming• 💡 Creative writing and brainstorming
+
+• 📚 Learning support and explanations• 📚 Learning support and explanations
+
+• 🔍 Research and information synthesis• 🔍 Research and information synthesis
+
+
+
+What would you like to explore together today?</div>What would you like to explore together today?</div>
+
+        </div>        </div>
+
+
+
+        <div class="typing-indicator" id="typingIndicator">        <div class="typing-indicator" id="typingIndicator">
+
+          <span class="typing-dots">🌌 NeoChat is processing</span>          <span class="typing-dots">🌌 NeoChat is processing</span>
+
+        </div>        </div>
+
+      </div>      </div>
+
+
+
+      <!-- Input Section -->      <!-- Input Section -->
+
+      <div class="chat-input-section">      <div class="chat-input-section">
+
+        <div class="input-wrapper">        <div class="input-wrapper">
+
+          <span class="input-prompt">you@neochat:~$</span>          <span class="input-prompt">you@neochat:~$</span>
+
+          <input           <input 
+
+            type="text"             type="text" 
+
+            class="message-input"             class="message-input" 
+
+            id="messageInput"            id="messageInput"
+
+            placeholder="Type your message here..."            placeholder="Type your message here..."
+
+            autocomplete="off"            autocomplete="off"
+
+            maxlength="1000"            maxlength="1000"
+
+          >          >
+
+          <button class="send-btn" id="sendButton">          <button class="send-btn" id="sendButton">
+
+            <span>Send</span>            <span>Send</span>
+
+            <span>→</span>            <span>→</span>
+
+          </button>          </button>
+
+        </div>        </div>
+
+      </div>      </div>
+
+    </div>    </div>
+
+
+
+    <!-- Stats Bar -->    <!-- Stats Bar -->
+
+    <div class="stats-bar">    <div class="stats-bar">
+
+      <div class="stat-card">      <div class="stat-card">
+
+        <span class="stat-value"><%= @agent_stats[:total_conversations] %></span>        <span class="stat-value"><%= @agent_stats[:total_conversations] %></span>
+
+        <span class="stat-label">Conversations</span>        <span class="stat-label">Conversations</span>
+
+      </div>      </div>
+
+      <div class="stat-card">      <div class="stat-card">
+
+        <span class="stat-value"><%= @agent_stats[:average_rating] %></span>        <span class="stat-value"><%= @agent_stats[:average_rating] %></span>
+
+        <span class="stat-label">Rating</span>        <span class="stat-label">Rating</span>
+
+      </div>      </div>
+
+      <div class="stat-card">      <div class="stat-card">
+
+        <span class="stat-value"><%= @agent_stats[:response_time] %></span>        <span class="stat-value"><%= @agent_stats[:response_time] %></span>
+
+        <span class="stat-label">Response Time</span>        <span class="stat-label">Response Time</span>
+
+      </div>      </div>
+
+    </div>    </div>
+
+
+
+    <!-- Features Panel -->    <!-- Features Panel -->
+
+    <div class="features-panel">    <div class="features-panel">
+
+      <h3 class="features-title">🚀 Quick Actions</h3>      <h3 class="features-title">🚀 Quick Actions</h3>
+
+      <div class="features-grid">      <div class="features-grid">
+
+        <div class="feature-item" onclick="quickAction('creative')">        <div class="feature-item" onclick="quickAction('creative')">
+
+          <div class="feature-icon">🎨</div>          <div class="feature-icon">🎨</div>
+
+          <div class="feature-name">Creative Mode</div>          <div class="feature-name">Creative Mode</div>
+
+        </div>        </div>
+
+        <div class="feature-item" onclick="quickAction('analytical')">        <div class="feature-item" onclick="quickAction('analytical')">
+
+          <div class="feature-icon">🔬</div>          <div class="feature-icon">🔬</div>
+
+          <div class="feature-name">Analysis Mode</div>          <div class="feature-name">Analysis Mode</div>
+
+        </div>        </div>
+
+        <div class="feature-item" onclick="quickAction('learning')">        <div class="feature-item" onclick="quickAction('learning')">
+
+          <div class="feature-icon">📚</div>          <div class="feature-icon">📚</div>
+
+          <div class="feature-name">Learning Mode</div>          <div class="feature-name">Learning Mode</div>
+
+        </div>        </div>
+
+        <div class="feature-item" onclick="quickAction('problem_solving')">        <div class="feature-item" onclick="quickAction('problem_solving')">
+
+          <div class="feature-icon">🎯</div>          <div class="feature-icon">🎯</div>
+
+          <div class="feature-name">Problem Solving</div>          <div class="feature-name">Problem Solving</div>
+
+        </div>        </div>
+
+      </div>      </div>
+
+    </div>    </div>
+
+  </div>  </div>
+
+</div></div>
+
+
+
+<%= content_for :javascript do %><%= content_for :javascript do %>
+
+<script><script>
+
+class NeoChatInterface {class NeoChatInterface {
+
+  constructor() {  constructor() {
+
+    this.messagesContainer = document.getElementById('chatMessages');    this.messagesContainer = document.getElementById('chatMessages');
+
+    this.messageInput = document.getElementById('messageInput');    this.messageInput = document.getElementById('messageInput');
+
+    this.sendButton = document.getElementById('sendButton');    this.sendButton = document.getElementById('sendButton');
+
+    this.typingIndicator = document.getElementById('typingIndicator');    this.typingIndicator = document.getElementById('typingIndicator');
+
+        
+
+    this.setupEventListeners();    this.setupEventListeners();
+
+    this.focusInput();    this.focusInput();
+
+  }  }
+
+    
+
+  setupEventListeners() {  setupEventListeners() {
+
+    // Enter key to send message    // Enter key to send message
+
+    this.messageInput.addEventListener('keypress', (e) => {    this.messageInput.addEventListener('keypress', (e) => {
+
+      if (e.key === 'Enter' && !e.shiftKey) {      if (e.key === 'Enter' && !e.shiftKey) {
+
+        e.preventDefault();        e.preventDefault();
+
+        this.sendMessage();        this.sendMessage();
+
+      }      }
+
+    });    });
+
+        
+
+    // Send button click    // Send button click
+
+    this.sendButton.addEventListener('click', () => {    this.sendButton.addEventListener('click', () => {
+
+      this.sendMessage();      this.sendMessage();
+
+    });    });
+
+        
+
+    // Focus input when clicking messages area    // Focus input when clicking messages area
+
+    this.messagesContainer.addEventListener('click', () => {    this.messagesContainer.addEventListener('click', () => {
+
+      this.messageInput.focus();      this.messageInput.focus();
+
+    });    });
+
+        
+
+    // Auto-resize input    // Auto-resize input
+
+    this.messageInput.addEventListener('input', () => {    this.messageInput.addEventListener('input', () => {
+
+      this.adjustInputHeight();      this.adjustInputHeight();
+
+    });    });
+
+  }  }
+
+    
+
+  focusInput() {  focusInput() {
+
+    this.messageInput.focus();    this.messageInput.focus();
+
+  }  }
+
+    
+
+  adjustInputHeight() {  adjustInputHeight() {
+
+    const input = this.messageInput;    const input = this.messageInput;
+
+    input.style.height = 'auto';    input.style.height = 'auto';
+
+    input.style.height = Math.min(input.scrollHeight, 120) + 'px';    input.style.height = Math.min(input.scrollHeight, 120) + 'px';
+
+  }  }
+
+    
+
+  async sendMessage() {  async sendMessage() {
+
+    const message = this.messageInput.value.trim();    const message = this.messageInput.value.trim();
+
+    if (!message) return;    if (!message) return;
+
+        
+
+    // Add user message    // Add user message
+
+    this.addMessage('user', message);    this.addMessage('user', message);
+
+    this.messageInput.value = '';    this.messageInput.value = '';
+
+    this.adjustInputHeight();    this.adjustInputHeight();
+
+    this.setLoading(true);    this.setLoading(true);
+
+        
+
+    try {    try {
+
+      const response = await fetch('/neochat/chat', {      const response = await fetch('/neochat/chat', {
+
+        method: 'POST',        method: 'POST',
+
+        headers: {        headers: {
+
+          'Content-Type': 'application/json',          'Content-Type': 'application/json',
+
+          'X-CSRF-Token': document.querySelector('[name="csrf-token"]').getAttribute('content')          'X-CSRF-Token': document.querySelector('[name="csrf-token"]').getAttribute('content')
+
+        },        },
+
+        body: JSON.stringify({ message: message })        body: JSON.stringify({ message: message })
+
+      });      });
+
+            
+
+      const data = await response.json();      const data = await response.json();
+
+            
+
+      if (data.success) {      if (data.success) {
+
+        setTimeout(() => {        setTimeout(() => {
+
+          this.addMessage('agent', data.response, data.timestamp);          this.addMessage('agent', data.response, data.timestamp);
+
+          this.setLoading(false);          this.setLoading(false);
+
+        }, 1000); // Simulate thinking time        }, 1000); // Simulate thinking time
+
+      } else {      } else {
+
+        this.addMessage('error', data.error || 'Sorry, there was an error processing your request.');        this.addMessage('error', data.error || 'Sorry, there was an error processing your request.');
+
+        this.setLoading(false);        this.setLoading(false);
+
+      }      }
+
+    } catch (error) {    } catch (error) {
+
+      console.error('Chat error:', error);      console.error('Chat error:', error);
+
+      this.addMessage('error', 'Connection error. Please check your internet connection and try again.');      this.addMessage('error', 'Connection error. Please check your internet connection and try again.');
+
+      this.setLoading(false);      this.setLoading(false);
+
+    }    }
+
+  }  }
+
+    
+
+  addMessage(type, content, timestamp = null) {  addMessage(type, content, timestamp = null) {
+
+    const messageDiv = document.createElement('div');    const messageDiv = document.createElement('div');
+
+    messageDiv.className = `message ${type}`;    messageDiv.className = `message ${type}`;
+
+        
+
+    const time = timestamp || new Date().toLocaleTimeString();    const time = timestamp || new Date().toLocaleTimeString();
+
+    const icon = type === 'user' ? '👤' : type === 'agent' ? '🌌' : '⚠️';    const icon = type === 'user' ? '👤' : type === 'agent' ? '🌌' : '⚠️';
+
+    const sender = type === 'user' ? 'You' : type === 'agent' ? 'NeoChat' : 'System';    const sender = type === 'user' ? 'You' : type === 'agent' ? 'NeoChat' : 'System';
+
+        
+
+    messageDiv.innerHTML = `    messageDiv.innerHTML = `
+
+      <div class="message-header">      <div class="message-header">
+
+        <span>${icon} ${sender}</span>        <span>${icon} ${sender}</span>
+
+        <span>${time}</span>        <span>${time}</span>
+
+      </div>      </div>
+
+      <div>${this.escapeHtml(content)}</div>      <div>${this.escapeHtml(content)}</div>
+
+    `;    `;
+
+        
+
+    this.messagesContainer.appendChild(messageDiv);    this.messagesContainer.appendChild(messageDiv);
+
+    this.scrollToBottom();    this.scrollToBottom();
+
+  }  }
+
+    
+
+  setLoading(isLoading) {  setLoading(isLoading) {
+
+    this.sendButton.disabled = isLoading;    this.sendButton.disabled = isLoading;
+
+    this.messageInput.disabled = isLoading;    this.messageInput.disabled = isLoading;
+
+        
+
+    if (isLoading) {    if (isLoading) {
+
+      this.typingIndicator.classList.add('active');      this.typingIndicator.classList.add('active');
+
+      this.scrollToBottom();      this.scrollToBottom();
+
+    } else {    } else {
+
+      this.typingIndicator.classList.remove('active');      this.typingIndicator.classList.remove('active');
+
+    }    }
+
+        
+
+    this.focusInput();    this.focusInput();
+
+  }  }
+
+    
+
+  scrollToBottom() {  scrollToBottom() {
+
+    this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;    this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
+
+  }  }
+
+    
+
+  escapeHtml(text) {  escapeHtml(text) {
+
+    const div = document.createElement('div');    const div = document.createElement('div');
+
+    div.textContent = text;    div.textContent = text;
+
+    return div.innerHTML.replace(/\n/g, '<br>');    return div.innerHTML.replace(/\n/g, '<br>');
+
+  }  }
+
+}}
+
+
+
+// Quick action functions// Quick action functions
+
+function quickAction(mode) {function quickAction(mode) {
+
+  const prompts = {  const prompts = {
+
+    creative: "Hi NeoChat! I'd like to explore some creative ideas. Can you help me brainstorm?",    creative: "Hi NeoChat! I'd like to explore some creative ideas. Can you help me brainstorm?",
+
+    analytical: "Hello! I need help analyzing a problem. Can you assist me with logical thinking?",    analytical: "Hello! I need help analyzing a problem. Can you assist me with logical thinking?",
+
+    learning: "Hi there! I'd like to learn something new today. What can you teach me?",    learning: "Hi there! I'd like to learn something new today. What can you teach me?",
+
+    problem_solving: "Hello NeoChat! I have a challenge I need to solve. Can you help me think through it?"    problem_solving: "Hello NeoChat! I have a challenge I need to solve. Can you help me think through it?"
+
+  };  };
+
+    
+
+  if (window.neoChatInterface && prompts[mode]) {  if (window.neoChatInterface && prompts[mode]) {
+
+    window.neoChatInterface.messageInput.value = prompts[mode];    window.neoChatInterface.messageInput.value = prompts[mode];
+
+    window.neoChatInterface.focusInput();    window.neoChatInterface.focusInput();
+
+  }  }
+
+}}
+
+
+
+// Initialize interface when page loads// Initialize interface when page loads
+
+document.addEventListener('DOMContentLoaded', () => {document.addEventListener('DOMContentLoaded', () => {
+
+  window.neoChatInterface = new NeoChatInterface();  window.neoChatInterface = new NeoChatInterface();
+
+    
+
+  // Add some subtle animations  // Add some subtle animations
+
+  const statCards = document.querySelectorAll('.stat-card');  const statCards = document.querySelectorAll('.stat-card');
+
+  statCards.forEach((card, index) => {  statCards.forEach((card, index) => {
+
+    setTimeout(() => {    setTimeout(() => {
+
+      card.style.opacity = '0';      card.style.opacity = '0';
+
+      card.style.transform = 'translateY(20px)';      card.style.transform = 'translateY(20px)';
+
+      card.style.transition = 'all 0.5s ease';      card.style.transition = 'all 0.5s ease';
+
+      setTimeout(() => {      setTimeout(() => {
+
+        card.style.opacity = '1';        card.style.opacity = '1';
+
+        card.style.transform = 'translateY(0)';        card.style.transform = 'translateY(0)';
+
+      }, 100);      }, 100);
+
+    }, index * 200);    }, index * 200);
+
+  });  });
+
+});});
+
+</script></script>
+
+<% end %><% end %>
+      
+      <div class="agent-stats">
+        <div class="stat-item">
+          <span class="stat-value"><%= @agent_stats[:total_conversations] %></span>
+          <span class="stat-label">Conversations</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value"><%= @agent_stats[:average_rating] %></span>
+          <span class="stat-label">Rating</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value"><%= @agent_stats[:response_time] %></span>
+          <span class="stat-label">Response Time</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Features Section -->
+  <div class="features-section">
+    <div class="container">
+      <h2 class="section-title">🌌 AI Capabilities</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🗣️</div>
+          <h3>Natural Conversation</h3>
+          <p>Engage in fluid, natural conversations on any topic with advanced language understanding.</p>
+          <button class="feature-btn" onclick="startConversation('natural')">Start Chatting</button>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">🎨</div>
+          <h3>Creative Writing</h3>
+          <p>Collaborate on creative projects, stories, poems, and innovative content creation.</p>
+          <button class="feature-btn" onclick="startConversation('creative')">Get Creative</button>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">🔬</div>
+          <h3>Problem Solving</h3>
+          <p>Analyze complex problems and find solutions with logical reasoning and insight.</p>
+          <button class="feature-btn" onclick="startConversation('problem')">Solve Problems</button>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">📚</div>
+          <h3>Knowledge & Learning</h3>
+          <p>Explore topics, learn new concepts, and gain insights across various domains.</p>
+          <button class="feature-btn" onclick="startConversation('learning')">Learn Together</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Terminal Chat Interface -->
+  <div class="terminal-section">
+    <div class="container">
+      <h2 class="section-title">💬 Chat Terminal</h2>
+      <div class="terminal-container">
+        <div class="terminal-header">
+          <div class="terminal-controls">
+            <div class="terminal-button close"></div>
+            <div class="terminal-button minimize"></div>
+            <div class="terminal-button maximize"></div>
+          </div>
+          <div class="terminal-title">neochat@onelastai.com</div>
+          <div class="terminal-status">
+            <span class="status-indicator online"></span>
+            <span class="status-text">Online</span>
+          </div>
+        </div>
+        
+        <div class="terminal-output" id="terminalOutput">
+          <div class="welcome-message">
+╔══════════════════════════════════════════════════════════════════╗
+║                       Welcome to NeoChat                        ║
+║              Advanced Conversational AI Assistant               ║
+╚══════════════════════════════════════════════════════════════════╝
+
+<span class="system-info">System: NeoChat v<%= @agent.version %> | Status: Online | Session: <%= @agent.id[0,8] %>...
+<%= Time.current.strftime("Date: %Y-%m-%d %H:%M:%S") %> | Agent Ready</span>
+
+<span class="agent-intro">Hello! I'm NeoChat, your intelligent AI conversation partner.</span>
+
+I can help you with:
+• 💭 Natural conversations and discussions
+• 🎯 Questions & answers on any topic  
+• 🛠️ Problem solving and analysis
+• 💡 Creative writing and brainstorming
+• 📖 Learning and knowledge exploration
+• 🤔 Deep thinking and insights
+
+Type your message below to start our conversation!
+          </div>
+          
+          <div class="typing-indicator" id="typingIndicator">
+            <span class="typing-dots">NeoChat is thinking<span class="dots"></span></span>
+          </div>
+        </div>
+        
+        <div class="terminal-input-section">
+          <div class="input-container">
+            <span class="terminal-prompt">you@terminal:~$ </span>
+            <input 
+              type="text" 
+              class="terminal-input" 
+              id="messageInput"
+              placeholder="Type your message here..."
+              autocomplete="off"
+            >
+            <button class="send-button" id="sendButton">
+              <span class="button-text">Send</span>
+              <span class="button-icon">→</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Conversations -->
+  <% if @recent_conversations.present? %>
+    <div class="recent-section">
+      <div class="container">
+        <h3 class="section-subtitle">📝 Recent Conversations</h3>
+        <div class="recent-grid">
+          <% @recent_conversations.each do |conversation| %>
+            <div class="recent-card">
+              <div class="recent-topic"><%= conversation[:topic] %></div>
+              <div class="recent-time"><%= conversation[:timestamp] %></div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<%= content_for :head do %>
+<style>
+  .neochat-dashboard {
+    min-height: calc(100vh - 60px);
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+    color: #ffffff;
+    position: relative;
+  }
+
+  .neochat-dashboard::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="%2300d4ff" stroke-width="0.3" opacity="0.2"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+    animation: gridMove 30s linear infinite;
+    pointer-events: none;
+  }
+
+  @keyframes gridMove {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(10px, 10px); }
+  }
+
+  .hero-section {
+    padding: 4rem 2rem;
+    text-align: center;
+    background: radial-gradient(ellipse at center, rgba(0, 212, 255, 0.1) 0%, transparent 70%);
+    border-bottom: 2px solid #00d4ff;
+    position: relative;
+    z-index: 1;
+  }
+
+  .agent-logo {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    text-shadow: 0 0 20px #00d4ff;
+    animation: logoGlow 3s infinite;
+  }
+
+  @keyframes logoGlow {
+    0%, 100% { 
+      transform: scale(1);
+      text-shadow: 0 0 20px #00d4ff;
+    }
+    50% { 
+      transform: scale(1.05);
+      text-shadow: 0 0 30px #00d4ff, 0 0 40px #0099cc;
+    }
+  }
+
+  .agent-title {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    background: linear-gradient(45deg, #00d4ff, #ffffff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 0 10px #00d4ff;
+  }
+
+  .agent-tagline {
+    font-size: 1.3rem;
+    color: #b3b3b3;
+    margin-bottom: 1.5rem;
+    font-style: italic;
+  }
+
+  .agent-description {
+    max-width: 600px;
+    margin: 0 auto 2rem;
+    color: #cccccc;
+    line-height: 1.6;
+    font-size: 1.1rem;
+  }
+
+  .agent-stats {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .stat-item {
+    background: rgba(0, 212, 255, 0.1);
+    border: 1px solid #00d4ff;
+    border-radius: 12px;
+    padding: 1.5rem;
+    min-width: 140px;
+    text-align: center;
+    transition: all 0.3s ease;
+  }
+
+  .stat-item:hover {
+    background: rgba(0, 212, 255, 0.2);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 212, 255, 0.3);
+  }
+
+  .stat-value {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #00d4ff;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .stat-label {
+    font-size: 0.9rem;
+    color: #b3b3b3;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .section-title {
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 3rem;
+    color: #00d4ff;
+    font-weight: 300;
+  }
+
+  .features-section {
+    padding: 4rem 0;
+    background: rgba(26, 26, 46, 0.5);
+    position: relative;
+    z-index: 1;
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+  }
+
+  .feature-card {
+    background: rgba(16, 33, 62, 0.8);
+    border: 2px solid #333;
+    border-radius: 12px;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+  }
+
+  .feature-card:hover {
+    border-color: #00d4ff;
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+  }
+
+  .feature-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+
+  .feature-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #00d4ff;
+  }
+
+  .feature-card p {
+    color: #cccccc;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+  }
+
+  .feature-btn {
+    background: linear-gradient(45deg, #00d4ff, #0099cc);
+    color: #000;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .feature-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(0, 212, 255, 0.4);
+  }
+
+  .terminal-section {
+    padding: 4rem 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  .terminal-container {
+    background: #000000;
+    border: 2px solid #00d4ff;
+    border-radius: 12px;
+    box-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+    overflow: hidden;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .terminal-header {
+    background: linear-gradient(90deg, #00d4ff 0%, #0099cc 100%);
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .terminal-controls {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .terminal-button {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+  }
+
+  .terminal-button.close { background: #ff5f56; }
+  .terminal-button.minimize { background: #ffbd2e; }
+  .terminal-button.maximize { background: #27ca3f; }
+
+  .terminal-title {
+    color: #000;
+    font-weight: bold;
+    font-family: 'Consolas', 'Monaco', monospace;
+  }
+
+  .terminal-status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #000;
+    font-size: 0.9rem;
+  }
+
+  .status-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #27ca3f;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  .terminal-output {
+    height: 400px;
+    padding: 1rem;
+    overflow-y: auto;
+    background: #000000;
+    color: #00ff00;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  .terminal-output::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .terminal-output::-webkit-scrollbar-track {
+    background: #1a1a1a;
+  }
+
+  .terminal-output::-webkit-scrollbar-thumb {
+    background: #00d4ff;
+    border-radius: 4px;
+  }
+
+  .welcome-message {
+    color: #00d4ff;
+    margin-bottom: 1rem;
+    white-space: pre-line;
+  }
+
+  .system-info {
+    color: #666666;
+    font-size: 12px;
+    margin-bottom: 1rem;
+  }
+
+  .agent-intro {
+    color: #ffffff;
+    font-weight: bold;
+  }
+
+  .typing-indicator {
+    color: #00ff00;
+    display: none;
+    margin: 1rem 0;
+  }
+
+  .typing-indicator.active {
+    display: block;
+  }
+
+  .dots::after {
+    content: '...';
+    animation: typing 1.5s infinite;
+  }
+
+  @keyframes typing {
+    0%, 60% { content: '...'; }
+    20% { content: '.'; }
+    40% { content: '..'; }
+  }
+
+  .terminal-input-section {
+    background: #111111;
+    border-top: 1px solid #333333;
+    padding: 1rem;
+  }
+
+  .input-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .terminal-prompt {
+    color: #00ff00;
+    font-weight: bold;
+    font-family: 'Consolas', 'Monaco', monospace;
+    flex-shrink: 0;
+  }
+
+  .terminal-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: #00d4ff;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 14px;
+    outline: none;
+    padding: 0.75rem;
+  }
+
+  .terminal-input::placeholder {
+    color: #666666;
+  }
+
+  .send-button {
+    background: linear-gradient(45deg, #00d4ff, #0099cc);
+    border: none;
+    border-radius: 8px;
+    color: #000;
+    padding: 0.75rem 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Consolas', 'Monaco', monospace;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .send-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 212, 255, 0.4);
+  }
+
+  .send-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .recent-section {
+    padding: 3rem 0;
+    background: rgba(16, 33, 62, 0.3);
+    position: relative;
+    z-index: 1;
+  }
+
+  .section-subtitle {
+    font-size: 1.8rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #00d4ff;
+  }
+
+  .recent-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+  }
+
+  .recent-card {
+    background: rgba(0, 212, 255, 0.1);
+    border: 1px solid #00d4ff;
+    border-radius: 8px;
+    padding: 1rem;
+    transition: all 0.3s ease;
+  }
+
+  .recent-card:hover {
+    background: rgba(0, 212, 255, 0.2);
+    transform: translateY(-2px);
+  }
+
+  .recent-topic {
+    color: #ffffff;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+
+  .recent-time {
+    color: #b3b3b3;
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 768px) {
+    .hero-section {
+      padding: 2rem 1rem;
+    }
+    
+    .agent-title {
+      font-size: 2rem;
+    }
+    
+    .agent-stats {
+      gap: 1rem;
+    }
+    
+    .terminal-section {
+      padding: 2rem 1rem;
+    }
+    
+    .terminal-output {
+      height: 300px;
+    }
+    
+    .features-grid,
+    .recent-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+<% end %>
+
+<%= content_for :javascript do %>
+<script>
+  class NeoChatInterface {
+    constructor() {
+      this.output = document.getElementById('terminalOutput');
+      this.input = document.getElementById('messageInput');
+      this.sendButton = document.getElementById('sendButton');
+      this.typingIndicator = document.getElementById('typingIndicator');
+      
+      this.setupEventListeners();
+      this.focusInput();
+    }
+    
+    setupEventListeners() {
+      this.input.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          this.sendMessage();
+        }
+      });
+      
+      this.sendButton.addEventListener('click', () => {
+        this.sendMessage();
+      });
+      
+      this.output.addEventListener('click', () => {
+        this.input.focus();
+      });
+    }
+    
+    focusInput() {
+      this.input.focus();
+    }
+    
+    async sendMessage() {
+      const message = this.input.value.trim();
+      if (!message) return;
+      
+      this.addMessage('user', message);
+      this.input.value = '';
+      this.setLoading(true);
+      
+      try {
+        const response = await fetch('/neochat/chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': document.querySelector('[name="csrf-token"]').getAttribute('content')
+          },
+          body: JSON.stringify({ message: message })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+          this.addMessage('agent', data.response, data.timestamp);
+        } else {
+          this.addMessage('error', data.error || 'Sorry, there was an error.');
+        }
+      } catch (error) {
+        console.error('Chat error:', error);
+        this.addMessage('error', 'Connection error. Please try again.');
+      } finally {
+        this.setLoading(false);
+        this.focusInput();
+      }
+    }
+    
+    addMessage(type, content, timestamp = null) {
+      const messageDiv = document.createElement('div');
+      messageDiv.className = 'chat-message';
+      
+      const time = timestamp || new Date().toLocaleTimeString();
+      
+      if (type === 'user') {
+        messageDiv.innerHTML = `
+          <div style="color: #00d4ff; margin: 1rem 0;">
+            <span style="color: #00ff00; font-weight: bold;">you@terminal:~$ </span>${this.escapeHtml(content)}
+            <span style="color: #666666; font-size: 12px; margin-left: 1rem;">[${time}]</span>
+          </div>
+        `;
+      } else if (type === 'agent') {
+        messageDiv.innerHTML = `
+          <div style="color: #ffffff; margin: 1rem 0; margin-left: 2rem; white-space: pre-wrap;">
+            ${this.escapeHtml(content)}
+            <span style="color: #666666; font-size: 12px; display: block; margin-top: 0.5rem;">[${time}]</span>
+          </div>
+        `;
+      } else if (type === 'error') {
+        messageDiv.innerHTML = `
+          <div style="color: #ff6b6b; margin: 1rem 0; margin-left: 2rem;">
+            ❌ ${this.escapeHtml(content)}
+          </div>
+        `;
+      }
+      
+      this.output.appendChild(messageDiv);
+      this.scrollToBottom();
+    }
+    
+    setLoading(isLoading) {
+      this.sendButton.disabled = isLoading;
+      this.input.disabled = isLoading;
+      
+      if (isLoading) {
+        this.sendButton.querySelector('.button-text').textContent = 'Sending...';
+        this.typingIndicator.classList.add('active');
+        this.scrollToBottom();
+      } else {
+        this.sendButton.querySelector('.button-text').textContent = 'Send';
+        this.typingIndicator.classList.remove('active');
+      }
+    }
+    
+    scrollToBottom() {
+      this.output.scrollTop = this.output.scrollHeight;
+    }
+    
+    escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+  }
+
+  // Feature button functions
+  function startConversation(type) {
+    const prompts = {
+      natural: "Hello NeoChat! I'd like to have a natural conversation.",
+      creative: "I need help with creative writing. Can you assist me?",
+      problem: "I have a problem I'd like to solve. Can you help me think through it?",
+      learning: "I want to learn something new today. What do you recommend?"
+    };
+    
+    if (window.neoChatInterface) {
+      window.neoChatInterface.input.value = prompts[type] || prompts.natural;
+      window.neoChatInterface.input.focus();
+      
+      // Scroll to terminal
+      document.querySelector('.terminal-container').scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'center'
+      });
+    }
+  }
+  
+  // Initialize when page loads
+  document.addEventListener('DOMContentLoaded', () => {
+    window.neoChatInterface = new NeoChatInterface();
+  });
+</script>
+<% end %>

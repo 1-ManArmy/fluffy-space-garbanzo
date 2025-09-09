@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Usage Reports - OneLastAI Admin</title>
+
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <%= javascript_importmap_tags %>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+      background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+      color: #ffffff;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .admin-header {
+      background: rgba(255, 0, 0, 0.1);
+      border-bottom: 2px solid #ff4444;
+      padding: 1rem 2rem;
+      text-align: center;
+    }
+
+    .admin-warning {
+      color: #ff4444;
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+
+    .hero-section {
+      padding: 4rem 2rem 2rem;
+      text-align: center;
+      background: radial-gradient(ellipse at center, rgba(255, 68, 68, 0.15) 0%, rgba(0, 0, 0, 0.3) 70%);
+      border-bottom: 2px solid #ff4444;
+    }
+
+    .hero-title {
+      font-size: 3.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 20px #ff4444;
+      background: linear-gradient(45deg, #ff4444, #cc0000, #ff6666);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 30px #ff4444;
+    }
+
+    .hero-tagline {
+      font-size: 1.5rem;
+      color: #e0e0e0;
+      margin-bottom: 2rem;
+      font-weight: 300;
+    }
+
+    .admin-content {
+      padding: 4rem 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .admin-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .admin-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 68, 68, 0.3);
+      border-radius: 20px;
+      padding: 3rem;
+      backdrop-filter: blur(10px);
+      text-align: center;
+    }
+
+    .admin-card h3 {
+      color: #ff4444;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .admin-card p {
+      color: #b8b8b8;
+      line-height: 1.6;
+    }
+
+    .back-button {
+      display: inline-block;
+      background: linear-gradient(45deg, #ff4444, #cc0000);
+      color: #ffffff;
+      padding: 1rem 2rem;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      margin-top: 2rem;
+    }
+
+    .back-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(255, 68, 68, 0.4);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="admin-header">
+    <div class="admin-warning">⚠️ RESTRICTED AREA - ADMIN ACCESS ONLY ⚠️</div>
+  </div>
+
+  <section class="hero-section">
+    <div class="hero-icon">📊</div>
+    <h1 class="hero-title">Usage Reports</h1>
+    <p class="hero-tagline">Analytics and usage statistics</p>
+  </section>
+
+  <section class="admin-content">
+    <div class="admin-grid">
+      <div class="admin-card">
+        <h3>🚧 Under Development</h3>
+        <p>
+          This admin feature is currently being developed. Full administrative 
+          capabilities will be available in the next release.
+        </p>
+      </div>
+      
+      <div class="admin-card">
+        <h3>🔒 Security Notice</h3>
+        <p>
+          All admin actions are logged and monitored. Ensure you have proper 
+          authorization before accessing sensitive data.
+        </p>
+      </div>
+      
+      <div class="admin-card">
+        <h3>📊 Quick Stats</h3>
+        <p>
+          System status: Online<br>
+          Active users: 10,247<br>
+          Agent requests: 1.2M today
+        </p>
+      </div>
+    </div>
+    
+    <div style="text-align: center;">
+      <a href="/dashboard" class="back-button">← Back to Dashboard</a>
+    </div>
+  </section>
+</body>
+</html>

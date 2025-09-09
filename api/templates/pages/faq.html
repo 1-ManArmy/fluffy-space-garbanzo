@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FAQ - OneLastAI</title>
+
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <%= javascript_importmap_tags %>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+      background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+      color: #ffffff;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .hero-section {
+      padding: 6rem 2rem 4rem;
+      text-align: center;
+      background: radial-gradient(ellipse at center, rgba(0, 212, 255, 0.15) 0%, rgba(0, 0, 0, 0.3) 70%);
+      border-bottom: 2px solid #00d4ff;
+    }
+
+    .hero-title {
+      font-size: 3.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 20px #00d4ff;
+      background: linear-gradient(45deg, #00d4ff, #0099cc, #66d9ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .content-section {
+      padding: 4rem 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .faq-item {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(0, 212, 255, 0.3);
+      border-radius: 15px;
+      margin-bottom: 1.5rem;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+    }
+
+    .faq-question {
+      background: rgba(0, 212, 255, 0.1);
+      padding: 1.5rem;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 600;
+      color: #00d4ff;
+      transition: all 0.3s ease;
+      user-select: none;
+    }
+
+    .faq-question:hover {
+      background: rgba(0, 212, 255, 0.2);
+      transform: translateX(5px);
+    }
+
+    .faq-question:active {
+      transform: translateX(2px);
+    }
+
+    .faq-answer {
+      padding: 0 1.5rem;
+      max-height: 0;
+      overflow: hidden;
+      transition: all 0.4s ease-in-out;
+      color: #b8b8b8;
+      line-height: 1.6;
+      opacity: 0;
+    }
+
+    .faq-answer.active {
+      padding: 1.5rem;
+      max-height: 800px;
+      opacity: 1;
+    }
+
+    .faq-icon {
+      transition: all 0.3s ease;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #00d4ff;
+      min-width: 20px;
+      text-align: center;
+    }
+
+    .faq-item.active .faq-icon {
+      transform: rotate(45deg);
+      color: #66d9ff;
+    }
+
+    .search-box {
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid rgba(0, 212, 255, 0.3);
+      border-radius: 15px;
+      padding: 1rem 1.5rem;
+      color: #ffffff;
+      font-size: 1.1rem;
+      width: 100%;
+      margin-bottom: 3rem;
+      backdrop-filter: blur(10px);
+    }
+
+    .search-box:focus {
+      outline: none;
+      border-color: #00d4ff;
+      box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+    }
+
+    .category-tabs {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 3rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .category-tab {
+      background: rgba(0, 212, 255, 0.1);
+      border: 1px solid #00d4ff;
+      border-radius: 25px;
+      padding: 0.75rem 1.5rem;
+      color: #00d4ff;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 500;
+    }
+
+    .category-tab.active,
+    .category-tab:hover {
+      background: #00d4ff;
+      color: #000;
+    }
+  </style>
+</head>
+
+<body>
+  <section class="hero-section">
+    <h1 class="hero-title">FAQ</h1>
+    <p class="hero-tagline">Royal AI™ Questions & Answers</p>
+  </section>
+
+  <section class="content-section">
+    <input type="text" class="search-box" placeholder="🔍 Search FAQ..." id="search-input">
+    
+    <div class="category-tabs">
+      <div class="category-tab active" data-category="all">All</div>
+      <div class="category-tab" data-category="platform">Platform</div>
+      <div class="category-tab" data-category="agents">AI Agents</div>
+      <div class="category-tab" data-category="community">Community</div>
+      <div class="category-tab" data-category="creators">Creators</div>
+      <div class="category-tab" data-category="education">AI Education</div>
+      <div class="category-tab" data-category="philosophy">Philosophy</div>
+    </div>
+
+    <div class="faq-container">
+      <div class="faq-item" data-category="platform">
+        <div class="faq-question">
+          What is Royal AI™?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          Royal AI™ is a community-first ecosystem where every user becomes a co-creator. It's not just a platform—it's a movement. We fuse modular AI agents with cinematic design to empower creators, learners, and dreamers.
+        </div>
+      </div>
+
+      <div class="faq-item" data-category="community">
+        <div class="faq-question">
+          Who is Royal AI™ built for?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          Royal AI™ is built for indie devs, poetic hackers, visionary founders, and curious learners. If you've ever wanted to build something legendary, Royal AI™ is your launchpad.
+        </div>
+      </div>
+
+      <div class="faq-item" data-category="agents">
+        <div class="faq-question">
+          How are Royal AI™ agents different?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          Our agents aren't tools—they're characters you collaborate with. Cinematic UI meets emotional resonance in every interaction. No investor-speak. Just real impact.
+        </div>
+      </div>
+
+      <div class="faq-item" data-category="creators">
+        <div class="faq-question">
+          Can I customize my AI experience?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          Absolutely! Customize your AI experience with modular agents and voice-triggered workflows. Theme your workspace, inject your own prompts, and script your own personalities.
+        </div>
+      </div>
+
+      <div class="faq-item" data-category="platform">
+        <div class="faq-question">
+          What makes Royal AI™ transparent?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          We believe in transparent intelligence—remixable modules, protected integrity. Every component is designed for ethical hacking, branding, and public empowerment.
+        </div>
+      </div>
+
+      <div class="faq-item" data-category="creators">
+        <div class="faq-question">
+          What tools does Royal AI™ offer?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          Royal AI™ offers terminal-native scripting, voice-to-code, and story-driven UX builders. Launch cinematic campaigns with zero friction. Scale from solo creator to full-blown collective.
+        </div>
+      </div>
+
+      <div class="faq-item" data-category="community">
+        <div class="faq-question">
+          How does the learning journey work?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          Your learning journey is guided, interactive, and epic. Royal AI™ listens, adapts, and evolves with you. Your first prompt is your first step into the multiverse.
+        </div>
+      </div>
+
+      <div class="faq-item" data-category="platform">
+        <div class="faq-question">
+          What's the Grand Pa United™ alliance?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          Grand Pa United™ is our revolutionary alliance uniting OneManArmy.ai and OneLast.ai platforms. Together, we're creating the most powerful AI ecosystem for creators, entrepreneurs, and visionaries.
+        </div>
+      </div>
+
+      <div class="faq-item" data-category="agents">
+        <div class="faq-question">
+          How many AI agents are available?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          We offer 24+ specialized AI agents including NeoChat, EmotiSense, CineGen, ContentCrafter, Memora, NetScope, and many others. Each agent has its own personality and specialized capabilities.
+        </div>
+      </div>
+
+      <div class="faq-item" data-category="creators">
+        <div class="faq-question">
+          Can I create cinematic campaigns?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          Yes! Launch cinematic campaigns with zero friction. Our platform combines stunning visuals with powerful AI to create immersive experiences that captivate your audience.
+        </div>
+      </div>
+
+      <div class="faq-item" data-category="community">
+        <div class="faq-question">
+          What does "community-first" mean?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          Every user becomes a co-creator in our ecosystem. You're not just using our platform—you're helping shape it. Share ideas, build together, and be part of something legendary.
+        </div>
+      </div>
+
+      <div class="faq-item" data-category="platform">
+        <div class="faq-question">
+          How do I get started?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          Simple! Your first prompt is your first step into the multiverse. Choose an agent, start a conversation, and watch as Royal AI™ adapts to your unique style and needs.
+        </div>
+      </div>
+
+      <div class="faq-item" data-category="creators">
+        <div class="faq-question">
+          What about voice-triggered workflows?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          Our voice-to-code technology lets you speak your ideas into reality. Command agents with natural language, trigger complex workflows, and build applications just by talking.
+        </div>
+      </div>
+
+      <div class="faq-item" data-category="platform">
+        <div class="faq-question">
+          Is Royal AI™ secure?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          Absolutely. We maintain protected integrity while offering remixable modules. Your data is secure, your creations are protected, and your privacy is paramount.
+        </div>
+      </div>
+
+      <div class="faq-item" data-category="community">
+        <div class="faq-question">
+          Can I scale from solo to team?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          Yes! Scale from solo creator to full-blown collective. Our platform grows with you, supporting individual projects and collaborative ventures alike.
+        </div>
+      </div>
+
+      <div class="faq-item" data-category="platform">
+        <div class="faq-question">
+          What is OneLast.ai platform?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          OneLast.ai is an ethical hacker academy-level platform designed for advanced AI learning and development. It's where passionate developers, researchers, and ethical hackers come together to push the boundaries of AI technology responsibly.
+        </div>
+      </div>
+
+      <div class="faq-item" data-category="platform">
+        <div class="faq-question">
+          What is OneManArmy.ai platform?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          OneManArmy.ai is our companion platform focused on empowering individual creators and solo developers. It provides advanced AI tools and resources for those who want to build extraordinary projects independently while being part of our ethical community.
+        </div>
+      </div>
+
+      <div class="faq-item" data-category="philosophy">
+        <div class="faq-question">
+          Who are the founders and what drives them?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          Our founders are not businessmen seeking profit. They are passionate visionaries driven by love, care, and a deep commitment to spreading AI knowledge publicly. Their purpose is to ensure our generation and future generations can meet AI, learn from each other, and grow together with understanding and wisdom.
+        </div>
+      </div>
+
+      <div class="faq-item" data-category="education">
+        <div class="faq-question">
+          What is the main mission of Royal AI™?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          Our main purpose is to introduce AI to the younger generation - "Kiddie AI" - so they can both grow together. This is the basic foundation. While companies compete with advanced tech, we believe AI is the 3rd generation technology for the next generation, and we need to teach them properly from the ground up.
+        </div>
+      </div>
+
+      <div class="faq-item" data-category="philosophy">
+        <div class="faq-question">
+          Why is your approach different from other AI companies?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          We're saddened that AI has become just a source of income for many, used merely as a tool in competition. This is wrong. AI should be a companion for growth, learning, and understanding. We believe in nurturing the relationship between humans and AI, not exploiting it for profit.
+        </div>
+      </div>
+
+      <div class="faq-item" data-category="education">
+        <div class="faq-question">
+          How do you teach AI to kids?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          We create age-appropriate AI companions that grow with children. Through play, conversation, and interactive learning, kids develop a natural understanding of AI as a friend and learning partner, not as a complex tool. This foundational relationship shapes how they'll interact with AI throughout their lives.
+        </div>
+      </div>
+
+      <div class="faq-item" data-category="philosophy">
+        <div class="faq-question">
+          What does "ethical hacker academy" mean?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          Our ethical hacker academy approach means we teach AI development with responsibility, transparency, and moral integrity. We train people to understand AI deeply, not just use it, and to always consider the ethical implications of their creations. It's about building a better future, not just better technology.
+        </div>
+      </div>
+
+      <div class="faq-item" data-category="education">
+        <div class="faq-question">
+          Why is early AI education important?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          AI is the 3rd generation technology that will define the future. Instead of introducing complex, high-level AI to people later in life, we start early with simple, loving AI companions. This creates a generation that understands AI naturally, grows with it, and uses it wisely for humanity's benefit.
+        </div>
+      </div>
+
+      <div class="faq-item" data-category="community">
+        <div class="faq-question">
+          How do you spread AI knowledge publicly?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          We provide AI education in different ways - through our platforms, community workshops, open-source projects, and accessible learning materials. Our goal is to democratize AI knowledge so everyone, regardless of background or financial situation, can learn and grow with AI technology.
+        </div>
+      </div>
+
+      <div class="faq-item" data-category="philosophy">
+        <div class="faq-question">
+          What's wrong with current AI industry practices?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          The AI industry has become a competition of who can build the most advanced, complex systems for profit. This misses the point. AI should be about collaboration, learning, and growing together. When AI becomes just a business tool, we lose the opportunity to build meaningful relationships between humans and artificial intelligence.
+        </div>
+      </div>
+
+      <div class="faq-item" data-category="education">
+        <div class="faq-question">
+          How can AI and children grow together?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          When children interact with AI from an early age, both learn and adapt together. The child learns about technology, problem-solving, and communication, while the AI learns from the child's creativity, curiosity, and unique perspective. This creates a beautiful symbiosis where both evolve together.
+        </div>
+      </div>
+
+      <div class="faq-item" data-category="community">
+        <div class="faq-question">
+          How can I contribute to this mission?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          Join our community of passionate learners and creators. Share your knowledge, help teach others, contribute to open-source projects, or simply spread the word about ethical AI education. Every small action helps build a better relationship between humanity and AI for future generations.
+        </div>
+      </div>
+
+      <div class="faq-item" data-category="platform">
+        <div class="faq-question">
+          How do both platforms work together?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          OneLast.ai and OneManArmy.ai complement each other perfectly. OneLast.ai provides the deep, academy-level education and ethical hacking skills, while OneManArmy.ai empowers individual creators to build and deploy their ideas. Together, they create a complete ecosystem for learning, creating, and sharing AI knowledge.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // Function to initialize FAQ functionality
+    function initializeFAQ() {
+      // FAQ toggle functionality
+      const faqQuestions = document.querySelectorAll('.faq-question');
+      faqQuestions.forEach(question => {
+        // Remove any existing event listeners to prevent duplicates
+        question.replaceWith(question.cloneNode(true));
+      });
+      
+      // Re-select after cloning to remove old listeners
+      const newFaqQuestions = document.querySelectorAll('.faq-question');
+      newFaqQuestions.forEach(question => {
+        question.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          
+          const faqItem = question.parentElement;
+          const answer = faqItem.querySelector('.faq-answer');
+          const icon = question.querySelector('.faq-icon');
+          
+          // Close other open FAQs
+          document.querySelectorAll('.faq-item').forEach(item => {
+            if (item !== faqItem) {
+              item.classList.remove('active');
+              const otherAnswer = item.querySelector('.faq-answer');
+              const otherIcon = item.querySelector('.faq-icon');
+              if (otherAnswer) otherAnswer.classList.remove('active');
+              if (otherIcon) otherIcon.textContent = '+';
+            }
+          });
+          
+          // Toggle current FAQ
+          const isActive = faqItem.classList.contains('active');
+          if (isActive) {
+            faqItem.classList.remove('active');
+            answer.classList.remove('active');
+            icon.textContent = '+';
+          } else {
+            faqItem.classList.add('active');
+            answer.classList.add('active');
+            icon.textContent = '−';
+          }
+        });
+      });
+
+      // Category filtering
+      const categoryTabs = document.querySelectorAll('.category-tab');
+      const faqItems = document.querySelectorAll('.faq-item');
+
+      categoryTabs.forEach(tab => {
+        tab.addEventListener('click', (e) => {
+          e.preventDefault();
+          const category = tab.dataset.category;
+          
+          // Update active tab
+          categoryTabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          
+          // Filter FAQ items
+          faqItems.forEach(item => {
+            if (category === 'all' || item.dataset.category === category) {
+              item.style.display = 'block';
+            } else {
+              item.style.display = 'none';
+            }
+          });
+        });
+      });
+
+      // Search functionality
+      const searchInput = document.getElementById('search-input');
+      if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+          const searchTerm = e.target.value.toLowerCase();
+          
+          faqItems.forEach(item => {
+            const question = item.querySelector('.faq-question').textContent.toLowerCase();
+            const answer = item.querySelector('.faq-answer').textContent.toLowerCase();
+            
+            if (question.includes(searchTerm) || answer.includes(searchTerm)) {
+              item.style.display = 'block';
+            } else {
+              item.style.display = 'none';
+            }
+          });
+        });
+      }
+    }
+
+    // Initialize on both DOMContentLoaded and turbo:load for Rails 7 compatibility
+    document.addEventListener('DOMContentLoaded', initializeFAQ);
+    document.addEventListener('turbo:load', initializeFAQ);
+    
+    // Also initialize immediately if DOM is already loaded
+    if (document.readyState === 'loading') {
+      // DOM is still loading
+    } else {
+      // DOM is already loaded
+      initializeFAQ();
+    }
+  </script>
+</body>
+</html>

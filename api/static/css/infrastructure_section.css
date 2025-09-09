@@ -1,0 +1,41 @@
+/* === Infrastructure Section === */
+.infrastructure-section {
+	background: linear-gradient(135deg, #0ea5e9 0%, #22d3ee 100%);
+	border-radius: 16px;
+	box-shadow: 0 6px 24px rgba(14,165,233,0.12);
+	padding: 2.5rem;
+	max-width: 900px;
+	margin: 2rem auto;
+	color: #fff;
+}
+.infrastructure-title {
+	font-size: 2.25rem;
+	font-weight: 800;
+	margin-bottom: 1.5rem;
+	text-shadow: 0 2px 8px #22d3ee;
+}
+.infrastructure-description {
+	color: #e0f2fe;
+	font-size: 1.125rem;
+	margin-bottom: 2rem;
+}
+.infrastructure-features {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 2rem;
+	margin-bottom: 2rem;
+}
+.infrastructure-feature-card {
+	background: rgba(14,165,233,0.15);
+	border-radius: 12px;
+	padding: 1.5rem;
+	color: #cffafe;
+	box-shadow: 0 2px 12px rgba(14,165,233,0.08);
+	flex: 1 1 220px;
+	min-width: 220px;
+	transition: transform 0.2s;
+}
+.infrastructure-feature-card:hover {
+	transform: translateY(-4px) scale(1.03);
+	background: rgba(14,165,233,0.25);
+}

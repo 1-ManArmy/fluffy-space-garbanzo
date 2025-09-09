@@ -1,0 +1,162 @@
+<% content_for :title, @page_title %>
+<% content_for :meta_description, "OneLastAI database infrastructure with PostgreSQL and Redis for optimal performance." %>
+
+<div class="min-h-screen bg-gradient-to-br from-slate-50 to-green-50">
+  <div class="container mx-auto px-4 py-12">
+    <!-- Header -->
+    <div class="text-center mb-12">
+      <h1 class="text-4xl font-bold text-gray-900 mb-4">
+        <span class="text-green-600">🗄️</span> Database Infrastructure
+      </h1>
+      <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+        Robust database architecture supporting 27 AI agents with PostgreSQL and Redis
+      </p>
+    </div>
+
+    <!-- Primary Database -->
+    <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
+      <div class="flex items-center mb-6">
+        <div class="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center mr-4">
+          <span class="text-white text-2xl">🐘</span>
+        </div>
+        <div>
+          <h2 class="text-2xl font-bold text-gray-900"><%= @database_info[:primary][:name] %></h2>
+          <p class="text-gray-600"><%= @database_info[:primary][:description] %></p>
+        </div>
+      </div>
+      
+      <div class="grid md:grid-cols-2 gap-6">
+        <div>
+          <h3 class="text-lg font-semibold text-gray-800 mb-3">Features</h3>
+          <ul class="space-y-2">
+            <% @database_info[:primary][:features].each do |feature| %>
+              <li class="flex items-center text-gray-600">
+                <span class="text-green-500 mr-2">✅</span>
+                <%= feature %>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+        
+        <div>
+          <h3 class="text-lg font-semibold text-gray-800 mb-3">Provider</h3>
+          <div class="p-4 bg-blue-50 rounded-lg">
+            <p class="font-semibold text-blue-900"><%= @database_info[:primary][:provider] %></p>
+            <p class="text-blue-700 text-sm">Managed PostgreSQL with automatic scaling</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cache Layer -->
+    <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
+      <div class="flex items-center mb-6">
+        <div class="w-12 h-12 bg-red-600 rounded-lg flex items-center justify-center mr-4">
+          <span class="text-white text-2xl">⚡</span>
+        </div>
+        <div>
+          <h2 class="text-2xl font-bold text-gray-900"><%= @database_info[:cache][:name] %></h2>
+          <p class="text-gray-600"><%= @database_info[:cache][:description] %></p>
+        </div>
+      </div>
+      
+      <div class="grid md:grid-cols-2 gap-6">
+        <div>
+          <h3 class="text-lg font-semibold text-gray-800 mb-3">Use Cases</h3>
+          <ul class="space-y-2">
+            <% @database_info[:cache][:features].each do |feature| %>
+              <li class="flex items-center text-gray-600">
+                <span class="text-red-500 mr-2">⚡</span>
+                <%= feature %>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+        
+        <div>
+          <h3 class="text-lg font-semibold text-gray-800 mb-3">Provider</h3>
+          <div class="p-4 bg-red-50 rounded-lg">
+            <p class="font-semibold text-red-900"><%= @database_info[:cache][:provider] %></p>
+            <p class="text-red-700 text-sm">High-performance in-memory storage</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Current Configuration -->
+    <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">
+        <span class="text-gray-600">⚙️</span> Current Configuration
+      </h2>
+      
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="space-y-4">
+          <div class="p-4 bg-gray-50 rounded-lg">
+            <h3 class="font-semibold text-gray-800">Environment</h3>
+            <p class="text-gray-600"><%= @database_info[:current_config][:environment] %></p>
+          </div>
+          
+          <div class="p-4 bg-blue-50 rounded-lg">
+            <h3 class="font-semibold text-blue-900">PostgreSQL Version</h3>
+            <p class="text-blue-700 font-mono"><%= @database_info[:current_config][:postgres_version] %></p>
+          </div>
+        </div>
+        
+        <div class="space-y-4">
+          <div class="p-4 bg-red-50 rounded-lg">
+            <h3 class="font-semibold text-red-900">Redis Version</h3>
+            <p class="text-red-700 font-mono"><%= @database_info[:current_config][:redis_version] %></p>
+          </div>
+          
+          <div class="p-4 bg-green-50 rounded-lg">
+            <h3 class="font-semibold text-green-900">Connection Pooling</h3>
+            <p class="text-green-700"><%= @database_info[:current_config][:connection_pooling] %></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI Agent Data Schema -->
+    <div class="bg-white rounded-xl shadow-lg p-8">
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">
+        <span class="text-purple-600">🤖</span> AI Agent Data Schema
+      </h2>
+      
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="text-center p-6 bg-purple-50 rounded-lg">
+          <div class="w-16 h-16 bg-purple-500 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span class="text-white text-2xl">💬</span>
+          </div>
+          <h3 class="font-semibold text-gray-800 mb-2">Conversations</h3>
+          <p class="text-gray-600 text-sm">Chat history for all 27 agents<br>Session management</p>
+        </div>
+        
+        <div class="text-center p-6 bg-blue-50 rounded-lg">
+          <div class="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span class="text-white text-2xl">👤</span>
+          </div>
+          <h3 class="font-semibold text-gray-800 mb-2">User Profiles</h3>
+          <p class="text-gray-600 text-sm">Preferences & settings<br>Agent interactions</p>
+        </div>
+        
+        <div class="text-center p-6 bg-green-50 rounded-lg">
+          <div class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span class="text-white text-2xl">📊</span>
+          </div>
+          <h3 class="font-semibold text-gray-800 mb-2">Analytics</h3>
+          <p class="text-gray-600 text-sm">Usage metrics<br>Performance data</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="mt-12 text-center">
+      <div class="space-x-4">
+        <%= link_to "← View Cloud Config", infrastructure_cloud_path, 
+            class: "px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors" %>
+        <%= link_to "View Security Config →", infrastructure_security_path, 
+            class: "px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors" %>
+      </div>
+    </div>
+  </div>
+</div>

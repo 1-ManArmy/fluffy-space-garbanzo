@@ -1,0 +1,366 @@
+<div class="render-dashboard-container">
+  <div class="dashboard-header">
+    <h1>🎯 Render Studio</h1>
+    <p class="dashboard-subtitle">Monitor and manage your video rendering projects</p>
+  </div>
+
+  <div class="dashboard-grid">
+    <div class="render-queue-section">
+      <h3>📋 Render Queue</h3>
+      <div class="queue-list">
+        <div class="queue-item active">
+          <div class="project-info">
+            <h4>🎬 Cyberpunk Dreams</h4>
+            <p>Duration: 2:45 | Style: Cyberpunk</p>
+          </div>
+          <div class="progress-info">
+            <div class="progress-bar">
+              <div class="progress-fill" style="width: 75%"></div>
+            </div>
+            <span class="progress-text">75% Complete</span>
+          </div>
+          <div class="render-status">
+            <span class="status-badge rendering">Rendering</span>
+          </div>
+        </div>
+
+        <div class="queue-item">
+          <div class="project-info">
+            <h4>🌟 Stellar Journey</h4>
+            <p>Duration: 1:30 | Style: Sci-Fi</p>
+          </div>
+          <div class="progress-info">
+            <div class="progress-bar">
+              <div class="progress-fill" style="width: 0%"></div>
+            </div>
+            <span class="progress-text">Queued</span>
+          </div>
+          <div class="render-status">
+            <span class="status-badge queued">Queued</span>
+          </div>
+        </div>
+
+        <div class="queue-item">
+          <div class="project-info">
+            <h4>🏙️ Urban Noir</h4>
+            <p>Duration: 3:20 | Style: Noir</p>
+          </div>
+          <div class="progress-info">
+            <div class="progress-bar">
+              <div class="progress-fill" style="width: 100%"></div>
+            </div>
+            <span class="progress-text">Complete</span>
+          </div>
+          <div class="render-status">
+            <span class="status-badge completed">Completed</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="render-stats-section">
+      <h3>📊 Render Statistics</h3>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">⚡</div>
+          <div class="stat-info">
+            <h4>Active Renders</h4>
+            <p class="stat-value">2</p>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">✅</div>
+          <div class="stat-info">
+            <h4>Completed Today</h4>
+            <p class="stat-value">7</p>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">⏱️</div>
+          <div class="stat-info">
+            <h4>Avg Render Time</h4>
+            <p class="stat-value">14 min</p>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">💾</div>
+          <div class="stat-info">
+            <h4>Storage Used</h4>
+            <p class="stat-value">2.3 GB</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="system-monitor-section">
+      <h3>🖥️ System Monitor</h3>
+      <div class="monitor-grid">
+        <div class="monitor-item">
+          <label>CPU Usage</label>
+          <div class="usage-bar">
+            <div class="usage-fill cpu" style="width: 65%"></div>
+          </div>
+          <span>65%</span>
+        </div>
+
+        <div class="monitor-item">
+          <label>GPU Usage</label>
+          <div class="usage-bar">
+            <div class="usage-fill gpu" style="width: 88%"></div>
+          </div>
+          <span>88%</span>
+        </div>
+
+        <div class="monitor-item">
+          <label>Memory</label>
+          <div class="usage-bar">
+            <div class="usage-fill memory" style="width: 42%"></div>
+          </div>
+          <span>42%</span>
+        </div>
+
+        <div class="monitor-item">
+          <label>Storage</label>
+          <div class="usage-bar">
+            <div class="usage-fill storage" style="width: 73%"></div>
+          </div>
+          <span>73%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="render-controls-section">
+      <h3>🎛️ Render Controls</h3>
+      <div class="control-buttons">
+        <button class="btn btn-primary">
+          ▶️ Start Render
+        </button>
+        <button class="btn btn-warning">
+          ⏸️ Pause Queue
+        </button>
+        <button class="btn btn-danger">
+          🛑 Stop All
+        </button>
+        <button class="btn btn-success">
+          🔄 Refresh Status
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.render-dashboard-container {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.dashboard-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.dashboard-header h1 {
+  color: #ff6b6b;
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.dashboard-subtitle {
+  color: #666;
+  font-size: 1.1rem;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 2rem;
+}
+
+.render-queue-section {
+  grid-row: 1 / 3;
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.queue-list {
+  margin-top: 1rem;
+}
+
+.queue-item {
+  display: grid;
+  grid-template-columns: 2fr 1fr auto;
+  gap: 1rem;
+  align-items: center;
+  padding: 1rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.queue-item.active {
+  border-color: #ff6b6b;
+  background: #fff5f5;
+}
+
+.project-info h4 {
+  margin: 0 0 0.25rem 0;
+  color: #333;
+}
+
+.project-info p {
+  margin: 0;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: #e0e0e0;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 0.25rem;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #4ecdc4;
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.status-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.status-badge.rendering {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.status-badge.queued {
+  background: #d1ecf1;
+  color: #0c5460;
+}
+
+.status-badge.completed {
+  background: #d4edda;
+  color: #155724;
+}
+
+.render-stats-section, .system-monitor-section, .render-controls-section {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.stat-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+}
+
+.stat-icon {
+  font-size: 2rem;
+}
+
+.stat-info h4 {
+  margin: 0 0 0.25rem 0;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.stat-value {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.monitor-grid {
+  margin-top: 1rem;
+}
+
+.monitor-item {
+  display: grid;
+  grid-template-columns: 80px 1fr 50px;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.monitor-item label {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.usage-bar {
+  height: 8px;
+  background: #e0e0e0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.usage-fill {
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+.usage-fill.cpu { background: #ff6b6b; }
+.usage-fill.gpu { background: #4ecdc4; }
+.usage-fill.memory { background: #ffe66d; }
+.usage-fill.storage { background: #a8e6cf; }
+
+.control-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.btn {
+  padding: 0.75rem 1rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-primary { background: #ff6b6b; color: white; }
+.btn-warning { background: #ffe66d; color: #333; }
+.btn-danger { background: #ff8a80; color: white; }
+.btn-success { background: #4ecdc4; color: white; }
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+</style>

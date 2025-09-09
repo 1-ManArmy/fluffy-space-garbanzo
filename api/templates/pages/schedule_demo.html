@@ -1,0 +1,173 @@
+<% content_for :title, "Schedule Demo - OneLastAI" %>
+
+<div class="min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-black">
+  <!-- Header Section -->
+  <section class="pt-32 pb-20">
+    <div class="container mx-auto px-6 text-center">
+      <h1 class="text-5xl lg:text-6xl font-bold text-white mb-6">
+        Schedule Your <span class="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">Demo</span>
+      </h1>
+      <p class="text-xl text-gray-300 max-w-3xl mx-auto mb-12">
+        See OneLastAI in action with a personalized demo tailored to your business needs.
+      </p>
+    </div>
+  </section>
+
+  <!-- Demo Scheduling Form -->
+  <section class="pb-20">
+    <div class="container mx-auto px-6">
+      <div class="max-w-2xl mx-auto">
+        <div class="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-8">
+          
+          <% if notice %>
+            <div class="mb-6 p-4 bg-green-900/20 border border-green-500/50 rounded-lg">
+              <p class="text-green-300"><%= notice %></p>
+            </div>
+          <% end %>
+
+          <%= form_with url: schedule_demo_path, method: :post, local: true, class: "space-y-6" do |form| %>
+            
+            <!-- Name Field -->
+            <div>
+              <%= form.label :name, "Full Name", class: "block text-sm font-medium text-gray-300 mb-2" %>
+              <%= form.text_field :name, required: true, class: "w-full px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent", placeholder: "John Doe" %>
+            </div>
+
+            <!-- Email Field -->
+            <div>
+              <%= form.label :email, "Email Address", class: "block text-sm font-medium text-gray-300 mb-2" %>
+              <%= form.email_field :email, required: true, class: "w-full px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent", placeholder: "john@company.com" %>
+            </div>
+
+            <!-- Company Field -->
+            <div>
+              <%= form.label :company, "Company", class: "block text-sm font-medium text-gray-300 mb-2" %>
+              <%= form.text_field :company, class: "w-full px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent", placeholder: "Your Company Name" %>
+            </div>
+
+            <!-- Company Size -->
+            <div>
+              <%= form.label :company_size, "Company Size", class: "block text-sm font-medium text-gray-300 mb-2" %>
+              <%= form.select :company_size, 
+                  options_for_select([
+                    ['Select company size', ''],
+                    ['1-10 employees', '1-10'],
+                    ['11-50 employees', '11-50'],
+                    ['51-200 employees', '51-200'],
+                    ['201-1000 employees', '201-1000'],
+                    ['1000+ employees', '1000+']
+                  ]), 
+                  {}, 
+                  { class: "w-full px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" } %>
+            </div>
+
+            <!-- Use Case -->
+            <div>
+              <%= form.label :use_case, "Primary Use Case", class: "block text-sm font-medium text-gray-300 mb-2" %>
+              <%= form.select :use_case, 
+                  options_for_select([
+                    ['Select primary use case', ''],
+                    ['Customer Support Automation', 'customer-support'],
+                    ['Content Creation & Marketing', 'content-marketing'],
+                    ['Data Analysis & Insights', 'data-analysis'],
+                    ['Process Automation', 'process-automation'],
+                    ['Research & Development', 'research-development'],
+                    ['Financial Analysis', 'financial-analysis'],
+                    ['Other', 'other']
+                  ]), 
+                  {}, 
+                  { class: "w-full px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" } %>
+            </div>
+
+            <!-- Message Field -->
+            <div>
+              <%= form.label :message, "Tell us about your needs", class: "block text-sm font-medium text-gray-300 mb-2" %>
+              <%= form.text_area :message, rows: 4, class: "w-full px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none", placeholder: "Describe your specific requirements, goals, or any questions you have about OneLastAI..." %>
+            </div>
+
+            <!-- Preferred Time -->
+            <div>
+              <%= form.label :preferred_time, "Preferred Demo Time", class: "block text-sm font-medium text-gray-300 mb-2" %>
+              <%= form.select :preferred_time, 
+                  options_for_select([
+                    ['Select preferred time', ''],
+                    ['Morning (9AM - 12PM)', 'morning'],
+                    ['Afternoon (12PM - 5PM)', 'afternoon'],
+                    ['Evening (5PM - 8PM)', 'evening'],
+                    ['I\'m flexible', 'flexible']
+                  ]), 
+                  {}, 
+                  { class: "w-full px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" } %>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="pt-4">
+              <%= form.submit "Schedule My Demo", class: "w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white font-semibold py-4 px-6 rounded-lg hover:from-blue-600 hover:to-purple-600 transition-all duration-300 cursor-pointer" %>
+            </div>
+
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- What to Expect -->
+  <section class="py-20 border-t border-gray-800">
+    <div class="container mx-auto px-6">
+      <div class="text-center mb-16">
+        <h2 class="text-4xl font-bold text-white mb-6">What to Expect</h2>
+        <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+          Our 30-minute personalized demo will show you exactly how OneLastAI can transform your business
+        </p>
+      </div>
+      
+      <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+        <div class="text-center">
+          <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-6">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold text-white mb-3">Live Demonstration</h3>
+          <p class="text-gray-300">See our AI agents in action with real-world scenarios relevant to your industry</p>
+        </div>
+        
+        <div class="text-center">
+          <div class="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-6">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold text-white mb-3">Q&A Session</h3>
+          <p class="text-gray-300">Get answers to your technical questions and discuss implementation strategies</p>
+        </div>
+        
+        <div class="text-center">
+          <div class="w-16 h-16 bg-gradient-to-r from-pink-500 to-red-500 rounded-full flex items-center justify-center mx-auto mb-6">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold text-white mb-3">Custom Recommendations</h3>
+          <p class="text-gray-300">Receive personalized recommendations for your specific use case and requirements</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Information -->
+  <section class="py-12 bg-slate-900/50">
+    <div class="container mx-auto px-6 text-center">
+      <p class="text-gray-400 mb-4">Need immediate assistance?</p>
+      <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
+        <a href="mailto:mail@onelastai.com" class="text-blue-400 hover:text-blue-300 transition-colors">
+          mail@onelastai.com
+        </a>
+        <span class="hidden sm:block text-gray-600">•</span>
+        <a href="tel:+1-555-ONEAI-1" class="text-blue-400 hover:text-blue-300 transition-colors">
+          +1 (555) ONE-AI-1
+        </a>
+      </div>
+    </div>
+  </section>
+</div>

@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= @page_title %> - OneLast AI</title>
+    <meta name="description" content="Deployment infrastructure and CI/CD pipeline details">
+    
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+</head>
+<body class="bg-gray-900 text-gray-100">
+    <!-- Header -->
+    <header class="bg-black/50 backdrop-blur-md border-b border-gray-800 fixed w-full top-0 z-50">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <a href="/" class="text-2xl font-bold text-white">OneLast AI</a>
+                <nav class="hidden md:flex space-x-8">
+                    <a href="/" class="text-gray-300 hover:text-white transition-colors">Home</a>
+                    <a href="/features" class="text-gray-300 hover:text-white transition-colors">Features</a>
+                    <a href="/infrastructure" class="text-green-400 font-medium">Infrastructure</a>
+                    <a href="/about" class="text-gray-300 hover:text-white transition-colors">About</a>
+                    <a href="/contact" class="text-gray-300 hover:text-white transition-colors">Contact</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="pt-20">
+        <!-- Hero Section -->
+        <section class="py-20 bg-gradient-to-br from-gray-900 via-green-900/20 to-gray-900">
+            <div class="container mx-auto px-6 text-center">
+                <div class="text-6xl mb-6">🚀</div>
+                <h1 class="text-5xl lg:text-6xl font-bold text-white mb-6">
+                    Deployment Infrastructure
+                </h1>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto mb-8">
+                    Enterprise-grade deployment pipeline with automated CI/CD and monitoring
+                </p>
+            </div>
+        </section>
+
+        <!-- Deployment Overview -->
+        <section class="py-20">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold text-white mb-6">Deployment Pipeline</h2>
+                    <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                        Automated, scalable, and reliable deployment infrastructure
+                    </p>
+                </div>
+                
+                <div class="grid lg:grid-cols-2 gap-12 items-center mb-16">
+                    <!-- Left Side - Deployment Info -->
+                    <div>
+                        <h3 class="text-2xl font-bold text-white mb-8">AWS EC2 Auto-Scaling</h3>
+                        <div class="space-y-6">
+                            <div class="tech-stack-card p-6">
+                                <div class="flex items-center gap-4">
+                                    <div class="tech-icon">
+                                        <span class="text-2xl">⚡</span>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-white font-semibold text-lg mb-2">Auto-Scaling Groups</h4>
+                                        <p class="text-gray-300">Automatically scales based on demand with min 2, max 10 instances</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="tech-stack-card p-6">
+                                <div class="flex items-center gap-4">
+                                    <div class="tech-icon">
+                                        <span class="text-2xl">🔄</span>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-white font-semibold text-lg mb-2">Load Balancer</h4>
+                                        <p class="text-gray-300">Application Load Balancer with health checks and SSL termination</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="tech-stack-card p-6">
+                                <div class="flex items-center gap-4">
+                                    <div class="tech-icon">
+                                        <span class="text-2xl">📊</span>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-white font-semibold text-lg mb-2">CloudWatch Monitoring</h4>
+                                        <p class="text-gray-300">Real-time metrics, logs, and alerting for system health</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Right Side - Deployment Terminal -->
+                    <div class="linux-terminal">
+                        <div class="terminal-header">
+                            <div class="terminal-dots">
+                                <div class="terminal-dot bg-red-500"></div>
+                                <div class="terminal-dot bg-yellow-500"></div>
+                                <div class="terminal-dot bg-green-500"></div>
+                            </div>
+                            <div class="terminal-title">
+                                <span class="linux-logo"></span>
+                                <span>deploy@onelast-ai:~/deployment</span>
+                            </div>
+                        </div>
+                        <div class="terminal-content">
+                            <div class="terminal-prompt">
+                                <span class="terminal-user">deploy</span>
+                                <span class="text-gray-400">@</span>
+                                <span class="terminal-host">ci-cd</span>
+                                <span class="text-gray-400">:</span>
+                                <span class="terminal-path">~/pipeline</span>
+                                <span class="text-gray-400">$</span>
+                            </div>
+                            
+                            <div class="terminal-command">aws autoscaling describe-auto-scaling-groups</div>
+                            <div class="terminal-output">
+                                <div class="mb-2">
+                                    <span class="terminal-key">AutoScalingGroupName:</span> 
+                                    <span class="terminal-value">onelast-ai-asg</span>
+                                </div>
+                                <div class="mb-2">
+                                    <span class="terminal-key">MinSize:</span> 
+                                    <span class="terminal-value">2</span>
+                                </div>
+                                <div class="mb-2">
+                                    <span class="terminal-key">MaxSize:</span> 
+                                    <span class="terminal-value">10</span>
+                                </div>
+                                <div class="mb-2">
+                                    <span class="terminal-key">DesiredCapacity:</span> 
+                                    <span class="terminal-value">3</span>
+                                </div>
+                                <div class="mb-4">
+                                    <span class="terminal-key">HealthCheckType:</span> 
+                                    <span class="terminal-value">ELB</span>
+                                </div>
+                            </div>
+                            
+                            <div class="terminal-prompt">
+                                <span class="terminal-user">deploy</span>
+                                <span class="text-gray-400">@</span>
+                                <span class="terminal-host">ci-cd</span>
+                                <span class="text-gray-400">:</span>
+                                <span class="terminal-path">~/pipeline</span>
+                                <span class="text-gray-400">$</span>
+                                <span class="terminal-success">kubectl get pods -n production</span>
+                            </div>
+                            <div class="terminal-output">
+                                <div class="terminal-success">NAME                        READY   STATUS    RESTARTS</div>
+                                <div class="text-gray-300">onelast-ai-web-1           1/1     Running   0</div>
+                                <div class="text-gray-300">onelast-ai-web-2           1/1     Running   0</div>
+                                <div class="text-gray-300">onelast-ai-worker-1        1/1     Running   0</div>
+                            </div>
+                            
+                            <div class="terminal-prompt mt-2">
+                                <span class="terminal-user">deploy</span>
+                                <span class="text-gray-400">@</span>
+                                <span class="terminal-host">ci-cd</span>
+                                <span class="text-gray-400">:</span>
+                                <span class="terminal-path">~/pipeline</span>
+                                <span class="text-gray-400">$</span>
+                                <span class="terminal-cursor"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CI/CD Pipeline -->
+                <div class="mb-16">
+                    <h3 class="text-3xl font-bold text-white mb-8 text-center">CI/CD Pipeline</h3>
+                    <div class="grid md:grid-cols-4 gap-6">
+                        <div class="tech-stack-card p-6 text-center">
+                            <div class="text-4xl mb-4">📝</div>
+                            <h4 class="text-xl font-semibold text-white mb-3">Code Commit</h4>
+                            <p class="text-gray-300">GitHub integration with branch protection and automated testing</p>
+                        </div>
+                        
+                        <div class="tech-stack-card p-6 text-center">
+                            <div class="text-4xl mb-4">🔨</div>
+                            <h4 class="text-xl font-semibold text-white mb-3">Build & Test</h4>
+                            <p class="text-gray-300">GitHub Actions with automated testing, linting, and security scans</p>
+                        </div>
+                        
+                        <div class="tech-stack-card p-6 text-center">
+                            <div class="text-4xl mb-4">🚀</div>
+                            <h4 class="text-xl font-semibold text-white mb-3">Deploy</h4>
+                            <p class="text-gray-300">Blue-green deployment with zero downtime rollouts</p>
+                        </div>
+                        
+                        <div class="tech-stack-card p-6 text-center">
+                            <div class="text-4xl mb-4">📊</div>
+                            <h4 class="text-xl font-semibold text-white mb-3">Monitor</h4>
+                            <p class="text-gray-300">Real-time monitoring with alerting and automatic rollback</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Deployment Stats -->
+                <div class="text-center">
+                    <h3 class="text-3xl font-bold text-white mb-8">Deployment Metrics</h3>
+                    <div class="grid md:grid-cols-4 gap-6">
+                        <div class="tech-stack-card p-6 text-center">
+                            <div class="text-3xl font-bold text-green-400 mb-2">99.9%</div>
+                            <div class="text-gray-300">Uptime SLA</div>
+                        </div>
+                        
+                        <div class="tech-stack-card p-6 text-center">
+                            <div class="text-3xl font-bold text-blue-400 mb-2">< 5min</div>
+                            <div class="text-gray-300">Deploy Time</div>
+                        </div>
+                        
+                        <div class="tech-stack-card p-6 text-center">
+                            <div class="text-3xl font-bold text-purple-400 mb-2">0s</div>
+                            <div class="text-gray-300">Downtime</div>
+                        </div>
+                        
+                        <div class="tech-stack-card p-6 text-center">
+                            <div class="text-3xl font-bold text-yellow-400 mb-2">24/7</div>
+                            <div class="text-gray-300">Monitoring</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Back to Infrastructure -->
+        <section class="py-10 text-center">
+            <a href="/infrastructure" class="btn-secondary">← Back to Infrastructure</a>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-black border-t border-gray-800">
+        <div class="container mx-auto px-6 py-8">
+            <div class="text-center text-gray-400">
+                <p>&copy; 2024 OneLast AI. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

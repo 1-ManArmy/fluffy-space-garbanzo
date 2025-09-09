@@ -1,0 +1,452 @@
+<div class="video-gallery-container">
+  <div class="gallery-header">
+    <h1>🎥 Video Gallery</h1>
+    <p class="gallery-subtitle">Browse and manage your cinematic creations</p>
+  </div>
+
+  <div class="gallery-controls">
+    <div class="search-filter">
+      <input type="text" placeholder="🔍 Search videos..." class="search-input">
+      <select class="filter-select">
+        <option value="all">All Styles</option>
+        <option value="cinematic">Cinematic</option>
+        <option value="documentary">Documentary</option>
+        <option value="artistic">Artistic</option>
+        <option value="noir">Noir</option>
+        <option value="sci-fi">Sci-Fi</option>
+      </select>
+    </div>
+    <div class="view-controls">
+      <button class="view-btn active" data-view="grid">📊 Grid</button>
+      <button class="view-btn" data-view="list">📋 List</button>
+    </div>
+  </div>
+
+  <div class="video-grid" id="videoGrid">
+    <div class="video-card featured">
+      <div class="video-thumbnail">
+        <div class="thumbnail-placeholder">
+          <span class="play-icon">▶️</span>
+          <div class="video-info-overlay">
+            <span class="duration">2:45</span>
+            <span class="resolution">4K</span>
+          </div>
+        </div>
+      </div>
+      <div class="video-details">
+        <h3>🎬 Cyberpunk Dreams</h3>
+        <p class="video-meta">Cyberpunk • Created 2 hours ago</p>
+        <div class="video-stats">
+          <span>👁️ 1.2K views</span>
+          <span>⭐ 4.8</span>
+        </div>
+        <div class="video-actions">
+          <button class="action-btn play">▶️ Play</button>
+          <button class="action-btn edit">✏️ Edit</button>
+          <button class="action-btn share">🔗 Share</button>
+          <button class="action-btn download">💾 Download</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="video-card">
+      <div class="video-thumbnail">
+        <div class="thumbnail-placeholder">
+          <span class="play-icon">▶️</span>
+          <div class="video-info-overlay">
+            <span class="duration">1:30</span>
+            <span class="resolution">HD</span>
+          </div>
+        </div>
+      </div>
+      <div class="video-details">
+        <h3>🌟 Stellar Journey</h3>
+        <p class="video-meta">Sci-Fi • Created 5 hours ago</p>
+        <div class="video-stats">
+          <span>👁️ 856 views</span>
+          <span>⭐ 4.6</span>
+        </div>
+        <div class="video-actions">
+          <button class="action-btn play">▶️ Play</button>
+          <button class="action-btn edit">✏️ Edit</button>
+          <button class="action-btn share">🔗 Share</button>
+          <button class="action-btn download">💾 Download</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="video-card">
+      <div class="video-thumbnail">
+        <div class="thumbnail-placeholder">
+          <span class="play-icon">▶️</span>
+          <div class="video-info-overlay">
+            <span class="duration">3:20</span>
+            <span class="resolution">4K</span>
+          </div>
+        </div>
+      </div>
+      <div class="video-details">
+        <h3>🏙️ Urban Noir</h3>
+        <p class="video-meta">Noir • Created 1 day ago</p>
+        <div class="video-stats">
+          <span>👁️ 2.1K views</span>
+          <span>⭐ 4.9</span>
+        </div>
+        <div class="video-actions">
+          <button class="action-btn play">▶️ Play</button>
+          <button class="action-btn edit">✏️ Edit</button>
+          <button class="action-btn share">🔗 Share</button>
+          <button class="action-btn download">💾 Download</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="video-card">
+      <div class="video-thumbnail">
+        <div class="thumbnail-placeholder">
+          <span class="play-icon">▶️</span>
+          <div class="video-info-overlay">
+            <span class="duration">4:15</span>
+            <span class="resolution">HD</span>
+          </div>
+        </div>
+      </div>
+      <div class="video-details">
+        <h3>🎭 Emotional Portraits</h3>
+        <p class="video-meta">Documentary • Created 2 days ago</p>
+        <div class="video-stats">
+          <span>👁️ 1.7K views</span>
+          <span>⭐ 4.7</span>
+        </div>
+        <div class="video-actions">
+          <button class="action-btn play">▶️ Play</button>
+          <button class="action-btn edit">✏️ Edit</button>
+          <button class="action-btn share">🔗 Share</button>
+          <button class="action-btn download">💾 Download</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="video-card">
+      <div class="video-thumbnail">
+        <div class="thumbnail-placeholder">
+          <span class="play-icon">▶️</span>
+          <div class="video-info-overlay">
+            <span class="duration">2:10</span>
+            <span class="resolution">4K</span>
+          </div>
+        </div>
+      </div>
+      <div class="video-details">
+        <h3>🌈 Abstract Visions</h3>
+        <p class="video-meta">Artistic • Created 3 days ago</p>
+        <div class="video-stats">
+          <span>👁️ 943 views</span>
+          <span>⭐ 4.5</span>
+        </div>
+        <div class="video-actions">
+          <button class="action-btn play">▶️ Play</button>
+          <button class="action-btn edit">✏️ Edit</button>
+          <button class="action-btn share">🔗 Share</button>
+          <button class="action-btn download">💾 Download</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="video-card">
+      <div class="video-thumbnail">
+        <div class="thumbnail-placeholder">
+          <span class="play-icon">▶️</span>
+          <div class="video-info-overlay">
+            <span class="duration">1:45</span>
+            <span class="resolution">HD</span>
+          </div>
+        </div>
+      </div>
+      <div class="video-details">
+        <h3>🎨 Creative Montage</h3>
+        <p class="video-meta">Cinematic • Created 1 week ago</p>
+        <div class="video-stats">
+          <span>👁️ 3.2K views</span>
+          <span>⭐ 4.8</span>
+        </div>
+        <div class="video-actions">
+          <button class="action-btn play">▶️ Play</button>
+          <button class="action-btn edit">✏️ Edit</button>
+          <button class="action-btn share">🔗 Share</button>
+          <button class="action-btn download">💾 Download</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="gallery-pagination">
+    <button class="page-btn">⬅️ Previous</button>
+    <div class="page-numbers">
+      <button class="page-num active">1</button>
+      <button class="page-num">2</button>
+      <button class="page-num">3</button>
+      <span>...</span>
+      <button class="page-num">12</button>
+    </div>
+    <button class="page-btn">Next ➡️</button>
+  </div>
+</div>
+
+<style>
+.video-gallery-container {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.gallery-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.gallery-header h1 {
+  color: #ff6b6b;
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.gallery-subtitle {
+  color: #666;
+  font-size: 1.1rem;
+}
+
+.gallery-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.search-filter {
+  display: flex;
+  gap: 1rem;
+}
+
+.search-input, .filter-select {
+  padding: 0.75rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.search-input {
+  min-width: 300px;
+}
+
+.view-controls {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.view-btn {
+  padding: 0.75rem 1rem;
+  border: 2px solid #e0e0e0;
+  background: white;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.view-btn.active {
+  border-color: #ff6b6b;
+  background: #fff5f5;
+  color: #ff6b6b;
+}
+
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.video-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+}
+
+.video-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.video-card.featured {
+  grid-column: 1 / -1;
+  grid-template-columns: 1fr 1fr;
+  display: grid;
+}
+
+.video-thumbnail {
+  position: relative;
+  aspect-ratio: 16/9;
+  background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+}
+
+.thumbnail-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.play-icon {
+  font-size: 3rem;
+  color: white;
+  opacity: 0.8;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.play-icon:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.video-info-overlay {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.duration, .resolution {
+  background: rgba(0,0,0,0.7);
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+}
+
+.video-details {
+  padding: 1.5rem;
+}
+
+.video-details h3 {
+  margin: 0 0 0.5rem 0;
+  color: #333;
+  font-size: 1.2rem;
+}
+
+.video-meta {
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.video-stats {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.video-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.action-btn {
+  padding: 0.5rem;
+  border: 1px solid #e0e0e0;
+  background: white;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: all 0.3s ease;
+}
+
+.action-btn:hover {
+  background: #f8f9fa;
+  border-color: #ff6b6b;
+}
+
+.action-btn.play {
+  background: #ff6b6b;
+  color: white;
+  border-color: #ff6b6b;
+}
+
+.gallery-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem;
+}
+
+.page-btn, .page-num {
+  padding: 0.75rem 1rem;
+  border: 2px solid #e0e0e0;
+  background: white;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.page-num.active {
+  background: #ff6b6b;
+  color: white;
+  border-color: #ff6b6b;
+}
+
+.page-numbers {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // View toggle
+  document.querySelectorAll('.view-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      
+      const view = this.dataset.view;
+      const grid = document.getElementById('videoGrid');
+      
+      if (view === 'list') {
+        grid.style.gridTemplateColumns = '1fr';
+      } else {
+        grid.style.gridTemplateColumns = 'repeat(auto-fit, minmax(350px, 1fr))';
+      }
+    });
+  });
+
+  // Video actions
+  document.querySelectorAll('.action-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const action = this.textContent.trim();
+      if (action.includes('Play')) {
+        alert('🎥 Video player would open here!');
+      } else if (action.includes('Edit')) {
+        alert('✏️ Video editor would open here!');
+      } else if (action.includes('Share')) {
+        alert('🔗 Share options would appear here!');
+      } else if (action.includes('Download')) {
+        alert('💾 Download would start here!');
+      }
+    });
+  });
+});
+</script>

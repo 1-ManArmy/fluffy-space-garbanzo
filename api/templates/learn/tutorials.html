@@ -1,0 +1,114 @@
+<div class="min-h-screen bg-gray-900">
+  <!-- Tutorials Header -->
+  <section class="relative py-20 overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-indigo-900/20 to-blue-900/20"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/40"></div>
+    
+    <div class="container mx-auto px-6 relative z-10">
+      <div class="text-center mb-16">
+        <h1 class="text-5xl lg:text-6xl font-bold text-white mb-6">
+          All <span class="text-purple-400">Tutorials</span>
+        </h1>
+        <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+          Browse our complete collection of hands-on tutorials covering everything from basics to advanced AI development
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Filters and Search -->
+  <section class="py-12 border-t border-gray-800">
+    <div class="container mx-auto px-6">
+      <div class="bg-gray-800/50 rounded-xl p-6 mb-8">
+        <div class="grid lg:grid-cols-4 gap-6">
+          <!-- Search -->
+          <div class="lg:col-span-2">
+            <label class="block text-sm font-medium text-gray-300 mb-2">Search Tutorials</label>
+            <input type="text" placeholder="Search by title, technology, or topic..." 
+                   class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:border-purple-500 focus:outline-none">
+          </div>
+          
+          <!-- Category Filter -->
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-2">Category</label>
+            <select class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white focus:border-purple-500 focus:outline-none">
+              <% @categories.each do |category| %>
+                <option value="<%= category.downcase.gsub(' ', '-') %>"><%= category %></option>
+              <% end %>
+            </select>
+          </div>
+          
+          <!-- Difficulty Filter -->
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-2">Difficulty</label>
+            <select class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white focus:border-purple-500 focus:outline-none">
+              <% @difficulty_levels.each do |level| %>
+                <option value="<%= level.downcase.gsub(' ', '-') %>"><%= level %></option>
+              <% end %>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tutorials Grid -->
+  <section class="pb-20">
+    <div class="container mx-auto px-6">
+      <div class="grid lg:grid-cols-3 gap-8">
+        <% @all_tutorials.each do |tutorial| %>
+          <div class="feature-card group">
+            <div class="card-bg-gradient"></div>
+            <div class="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent rounded-xl"></div>
+            
+            <div class="relative z-10 p-8">
+              <div class="flex items-center justify-between mb-4">
+                <span class="px-3 py-1 bg-<%= tutorial[:difficulty] == 'Beginner' ? 'green' : tutorial[:difficulty] == 'Intermediate' ? 'yellow' : tutorial[:difficulty] == 'Advanced' ? 'orange' : 'red' %>-600/20 text-<%= tutorial[:difficulty] == 'Beginner' ? 'green' : tutorial[:difficulty] == 'Intermediate' ? 'yellow' : tutorial[:difficulty] == 'Advanced' ? 'orange' : 'red' %>-400 rounded-full text-sm">
+                  <%= tutorial[:difficulty] %>
+                </span>
+                <div class="flex items-center gap-2">
+                  <% if tutorial[:free] %>
+                    <span class="px-2 py-1 bg-green-600/20 text-green-400 rounded text-xs">FREE</span>
+                  <% else %>
+                    <span class="px-2 py-1 bg-amber-600/20 text-amber-400 rounded text-xs">PRO</span>
+                  <% end %>
+                  <span class="text-gray-400 text-sm"><%= tutorial[:duration] %></span>
+                </div>
+              </div>
+              
+              <h3 class="text-xl font-bold text-white mb-4"><%= tutorial[:title] %></h3>
+              <p class="text-gray-300 mb-4"><%= tutorial[:description] %></p>
+              
+              <div class="flex flex-wrap gap-2 mb-4">
+                <% tutorial[:technologies].each do |tech| %>
+                  <span class="px-2 py-1 bg-purple-600/20 text-purple-300 rounded text-xs"><%= tech %></span>
+                <% end %>
+              </div>
+              
+              <div class="text-sm text-gray-400 mb-6">
+                <span class="px-2 py-1 bg-gray-700 rounded text-xs"><%= tutorial[:category] %></span>
+              </div>
+              
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <div class="flex items-center">
+                    <% 5.times do |i| %>
+                      <svg class="w-4 h-4 <%= i < tutorial[:rating].floor ? 'text-yellow-400' : 'text-gray-600' %>" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                      </svg>
+                    <% end %>
+                  </div>
+                  <span class="text-sm text-gray-400">(<%= tutorial[:students] %>)</span>
+                </div>
+                
+                <a href="/learn/tutorial/<%= tutorial[:id] %>" class="bg-purple-600 hover:bg-purple-500 text-white font-medium py-2 px-4 rounded-lg transition-colors">
+                  <%= tutorial[:free] ? 'Start Free' : 'Start Tutorial' %>
+                </a>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </section>
+</div>

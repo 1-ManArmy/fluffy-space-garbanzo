@@ -1,0 +1,146 @@
+<div class="min-h-screen bg-gray-900">
+  <!-- Learning Paths Header -->
+  <section class="relative py-20 overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-indigo-900/20 to-blue-900/20"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/40"></div>
+    
+    <div class="container mx-auto px-6 relative z-10">
+      <div class="text-center mb-16">
+        <h1 class="text-5xl lg:text-6xl font-bold text-white mb-6">
+          Learning <span class="text-purple-400">Paths</span>
+        </h1>
+        <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+          Structured curricula designed to take you from beginner to expert in AI development. 
+          Follow proven learning paths created by industry experts.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Path Categories Filter -->
+  <section class="py-12 border-t border-gray-800">
+    <div class="container mx-auto px-6">
+      <div class="flex flex-wrap justify-center gap-4 mb-8">
+        <% @path_categories.each do |category| %>
+          <button class="px-4 py-2 bg-gray-800 hover:bg-purple-600 text-gray-300 hover:text-white rounded-lg transition-colors">
+            <%= category %>
+          </button>
+        <% end %>
+      </div>
+    </div>
+  </section>
+
+  <!-- Learning Paths Grid -->
+  <section class="pb-20">
+    <div class="container mx-auto px-6">
+      <div class="grid lg:grid-cols-2 gap-8">
+        <% @all_paths.each do |path| %>
+          <div class="feature-card group">
+            <div class="card-bg-gradient"></div>
+            <div class="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent rounded-xl"></div>
+            
+            <div class="relative z-10 p-8">
+              <div class="flex items-center gap-4 mb-6">
+                <div class="w-16 h-16 bg-<%= path[:color] %>-600/20 rounded-2xl flex items-center justify-center">
+                  <span class="text-3xl"><%= path[:icon] %></span>
+                </div>
+                <div>
+                  <span class="px-3 py-1 bg-<%= path[:level] == 'Beginner' ? 'green' : path[:level] == 'Intermediate' ? 'yellow' : 'red' %>-600/20 text-<%= path[:level] == 'Beginner' ? 'green' : path[:level] == 'Intermediate' ? 'yellow' : 'red' %>-400 rounded-full text-sm">
+                    <%= path[:level] %>
+                  </span>
+                </div>
+              </div>
+              
+              <h3 class="text-2xl font-bold text-white mb-4"><%= path[:title] %></h3>
+              <p class="text-gray-300 mb-6"><%= path[:description] %></p>
+              
+              <!-- Skills Tags -->
+              <div class="flex flex-wrap gap-2 mb-6">
+                <% path[:skills].each do |skill| %>
+                  <span class="px-2 py-1 bg-<%= path[:color] %>-600/20 text-<%= path[:color] %>-300 rounded text-xs"><%= skill %></span>
+                <% end %>
+              </div>
+              
+              <!-- Path Stats -->
+              <div class="grid grid-cols-3 gap-4 mb-6 text-center">
+                <div>
+                  <div class="text-xl font-bold text-<%= path[:color] %>-400"><%= path[:tutorials] %></div>
+                  <div class="text-xs text-gray-400">Tutorials</div>
+                </div>
+                <div>
+                  <div class="text-xl font-bold text-<%= path[:color] %>-400"><%= path[:duration] %></div>
+                  <div class="text-xs text-gray-400">Total Time</div>
+                </div>
+                <div>
+                  <div class="text-xl font-bold text-<%= path[:color] %>-400"><%= number_with_delimiter(path[:students]) %></div>
+                  <div class="text-xs text-gray-400">Students</div>
+                </div>
+              </div>
+              
+              <div class="flex gap-3">
+                <a href="/learn/path/<%= path[:id] %>" class="flex-1 bg-<%= path[:color] %>-600 hover:bg-<%= path[:color] %>-500 text-white font-medium py-3 px-6 rounded-lg transition-colors text-center">
+                  Start Path
+                </a>
+                <button class="px-4 py-3 bg-gray-700 hover:bg-gray-600 text-gray-300 rounded-lg transition-colors">
+                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why Choose Learning Paths -->
+  <section class="py-20 border-t border-gray-800">
+    <div class="container mx-auto px-6">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl font-bold text-white mb-4">Why Choose Learning Paths?</h2>
+        <p class="text-gray-300 max-w-2xl mx-auto">
+          Our learning paths are carefully designed to provide a structured, efficient way to master AI development skills.
+        </p>
+      </div>
+      
+      <div class="grid lg:grid-cols-3 gap-8">
+        <div class="text-center">
+          <div class="w-16 h-16 bg-purple-600/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
+            <svg class="w-8 h-8 text-purple-400" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm1 5a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z" clip-rule="evenodd"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-4">Structured Curriculum</h3>
+          <p class="text-gray-300">
+            Follow a logical progression from basics to advanced concepts, ensuring you build a solid foundation.
+          </p>
+        </div>
+        
+        <div class="text-center">
+          <div class="w-16 h-16 bg-blue-600/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
+            <svg class="w-8 h-8 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z" clip-rule="evenodd"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-4">Expert Instructors</h3>
+          <p class="text-gray-300">
+            Learn from industry professionals who bring real-world experience to every lesson.
+          </p>
+        </div>
+        
+        <div class="text-center">
+          <div class="w-16 h-16 bg-green-600/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
+            <svg class="w-8 h-8 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-4">Certification</h3>
+          <p class="text-gray-300">
+            Earn industry-recognized certificates upon completion to showcase your new skills.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

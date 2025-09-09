@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Templates Library - Royal AI™</title>
+
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <%= javascript_importmap_tags %>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+      background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+      color: #eee;
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    .hero-section {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      padding: 4rem 2rem;
+      text-align: center;
+      color: #fff;
+    }
+
+    .hero-title {
+      font-size: 3.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+      color: #ffd700;
+    }
+
+    .hero-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 30px #ffd700;
+    }
+
+    .hero-tagline {
+      font-size: 1.3rem;
+      font-weight: 300;
+      max-width: 600px;
+      margin: 0 auto;
+      opacity: 0.9;
+      color: #ccc;
+    }
+
+    .content-section {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .search-filter {
+      background: rgba(30, 30, 30, 0.85);
+      border: 1px solid rgba(255, 215, 0, 0.3);
+      border-radius: 15px;
+      padding: 2rem;
+      margin-bottom: 3rem;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    }
+
+    .search-input {
+      width: 100%;
+      max-width: 500px;
+      padding: 1rem 1.5rem;
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid rgba(255, 215, 0, 0.3);
+      border-radius: 25px;
+      color: #ffffff;
+      font-size: 1rem;
+      margin: 0 auto 2rem auto;
+      display: block;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: #ffd700;
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+    }
+
+    .filter-tabs {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .filter-tab {
+      background: rgba(255, 215, 0, 0.1);
+      border: 1px solid #ffd700;
+      border-radius: 25px;
+      padding: 0.75rem 1.5rem;
+      color: #ffd700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 500;
+    }
+
+    .filter-tab.active,
+    .filter-tab:hover {
+      background: #ffd700;
+      color: #000;
+    }
+
+    .templates-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 2rem;
+      margin: 3rem 0;
+    }
+
+    .template-card {
+      background: rgba(30, 30, 30, 0.85);
+      border: 1px solid rgba(255, 215, 0, 0.3);
+      border-radius: 15px;
+      padding: 2rem;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+      color: #ddd;
+    }
+
+    .template-card:hover {
+      transform: translateY(-5px);
+      border-color: #ffd700;
+      box-shadow: 0 15px 40px rgba(255, 215, 0, 0.2);
+    }
+
+    .template-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .template-emoji {
+      font-size: 2.5rem;
+    }
+
+    .template-info h3 {
+      color: #ffd700;
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+    }
+
+    .template-agent {
+      color: #888;
+      font-size: 0.9rem;
+    }
+
+    .template-description {
+      color: #ccc;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+
+    .template-content {
+      background: rgba(40, 40, 40, 0.9);
+      border: 1px solid #555;
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin: 1rem 0;
+      font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
+      font-size: 13px;
+      color: #e0e0e0;
+      position: relative;
+      overflow-x: auto;
+    }
+
+    .copy-button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #ffd700;
+      color: #000;
+      border: none;
+      border-radius: 5px;
+      padding: 0.3rem 0.6rem;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .copy-button:hover {
+      background: #ffcc00;
+    }
+
+    .template-tags {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+
+    .template-tag {
+      background: rgba(255, 215, 0, 0.2);
+      color: #ffd700;
+      padding: 0.3rem 0.8rem;
+      border-radius: 15px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    .use-template-btn {
+      background: linear-gradient(45deg, #ffd700, #ffcc00);
+      color: #000;
+      border: none;
+      border-radius: 10px;
+      padding: 0.8rem 1.5rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: 100%;
+      margin-top: 1rem;
+    }
+
+    .use-template-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+    }
+
+    .section-title {
+      color: #ffd700;
+      font-size: 2rem;
+      font-weight: 700;
+      text-align: center;
+      margin: 3rem 0 2rem 0;
+    }
+
+    .category-section {
+      margin: 3rem 0;
+    }
+
+    .category-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid rgba(255, 215, 0, 0.3);
+    }
+
+    .category-icon {
+      font-size: 2rem;
+    }
+
+    .category-title {
+      color: #ffd700;
+      font-size: 1.8rem;
+      font-weight: 600;
+    }
+
+    .tips-section {
+      background: rgba(30, 30, 30, 0.85);
+      border: 1px solid rgba(255, 215, 0, 0.3);
+      border-radius: 15px;
+      padding: 2rem;
+      margin: 3rem 0;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    }
+
+    .tips-section h3 {
+      color: #ffd700;
+      margin-bottom: 1rem;
+    }
+
+    .tip-item {
+      margin: 0.8rem 0;
+      padding-left: 1.5rem;
+      position: relative;
+      color: #ccc;
+      line-height: 1.6;
+    }
+
+    .tip-item::before {
+      content: "💡";
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+
+    /* Repository Showcase Styles */
+    .repo-showcase {
+      margin: 2rem 0;
+    }
+
+    .showcase-intro {
+      background: rgba(30, 30, 30, 0.85);
+      border-radius: 15px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    }
+
+    .github-main-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+      background: linear-gradient(135deg, rgba(40, 40, 60, 0.95) 0%, rgba(20, 20, 30, 0.95) 100%);
+      color: #ffffff;
+      padding: 1rem 2rem;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255, 215, 0, 0.3);
+    }
+
+    .github-main-link:hover {
+      background: linear-gradient(135deg, rgba(50, 50, 70, 0.95) 0%, rgba(30, 30, 50, 0.95) 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(255, 215, 0, 0.3);
+      border-color: #ffd700;
+    }
+
+    .github-icon {
+      font-size: 1.2rem;
+    }
+
+    .external-icon {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+
+    .repo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+
+    .repo-card {
+      background: rgba(30, 30, 30, 0.85);
+      border: 1px solid rgba(255, 215, 0, 0.3);
+      border-radius: 15px;
+      padding: 2rem;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      position: relative;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+      color: #ddd;
+    }
+
+    .repo-card.featured {
+      border-color: #ffaa00;
+      background: linear-gradient(135deg, rgba(40, 40, 60, 0.95) 0%, rgba(20, 20, 30, 0.95) 100%);
+    }
+
+    .repo-card:hover {
+      transform: translateY(-5px);
+      border-color: #ffd700;
+      box-shadow: 0 15px 40px rgba(255, 215, 0, 0.2);
+    }
+
+    .repo-card.featured:hover {
+      border-color: #ffaa00;
+      box-shadow: 0 15px 40px rgba(255, 170, 0, 0.2);
+    }
+
+    .repo-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      position: relative;
+    }
+
+    .repo-icon {
+      font-size: 2rem;
+    }
+
+    .repo-info h4 {
+      color: #ffd700;
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+    }
+
+    .repo-path {
+      color: #888;
+      font-size: 0.85rem;
+      font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
+    }
+
+    .featured-badge {
+      position: absolute;
+      top: -0.5rem;
+      right: 0;
+      background: #ffaa00;
+      color: #000;
+      padding: 0.3rem 0.8rem;
+      border-radius: 15px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .repo-description {
+      color: #ccc;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+      font-size: 0.95rem;
+    }
+
+    .repo-features {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+
+    .feature-tag {
+      background: rgba(255, 215, 0, 0.15);
+      color: #ffd700;
+      padding: 0.3rem 0.7rem;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      border: 1px solid rgba(255, 215, 0, 0.3);
+    }
+
+    .repo-actions {
+      display: flex;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+    }
+
+    .repo-btn {
+      flex: 1;
+      min-width: 120px;
+      padding: 0.7rem 1.2rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-align: center;
+      transition: all 0.3s ease;
+      border: 1px solid transparent;
+    }
+
+    .repo-btn.primary {
+      background: linear-gradient(45deg, #ffd700, #ffcc00);
+      color: #000;
+    }
+
+    .repo-btn.primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+    }
+
+    .repo-btn.secondary {
+      background: transparent;
+      color: #ffd700;
+      border-color: #ffd700;
+    }
+
+    .repo-btn.secondary:hover {
+      background: rgba(255, 215, 0, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .all-repos-section {
+      background: rgba(30, 30, 30, 0.85);
+      border: 1px solid rgba(255, 215, 0, 0.3);
+      border-radius: 15px;
+      padding: 2.5rem;
+      margin: 3rem 0;
+      text-align: center;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    }
+
+    .view-all-repos-btn {
+      display: inline-block;
+      background: linear-gradient(135deg, rgba(40, 40, 60, 0.95) 0%, rgba(20, 20, 30, 0.95) 100%);
+      color: #ffffff;
+      padding: 1.2rem 2.5rem;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255, 215, 0, 0.3);
+    }
+
+    .view-all-repos-btn:hover {
+      background: linear-gradient(135deg, rgba(50, 50, 70, 0.95) 0%, rgba(30, 30, 50, 0.95) 100%);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
+      border-color: #ffd700;
+    }
+
+    @media (max-width: 768px) {
+      .templates-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .template-card {
+        padding: 1.5rem;
+      }
+
+      .repo-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .repo-actions {
+        flex-direction: column;
+      }
+
+      .repo-btn {
+        flex: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <section class="hero-section">
+    <div class="hero-icon">�</div>
+    <h1 class="hero-title">Templates Library</h1>
+    <p class="hero-tagline">Ready-to-use prompts and templates for all Royal AI™ agents</p>
+  </section>
+
+  <section class="content-section">
+    <!-- Search and Filter -->
+    <div class="search-filter">
+      <input type="text" class="search-input" placeholder="🔍 Search templates..." id="template-search">
+      <div class="filter-tabs">
+        <div class="filter-tab active" data-category="all">All Templates</div>
+        <div class="filter-tab" data-category="content">Content Creation</div>
+        <div class="filter-tab" data-category="companion">AI Companions</div>
+        <div class="filter-tab" data-category="development">Development</div>
+        <div class="filter-tab" data-category="education">Education</div>
+        <div class="filter-tab" data-category="business">Business</div>
+        <div class="filter-tab" data-category="creative">Creative</div>
+      </div>
+    </div>
+
+    <!-- Content Creation Templates -->
+    <div class="category-section" data-category="content">
+      <div class="category-header">
+        <span class="category-icon">✍️</span>
+        <h2 class="category-title">Content Creation Templates</h2>
+      </div>
+      
+      <div class="templates-grid">
+        <div class="template-card" data-category="content">
+          <div class="template-header">
+            <span class="template-emoji">📝</span>
+            <div class="template-info">
+              <h3>Blog Post Outline</h3>
+              <div class="template-agent">ContentCrafter</div>
+            </div>
+          </div>
+          <p class="template-description">
+            Create comprehensive blog post outlines with engaging hooks, structured content, and strong conclusions.
+          </p>
+          <div class="template-content">
+            <button class="copy-button" onclick="copyTemplate(this)">Copy</button>
+Create a detailed blog post outline for "[TOPIC]" targeting [TARGET_AUDIENCE].
+
+Include:
+- Compelling headline with SEO keywords
+- Engaging introduction hook
+- 5-7 main sections with subpoints
+- Actionable takeaways
+- Strong conclusion with CTA
+
+Tone: [Professional/Casual/Friendly]
+Length: [Short/Medium/Long] format
+          </div>
+          <div class="template-tags">
+            <span class="template-tag">Blog Writing</span>
+            <span class="template-tag">SEO</span>
+            <span class="template-tag">Content Strategy</span>
+          </div>
+          <button class="use-template-btn">Use This Template</button>
+        </div>
+
+        <div class="template-card" data-category="content">
+          <div class="template-header">
+            <span class="template-emoji">📱</span>
+            <div class="template-info">
+              <h3>Social Media Campaign</h3>
+              <div class="template-agent">ContentCrafter</div>
+            </div>
+          </div>
+          <p class="template-description">
+            Generate engaging social media content for various platforms with platform-specific optimization.
+          </p>
+          <div class="template-content">
+            <button class="copy-button" onclick="copyTemplate(this)">Copy</button>
+Create a 7-day social media campaign for [PRODUCT/SERVICE].
+
+Platforms: [Instagram/Twitter/LinkedIn/TikTok]
+Goal: [Brand awareness/Sales/Engagement]
+
+For each day, provide:
+- Platform-optimized caption
+- Relevant hashtags (5-10)
+- Visual content suggestions
+- Best posting times
+- Engagement strategies
+
+Brand voice: [Describe brand personality]
+          </div>
+          <div class="template-tags">
+            <span class="template-tag">Social Media</span>
+            <span class="template-tag">Marketing</span>
+            <span class="template-tag">Campaign</span>
+          </div>
+          <button class="use-template-btn">Use This Template</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI Companions Templates -->
+    <div class="category-section" data-category="companion">
+      <div class="category-header">
+        <span class="category-icon">❤️</span>
+        <h2 class="category-title">AI Companion Templates</h2>
+      </div>
+      
+      <div class="templates-grid">
+        <div class="template-card" data-category="companion">
+          <div class="template-header">
+            <span class="template-emoji">🤗</span>
+            <div class="template-info">
+              <h3>Emotional Support Session</h3>
+              <div class="template-agent">EmotiSense</div>
+            </div>
+          </div>
+          <p class="template-description">
+            Get empathetic emotional support and guidance through difficult feelings or situations.
+          </p>
+          <div class="template-content">
+            <button class="copy-button" onclick="copyTemplate(this)">Copy</button>
+Hi EmotiSense, I'm feeling [EMOTION] about [SITUATION].
+
+I need help with:
+- Understanding these feelings
+- Processing what happened
+- Finding healthy coping strategies
+- Building emotional resilience
+
+Please be gentle and supportive in your response. I'm looking for compassion and practical guidance.
+
+Current stress level: [1-10]
+What would help most right now: [Listening/Advice/Distraction/Techniques]
+          </div>
+          <div class="template-tags">
+            <span class="template-tag">Emotional Support</span>
+            <span class="template-tag">Mental Health</span>
+            <span class="template-tag">Coping</span>
+          </div>
+          <button class="use-template-btn">Use This Template</button>
+        </div>
+
+        <div class="template-card" data-category="companion">
+          <div class="template-header">
+            <span class="template-emoji">🌌</span>
+            <div class="template-info">
+              <h3>Memory Organization</h3>
+              <div class="template-agent">Memora</div>
+            </div>
+          </div>
+          <p class="template-description">
+            Organize and structure important information for easy recall and knowledge building.
+          </p>
+          <div class="template-content">
+            <button class="copy-button" onclick="copyTemplate(this)">Copy</button>
+Help me organize and remember information about [TOPIC/SUBJECT].
+
+Information to process:
+[Paste your content, notes, or data here]
+
+Please help me:
+- Create a clear knowledge structure
+- Identify key concepts and connections
+- Build memory associations
+- Suggest review schedules
+- Create easy recall triggers
+
+Learning style: [Visual/Auditory/Kinesthetic]
+Priority level: [High/Medium/Low]
+          </div>
+          <div class="template-tags">
+            <span class="template-tag">Memory</span>
+            <span class="template-tag">Learning</span>
+            <span class="template-tag">Organization</span>
+          </div>
+          <button class="use-template-btn">Use This Template</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Development Templates -->
+    <div class="category-section" data-category="development">
+      <div class="category-header">
+        <span class="category-icon">⚡</span>
+        <h2 class="category-title">Development Templates</h2>
+      </div>
+      
+      <div class="templates-grid">
+        <div class="template-card" data-category="development">
+          <div class="template-header">
+            <span class="template-emoji">🔧</span>
+            <div class="template-info">
+              <h3>Code Review & Optimization</h3>
+              <div class="template-agent">CodeForge</div>
+            </div>
+          </div>
+          <p class="template-description">
+            Get comprehensive code review with optimization suggestions and best practices.
+          </p>
+          <div class="template-content">
+            <button class="copy-button" onclick="copyTemplate(this)">Copy</button>
+Please review and optimize this [LANGUAGE] code:
+
+```[LANGUAGE]
+[Paste your code here]
+```
+
+Focus on:
+- Performance optimization
+- Code readability
+- Security vulnerabilities
+- Best practices compliance
+- Error handling
+- Documentation improvements
+
+Project context: [Brief description]
+Performance requirements: [Specific needs]
+Target audience: [Beginners/Intermediate/Advanced]
+          </div>
+          <div class="template-tags">
+            <span class="template-tag">Code Review</span>
+            <span class="template-tag">Optimization</span>
+            <span class="template-tag">Best Practices</span>
+          </div>
+          <button class="use-template-btn">Use This Template</button>
+        </div>
+
+        <div class="template-card" data-category="development">
+          <div class="template-header">
+            <span class="template-emoji">🌐</span>
+            <div class="template-info">
+              <h3>Research & Analysis</h3>
+              <div class="template-agent">NetScope</div>
+            </div>
+          </div>
+          <p class="template-description">
+            Conduct comprehensive research and data analysis for projects and decision-making.
+          </p>
+          <div class="template-content">
+            <button class="copy-button" onclick="copyTemplate(this)">Copy</button>
+Research and analyze: [RESEARCH TOPIC]
+
+Scope:
+- Market trends and statistics
+- Competitor analysis
+- Technology landscape
+- User preferences and behavior
+- Industry best practices
+
+Deliverables needed:
+- Summary of key findings
+- Data visualization suggestions
+- Actionable recommendations
+- Risk assessment
+- Implementation timeline
+
+Target market: [Define audience]
+Budget considerations: [If applicable]
+          </div>
+          <div class="template-tags">
+            <span class="template-tag">Research</span>
+            <span class="template-tag">Analysis</span>
+            <span class="template-tag">Market Intelligence</span>
+          </div>
+          <button class="use-template-btn">Use This Template</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Education Templates -->
+    <div class="category-section" data-category="education">
+      <div class="category-header">
+        <span class="category-icon">🎓</span>
+        <h2 class="category-title">Educational Templates</h2>
+      </div>
+      
+      <div class="templates-grid">
+        <div class="template-card" data-category="education">
+          <div class="template-header">
+            <span class="template-emoji">👨‍🏫</span>
+            <div class="template-info">
+              <h3>Kid-Friendly Learning</h3>
+              <div class="template-agent">KiddieAI Tutor</div>
+            </div>
+          </div>
+          <p class="template-description">
+            Age-appropriate learning sessions that make complex topics fun and engaging for children.
+          </p>
+          <div class="template-content">
+            <button class="copy-button" onclick="copyTemplate(this)">Copy</button>
+Hi KiddieAI! I'm [AGE] years old and want to learn about [TOPIC].
+
+Please teach me:
+- What is [TOPIC]?
+- Why is it important?
+- Fun facts I should know
+- Simple examples I can understand
+- Activities or games to practice
+
+Make it:
+- Age-appropriate for [AGE]
+- Fun and engaging
+- Easy to understand
+- Interactive when possible
+
+My favorite subjects: [List interests]
+Learning style: [How child learns best]
+          </div>
+          <div class="template-tags">
+            <span class="template-tag">Kids Learning</span>
+            <span class="template-tag">Interactive</span>
+            <span class="template-tag">Age-Appropriate</span>
+          </div>
+          <button class="use-template-btn">Use This Template</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Creative Templates -->
+    <div class="category-section" data-category="creative">
+      <div class="category-header">
+        <span class="category-icon">🎨</span>
+        <h2 class="category-title">Creative Templates</h2>
+      </div>
+      
+      <div class="templates-grid">
+        <div class="template-card" data-category="creative">
+          <div class="template-header">
+            <span class="template-emoji">🎬</span>
+            <div class="template-info">
+              <h3>Video Script Creation</h3>
+              <div class="template-agent">CineGen</div>
+            </div>
+          </div>
+          <p class="template-description">
+            Create compelling video scripts with cinematic storytelling and engaging narratives.
+          </p>
+          <div class="template-content">
+            <button class="copy-button" onclick="copyTemplate(this)">Copy</button>
+Create a video script for: [PROJECT TYPE]
+
+Video details:
+- Duration: [LENGTH]
+- Genre: [Documentary/Marketing/Educational/Entertainment]
+- Target audience: [DEMOGRAPHICS]
+- Main message: [KEY POINT]
+- Tone: [Professional/Casual/Dramatic/Humorous]
+
+Include:
+- Compelling opening hook
+- Clear narrative structure
+- Visual scene descriptions
+- Dialogue and voiceover
+- Call-to-action ending
+- Technical notes for production
+
+Budget level: [Low/Medium/High]
+Distribution platform: [YouTube/Social/Broadcast/Web]
+          </div>
+          <div class="template-tags">
+            <span class="template-tag">Video Production</span>
+            <span class="template-tag">Storytelling</span>
+            <span class="template-tag">Cinematic</span>
+          </div>
+          <button class="use-template-btn">Use This Template</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Repository Showcase Section -->
+    <div class="category-section">
+      <div class="category-header">
+        <span class="category-icon">🏛️</span>
+        <h2 class="category-title">Repository Templates Showcase</h2>
+      </div>
+      
+      <div class="showcase-intro">
+        <p style="text-align: center; color: #b8b8b8; margin-bottom: 2rem; font-size: 1.1rem; line-height: 1.6;">
+          Each Royal AI™ agent has its own dedicated repository with complete project structures, documentation, and ready-to-use templates. 
+          Fork any repository to get started with your own agent environment instantly!
+        </p>
+      </div>
+
+      <div class="repo-showcase">
+        <div class="showcase-header">
+          <h3 style="color: #00d4ff; text-align: center; margin-bottom: 2rem; font-size: 1.5rem;">
+            🚀 Explore Our Agent Repositories
+          </h3>
+          <div class="github-link-container" style="text-align: center; margin-bottom: 3rem;">
+            <a href="https://github.com/onelastai" target="_blank" class="github-main-link">
+              <span class="github-icon">📂</span>
+              <span>Browse All Repositories</span>
+              <span class="external-icon">↗</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="repo-grid">
+          <!-- Featured Repositories -->
+          <div class="repo-card featured">
+            <div class="repo-header">
+              <span class="repo-icon">🤗</span>
+              <div class="repo-info">
+                <h4>EmotiSense Repository</h4>
+                <div class="repo-path">github.com/onelastai/emotisense</div>
+              </div>
+              <span class="featured-badge">Featured</span>
+            </div>
+            <p class="repo-description">
+              Complete emotional intelligence agent with conversation templates, mood tracking, and mental health resources.
+            </p>
+            <div class="repo-features">
+              <span class="feature-tag">🌌 Psychology Templates</span>
+              <span class="feature-tag">💬 Conversation Starters</span>
+              <span class="feature-tag">📊 Mood Analytics</span>
+            </div>
+            <div class="repo-actions">
+              <a href="https://github.com/onelastai/emotisense" target="_blank" class="repo-btn primary">
+                Fork Repository
+              </a>
+              <a href="https://github.com/onelastai/emotisense#readme" target="_blank" class="repo-btn secondary">
+                View Docs
+              </a>
+            </div>
+          </div>
+
+          <div class="repo-card featured">
+            <div class="repo-header">
+              <span class="repo-icon">📝</span>
+              <div class="repo-info">
+                <h4>ContentCrafter Repository</h4>
+                <div class="repo-path">github.com/onelastai/contentcrafter</div>
+              </div>
+              <span class="featured-badge">Featured</span>
+            </div>
+            <p class="repo-description">
+              Advanced content creation toolkit with blog templates, social media campaigns, and SEO optimization guides.
+            </p>
+            <div class="repo-features">
+              <span class="feature-tag">✍️ Blog Templates</span>
+              <span class="feature-tag">📱 Social Media</span>
+              <span class="feature-tag">🔍 SEO Tools</span>
+            </div>
+            <div class="repo-actions">
+              <a href="https://github.com/onelastai/contentcrafter" target="_blank" class="repo-btn primary">
+                Fork Repository
+              </a>
+              <a href="https://github.com/onelastai/contentcrafter#readme" target="_blank" class="repo-btn secondary">
+                View Docs
+              </a>
+            </div>
+          </div>
+
+          <div class="repo-card">
+            <div class="repo-header">
+              <span class="repo-icon">🌌</span>
+              <div class="repo-info">
+                <h4>Memora Repository</h4>
+                <div class="repo-path">github.com/onelastai/memora</div>
+              </div>
+            </div>
+            <p class="repo-description">
+              Memory management and knowledge organization system with learning templates and recall strategies.
+            </p>
+            <div class="repo-features">
+              <span class="feature-tag">🗃️ Knowledge Base</span>
+              <span class="feature-tag">🔄 Learning Loops</span>
+              <span class="feature-tag">📚 Study Plans</span>
+            </div>
+            <div class="repo-actions">
+              <a href="https://github.com/onelastai/memora" target="_blank" class="repo-btn primary">
+                Fork Repository
+              </a>
+              <a href="https://github.com/onelastai/memora#readme" target="_blank" class="repo-btn secondary">
+                View Docs
+              </a>
+            </div>
+          </div>
+
+          <div class="repo-card">
+            <div class="repo-header">
+              <span class="repo-icon">👨‍🏫</span>
+              <div class="repo-info">
+                <h4>KiddieAI Repository</h4>
+                <div class="repo-path">github.com/onelastai/kiddieai</div>
+              </div>
+            </div>
+            <p class="repo-description">
+              Child-friendly AI education platform with safe learning environments and age-appropriate content templates.
+            </p>
+            <div class="repo-features">
+              <span class="feature-tag">🎮 Interactive Games</span>
+              <span class="feature-tag">🔒 Safety First</span>
+              <span class="feature-tag">📖 Learning Stories</span>
+            </div>
+            <div class="repo-actions">
+              <a href="https://github.com/onelastai/kiddieai" target="_blank" class="repo-btn primary">
+                Fork Repository
+              </a>
+              <a href="https://github.com/onelastai/kiddieai#readme" target="_blank" class="repo-btn secondary">
+                View Docs
+              </a>
+            </div>
+          </div>
+
+          <div class="repo-card">
+            <div class="repo-header">
+              <span class="repo-icon">🔧</span>
+              <div class="repo-info">
+                <h4>CodeForge Repository</h4>
+                <div class="repo-path">github.com/onelastai/codeforge</div>
+              </div>
+            </div>
+            <p class="repo-description">
+              Development toolkit with code templates, review checklists, and optimization frameworks for all languages.
+            </p>
+            <div class="repo-features">
+              <span class="feature-tag">⚡ Code Templates</span>
+              <span class="feature-tag">🔍 Review Tools</span>
+              <span class="feature-tag">🏗️ Architecture</span>
+            </div>
+            <div class="repo-actions">
+              <a href="https://github.com/onelastai/codeforge" target="_blank" class="repo-btn primary">
+                Fork Repository
+              </a>
+              <a href="https://github.com/onelastai/codeforge#readme" target="_blank" class="repo-btn secondary">
+                View Docs
+              </a>
+            </div>
+          </div>
+
+          <div class="repo-card">
+            <div class="repo-header">
+              <span class="repo-icon">🎬</span>
+              <div class="repo-info">
+                <h4>CineGen Repository</h4>
+                <div class="repo-path">github.com/onelastai/cinegen</div>
+              </div>
+            </div>
+            <p class="repo-description">
+              Cinematic content creation suite with script templates, storyboard tools, and video production guides.
+            </p>
+            <div class="repo-features">
+              <span class="feature-tag">🎭 Script Templates</span>
+              <span class="feature-tag">🎨 Storyboards</span>
+              <span class="feature-tag">🎥 Production</span>
+            </div>
+            <div class="repo-actions">
+              <a href="https://github.com/onelastai/cinegen" target="_blank" class="repo-btn primary">
+                Fork Repository
+              </a>
+              <a href="https://github.com/onelastai/cinegen#readme" target="_blank" class="repo-btn secondary">
+                View Docs
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="all-repos-section">
+          <h4 style="color: #00d4ff; text-align: center; margin: 3rem 0 2rem 0; font-size: 1.3rem;">
+            🌟 Complete Agent Ecosystem
+          </h4>
+          <p style="text-align: center; color: #b8b8b8; margin-bottom: 2rem; line-height: 1.6;">
+            Explore all 27 Royal AI™ agent repositories, each with unique capabilities, templates, and ready-to-deploy environments.
+          </p>
+          <div style="text-align: center;">
+            <a href="https://github.com/onelastai" target="_blank" class="view-all-repos-btn">
+              🚀 View All 27 Agent Repositories
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tips Section -->
+    <div class="tips-section">
+      <h3>🌟 Pro Tips for Using Templates</h3>
+      <div class="tip-item">
+        Customize templates to match your specific needs and brand voice - these are starting points, not rigid rules.
+      </div>
+      <div class="tip-item">
+        Replace [PLACEHOLDERS] with your actual content to get the most relevant and useful responses.
+      </div>
+      <div class="tip-item">
+        Combine templates from different agents for comprehensive solutions to complex projects.
+      </div>
+      <div class="tip-item">
+        Start simple with basic templates, then gradually use more advanced ones as you become comfortable.
+      </div>
+      <div class="tip-item">
+        Remember: Our AI agents are companions, not tools. Be polite, patient, and collaborative in your interactions.
+      </div>
+      <div class="tip-item">
+        For kids using KiddieAI templates: Always have a grown-up help and make learning fun together!
+      </div>
+      <div class="tip-item">
+        🏛️ Fork any repository to create your own agent environment with pre-configured templates and structures!
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // Search functionality
+    const searchInput = document.getElementById('template-search');
+    const filterTabs = document.querySelectorAll('.filter-tab');
+    const templateCards = document.querySelectorAll('.template-card');
+
+    searchInput.addEventListener('input', (e) => {
+      const searchTerm = e.target.value.toLowerCase();
+      
+      templateCards.forEach(card => {
+        const title = card.querySelector('h3').textContent.toLowerCase();
+        const description = card.querySelector('.template-description').textContent.toLowerCase();
+        const agent = card.querySelector('.template-agent').textContent.toLowerCase();
+        
+        const shouldShow = title.includes(searchTerm) || 
+                          description.includes(searchTerm) || 
+                          agent.includes(searchTerm);
+        
+        card.style.display = shouldShow ? 'block' : 'none';
+      });
+    });
+
+    // Filter functionality
+    filterTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const category = tab.dataset.category;
+        
+        // Update active tab
+        filterTabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        
+        // Filter templates
+        templateCards.forEach(card => {
+          if (category === 'all' || card.dataset.category === category) {
+            card.style.display = 'block';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+
+    // Copy template functionality
+    function copyTemplate(button) {
+      const templateContent = button.parentElement;
+      const text = templateContent.textContent.replace('Copy', '').trim();
+      
+      navigator.clipboard.writeText(text).then(() => {
+        button.textContent = 'Copied!';
+        button.style.background = '#00ff00';
+        
+        setTimeout(() => {
+          button.textContent = 'Copy';
+          button.style.background = '#00d4ff';
+        }, 2000);
+      });
+    }
+
+    // Use template functionality
+    document.querySelectorAll('.use-template-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const template = btn.closest('.template-card');
+        const agentName = template.querySelector('.template-agent').textContent;
+        const templateText = template.querySelector('.template-content').textContent.replace('Copy', '').trim();
+        
+        // Here you could redirect to the specific agent with the template pre-filled
+        alert(`This would redirect to ${agentName} with the template ready to use!`);
+      });
+    });
+  </script>
+</body>
+</html>

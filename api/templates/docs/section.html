@@ -1,0 +1,104 @@
+<div class="min-h-screen bg-gray-900">
+  <!-- Section Header -->
+  <section class="relative py-20 overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-blue-900/20 via-indigo-900/20 to-purple-900/20"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/40"></div>
+    
+    <div class="container mx-auto px-6 relative z-10">
+      <div class="max-w-4xl mx-auto">
+        <!-- Breadcrumb -->
+        <nav class="mb-8">
+          <ol class="flex items-center gap-2 text-sm text-gray-400">
+            <li><a href="/docs" class="hover:text-white transition-colors">Documentation</a></li>
+            <li>→</li>
+            <li class="text-white"><%= @section_info[:name] %></li>
+          </ol>
+        </nav>
+        
+        <div class="flex items-center gap-6 mb-6">
+          <div class="w-16 h-16 bg-<%= @section_info[:color] %>-600/20 rounded-2xl flex items-center justify-center">
+            <span class="text-2xl"><%= @section_info[:icon] %></span>
+          </div>
+          <div>
+            <h1 class="text-4xl lg:text-5xl font-bold text-white mb-2"><%= @section_info[:name] %></h1>
+            <p class="text-xl text-gray-300"><%= @section_info[:description] %></p>
+          </div>
+        </div>
+        
+        <div class="flex items-center gap-4 text-sm text-gray-400">
+          <span><%= @section_info[:topics] %> topics available</span>
+          <span>•</span>
+          <span>Updated regularly</span>
+          <span>•</span>
+          <span>Community contributions welcome</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Topics Grid -->
+  <section class="py-20 border-t border-gray-800">
+    <div class="container mx-auto px-6">
+      <div class="max-w-6xl mx-auto">
+        <div class="grid lg:grid-cols-2 gap-8">
+          <% @topics.each do |topic| %>
+            <div class="feature-card group">
+              <div class="card-bg-gradient"></div>
+              <div class="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent rounded-xl"></div>
+              
+              <div class="relative z-10 p-8">
+                <div class="flex items-center justify-between mb-4">
+                  <span class="px-3 py-1 bg-<%= topic[:difficulty] == 'Beginner' ? 'green' : topic[:difficulty] == 'Intermediate' ? 'yellow' : 'red' %>-600/20 text-<%= topic[:difficulty] == 'Beginner' ? 'green' : topic[:difficulty] == 'Intermediate' ? 'yellow' : 'red' %>-400 rounded-full text-sm">
+                    <%= topic[:difficulty] %>
+                  </span>
+                  <span class="text-gray-400 text-sm"><%= topic[:duration] %></span>
+                </div>
+                
+                <h3 class="text-xl font-bold text-white mb-4"><%= topic[:title] %></h3>
+                <p class="text-gray-300 mb-6"><%= topic[:description] %></p>
+                
+                <a href="/docs/<%= @section %>/<%= topic[:slug] %>" class="inline-flex items-center text-<%= @section_info[:color] %>-400 hover:text-<%= @section_info[:color] %>-300 transition-colors duration-200">
+                  Read Documentation
+                  <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                  </svg>
+                </a>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Related Sections -->
+  <section class="py-20 border-t border-gray-800">
+    <div class="container mx-auto px-6">
+      <div class="max-w-6xl mx-auto">
+        <h2 class="text-2xl font-bold text-white mb-8">Related Documentation</h2>
+        
+        <div class="grid lg:grid-cols-3 gap-6">
+          <% @related_sections.each do |section| %>
+            <div class="bg-gray-800/50 border border-gray-700 rounded-xl p-6 hover:border-<%= section[:color] %>-500/50 transition-colors">
+              <div class="flex items-center gap-3 mb-4">
+                <div class="w-12 h-12 bg-<%= section[:color] %>-600/20 rounded-xl flex items-center justify-center">
+                  <span class="text-xl"><%= section[:icon] %></span>
+                </div>
+                <div>
+                  <h3 class="text-lg font-bold text-white"><%= section[:name] %></h3>
+                  <p class="text-sm text-gray-400"><%= section[:topics] %> topics</p>
+                </div>
+              </div>
+              
+              <p class="text-gray-300 mb-4"><%= section[:description] %></p>
+              
+              <a href="/docs/<%= section[:slug] %>" class="text-<%= section[:color] %>-400 hover:text-<%= section[:color] %>-300 transition-colors text-sm">
+                Explore Section →
+              </a>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

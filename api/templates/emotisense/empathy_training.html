@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Empathy Training - EmotiSense | Terminal Interface</title>
+  
+  <%= csrf_meta_tags if defined?(csrf_meta_tags) %>
+  <%= csp_meta_tag if defined?(csp_meta_tag) %>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Courier New', 'Monaco', 'Menlo', 'Consolas', monospace;
+      background: #000000;
+      color: #00ff00;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+    
+    /* Terminal scanlines effect */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        transparent 50%, 
+        rgba(0, 255, 0, 0.03) 50%
+      );
+      background-size: 100% 2px;
+      pointer-events: none;
+      z-index: 1000;
+      animation: scanlines 0.1s linear infinite;
+    }
+    
+    @keyframes scanlines {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(2px); }
+    }
+
+    /* Top Header Menu Bar - Linux Command Style */
+    .top-menu-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 35px;
+      background: rgba(0, 0, 0, 0.98);
+      border-bottom: 1px solid #00ff00;
+      display: flex;
+      align-items: center;
+      z-index: 2000;
+      font-family: 'Courier New', monospace;
+      font-size: 0.8rem;
+      box-shadow: 0 1px 5px rgba(0, 255, 0, 0.5);
+    }
+
+    .terminal-prompt {
+      color: #ffff00;
+      padding: 0 10px;
+      font-weight: bold;
+      border-right: 1px solid #333;
+    }
+
+    .menu-bar-items {
+      display: flex;
+      flex: 1;
+      align-items: center;
+    }
+
+    .top-menu-item {
+      color: #00ff00;
+      padding: 8px 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-transform: lowercase;
+      border-right: 1px solid #333;
+      text-decoration: none;
+    }
+
+    .top-menu-item:hover {
+      background: rgba(0, 255, 0, 0.1);
+      color: #33ff33;
+      text-shadow: 0 0 5px #00ff00;
+    }
+
+    .system-info {
+      color: #666;
+      font-size: 0.7rem;
+      padding: 0 15px;
+      margin-left: auto;
+      border-left: 1px solid #333;
+    }
+
+    /* Main content area */
+    .page-container {
+      margin-top: 35px;
+      min-height: calc(100vh - 35px);
+      padding: 1rem;
+    }
+
+    /* Terminal window styling */
+    .terminal-window {
+      background: rgba(0, 0, 0, 0.9);
+      border: 1px solid #00ff00;
+      border-radius: 0;
+      margin: 1rem auto;
+      max-width: 1000px;
+      box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+      position: relative;
+    }
+
+    .terminal-header {
+      background: rgba(0, 100, 0, 0.3);
+      padding: 0.5rem;
+      border-bottom: 1px solid #00ff00;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .terminal-title {
+      color: #00ff00;
+      font-weight: bold;
+      font-size: 0.9rem;
+    }
+
+    .terminal-controls {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .terminal-btn {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 1px solid #00ff00;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .terminal-btn.close { border-color: #ff0000; }
+    .terminal-btn.minimize { border-color: #ffff00; }
+    .terminal-btn.maximize { border-color: #00ff00; }
+
+    .terminal-content {
+      padding: 1rem;
+      min-height: 500px;
+    }
+
+    /* Training interface */
+    .training-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .training-title {
+      color: #00ff00;
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+      text-shadow: 0 0 10px #00ff00;
+    }
+
+    .training-subtitle {
+      color: #cccccc;
+      font-size: 0.9rem;
+    }
+
+    /* Scenario card */
+    .scenario-card {
+      background: rgba(0, 100, 0, 0.1);
+      border: 1px solid #00ff00;
+      border-radius: 0;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .scenario-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid rgba(0, 255, 0, 0.3);
+    }
+
+    .scenario-icon {
+      color: #ffff00;
+      margin-right: 0.5rem;
+      font-size: 1.2rem;
+    }
+
+    .scenario-title {
+      color: #00ff00;
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+
+    .scenario-content {
+      color: #cccccc;
+      line-height: 1.5;
+      margin-bottom: 1rem;
+    }
+
+    .scenario-context {
+      background: rgba(0, 0, 0, 0.5);
+      border-left: 3px solid #ffff00;
+      padding: 0.75rem;
+      margin: 1rem 0;
+      color: #ffffcc;
+      font-style: italic;
+    }
+
+    .emotion-focus {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .emotion-tag {
+      background: rgba(255, 255, 0, 0.1);
+      border: 1px solid #ffff00;
+      color: #ffff00;
+      padding: 0.25rem 0.5rem;
+      font-size: 0.75rem;
+      border-radius: 2px;
+    }
+
+    /* Response interface */
+    .response-interface {
+      background: rgba(0, 0, 0, 0.8);
+      border: 1px solid #00ff00;
+      padding: 1rem;
+      margin-top: 1rem;
+    }
+
+    .response-label {
+      color: #00ff00;
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+    }
+
+    .response-textarea {
+      width: 100%;
+      background: transparent;
+      border: 1px solid #666;
+      color: #00ff00;
+      font-family: inherit;
+      font-size: inherit;
+      padding: 0.75rem;
+      min-height: 120px;
+      resize: vertical;
+      outline: none;
+    }
+
+    .response-textarea:focus {
+      border-color: #00ff00;
+      box-shadow: 0 0 5px rgba(0, 255, 0, 0.3);
+    }
+
+    /* Progress tracking */
+    .progress-panel {
+      background: rgba(0, 100, 0, 0.1);
+      border: 1px solid #00ff00;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .progress-title {
+      color: #00ff00;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+
+    .progress-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .progress-stat {
+      text-align: center;
+    }
+
+    .stat-value {
+      color: #ffff00;
+      font-size: 1.3rem;
+      font-weight: bold;
+      display: block;
+    }
+
+    .stat-label {
+      color: #cccccc;
+      font-size: 0.8rem;
+    }
+
+    /* Action buttons */
+    .action-buttons {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .action-btn {
+      background: transparent;
+      color: #00ff00;
+      border: 1px solid #00ff00;
+      padding: 0.75rem 1.5rem;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.8rem;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      text-transform: uppercase;
+    }
+
+    .action-btn:hover {
+      background: rgba(0, 255, 0, 0.1);
+      box-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
+      text-shadow: 0 0 5px #00ff00;
+    }
+
+    .action-btn.primary {
+      background: rgba(0, 255, 0, 0.1);
+      color: #33ff33;
+    }
+
+    /* Command interface */
+    .command-interface {
+      background: rgba(0, 0, 0, 0.8);
+      border: 1px solid #00ff00;
+      padding: 1rem;
+      margin-top: 1rem;
+    }
+
+    .command-line {
+      display: flex;
+      align-items: center;
+    }
+
+    .command-prompt {
+      color: #ffff00;
+      margin-right: 0.5rem;
+    }
+
+    .command-input {
+      background: transparent;
+      border: none;
+      color: #00ff00;
+      font-family: inherit;
+      font-size: inherit;
+      flex: 1;
+      outline: none;
+    }
+
+    /* Training scenarios list */
+    .scenarios-list {
+      display: grid;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .scenario-item {
+      background: rgba(0, 50, 0, 0.3);
+      border: 1px solid rgba(0, 255, 0, 0.5);
+      padding: 1rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .scenario-item:hover {
+      background: rgba(0, 100, 0, 0.3);
+      border-color: #00ff00;
+    }
+
+    .scenario-item.completed {
+      border-color: #ffff00;
+      background: rgba(100, 100, 0, 0.1);
+    }
+
+    .scenario-item-title {
+      color: #00ff00;
+      font-weight: bold;
+      margin-bottom: 0.25rem;
+    }
+
+    .scenario-item-desc {
+      color: #cccccc;
+      font-size: 0.85rem;
+    }
+
+    .completion-status {
+      color: #ffff00;
+      font-size: 0.75rem;
+      float: right;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Top Linux-Style Menu Bar -->
+  <div class="top-menu-bar">
+    <div class="terminal-prompt">root@emotisense:~#</div>
+    <div class="menu-bar-items">
+      <a href="/emotisense" class="top-menu-item">home</a>
+      <a href="/emotisense/emotion_chat" class="top-menu-item">emotion_chat</a>
+      <a href="/emotisense/mood_journal" class="top-menu-item">mood_journal</a>
+      <a href="/emotisense/emotion_dashboard" class="top-menu-item">emotion_dashboard</a>
+      <a href="/emotisense/wellness_center" class="top-menu-item">wellness_center</a>
+      <a href="/emotisense/empathy_training" class="top-menu-item">empathy_training</a>
+    </div>
+    <div class="system-info">EMPATHY | MEM: 1.8GB | CPU: 35%</div>
+  </div>
+
+  <div class="page-container">
+    <!-- Main Empathy Training Terminal -->
+    <div class="terminal-window">
+      <div class="terminal-header">
+        <div class="terminal-title">EmotiSense Empathy Training v1.0</div>
+        <div class="terminal-controls">
+          <div class="terminal-btn close"></div>
+          <div class="terminal-btn minimize"></div>
+          <div class="terminal-btn maximize"></div>
+        </div>
+      </div>
+      
+      <div class="terminal-content">
+        <div class="training-header">
+          <h1 class="training-title">🤝 Empathy Training Lab</h1>
+          <p class="training-subtitle">Develop emotional intelligence through interactive scenarios</p>
+        </div>
+
+        <!-- Progress Panel -->
+        <div class="progress-panel">
+          <div class="progress-title">Your Progress</div>
+          <div class="progress-stats">
+            <div class="progress-stat">
+              <span class="stat-value"><%= (session[:empathy_progress] || {})[:scenarios_completed] || 0 %></span>
+              <span class="stat-label">Scenarios Completed</span>
+            </div>
+            <div class="progress-stat">
+              <span class="stat-value"><%= ((session[:empathy_progress] || {})[:average_empathy_score] || 0).round(1) %></span>
+              <span class="stat-label">Avg Empathy Score</span>
+            </div>
+            <div class="progress-stat">
+              <span class="stat-value"><%= rand(70..95) %>%</span>
+              <span class="stat-label">Emotional Intelligence</span>
+            </div>
+            <div class="progress-stat">
+              <span class="stat-value"><%= ['Beginner', 'Intermediate', 'Advanced'][(session[:empathy_progress] || {})[:scenarios_completed] || 0 / 3] %></span>
+              <span class="stat-label">Level</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Current Scenario -->
+        <% if @current_scenario %>
+        <div class="scenario-card">
+          <div class="scenario-header">
+            <span class="scenario-icon">🎭</span>
+            <span class="scenario-title"><%= @current_scenario[:title] %></span>
+          </div>
+          
+          <div class="scenario-content">
+            <p><%= @current_scenario[:description] %></p>
+            
+            <div class="scenario-context">
+              <strong>Context:</strong> <%= @current_scenario[:context] %>
+            </div>
+            
+            <div>
+              <strong>Emotional Focus:</strong>
+              <div class="emotion-focus">
+                <% @current_scenario[:emotion_focus].split(', ').each do |emotion| %>
+                  <span class="emotion-tag"><%= emotion.strip %></span>
+                <% end %>
+              </div>
+            </div>
+          </div>
+
+          <!-- Response Interface -->
+          <div class="response-interface">
+            <div class="response-label">Your Empathetic Response:</div>
+            <textarea class="response-textarea" id="empathyResponse" placeholder="How would you respond to this person? Focus on understanding their emotions and providing appropriate support..."></textarea>
+            
+            <div class="action-buttons">
+              <button class="action-btn primary" onclick="submitResponse()">Submit Response</button>
+              <button class="action-btn" onclick="getHint()">Get Hint</button>
+              <button class="action-btn" onclick="skipScenario()">Skip Scenario</button>
+            </div>
+          </div>
+        </div>
+        <% end %>
+
+        <!-- Available Scenarios -->
+        <div class="scenario-card">
+          <div class="scenario-header">
+            <span class="scenario-icon">📚</span>
+            <span class="scenario-title">Available Training Scenarios</span>
+          </div>
+          
+          <div class="scenarios-list">
+            <% (@training_scenarios || []).each_with_index do |scenario, index| %>
+            <div class="scenario-item <%= 'completed' if (session[:empathy_progress] || {})[:scenarios_completed] || 0 > index %>" onclick="loadScenario(<%= scenario[:id] %>)">
+              <div class="scenario-item-title">
+                <%= scenario[:title] %>
+                <span class="completion-status">
+                  <%= (session[:empathy_progress] || {})[:scenarios_completed] || 0 > index ? '✓ Completed' : 'Available' %>
+                </span>
+              </div>
+              <div class="scenario-item-desc"><%= scenario[:description] %></div>
+            </div>
+            <% end %>
+          </div>
+        </div>
+
+        <!-- Command Interface -->
+        <div class="command-interface">
+          <div class="command-line">
+            <span class="command-prompt">empathy@training:~$</span>
+            <input type="text" class="command-input" id="commandInput" placeholder="Enter command (help, start, progress, reset)..." autocomplete="off">
+          </div>
+        </div>
+
+        <!-- Navigation Actions -->
+        <div class="action-buttons">
+          <a href="/emotisense/emotion_chat" class="action-btn">Practice Chat</a>
+          <a href="/emotisense/mood_journal" class="action-btn">Journal Reflection</a>
+          <a href="/emotisense/wellness_center" class="action-btn">Wellness Center</a>
+          <a href="/emotisense/emotion_dashboard" class="action-btn">View Progress</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  // Terminal command functionality
+  const commandInput = document.getElementById('commandInput');
+  
+  const commands = {
+    'help': 'Available commands: help, start, progress, reset, scenarios, tips',
+    'start': 'Starting new empathy training session...',
+    'progress': `Progress: ${<%= (session[:empathy_progress] || {})[:scenarios_completed] || 0 %>} scenarios completed`,
+    'reset': 'RESET_PROGRESS',
+    'scenarios': 'Loading available scenarios...',
+    'tips': 'Empathy tips: Listen actively, validate emotions, avoid judgment, ask open questions',
+    'status': 'Empathy Training Lab - All systems operational',
+    'clear': 'CLEAR_SCREEN',
+    'ls': 'scenario_1  scenario_2  scenario_3  progress.log  tips.txt',
+    'pwd': '/emotisense/empathy_training',
+    'whoami': 'empathy_trainee'
+  };
+
+  commandInput.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+      const command = this.value.trim();
+      if (command) {
+        executeCommand(command);
+        this.value = '';
+      }
+    }
+  });
+
+  function executeCommand(command) {
+    console.log(`Executing command: ${command}`);
+    
+    if (commands[command]) {
+      const response = commands[command];
+      
+      switch(response) {
+        case 'CLEAR_SCREEN':
+          // Clear interface
+          break;
+        case 'RESET_PROGRESS':
+          if (confirm('Are you sure you want to reset your empathy training progress?')) {
+            // Reset progress via AJAX call
+            alert('Progress reset successfully');
+            location.reload();
+          }
+          break;
+        default:
+          alert(response);
+      }
+    } else {
+      alert(`Command '${command}' not found. Type 'help' for available commands.`);
+    }
+  }
+
+  function submitResponse() {
+    const response = document.getElementById('empathyResponse').value;
+    if (!response.trim()) {
+      alert('Please enter your empathetic response first.');
+      return;
+    }
+    
+    // Simulate empathy analysis
+    const scenarios = <%= raw (@training_scenarios || []).to_json %>;
+    const currentScenarioId = <%= @current_scenario ? @current_scenario[:id] : 1 %>;
+    
+    // Submit via AJAX
+    fetch('/emotisense/process_empathy_response', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+      },
+      body: JSON.stringify({
+        scenario_id: currentScenarioId,
+        response: response
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+      alert(`Empathy Analysis:\nScore: ${data.analysis.empathy_score}/10\n\nFeedback: ${data.feedback}\n\nSuggestions:\n${data.analysis.suggestions.join('\n')}`);
+      
+      // Load next scenario
+      setTimeout(() => {
+        window.location.href = `/emotisense/empathy_training?scenario_id=${data.next_scenario.id}`;
+      }, 2000);
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('Error submitting response. Please try again.');
+    });
+  }
+
+  function getHint() {
+    const hints = [
+      "Start by acknowledging their feelings: 'It sounds like you're feeling...'",
+      "Ask open-ended questions: 'Can you tell me more about how this affected you?'",
+      "Validate their experience: 'Your feelings are completely understandable.'",
+      "Offer support: 'I'm here for you. What would be most helpful right now?'",
+      "Reflect their emotions: 'This must be really difficult for you.'"
+    ];
+    
+    const randomHint = hints[Math.floor(Math.random() * hints.length)];
+    alert(`Empathy Hint: ${randomHint}`);
+  }
+
+  function skipScenario() {
+    if (confirm('Are you sure you want to skip this scenario?')) {
+      // Navigate to next scenario
+      const scenarios = <%= raw (@training_scenarios || []).to_json %>;
+      const currentIndex = scenarios.findIndex(s => s.id === <%= @current_scenario ? @current_scenario[:id] : 1 %>);
+      const nextIndex = (currentIndex + 1) % scenarios.length;
+      
+      window.location.href = `/emotisense/empathy_training?scenario_id=${scenarios[nextIndex].id}`;
+    }
+  }
+
+  function loadScenario(scenarioId) {
+    window.location.href = `/emotisense/empathy_training?scenario_id=${scenarioId}`;
+  }
+
+  // Focus on command input when page loads
+  window.addEventListener('load', () => {
+    if (commandInput) {
+      commandInput.focus();
+    }
+  });
+</script>
+
+</body>
+</html>

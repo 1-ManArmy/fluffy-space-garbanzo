@@ -1,0 +1,138 @@
+<% content_for :title, @page_title %>
+<% content_for :meta_description, "OneLastAI cloud infrastructure powered by Railway platform with automatic scaling, deployment, and SSL." %>
+
+<div class="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+  <div class="container mx-auto px-4 py-12">
+    <!-- Header -->
+    <div class="text-center mb-12">
+      <h1 class="text-4xl font-bold text-gray-900 mb-4">
+        <span class="text-blue-600">☁️</span> Cloud Infrastructure
+      </h1>
+      <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+        Powered by Railway platform for modern, scalable deployment of OneLastAI's 27 AI agents
+      </p>
+    </div>
+
+    <!-- Railway Platform Overview -->
+    <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
+      <div class="flex items-center mb-6">
+        <div class="w-12 h-12 bg-purple-600 rounded-lg flex items-center justify-center mr-4">
+          <span class="text-white text-2xl">🚂</span>
+        </div>
+        <div>
+          <h2 class="text-2xl font-bold text-gray-900"><%= @cloud_info[:provider] %></h2>
+          <p class="text-gray-600"><%= @cloud_info[:description] %></p>
+        </div>
+      </div>
+      
+      <div class="grid md:grid-cols-2 gap-6 mb-6">
+        <div>
+          <h3 class="text-lg font-semibold text-gray-800 mb-3">Platform Features</h3>
+          <ul class="space-y-2">
+            <% @cloud_info[:features].each do |feature| %>
+              <li class="flex items-center text-gray-600">
+                <span class="text-green-500 mr-2">✅</span>
+                <%= feature %>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+        
+        <div>
+          <h3 class="text-lg font-semibold text-gray-800 mb-3">Benefits</h3>
+          <ul class="space-y-2">
+            <% @cloud_info[:benefits].each do |benefit| %>
+              <li class="flex items-center text-gray-600">
+                <span class="text-blue-500 mr-2">🎯</span>
+                <%= benefit %>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between p-4 bg-purple-50 rounded-lg">
+        <div>
+          <span class="text-sm text-gray-600">Monthly Cost:</span>
+          <span class="text-lg font-bold text-purple-600 ml-2"><%= @cloud_info[:pricing] %></span>
+        </div>
+        <div class="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-medium">
+          <%= @cloud_info[:status] %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Domain Configuration -->
+    <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">
+        <span class="text-blue-600">🌐</span> Domain Configuration
+      </h2>
+      
+      <div class="space-y-4">
+        <div class="p-4 bg-blue-50 rounded-lg">
+          <h3 class="font-semibold text-blue-900">Primary Domain</h3>
+          <p class="text-blue-700 font-mono">onelastai.com</p>
+        </div>
+        
+        <div class="p-4 bg-green-50 rounded-lg">
+          <h3 class="font-semibold text-green-900">Wildcard Subdomain Support</h3>
+          <p class="text-green-700 font-mono">*.onelastai.com</p>
+          <p class="text-sm text-green-600 mt-1">Automatically handles all 27 AI agent subdomains</p>
+        </div>
+        
+        <div class="p-4 bg-purple-50 rounded-lg">
+          <h3 class="font-semibold text-purple-900">Example Agent URLs</h3>
+          <div class="grid md:grid-cols-2 gap-2 mt-2">
+            <p class="text-purple-700 font-mono text-sm">girlfriend.onelastai.com</p>
+            <p class="text-purple-700 font-mono text-sm">neochat.onelastai.com</p>
+            <p class="text-purple-700 font-mono text-sm">codemaster.onelastai.com</p>
+            <p class="text-purple-700 font-mono text-sm">dreamweaver.onelastai.com</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Technical Architecture -->
+    <div class="bg-white rounded-xl shadow-lg p-8">
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">
+        <span class="text-green-600">🏗️</span> Technical Architecture
+      </h2>
+      
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="text-center p-6 bg-gray-50 rounded-lg">
+          <div class="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span class="text-white text-2xl">📱</span>
+          </div>
+          <h3 class="font-semibold text-gray-800 mb-2">Frontend</h3>
+          <p class="text-gray-600 text-sm">Ruby on Rails 7.1.5<br>Responsive UI</p>
+        </div>
+        
+        <div class="text-center p-6 bg-gray-50 rounded-lg">
+          <div class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span class="text-white text-2xl">⚙️</span>
+          </div>
+          <h3 class="font-semibold text-gray-800 mb-2">Backend</h3>
+          <p class="text-gray-600 text-sm">Rails API<br>27 AI Controllers</p>
+        </div>
+        
+        <div class="text-center p-6 bg-gray-50 rounded-lg">
+          <div class="w-16 h-16 bg-purple-500 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span class="text-white text-2xl">🗄️</span>
+          </div>
+          <h3 class="font-semibold text-gray-800 mb-2">Database</h3>
+          <p class="text-gray-600 text-sm">PostgreSQL 15<br>Built-in with Railway</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="mt-12 text-center">
+      <div class="space-x-4">
+        <%= link_to "← Back to Infrastructure", infrastructure_path, 
+            class: "px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors" %>
+        <%= link_to "View Database Config →", infrastructure_database_path, 
+            class: "px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors" %>
+      </div>
+    </div>
+  </div>
+</div>

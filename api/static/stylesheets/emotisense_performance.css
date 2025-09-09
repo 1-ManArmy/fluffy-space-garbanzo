@@ -1,0 +1,180 @@
+/* EmotiSense Pro - Performance Optimizations
+ * Advanced CSS for eliminating scroll issues and improving UI performance
+ * Created: 2024 - Production Ready
+ */
+
+/* Global Performance Enhancements */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Hardware Acceleration for Smooth Scrolling */
+html {
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-perspective: 1000px;
+  perspective: 1000px;
+}
+
+body {
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  will-change: scroll-position;
+}
+
+/* Optimized Container Performance */
+.emotisense-container {
+  contain: layout style paint;
+  will-change: auto;
+}
+
+/* Side Panel Scroll Optimization */
+.side-panel {
+  contain: layout style paint;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+/* Center Panel Performance */
+.center-panel {
+  contain: layout style paint;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+/* Animation Performance Rules */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Prevent Layout Thrashing */
+.feature-card,
+.panel,
+.modal {
+  contain: layout style;
+  will-change: auto;
+}
+
+/* Optimized Backdrop Filters */
+.side-panel,
+.center-panel,
+.modal-content {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* Scroll Performance for Chat */
+.chat-messages {
+  contain: strict;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+/* Memory Management */
+.hero-section,
+.stats-section {
+  contain: layout style paint;
+}
+
+/* GPU Acceleration for Key Elements */
+.hero-logo,
+.hero-title,
+.nav-button {
+  will-change: transform;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+}
+
+/* Prevent White Flash on Scroll */
+body::before,
+body::after {
+  will-change: auto;
+  contain: strict;
+}
+
+/* Optimized Grid Performance */
+.emotisense-grid {
+  contain: layout;
+  will-change: auto;
+}
+
+/* Enhanced Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #fd79a8, #6c5ce7);
+  border-radius: 10px;
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #e84393, #5f3dc4);
+}
+
+/* Firefox Scrollbar */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: #fd79a8 rgba(255, 255, 255, 0.1);
+}
+
+/* Prevent Scroll Bouncing */
+html, body {
+  overscroll-behavior: none;
+}
+
+/* Performance Monitoring */
+@supports (contain: strict) {
+  .performance-optimized {
+    contain: strict;
+  }
+}
+
+/* Critical Performance Fixes */
+.no-animation-on-scroll {
+  animation-play-state: paused;
+}
+
+body.scrolling .no-animation-on-scroll {
+  animation-play-state: paused;
+}
+
+/* Mobile Optimization */
+@media (max-width: 768px) {
+  body {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+  
+  .side-panel,
+  .center-panel {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+  }
+}
+
+/* High DPI Display Optimization */
+@media (-webkit-min-device-pixel-ratio: 2) {
+  * {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}

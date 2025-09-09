@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= @page_title %> - OneLast AI</title>
+    <meta name="description" content="Enterprise-grade infrastructure powering OneLast AI platform">
+    
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+</head>
+<body class="bg-gray-900 text-gray-100">
+    <!-- Header -->
+    <header class="bg-black/50 backdrop-blur-md border-b border-gray-800 fixed w-full top-0 z-50">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <a href="/" class="text-2xl font-bold text-white">OneLast AI</a>
+                <nav class="hidden md:flex space-x-8">
+                    <a href="/" class="text-gray-300 hover:text-white transition-colors">Home</a>
+                    <a href="/features" class="text-gray-300 hover:text-white transition-colors">Features</a>
+                    <a href="/infrastructure" class="text-green-400 font-medium">Infrastructure</a>
+                    <a href="/about" class="text-gray-300 hover:text-white transition-colors">About</a>
+                    <a href="/contact" class="text-gray-300 hover:text-white transition-colors">Contact</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="pt-20">
+        <!-- Hero Section -->
+        <section class="py-20 bg-gradient-to-br from-gray-900 via-green-900/20 to-gray-900">
+            <div class="container mx-auto px-6 text-center">
+                <div class="text-6xl mb-6">🏗️</div>
+                <h1 class="text-5xl lg:text-6xl font-bold text-white mb-6">
+                    Enterprise Infrastructure
+                </h1>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto mb-8">
+                    Battle-tested, scalable, and secure infrastructure designed for mission-critical AI workloads
+                </p>
+            </div>
+        </section>
+
+        <!-- Tech Stack Overview -->
+        <section class="py-20">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold text-white mb-6">Technology Stack</h2>
+                    <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                        Modern, proven technologies powering our AI platform
+                    </p>
+                </div>
+                
+                <div class="grid lg:grid-cols-2 gap-8">
+                    <% @tech_stack.each do |tech| %>
+                        <div class="tech-stack-card p-8">
+                            <div class="text-center">
+                                <div class="tech-icon mx-auto mb-6">
+                                    <span class="text-4xl"><%= tech[:icon] %></span>
+                                </div>
+                                <h3 class="text-2xl font-semibold text-white mb-4"><%= tech[:name] %></h3>
+                                <p class="text-gray-300 mb-6">
+                                    <%= tech[:description] %>
+                                </p>
+                                <div class="flex flex-wrap gap-2 justify-center mb-4">
+                                    <% tech[:features].each do |feature| %>
+                                        <span class="px-3 py-1 bg-green-600/20 text-green-300 rounded-full text-sm border border-green-600/30">
+                                            <%= feature %>
+                                        </span>
+                                    <% end %>
+                                </div>
+                                <a href="/infrastructure/<%= tech[:category] %>" class="text-green-400 hover:text-green-300 font-medium">
+                                    Learn More →
+                                </a>
+                            </div>
+                        </div>
+                    <% end %>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Links -->
+        <section class="py-20 bg-gray-800/50">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold text-white mb-6">Infrastructure Details</h2>
+                </div>
+                
+                <div class="grid md:grid-cols-3 gap-6">
+                    <a href="/infrastructure/tech-stack" class="glass-card p-6 text-center hover:border-green-500/50 transition-all duration-300 transform hover:scale-105">
+                        <div class="text-4xl mb-4">⚡</div>
+                        <h3 class="text-xl font-semibold text-white mb-2">Tech Stack</h3>
+                        <p class="text-gray-300">Detailed technology breakdown</p>
+                    </a>
+                    
+                    <a href="/infrastructure/security" class="glass-card p-6 text-center hover:border-green-500/50 transition-all duration-300 transform hover:scale-105">
+                        <div class="text-4xl mb-4">🔒</div>
+                        <h3 class="text-xl font-semibold text-white mb-2">Security</h3>
+                        <p class="text-gray-300">Enterprise security measures</p>
+                    </a>
+                    
+                    <a href="/infrastructure/deployment" class="glass-card p-6 text-center hover:border-green-500/50 transition-all duration-300 transform hover:scale-105">
+                        <div class="text-4xl mb-4">🚀</div>
+                        <h3 class="text-xl font-semibold text-white mb-2">Deployment</h3>
+                        <p class="text-gray-300">CI/CD and deployment strategy</p>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-black border-t border-gray-800">
+        <div class="container mx-auto px-6 py-8">
+            <div class="text-center text-gray-400">
+                <p>&copy; 2024 OneLast AI. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

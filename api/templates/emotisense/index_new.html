@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EmotiSense - Advanced Emotion AI | OneLast.AI</title>
+  
+  <%= csrf_meta_tags if defined?(csrf_meta_tags) %>
+  <%= csp_meta_tag if defined?(csp_meta_tag) %>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'JetBrains Mono', 'Courier New', monospace;
+      background: linear-gradient(135deg, #1a0d2e 0%, #2d1b4e 25%, #4a0e4e 50%, #2d1b4e 75%, #0f0f23 100%);
+      color: #e8b4ff;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+      animation: backgroundShift 20s ease-in-out infinite;
+    }
+
+    @keyframes backgroundShift {
+      0%, 100% { filter: hue-rotate(0deg) brightness(1); }
+      25% { filter: hue-rotate(15deg) brightness(1.1); }
+      50% { filter: hue-rotate(-10deg) brightness(0.9); }
+      75% { filter: hue-rotate(20deg) brightness(1.05); }
+    }
+    
+    /* Terminal scanlines effect */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        transparent 50%, 
+        rgba(232, 180, 255, 0.02) 50%
+      );
+      background-size: 100% 3px;
+      pointer-events: none;
+      z-index: 1000;
+      animation: scanlines 0.08s linear infinite;
+    }
+    
+    @keyframes scanlines {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(3px); }
+    }
+
+    /* Floating emotion particles */
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        radial-gradient(2px 2px at 20px 30px, rgba(232, 180, 255, 0.3), transparent),
+        radial-gradient(2px 2px at 40px 70px, rgba(253, 121, 168, 0.3), transparent),
+        radial-gradient(1px 1px at 90px 40px, rgba(116, 185, 255, 0.4), transparent),
+        radial-gradient(1px 1px at 130px 80px, rgba(255, 107, 129, 0.3), transparent),
+        radial-gradient(2px 2px at 160px 30px, rgba(168, 218, 220, 0.3), transparent);
+      background-repeat: repeat;
+      background-size: 200px 100px;
+      animation: floatParticles 25s linear infinite;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    @keyframes floatParticles {
+      0% { transform: translateY(100vh) rotate(0deg); }
+      100% { transform: translateY(-100vh) rotate(360deg); }
+    }
+    
+    /* Navigation Header */
+    .nav-header {
+      position: fixed;
+      top: 0;
+      right: 0;
+      z-index: 3000;
+      padding: 1rem;
+      display: flex;
+      gap: 0.5rem;
+      background: rgba(0, 0, 0, 0.8);
+      border-bottom-left-radius: 12px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(232, 180, 255, 0.3);
+    }
+    
+    .nav-arrow {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(45deg, #e8b4ff, #fd79a8);
+      border: none;
+      border-radius: 8px;
+      color: #1a0d2e;
+      font-size: 1.2rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .nav-arrow:hover {
+      transform: scale(1.1) rotate(5deg);
+      box-shadow: 0 0 20px rgba(232, 180, 255, 0.6);
+    }
+    
+    /* Main Container */
+    .emotisense-container {
+      display: flex;
+      min-height: 100vh;
+      position: relative;
+      z-index: 2;
+    }
+    
+    /* Left Panel - Emotion Analysis Tools */
+    .left-panel {
+      width: 320px;
+      background: linear-gradient(180deg, rgba(26, 13, 46, 0.95) 0%, rgba(45, 27, 78, 0.9) 100%);
+      border-right: 2px solid #e8b4ff;
+      backdrop-filter: blur(15px);
+      padding: 1.5rem;
+      overflow-y: auto;
+      max-height: 100vh;
+      box-shadow: 0 0 30px rgba(232, 180, 255, 0.2);
+    }
+    
+    /* Right Panel - Wellness Tools */
+    .right-panel {
+      width: 320px;
+      background: linear-gradient(180deg, rgba(26, 13, 46, 0.95) 0%, rgba(45, 27, 78, 0.9) 100%);
+      border-left: 2px solid #e8b4ff;
+      backdrop-filter: blur(15px);
+      padding: 1.5rem;
+      overflow-y: auto;
+      max-height: 100vh;
+      box-shadow: 0 0 30px rgba(232, 180, 255, 0.2);
+    }
+    
+    /* Center Panel - Main Interface */
+    .center-panel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+      position: relative;
+      background: radial-gradient(ellipse at center, rgba(232, 180, 255, 0.05) 0%, rgba(0, 0, 0, 0.2) 70%);
+    }
+
+    /* Grid overlay */
+    .center-panel::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: 
+        linear-gradient(rgba(232, 180, 255, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(232, 180, 255, 0.1) 1px, transparent 1px);
+      background-size: 20px 20px;
+      opacity: 0.3;
+      animation: gridPulse 15s ease-in-out infinite;
+    }
+
+    @keyframes gridPulse {
+      0%, 100% { opacity: 0.3; transform: scale(1); }
+      50% { opacity: 0.1; transform: scale(1.02); }
+    }
+    
+    /* Feature Cards */
+    .feature-card {
+      background: linear-gradient(135deg, rgba(232, 180, 255, 0.1) 0%, rgba(45, 27, 78, 0.3) 100%);
+      border: 1px solid rgba(232, 180, 255, 0.3);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(232, 180, 255, 0.1), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .feature-card:hover::before {
+      left: 100%;
+    }
+    
+    .feature-card:hover {
+      transform: translateY(-5px) scale(1.02);
+      border-color: #e8b4ff;
+      box-shadow: 0 10px 30px rgba(232, 180, 255, 0.4);
+      background: linear-gradient(135deg, rgba(232, 180, 255, 0.2) 0%, rgba(45, 27, 78, 0.4) 100%);
+    }
+    
+    .card-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      display: block;
+      filter: drop-shadow(0 0 10px currentColor);
+    }
+    
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: #e8b4ff;
+      margin-bottom: 0.5rem;
+      text-shadow: 0 0 5px rgba(232, 180, 255, 0.5);
+    }
+    
+    .card-description {
+      font-size: 0.9rem;
+      color: #c77dff;
+      opacity: 0.9;
+      line-height: 1.4;
+    }
+    
+    /* Hero Section */
+    .hero-section {
+      position: relative;
+      z-index: 3;
+      text-align: center;
+    }
+    
+    .hero-logo {
+      font-size: 5rem;
+      margin-bottom: 1rem;
+      animation: emotionPulse 3s ease-in-out infinite;
+      filter: drop-shadow(0 0 20px #e8b4ff);
+    }
+
+    @keyframes emotionPulse {
+      0%, 100% { transform: scale(1) rotate(0deg); filter: drop-shadow(0 0 20px #e8b4ff); }
+      25% { transform: scale(1.05) rotate(2deg); filter: drop-shadow(0 0 25px #fd79a8); }
+      50% { transform: scale(1.1) rotate(-1deg); filter: drop-shadow(0 0 30px #74b9ff); }
+      75% { transform: scale(1.05) rotate(1deg); filter: drop-shadow(0 0 25px #00b894); }
+    }
+    
+    .hero-title {
+      font-size: 3.5rem;
+      font-weight: 800;
+      background: linear-gradient(45deg, #e8b4ff, #fd79a8, #74b9ff, #00b894);
+      background-size: 300% 300%;
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradientFlow 4s ease-in-out infinite;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 30px rgba(232, 180, 255, 0.5);
+    }
+
+    @keyframes gradientFlow {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+    
+    .hero-tagline {
+      font-size: 1.3rem;
+      color: #c77dff;
+      margin-bottom: 1.5rem;
+      opacity: 0.9;
+      font-weight: 300;
+    }
+    
+    .hero-description {
+      font-size: 1rem;
+      line-height: 1.6;
+      color: #a8dadc;
+      margin-bottom: 2rem;
+      max-width: 600px;
+      opacity: 0.8;
+    }
+
+    /* Hero Stats */
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .stat-item {
+      background: linear-gradient(135deg, rgba(232, 180, 255, 0.1) 0%, rgba(0, 0, 0, 0.3) 100%);
+      border: 1px solid rgba(232, 180, 255, 0.3);
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+      min-width: 140px;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+    }
+
+    .stat-item:hover {
+      transform: translateY(-3px);
+      border-color: #e8b4ff;
+      box-shadow: 0 8px 25px rgba(232, 180, 255, 0.3);
+    }
+
+    .stat-value {
+      display: block;
+      font-size: 2.2rem;
+      font-weight: bold;
+      color: #e8b4ff;
+      text-shadow: 0 0 10px currentColor;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+      font-size: 0.9rem;
+      color: #c77dff;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* Hero Action Button */
+    .hero-action {
+      background: linear-gradient(135deg, #e8b4ff 0%, #fd79a8 50%, #74b9ff 100%);
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 25px;
+      color: #1a0d2e;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 1.5rem;
+      position: relative;
+      z-index: 10;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .hero-action:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 10px 30px rgba(232, 180, 255, 0.6);
+      filter: brightness(1.1);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .emotisense-container {
+        flex-direction: column;
+      }
+      
+      .left-panel,
+      .right-panel {
+        width: 100%;
+        max-height: none;
+        order: 2;
+      }
+      
+      .center-panel {
+        order: 1;
+        min-height: 60vh;
+      }
+      
+      .hero-title {
+        font-size: 2.5rem;
+      }
+      
+      .hero-stats {
+        gap: 1rem;
+      }
+    }
+
+    /* Emotion Detection Indicators */
+    .emotion-indicator {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      background: #e8b4ff;
+      border-radius: 50%;
+      animation: floatEmotion 3s ease-in-out infinite;
+      opacity: 0.7;
+    }
+
+    @keyframes floatEmotion {
+      0%, 100% { transform: translateY(0) scale(1); opacity: 0.7; }
+      50% { transform: translateY(-20px) scale(1.2); opacity: 1; }
+    }
+
+    .emotion-indicator:nth-child(1) { top: 20%; left: 10%; animation-delay: 0s; background: #e8b4ff; }
+    .emotion-indicator:nth-child(2) { top: 30%; right: 15%; animation-delay: 0.5s; background: #fd79a8; }
+    .emotion-indicator:nth-child(3) { bottom: 25%; left: 20%; animation-delay: 1s; background: #74b9ff; }
+    .emotion-indicator:nth-child(4) { bottom: 40%; right: 10%; animation-delay: 1.5s; background: #00b894; }
+    .emotion-indicator:nth-child(5) { top: 50%; left: 5%; animation-delay: 2s; background: #fdcb6e; }
+    .emotion-indicator:nth-child(6) { top: 60%; right: 5%; animation-delay: 2.5s; background: #ff7675; }
+
+    /* Panel Headers */
+    .panel-header {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(232, 180, 255, 0.3);
+    }
+
+    .panel-title {
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: #e8b4ff;
+      margin-bottom: 0.5rem;
+      text-shadow: 0 0 10px rgba(232, 180, 255, 0.5);
+    }
+
+    .panel-subtitle {
+      font-size: 0.9rem;
+      color: #c77dff;
+      opacity: 0.8;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navigation Header -->
+  <div class="nav-header">
+    <button class="nav-arrow" onclick="window.location.href='/'" title="Home">
+      🏠
+    </button>
+    <button class="nav-arrow" onclick="window.location.href='/neochat'" title="NeoChat">
+      💬
+    </button>
+    <button class="nav-arrow" onclick="window.location.href='/agents'" title="All Agents">
+      🌌
+    </button>
+  </div>
+
+  <!-- Floating Emotion Indicators -->
+  <div class="emotion-indicator"></div>
+  <div class="emotion-indicator"></div>
+  <div class="emotion-indicator"></div>
+  <div class="emotion-indicator"></div>
+  <div class="emotion-indicator"></div>
+  <div class="emotion-indicator"></div>
+
+  <div class="emotisense-container">
+    <!-- Left Panel - Emotion Analysis -->
+    <div class="left-panel">
+      <div class="panel-header">
+        <div class="panel-title">🌌 Emotion Analysis</div>
+        <div class="panel-subtitle">Advanced AI-powered emotion detection</div>
+      </div>
+
+      <div class="feature-card" onclick="startEmotionDetection()">
+        <span class="card-icon">🎭</span>
+        <div class="card-title">Real-time Detection</div>
+        <div class="card-description">Instant emotion analysis from text, voice, or image input with 94% accuracy</div>
+      </div>
+
+      <div class="feature-card" onclick="openSentimentAnalysis()">
+        <span class="card-icon">📊</span>
+        <div class="card-title">Sentiment Analysis</div>
+        <div class="card-description">Comprehensive sentiment scoring with polarity, subjectivity, and intensity mapping</div>
+      </div>
+
+      <div class="feature-card" onclick="startMoodTracking()">
+        <span class="card-icon">📈</span>
+        <div class="card-title">Mood Patterns</div>
+        <div class="card-description">Track emotional patterns, identify triggers, and monitor mental wellness trends</div>
+      </div>
+    </div>
+
+    <!-- Center Panel - Hero Section -->
+    <div class="center-panel">
+      <div class="hero-section">
+        <div class="hero-logo">🎭</div>
+        <h1 class="hero-title">EmotiSense</h1>
+        <p class="hero-tagline">Advanced Emotional Intelligence AI</p>
+        <p class="hero-description">
+          Cutting-edge emotion detection, sentiment analysis, and mental wellness support powered by advanced AI. 
+          Understand, track, and enhance your emotional well-being with real-time insights and personalized guidance.
+        </p>
+
+        <div class="hero-stats">
+          <div class="stat-item">
+            <span class="stat-value" id="emotion-count"><%=@agent_stats[:total_conversations] || 0 %></span>
+            <span class="stat-label">Analyses</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value">94.2%</span>
+            <span class="stat-label">Accuracy</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value">< 1.8s</span>
+            <span class="stat-label">Response</span>
+          </div>
+        </div>
+
+        <button class="hero-action" onclick="startEmotionChat()">
+          Start Emotion Analysis
+        </button>
+      </div>
+    </div>
+
+    <!-- Right Panel - Wellness Tools -->
+    <div class="right-panel">
+      <div class="panel-header">
+        <div class="panel-title">🌟 Wellness Center</div>
+        <div class="panel-subtitle">Mental health support & guidance</div>
+      </div>
+
+      <div class="feature-card" onclick="openTherapeuticSupport()">
+        <span class="card-icon">🛟</span>
+        <div class="card-title">Therapeutic Support</div>
+        <div class="card-description">AI-powered mental health guidance with evidence-based therapeutic techniques</div>
+      </div>
+
+      <div class="feature-card" onclick="openEmotionalCoaching()">
+        <span class="card-icon">🎓</span>
+        <div class="card-title">EQ Coaching</div>
+        <div class="card-description">Personalized emotional intelligence development with interactive learning paths</div>
+      </div>
+
+      <div class="feature-card" onclick="openWellnessAssessment()">
+        <span class="card-icon">🏥</span>
+        <div class="card-title">Wellness Assessment</div>
+        <div class="card-description">Comprehensive mental health evaluation with personalized wellness recommendations</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chat Interface Modal (Initially Hidden) -->
+  <div id="emotion-chat-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 4000; backdrop-filter: blur(10px);">
+    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 800px; background: linear-gradient(135deg, rgba(26, 13, 46, 0.95) 0%, rgba(45, 27, 78, 0.9) 100%); border: 2px solid #e8b4ff; border-radius: 20px; padding: 2rem; backdrop-filter: blur(15px);">
+      
+      <!-- Chat Header -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid rgba(232, 180, 255, 0.3);">
+        <div>
+          <h2 style="color: #e8b4ff; font-size: 1.8rem; margin-bottom: 0.5rem;">🎭 EmotiSense Chat</h2>
+          <p style="color: #c77dff; font-size: 0.9rem;">Share your thoughts and emotions for real-time AI analysis</p>
+        </div>
+        <button onclick="closeEmotionChat()" style="background: #ff7675; border: none; border-radius: 50%; width: 40px; height: 40px; color: white; font-size: 1.2rem; cursor: pointer; transition: all 0.3s ease;">×</button>
+      </div>
+
+      <!-- Chat Messages -->
+      <div id="chat-messages" style="height: 300px; overflow-y: auto; margin-bottom: 1.5rem; padding: 1rem; background: rgba(0, 0, 0, 0.3); border-radius: 10px; border: 1px solid rgba(232, 180, 255, 0.2);">
+        <div style="color: #c77dff; text-align: center; padding: 2rem;">
+          👋 Hello! I'm EmotiSense, your emotional intelligence AI companion. Share anything on your mind and I'll help you understand the emotions behind it.
+        </div>
+      </div>
+
+      <!-- Emotion Analysis Panel -->
+      <div id="emotion-analysis" style="background: rgba(232, 180, 255, 0.1); border: 1px solid rgba(232, 180, 255, 0.3); border-radius: 10px; padding: 1rem; margin-bottom: 1.5rem; display: none;">
+        <h4 style="color: #e8b4ff; margin-bottom: 0.5rem;">🌌 Emotion Analysis</h4>
+        <div id="emotion-results" style="color: #c77dff; font-size: 0.9rem;"></div>
+      </div>
+
+      <!-- Chat Input -->
+      <div style="display: flex; gap: 1rem;">
+        <input type="text" id="emotion-input" placeholder="Share your thoughts, feelings, or experiences..." style="flex: 1; padding: 1rem; background: rgba(0, 0, 0, 0.5); border: 1px solid rgba(232, 180, 255, 0.3); border-radius: 10px; color: #e8b4ff; font-size: 1rem;" onkeypress="if(event.key==='Enter') sendEmotionMessage()">
+        <button onclick="sendEmotionMessage()" style="background: linear-gradient(135deg, #e8b4ff, #fd79a8); border: none; border-radius: 10px; padding: 1rem 2rem; color: #1a0d2e; font-weight: bold; cursor: pointer; transition: all 0.3s ease;">Analyze</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Chat functionality
+    function startEmotionChat() {
+      document.getElementById('emotion-chat-modal').style.display = 'block';
+      document.getElementById('emotion-input').focus();
+    }
+
+    function closeEmotionChat() {
+      document.getElementById('emotion-chat-modal').style.display = 'none';
+    }
+
+    function sendEmotionMessage() {
+      const input = document.getElementById('emotion-input');
+      const message = input.value.trim();
+      
+      if (!message) return;
+      
+      // Add user message to chat
+      addMessageToChat('user', message);
+      
+      // Clear input
+      input.value = '';
+      
+      // Show loading
+      addMessageToChat('ai', '🌌 Analyzing emotions...', true);
+      
+      // Send to EmotiSense AI
+      fetch('/emotisense/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': document.querySelector('[name="csrf-token"]').content
+        },
+        body: JSON.stringify({ message: message })
+      })
+      .then(response => response.json())
+      .then(data => {
+        // Remove loading message
+        const messages = document.getElementById('chat-messages');
+        if (messages.lastChild) {
+          messages.removeChild(messages.lastChild);
+        }
+        
+        // Add AI response
+        addMessageToChat('ai', data.response);
+        
+        // Show emotion analysis
+        if (data.emotion_analysis) {
+          showEmotionAnalysis(data.emotion_analysis);
+        }
+        
+        // Update stats
+        updateStats();
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        const messages = document.getElementById('chat-messages');
+        if (messages.lastChild) {
+          messages.removeChild(messages.lastChild);
+        }
+        addMessageToChat('ai', 'Sorry, I encountered a technical issue. Please try again.');
+      });
+    }
+
+    function addMessageToChat(sender, message, isLoading = false) {
+      const messagesDiv = document.getElementById('chat-messages');
+      const messageDiv = document.createElement('div');
+      
+      const senderColor = sender === 'user' ? '#74b9ff' : '#e8b4ff';
+      const senderIcon = sender === 'user' ? '👤' : '🎭';
+      const bgColor = sender === 'user' ? 'rgba(116, 185, 255, 0.1)' : 'rgba(232, 180, 255, 0.1)';
+      
+      messageDiv.style.cssText = `
+        margin-bottom: 1rem;
+        padding: 1rem;
+        background: ${bgColor};
+        border-radius: 10px;
+        border-left: 3px solid ${senderColor};
+        ${isLoading ? 'animation: pulse 1.5s ease-in-out infinite;' : ''}
+      `;
+      
+      messageDiv.innerHTML = `
+        <div style="color: ${senderColor}; font-weight: bold; margin-bottom: 0.5rem; font-size: 0.9rem;">
+          ${senderIcon} ${sender === 'user' ? 'You' : 'EmotiSense'}
+        </div>
+        <div style="color: #c77dff; line-height: 1.5; white-space: pre-wrap;">${message}</div>
+      `;
+      
+      messagesDiv.appendChild(messageDiv);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+
+    function showEmotionAnalysis(analysis) {
+      const analysisDiv = document.getElementById('emotion-analysis');
+      const resultsDiv = document.getElementById('emotion-results');
+      
+      resultsDiv.innerHTML = `
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+          <div>
+            <strong>Primary Emotion:</strong><br>
+            ${analysis.primary_emotion || 'Not detected'}
+          </div>
+          <div>
+            <strong>Intensity:</strong><br>
+            ${analysis.intensity_score || 'Unknown'}/10
+          </div>
+          <div>
+            <strong>Confidence:</strong><br>
+            ${analysis.confidence_level || 'Unknown'}%
+          </div>
+        </div>
+      `;
+      
+      analysisDiv.style.display = 'block';
+    }
+
+    function updateStats() {
+      const countElement = document.getElementById('emotion-count');
+      const current = parseInt(countElement.textContent) || 0;
+      countElement.textContent = current + 1;
+    }
+
+    // Feature card functions
+    function startEmotionDetection() {
+      startEmotionChat();
+    }
+
+    function openSentimentAnalysis() {
+      alert('🔜 Advanced Sentiment Analysis coming soon! Use the chat for now.');
+    }
+
+    function startMoodTracking() {
+      window.location.href = '/emotisense/mood_journal';
+    }
+
+    function openTherapeuticSupport() {
+      alert('🔜 Therapeutic Support Center coming soon! Use the chat for emotional support.');
+    }
+
+    function openEmotionalCoaching() {
+      window.location.href = '/emotisense/empathy_training';
+    }
+
+    function openWellnessAssessment() {
+      window.location.href = '/emotisense/wellness_center';
+    }
+
+    // Close modal when clicking outside
+    document.getElementById('emotion-chat-modal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeEmotionChat();
+      }
+    });
+
+    // Initialize
+    console.log('🎭 EmotiSense Enhanced Interface v2.0 - Emotional Intelligence AI Ready');
+    
+    // Add some dynamic emotion indicators
+    setInterval(() => {
+      const indicators = document.querySelectorAll('.emotion-indicator');
+      indicators.forEach(indicator => {
+        const colors = ['#e8b4ff', '#fd79a8', '#74b9ff', '#00b894', '#fdcb6e', '#ff7675'];
+        indicator.style.background = colors[Math.floor(Math.random() * colors.length)];
+      });
+    }, 5000);
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeEmotionChat();
+      }
+    });
+  </script>
+
+  <style>
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+  </style>
+</body>
+</html>

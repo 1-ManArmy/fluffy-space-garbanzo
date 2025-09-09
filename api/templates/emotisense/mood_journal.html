@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mood Journal - EmotiSense | onelastai.com</title>
+  
+  <%= csrf_meta_tags if defined?(csrf_meta_tags) %>
+  <%= csp_meta_tag if defined?(csp_meta_tag) %>
+  
+  <!-- Custom EmotiSense Styles -->
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Courier New', 'Monaco', 'Menlo', 'Consolas', monospace;
+      background: linear-gradient(135deg, #1a0d2e 0%, #2d1b4e 50%, #0f0f23 100%);
+      color: #e8b4ff;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+    
+    /* Terminal scanlines effect */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        transparent 50%, 
+        rgba(232, 180, 255, 0.03) 50%
+      );
+      background-size: 100% 4px;
+      pointer-events: none;
+      z-index: 1000;
+      animation: scanlines 0.1s linear infinite;
+    }
+    
+    @keyframes scanlines {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(4px); }
+    }
+
+    /* Top Header Menu Bar - Linux Command Style */
+    .top-menu-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 40px;
+      background: rgba(0, 0, 0, 0.95);
+      border-bottom: 2px solid #00ff00;
+      display: flex;
+      align-items: center;
+      z-index: 2000;
+      font-family: 'Courier New', monospace;
+      font-size: 0.85rem;
+      box-shadow: 0 2px 10px rgba(0, 255, 0, 0.3);
+    }
+
+    .terminal-prompt {
+      color: #ffff00;
+      padding: 0 10px;
+      font-weight: bold;
+    }
+
+    .menu-bar-items {
+      display: flex;
+      flex: 1;
+      align-items: center;
+    }
+
+    .top-menu-item {
+      position: relative;
+      color: #00ff00;
+      padding: 10px 15px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-transform: lowercase;
+      border-right: 1px solid #333;
+    }
+
+    .top-menu-item:hover {
+      background: rgba(0, 255, 0, 0.1);
+      color: #33ff33;
+      box-shadow: inset 0 0 5px rgba(0, 255, 0, 0.3);
+    }
+
+    .dropdown-menu {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      min-width: 200px;
+      background: rgba(0, 0, 0, 0.98);
+      border: 1px solid #00ff00;
+      border-top: none;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+      box-shadow: 0 5px 15px rgba(0, 255, 0, 0.2);
+    }
+
+    .top-menu-item.active .dropdown-menu {
+      max-height: 400px;
+    }
+
+    .dropdown-item {
+      display: block;
+      color: #cccccc;
+      padding: 8px 15px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border-bottom: 1px solid rgba(51, 51, 51, 0.5);
+      font-size: 0.8rem;
+    }
+
+    .dropdown-item::before {
+      content: '$ ';
+      color: #666;
+      margin-right: 5px;
+    }
+
+    .dropdown-item:hover {
+      background: rgba(0, 255, 0, 0.05);
+      color: #00ff00;
+      padding-left: 20px;
+      box-shadow: inset 2px 0 0 #00ff00;
+    }
+
+    .system-info {
+      color: #666;
+      font-size: 0.7rem;
+      padding: 0 15px;
+      margin-left: auto;
+      border-left: 1px solid #333;
+    }
+
+    /* Main content area */
+    .page-container {
+      margin-top: 40px;
+      min-height: calc(100vh - 40px);
+      padding: 2rem;
+    }
+
+    /* Updated mood journal styles */
+    .mood-journal-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .emotion-card {
+      background: rgba(232, 180, 255, 0.1);
+      border: 1px solid #e8b4ff;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      backdrop-filter: blur(10px);
+    }
+
+    .journal-header h2 {
+      color: #e8b4ff;
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      text-shadow: 0 0 10px #e8b4ff;
+    }
+
+    .section-icon {
+      margin-right: 0.5rem;
+    }
+
+    .journal-streak {
+      font-size: 1rem;
+      color: #c77dff;
+      font-weight: normal;
+    }
+
+    .journal-description {
+      color: #a8dadc;
+      line-height: 1.6;
+      margin-top: 1rem;
+    }
+
+    /* Form styling */
+    .mood-form {
+      background: rgba(45, 27, 78, 0.3);
+      border-radius: 8px;
+      padding: 1.5rem;
+    }
+
+    .form-label {
+      color: #e8b4ff;
+      font-weight: bold;
+      display: block;
+      margin-bottom: 1rem;
+    }
+
+    .mood-scale {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+
+    .mood-rating-option {
+      cursor: pointer;
+    }
+
+    .rating-bubble {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      border: 2px solid #e8b4ff;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 36px;
+      transition: all 0.3s ease;
+      background: rgba(232, 180, 255, 0.1);
+    }
+
+    .mood-rating-option input[type="radio"] {
+      display: none;
+    }
+
+    .mood-rating-option input[type="radio"]:checked + .rating-bubble {
+      background: #e8b4ff;
+      color: #1a0d2e;
+      transform: scale(1.1);
+      box-shadow: 0 0 15px #e8b4ff;
+    }
+
+    .emotion-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Top Linux-Style Menu Bar -->
+  <div class="top-menu-bar">
+    <div class="terminal-prompt">EmotiSense@mood_journal:~$</div>
+    <div class="menu-bar-items">
+      <div class="top-menu-item" data-menu="file" onclick="toggleTopMenu('file')">
+        file
+        <div class="dropdown-menu">
+          <div class="dropdown-item" onclick="executeCommand('new')">new</div>
+          <div class="dropdown-item" onclick="executeCommand('open')">open</div>
+          <div class="dropdown-item" onclick="executeCommand('save')">save</div>
+          <div class="dropdown-item" onclick="executeCommand('export')">export</div>
+          <div class="dropdown-item" onclick="executeCommand('home')">home</div>
+        </div>
+      </div>
+      <div class="top-menu-item" data-menu="edit" onclick="toggleTopMenu('edit')">
+        edit
+        <div class="dropdown-menu">
+          <div class="dropdown-item" onclick="executeCommand('undo')">undo</div>
+          <div class="dropdown-item" onclick="executeCommand('redo')">redo</div>
+          <div class="dropdown-item" onclick="executeCommand('copy')">copy</div>
+          <div class="dropdown-item" onclick="executeCommand('paste')">paste</div>
+          <div class="dropdown-item" onclick="executeCommand('clear')">clear</div>
+        </div>
+      </div>
+      <div class="top-menu-item" data-menu="view" onclick="toggleTopMenu('view')">
+        view
+        <div class="dropdown-menu">
+          <div class="dropdown-item" onclick="executeCommand('fullscreen')">fullscreen</div>
+          <div class="dropdown-item" onclick="executeCommand('zoom_in')">zoom +</div>
+          <div class="dropdown-item" onclick="executeCommand('zoom_out')">zoom -</div>
+          <div class="dropdown-item" onclick="executeCommand('refresh')">refresh</div>
+        </div>
+      </div>
+      <div class="top-menu-item" data-menu="tools" onclick="toggleTopMenu('tools')">
+        tools
+        <div class="dropdown-menu">
+          <div class="dropdown-item" onclick="executeCommand('analyze')">analyze</div>
+          <div class="dropdown-item" onclick="executeCommand('benchmark')">benchmark</div>
+          <div class="dropdown-item" onclick="executeCommand('debug')">debug</div>
+          <div class="dropdown-item" onclick="executeCommand('config')">config</div>
+        </div>
+      </div>
+      <div class="top-menu-item" data-menu="help" onclick="toggleTopMenu('help')">
+        help
+        <div class="dropdown-menu">
+          <div class="dropdown-item" onclick="executeCommand('manual')">man emotisense</div>
+          <div class="dropdown-item" onclick="executeCommand('about')">about</div>
+          <div class="dropdown-item" onclick="executeCommand('version')">version</div>
+          <div class="dropdown-item" onclick="executeCommand('docs')">docs</div>
+        </div>
+      </div>
+    </div>
+    <div class="system-info">CPU: 45% | MEM: 2.1GB | JOURNAL: ACTIVE</div>
+  </div>
+
+  <div class="page-container">
+<div class="mood-journal-container">
+  <!-- Mood Journal Header -->
+  <div class="emotion-card journal-header">
+    <h2>
+      <span class="section-icon">📔</span>
+      Your Mood Journal
+      <span class="journal-streak">
+        💜 Day <%= Time.current.yday %> of your emotional journey
+      </span>
+    </h2>
+    <p class="journal-description">
+      Track your emotions, reflect on your feelings, and discover patterns in your emotional landscape. 
+      Every entry helps you understand yourself better.
+    </p>
+  </div>
+
+  <!-- Quick Mood Entry -->
+  <div class="emotion-card quick-entry">
+    <h3>
+      <span class="section-icon">✨</span>
+      How are you feeling right now?
+    </h3>
+    
+    <form id="mood-entry-form" class="mood-form">
+      <!-- Mood Rating Scale -->
+      <div class="mood-rating-section">
+        <label class="form-label">Overall Mood (1-10)</label>
+        <div class="mood-scale">
+          <% (1..10).each do |rating| %>
+            <label class="mood-rating-option">
+              <input type="radio" name="mood_rating" value="<%= rating %>" required>
+              <span class="rating-bubble" data-rating="<%= rating %>">
+                <%= rating %>
+              </span>
+            </label>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- Emotion Selection -->
+      <div class="emotions-section">
+        <label class="form-label">What emotions are you experiencing? (Select all that apply)</label>
+        <div class="emotion-grid">
+          <% emotions = [
+            {name: 'Joy', emoji: '😊', color: '#ffd700'},
+            {name: 'Sadness', emoji: '😢', color: '#74b9ff'},
+            {name: 'Anger', emoji: '😠', color: '#ff7675'},
+            {name: 'Fear', emoji: '😰', color: '#636e72'},
+            {name: 'Excitement', emoji: '🤩', color: '#fdcb6e'},
+            {name: 'Love', emoji: '😍', color: '#fd79a8'},
+            {name: 'Calm', emoji: '😌', color: '#00b894'},
+            {name: 'Anxious', emoji: '😟', color: '#a29bfe'},
+            {name: 'Grateful', emoji: '🙏', color: '#55a3ff'},
+            {name: 'Confident', emoji: '😎', color: '#6c5ce7'},
+            {name: 'Lonely', emoji: '😔', color: '#b2bec3'},
+            {name: 'Hopeful', emoji: '🌟', color: '#fdcb6e'}
+          ] %>
+          
+          <% emotions.each do |emotion| %>
+            <label class="emotion-option">
+              <input type="checkbox" name="emotions[]" value="<%= emotion[:name].downcase %>">
+              <span class="emotion-bubble" style="--emotion-color: <%= emotion[:color] %>">
+                <span class="emotion-emoji"><%= emotion[:emoji] %></span>
+                <span class="emotion-name"><%= emotion[:name] %></span>
+              </span>
+            </label>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- Energy Level -->
+      <div class="energy-section">
+        <label class="form-label">Energy Level</label>
+        <div class="energy-scale">
+          <% ['Very Low', 'Low', 'Moderate', 'High', 'Very High'].each_with_index do |level, index| %>
+            <label class="energy-option">
+              <input type="radio" name="energy_level" value="<%= level.downcase.gsub(' ', '_') %>" required>
+              <span class="energy-indicator" data-level="<%= index + 1 %>">
+                <%= '⚡' * (index + 1) %>
+                <br>
+                <small><%= level %></small>
+              </span>
+            </label>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- Notes Section -->
+      <div class="notes-section">
+        <label class="form-label" for="notes">What's on your mind? (Optional)</label>
+        <textarea 
+          id="notes" 
+          name="notes" 
+          placeholder="Share your thoughts, what happened today, or anything you'd like to remember about this moment..."
+          rows="4"
+        ></textarea>
+      </div>
+
+      <!-- Triggers Section -->
+      <div class="triggers-section">
+        <label class="form-label">What triggered these feelings? (Optional)</label>
+        <div class="trigger-options">
+          <% triggers = ['Work/School', 'Relationships', 'Health', 'Family', 'Finance', 'Social Media', 'Weather', 'Sleep', 'Exercise', 'News', 'Personal Achievement', 'Other'] %>
+          
+          <% triggers.each do |trigger| %>
+            <label class="trigger-option">
+              <input type="checkbox" name="triggers[]" value="<%= trigger.downcase %>">
+              <span class="trigger-tag"><%= trigger %></span>
+            </label>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="form-actions">
+        <button type="submit" class="emotion-button save-entry-btn">
+          <span class="btn-icon">💾</span>
+          Save Journal Entry
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Recent Entries -->
+  <% if @mood_history && @mood_history.any? %>
+    <div class="emotion-card recent-entries">
+      <h3>
+        <span class="section-icon">📚</span>
+        Recent Journal Entries
+      </h3>
+      
+      <div class="entries-timeline">
+        <% @mood_history.last(5).reverse.each do |entry| %>
+          <div class="journal-entry">
+            <div class="entry-header">
+              <div class="entry-date">
+                <%= Time.parse(entry[:timestamp].to_s).strftime("%B %d, %Y at %I:%M %p") %>
+              </div>
+              <div class="entry-mood">
+                <span class="mood-rating">Mood: <%= entry[:mood_rating] %>/10</span>
+                <span class="energy-level">Energy: <%= entry[:energy_level]&.humanize %></span>
+              </div>
+            </div>
+            
+            <% if entry[:emotions] && entry[:emotions].any? %>
+              <div class="entry-emotions">
+                <strong>Emotions:</strong>
+                <% entry[:emotions].each do |emotion| %>
+                  <span class="emotion-tag" style="background-color: <%= get_emotion_color(emotion) %>33; border-color: <%= get_emotion_color(emotion) %>">
+                    <%= emotion_emoji(emotion) %> <%= emotion.humanize %>
+                  </span>
+                <% end %>
+              </div>
+            <% end %>
+            
+            <% if entry[:notes] && !entry[:notes].empty? %>
+              <div class="entry-notes">
+                <strong>Notes:</strong>
+                <p><%= entry[:notes] %></p>
+              </div>
+            <% end %>
+            
+            <% if entry[:triggers] && entry[:triggers].any? %>
+              <div class="entry-triggers">
+                <strong>Triggers:</strong>
+                <% entry[:triggers].each do |trigger| %>
+                  <span class="trigger-badge"><%= trigger.humanize %></span>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
+  <!-- Mood Patterns Analysis -->
+  <% if @mood_patterns %>
+    <div class="emotion-card patterns-analysis">
+      <h3>
+        <span class="section-icon">📊</span>
+        Your Emotional Patterns
+      </h3>
+      
+      <div class="patterns-grid">
+        <% if @mood_patterns[:weekly_average] %>
+          <div class="pattern-card">
+            <div class="pattern-icon">📈</div>
+            <div class="pattern-content">
+              <h4>Weekly Average</h4>
+              <p class="pattern-value"><%= @mood_patterns[:weekly_average].round(1) %>/10</p>
+              <p class="pattern-description">Your average mood this week</p>
+            </div>
+          </div>
+        <% end %>
+        
+        <% if @mood_patterns[:most_common_triggers] && @mood_patterns[:most_common_triggers].any? %>
+          <div class="pattern-card">
+            <div class="pattern-icon">🎯</div>
+            <div class="pattern-content">
+              <h4>Common Triggers</h4>
+              <div class="trigger-list">
+                <% @mood_patterns[:most_common_triggers].first(3).each do |trigger| %>
+                  <span class="common-trigger"><%= trigger.humanize %></span>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+        
+        <% if @mood_patterns[:energy_patterns] %>
+          <div class="pattern-card">
+            <div class="pattern-icon">⚡</div>
+            <div class="pattern-content">
+              <h4>Energy Pattern</h4>
+              <p class="pattern-value"><%= @mood_patterns[:energy_patterns].humanize %></p>
+              <p class="pattern-description">Your typical energy level</p>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<!-- Mood Journal Styles -->
+<style>
+  .mood-journal-container {
+    display: grid;
+    gap: 2rem;
+    animation: fadeInUp 0.8s ease-out;
+  }
+
+  .journal-header h2 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .journal-streak {
+    font-size: 0.9rem;
+    color: var(--emotisense-accent);
+    font-weight: 500;
+  }
+
+  .journal-description {
+    color: var(--emotisense-dark);
+    opacity: 0.8;
+    line-height: 1.6;
+    margin-bottom: 0;
+  }
+
+  .mood-form {
+    display: grid;
+    gap: 2rem;
+  }
+
+  .form-label {
+    display: block;
+    font-weight: 600;
+    color: var(--emotisense-primary);
+    margin-bottom: 1rem;
+  }
+
+  /* Mood Rating Scale */
+  .mood-scale {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .mood-rating-option {
+    cursor: pointer;
+  }
+
+  .rating-bubble {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border: 2px solid rgba(108, 92, 231, 0.3);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.8);
+    font-weight: 600;
+    transition: all 0.3s ease;
+    color: var(--emotisense-primary);
+  }
+
+  .mood-rating-option input[type="radio"] {
+    display: none;
+  }
+
+  .mood-rating-option input[type="radio"]:checked + .rating-bubble {
+    background: var(--emotisense-gradient);
+    color: white;
+    border-color: var(--emotisense-primary);
+    transform: scale(1.1);
+    box-shadow: var(--emotisense-glow);
+  }
+
+  .rating-bubble:hover {
+    background: var(--emotisense-light);
+    border-color: var(--emotisense-primary);
+    transform: scale(1.05);
+  }
+
+  /* Emotion Grid */
+  .emotion-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 1rem;
+  }
+
+  .emotion-option {
+    cursor: pointer;
+  }
+
+  .emotion-bubble {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    border: 2px solid rgba(108, 92, 231, 0.2);
+    border-radius: 15px;
+    background: rgba(255, 255, 255, 0.8);
+    transition: all 0.3s ease;
+    text-align: center;
+  }
+
+  .emotion-option input[type="checkbox"] {
+    display: none;
+  }
+
+  .emotion-option input[type="checkbox"]:checked + .emotion-bubble {
+    background: var(--emotion-color);
+    color: white;
+    border-color: var(--emotion-color);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(108, 92, 231, 0.3);
+  }
+
+  .emotion-bubble:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(108, 92, 231, 0.2);
+    border-color: var(--emotion-color);
+  }
+
+  .emotion-emoji {
+    font-size: 1.5rem;
+  }
+
+  .emotion-name {
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  /* Energy Scale */
+  .energy-scale {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .energy-option {
+    cursor: pointer;
+  }
+
+  .energy-indicator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    border: 2px solid rgba(108, 92, 231, 0.3);
+    border-radius: 15px;
+    background: rgba(255, 255, 255, 0.8);
+    transition: all 0.3s ease;
+    text-align: center;
+    min-width: 80px;
+  }
+
+  .energy-option input[type="radio"] {
+    display: none;
+  }
+
+  .energy-option input[type="radio"]:checked + .energy-indicator {
+    background: var(--emotisense-gradient);
+    color: white;
+    border-color: var(--emotisense-primary);
+    transform: translateY(-3px);
+    box-shadow: var(--emotisense-glow);
+  }
+
+  .energy-indicator:hover {
+    transform: translateY(-2px);
+    border-color: var(--emotisense-primary);
+  }
+
+  /* Notes Section */
+  .notes-section textarea {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid rgba(108, 92, 231, 0.3);
+    border-radius: 15px;
+    font-family: inherit;
+    font-size: 1rem;
+    resize: vertical;
+    background: rgba(255, 255, 255, 0.9);
+    transition: all 0.3s ease;
+  }
+
+  .notes-section textarea:focus {
+    outline: none;
+    border-color: var(--emotisense-primary);
+    box-shadow: var(--emotisense-glow);
+  }
+
+  /* Triggers Section */
+  .trigger-options {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .trigger-option {
+    cursor: pointer;
+  }
+
+  .trigger-tag {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border: 2px solid rgba(108, 92, 231, 0.3);
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.8);
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+  }
+
+  .trigger-option input[type="checkbox"] {
+    display: none;
+  }
+
+  .trigger-option input[type="checkbox"]:checked + .trigger-tag {
+    background: var(--emotisense-accent);
+    color: white;
+    border-color: var(--emotisense-accent);
+  }
+
+  .trigger-tag:hover {
+    border-color: var(--emotisense-primary);
+    background: var(--emotisense-light);
+  }
+
+  /* Form Actions */
+  .form-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+  }
+
+  .save-entry-btn {
+    font-size: 1.1rem;
+    padding: 1rem 2rem;
+  }
+
+  /* Recent Entries */
+  .entries-timeline {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .journal-entry {
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 15px;
+    border: 1px solid rgba(108, 92, 231, 0.2);
+    border-left: 4px solid var(--emotisense-accent);
+  }
+
+  .entry-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .entry-date {
+    font-weight: 600;
+    color: var(--emotisense-primary);
+  }
+
+  .entry-mood {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.9rem;
+    color: var(--emotisense-dark);
+  }
+
+  .mood-rating, .energy-level {
+    padding: 0.25rem 0.5rem;
+    background: rgba(108, 92, 231, 0.1);
+    border-radius: 10px;
+  }
+
+  .entry-emotions, .entry-notes, .entry-triggers {
+    margin-bottom: 1rem;
+  }
+
+  .entry-emotions strong, .entry-notes strong, .entry-triggers strong {
+    color: var(--emotisense-primary);
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .emotion-tag {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 15px;
+    font-size: 0.85rem;
+    margin-right: 0.5rem;
+    margin-bottom: 0.25rem;
+    border: 1px solid;
+  }
+
+  .trigger-badge {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    background: rgba(108, 92, 231, 0.1);
+    border-radius: 10px;
+    font-size: 0.8rem;
+    margin-right: 0.5rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .entry-notes p {
+    margin: 0;
+    line-height: 1.6;
+    color: var(--emotisense-dark);
+  }
+
+  /* Patterns Analysis */
+  .patterns-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .pattern-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 15px;
+    border: 1px solid rgba(108, 92, 231, 0.2);
+    transition: all 0.3s ease;
+  }
+
+  .pattern-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--emotisense-shadow);
+  }
+
+  .pattern-icon {
+    font-size: 2rem;
+    min-width: 48px;
+    text-align: center;
+  }
+
+  .pattern-content h4 {
+    margin: 0 0 0.5rem 0;
+    color: var(--emotisense-primary);
+  }
+
+  .pattern-value {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--emotisense-accent);
+    margin: 0;
+  }
+
+  .pattern-description {
+    font-size: 0.9rem;
+    color: var(--emotisense-dark);
+    opacity: 0.8;
+    margin: 0;
+  }
+
+  .trigger-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .common-trigger {
+    font-size: 0.9rem;
+    color: var(--emotisense-accent);
+    font-weight: 500;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .mood-scale, .energy-scale {
+      gap: 0.25rem;
+    }
+    
+    .rating-bubble, .energy-indicator {
+      min-width: 40px;
+      font-size: 0.9rem;
+    }
+    
+    .emotion-grid {
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    }
+    
+    .entry-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    
+    .patterns-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<!-- JavaScript for Mood Journal -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    initializeMoodJournal();
+  });
+
+  function initializeMoodJournal() {
+    const moodForm = document.getElementById('mood-entry-form');
+    
+    if (moodForm) {
+      moodForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        saveMoodEntry();
+      });
+    }
+    
+    // Add visual feedback for selections
+    addSelectionFeedback();
+  }
+
+  function saveMoodEntry() {
+    const formData = new FormData(document.getElementById('mood-entry-form'));
+    const moodData = {
+      mood_rating: formData.get('mood_rating'),
+      emotions: formData.getAll('emotions[]'),
+      energy_level: formData.get('energy_level'),
+      notes: formData.get('notes'),
+      triggers: formData.getAll('triggers[]')
+    };
+    
+    // Show saving animation
+    const submitBtn = document.querySelector('.save-entry-btn');
+    const originalText = submitBtn.innerHTML;
+    submitBtn.innerHTML = '<span class="btn-icon">⏳</span> Saving...';
+    submitBtn.disabled = true;
+    
+    fetch('/emotisense/mood_journal', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': document.querySelector('[name="csrf-token"]').content
+      },
+      body: JSON.stringify(moodData)
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        // Show success message
+        showNotification('Journal entry saved! 💜 ' + data.message, 'success');
+        
+        // Reset form
+        document.getElementById('mood-entry-form').reset();
+        
+        // Show insights if available
+        if (data.mood_insights && data.mood_insights.length > 0) {
+          setTimeout(() => {
+            showInsights(data.mood_insights);
+          }, 1000);
+        }
+        
+        // Reload page to show new entry
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
+      } else {
+        showNotification('Error saving entry. Please try again.', 'error');
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      showNotification('Error saving entry. Please try again.', 'error');
+    })
+    .finally(() => {
+      submitBtn.innerHTML = originalText;
+      submitBtn.disabled = false;
+    });
+  }
+
+  function addSelectionFeedback() {
+    // Add click sounds and animations
+    document.querySelectorAll('.mood-rating-option, .emotion-option, .energy-option, .trigger-option').forEach(option => {
+      option.addEventListener('click', function() {
+        // Add ripple effect
+        this.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+          this.style.transform = '';
+        }, 150);
+      });
+    });
+  }
+
+  function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.innerHTML = `
+      <div class="notification-content">
+        <span class="notification-icon">${type === 'success' ? '✅' : '⚠️'}</span>
+        <span class="notification-message">${message}</span>
+      </div>
+    `;
+    
+    // Add notification styles
+    notification.style.cssText = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: ${type === 'success' ? 'var(--emotisense-accent)' : '#ff7675'};
+      color: white;
+      padding: 1rem 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      z-index: 10000;
+      animation: slideInRight 0.3s ease-out;
+    `;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+      notification.style.animation = 'slideOutRight 0.3s ease-out';
+      setTimeout(() => {
+        document.body.removeChild(notification);
+      }, 300);
+    }, 4000);
+  }
+
+  function showInsights(insights) {
+    const insightContainer = document.createElement('div');
+    insightContainer.className = 'insights-popup';
+    insightContainer.innerHTML = `
+      <div class="insights-content">
+        <h4>💡 Insights for You</h4>
+        <ul>
+          ${insights.map(insight => `<li>${insight}</li>`).join('')}
+        </ul>
+        <button onclick="this.parentElement.parentElement.remove()" class="close-insights">Close</button>
+      </div>
+    `;
+    
+    insightContainer.style.cssText = `
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+      z-index: 10001;
+      max-width: 400px;
+      width: 90%;
+      animation: fadeInUp 0.3s ease-out;
+    `;
+    
+    document.body.appendChild(insightContainer);
+  }
+
+  // Add CSS animations
+  const journalStyles = document.createElement('style');
+  journalStyles.textContent = `
+    @keyframes slideInRight {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    
+    @keyframes slideOutRight {
+      from { transform: translateX(0); opacity: 1; }
+      to { transform: translateX(100%); opacity: 0; }
+    }
+    
+    .notification-content {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .insights-content h4 {
+      margin-top: 0;
+      color: var(--emotisense-primary);
+    }
+    
+    .insights-content ul {
+      margin: 1rem 0;
+      padding-left: 1.5rem;
+    }
+    
+    .insights-content li {
+      margin-bottom: 0.5rem;
+      line-height: 1.5;
+    }
+    
+    .close-insights {
+      background: var(--emotisense-gradient);
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-top: 1rem;
+    }
+  `;
+  document.head.appendChild(journalStyles);
+  
+  // Terminal menu functionality
+  let activeMenu = null;
+
+  function toggleTopMenu(menuName) {
+    const menuItems = document.querySelectorAll('.top-menu-item');
+    const targetMenu = document.querySelector(`[data-menu="${menuName}"]`);
+    
+    // Close all other menus
+    menuItems.forEach(item => {
+      if (item.dataset.menu !== menuName) {
+        item.classList.remove('active');
+      }
+    });
+    
+    // Toggle target menu
+    if (activeMenu === menuName) {
+      targetMenu.classList.remove('active');
+      activeMenu = null;
+    } else {
+      targetMenu.classList.add('active');
+      activeMenu = menuName;
+    }
+  }
+
+  // Close menus when clicking outside
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.top-menu-item')) {
+      document.querySelectorAll('.top-menu-item').forEach(item => {
+        item.classList.remove('active');
+      });
+      activeMenu = null;
+    }
+  });
+
+  function executeCommand(command) {
+    console.log(`Executing command: ${command}`);
+    
+    // Close any open menus
+    document.querySelectorAll('.top-menu-item').forEach(item => {
+      item.classList.remove('active');
+    });
+    activeMenu = null;
+    
+    // Command routing with visual feedback
+    const terminalPrompt = document.querySelector('.terminal-prompt');
+    const originalText = terminalPrompt.textContent;
+    terminalPrompt.textContent = `EmotiSense@mood_journal:~$ ${command}`;
+    
+    setTimeout(() => {
+      terminalPrompt.textContent = originalText;
+      
+      // Navigation commands
+      switch(command) {
+        case 'new':
+        case 'save':
+          // Stay on current page for journal operations
+          break;
+        case 'open':
+          window.location.href = '/emotisense/emotion_dashboard';
+          break;
+        case 'export':
+          window.location.href = '/emotisense/export_data';
+          break;
+        case 'home':
+          window.location.href = '/emotisense';
+          break;
+        case 'analyze':
+          window.location.href = '/emotisense/emotion_chat';
+          break;
+        case 'benchmark':
+          window.location.href = '/emotisense/wellness_center';
+          break;
+        case 'config':
+          window.location.href = '/emotisense/empathy_training';
+          break;
+        case 'refresh':
+          window.location.reload();
+          break;
+        case 'fullscreen':
+          if (document.fullscreenElement) {
+            document.exitFullscreen();
+          } else {
+            document.documentElement.requestFullscreen();
+          }
+          break;
+        case 'zoom_in':
+          document.body.style.zoom = (parseFloat(document.body.style.zoom || 1) + 0.1).toString();
+          break;
+        case 'zoom_out':
+          document.body.style.zoom = Math.max(0.5, parseFloat(document.body.style.zoom || 1) - 0.1).toString();
+          break;
+        case 'clear':
+          // Clear form data
+          const form = document.querySelector('.mood-form');
+          if (form) {
+            form.reset();
+          }
+          break;
+        case 'manual':
+          alert('EmotiSense Mood Journal v2.1\n\nCommands:\n- new: Create new entry\n- save: Save current entry\n- analyze: Open emotion analysis\n- export: Export journal data\n- home: Return to main dashboard');
+          break;
+        case 'about':
+          alert('EmotiSense Mood Journal\nAI-Powered Emotional Intelligence Platform\nBuilt with Ruby on Rails & Advanced Analytics');
+          break;
+        case 'version':
+          alert('EmotiSense v2.1.0\nRails 7.1.4.1\nTerminal Interface v1.2');
+          break;
+        default:
+          console.log(`Command ${command} not implemented yet`);
+      }
+    }, 300);
+  }
+</script>
+
+    </div> <!-- closing mood-journal-container -->
+  </div> <!-- closing page-container -->
+</body>
+</html>

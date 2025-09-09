@@ -1,0 +1,425 @@
+
+<!-- Call to Action Section Component -->
+<section class="call-to-action-section" style="
+    font-family: 'Inter', sans-serif;
+    background-color: #0a0a0a;
+    position: relative;
+    overflow: hidden;
+">
+    <style>
+        .call-to-action-section {
+            background-color: #0a0a0a;
+        }
+
+        /* Enhanced futuristic background container */
+        .cta-enhanced-bg {
+            z-index: 10;
+        }
+
+        /* --- Particle Animations --- */
+        .cta-particles {
+            overflow: hidden;
+        }
+
+        .cta-particle {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0;
+            animation: particle-roam 25s infinite linear;
+        }
+
+        /* Individual particle styles and delays */
+        .particle-blue-1 {
+            width: 8px; height: 8px; background-color: #3b82f6; left: 10%; top: 20%; animation-delay: -2s;
+        }
+        .particle-cyan-2 {
+            width: 6px; height: 6px; background-color: #22d3ee; left: 80%; top: 50%; animation-delay: -8s;
+        }
+        .particle-indigo-1 {
+            width: 10px; height: 10px; background-color: #6366f1; left: 40%; top: 80%; animation-delay: -15s;
+        }
+        .particle-violet-1 {
+            width: 7px; height: 7px; background-color: #8b5cf6; left: 60%; top: 10%; animation-delay: -20s;
+        }
+
+        @keyframes particle-roam {
+            0% { transform: translate(0, 0) scale(1); opacity: 0; }
+            25% { opacity: 0.7; }
+            50% { transform: translate(100px, 200px) scale(1.2); }
+            75% { opacity: 0.5; }
+            100% { transform: translate(-100px, -200px) scale(0.8); opacity: 0; }
+        }
+
+        /* --- Smoky Fog Layers --- */
+        .cta-fog-layer {
+            position: absolute;
+            background: radial-gradient(circle, rgba(100, 108, 255, 0.05) 0%, transparent 60%);
+            border-radius: 50%;
+            animation: smoky-drift 40s infinite alternate ease-in-out;
+            opacity: 0;
+        }
+        .fog-smoky-1 { width: 800px; height: 800px; top: -20%; left: -10%; }
+        .fog-smoky-2 { width: 1000px; height: 1000px; bottom: -30%; right: -20%; animation-delay: -10s; }
+        .fog-smoky-3 { width: 600px; height: 600px; top: 50%; left: 30%; animation-delay: -20s; }
+        .fog-smoky-4 { width: 900px; height: 900px; top: 10%; right: 10%; animation-delay: -30s; }
+
+        @keyframes smoky-drift {
+            0% { transform: translateX(-50px) translateY(20px) scale(1); opacity: 0; }
+            50% { transform: translateX(30px) translateY(-40px) scale(1.1); opacity: 1; }
+            100% { transform: translateX(50px) translateY(10px) scale(0.9); opacity: 0; }
+        }
+
+        /* --- Epic Title --- */
+        .cta-epic-title {
+            text-shadow: 0 0 15px rgba(72, 149, 239, 0.3), 0 0 30px rgba(34, 211, 238, 0.2);
+        }
+        .cta-title-underline {
+            width: 150px;
+            height: 4px;
+            background: linear-gradient(90deg, #3b82f6, #22d3ee);
+            margin: 1rem auto 0;
+            border-radius: 2px;
+            box-shadow: 0 0 15px #3b82f6, 0 0 10px #22d3ee;
+        }
+        
+        /* --- Mega Buttons --- */
+        .cta-mega-button {
+            position: relative;
+            padding: 1.5rem 3.5rem;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: white;
+            border-radius: 1rem;
+            overflow: hidden;
+            transform: translateZ(0); /* Promotes to a new rendering layer */
+            transition: all 0.3s ease;
+            text-align: center;
+            display: inline-block;
+        }
+
+        .button-multi-color-border {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: conic-gradient(from 180deg at 50% 50%, #3b82f6, #a855f7, #22d3ee, #3b82f6);
+            z-index: 1;
+            animation: spin 4s linear infinite;
+        }
+
+        .cta-mega-button .button-content {
+            position: relative;
+            z-index: 3;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Button background and effects container */
+        .cta-mega-button .button-bg-effects {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            right: 2px;
+            bottom: 2px;
+            background-color: #111827; /* Button inner color */
+            border-radius: 14px; /* Slightly smaller than parent */
+            z-index: 2;
+        }
+
+        /* Glow effect */
+        .button-glow-effect {
+            position: absolute;
+            width: 150%;
+            height: 150%;
+            left: -25%;
+            top: -25%;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.3) 0%, transparent 60%);
+            transition: opacity 0.4s ease;
+            opacity: 0;
+        }
+        .cta-mega-button:hover .button-glow-effect {
+            opacity: 1;
+        }
+
+        /* Shine effect */
+        .button-shine-effect {
+            position: absolute;
+            top: -100%;
+            left: -50%;
+            width: 50%;
+            height: 300%;
+            background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.3) 50%, rgba(255, 255, 255, 0) 100%);
+            transform: rotate(20deg);
+            transition: top 0.6s ease;
+        }
+        .cta-mega-button:hover .button-shine-effect {
+            top: -30%;
+        }
+
+        /* Pulse effect */
+        .button-pulse-effect {
+            position: absolute;
+            inset: 0;
+            border-radius: 1rem;
+        }
+        .cta-mega-button:hover .button-pulse-effect {
+            animation: pulse 2s infinite;
+        }
+
+        /* Secondary button style override */
+        .secondary-mega .button-bg-effects {
+            background-color: transparent;
+            border: 2px solid #374151;
+        }
+        .secondary-mega:hover .button-bg-effects {
+            background-color: rgba(55, 65, 81, 0.2);
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.5); }
+            70% { box-shadow: 0 0 0 15px rgba(99, 102, 241, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
+        }
+
+        /* --- Trust Badges & Agent Cards --- */
+        .trust-badge-epic, .quick-agent-card {
+            background-color: rgba(23, 29, 43, 0.7);
+            border: 1px solid rgba(55, 65, 81, 0.7);
+            border-radius: 1rem;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        
+        .trust-badge-epic:hover, .quick-agent-card:hover {
+             transform: translateY(-8px);
+             box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        }
+        
+        .trust-card-multi-border, .agent-multi-color-border {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: conic-gradient(from 180deg at 50% 50%, #3b82f6, #a855f7, #22d3ee, #3b82f6);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: -1;
+        }
+
+        .trust-badge-epic:hover .trust-card-multi-border,
+        .quick-agent-card:hover .agent-multi-color-border {
+            opacity: 0.3;
+        }
+
+        .trust-icon-wrapper {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .trust-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #e5e7eb;
+            margin-bottom: 0.5rem;
+        }
+        .trust-description {
+            color: #9ca3af;
+        }
+
+        .quick-agent-card {
+             display: flex;
+             flex-direction: column;
+             align-items: center;
+             justify-content: center;
+             gap: 0.75rem;
+             text-decoration: none;
+             color: #d1d5db;
+        }
+        .agent-icon {
+            font-size: 2rem;
+        }
+        .agent-name {
+            font-weight: 600;
+        }
+
+        /* Final depth shadow */
+        .cta-smoky-depth-shadow {
+            background: radial-gradient(50% 30% at 50% 100%, rgba(0,0,0,0.5) 0%, transparent 100%);
+        }
+
+    </style>
+</head>
+<body class="bg-gray-900 text-white">
+
+<!-- Call to Action (Join Now) Section -->
+<section class="cta-ultimate-section relative py-32 overflow-hidden">
+  <!-- Futuristic Background -->
+  <div class="cta-enhanced-bg absolute inset-0">
+
+    <!-- Gradient Layers (changed colors here) -->
+    <div class="absolute inset-0 bg-gradient-to-br from-gray-900 via-indigo-950/80 to-black"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-gray-800/70 to-black/90"></div>
+    <div class="absolute inset-0 bg-gradient-radial from-indigo-700/10 via-transparent to-black"></div>
+
+    <!-- Particles -->
+    <div class="cta-particles absolute inset-0 pointer-events-none">
+      <div class="cta-particle particle-blue-1"></div>
+      <div class="cta-particle particle-cyan-2"></div>
+      <div class="cta-particle particle-indigo-1"></div>
+      <div class="cta-particle particle-violet-1"></div>
+    </div>
+
+    <!-- Fog Layers -->
+    <div class="cta-smoky-fog-layers absolute inset-0">
+      <div class="cta-fog-layer fog-smoky-1"></div>
+      <div class="cta-fog-layer fog-smoky-2"></div>
+      <div class="cta-fog-layer fog-smoky-3"></div>
+      <div class="cta-fog-layer fog-smoky-4"></div>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="container mx-auto px-4 relative z-30">
+    <div class="cta-epic-container text-center max-w-6xl mx-auto">
+      <!-- Main CTA Content -->
+      <div class="cta-content-wrapper">
+        <!-- Title -->
+        <div class="cta-title-container mb-12">
+          <h2 class="cta-epic-title text-6xl lg:text-8xl font-black mb-4 relative">
+            <span class="cta-title-main text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-indigo-400">
+              Start Your Journey Into The AI
+            </span>
+          </h2>
+          <div class="cta-title-underline"></div>
+        </div>
+        
+        <!-- Subtitle -->
+        <p class="cta-epic-subtitle text-2xl lg:text-3xl font-light mb-16 max-w-4xl mx-auto leading-relaxed text-gray-200">
+          Join <span class="cta-number-highlight text-blue-400 font-bold">50,000+</span> developers who've unlocked their potential with our 
+          <span class="cta-ai-highlight text-cyan-400 font-semibold">phantom AI guidance</span> and transformed their careers forever
+        </p>
+        
+        <!-- Buttons -->
+        <div class="cta-epic-buttons flex flex-col lg:flex-row gap-8 justify-center items-center mb-16">
+          <a href="#" class="cta-mega-button primary-mega group">
+            <div class="button-multi-color-border"></div>
+            <div class="button-bg-effects">
+              <div class="button-glow-effect"></div>
+              <div class="button-pulse-effect"></div>
+              <div class="button-shine-effect"></div>
+            </div>
+            <span class="button-content">
+              <span class="button-icon">🚀</span>
+              <span class="button-text">Start Free Trial Today</span>
+              <span class="button-arrow">→</span>
+            </span>
+          </a>
+          
+          <a href="#" class="cta-mega-button secondary-mega group">
+            <div class="button-multi-color-border"></div>
+            <div class="button-bg-effects">
+              <div class="button-glow-effect"></div>
+              <div class="button-pulse-effect"></div>
+            </div>
+            <span class="button-content">
+              <span class="button-icon">🎬</span>
+              <span class="button-text">Try AI Demo Live</span>
+              <span class="button-arrow">→</span>
+            </span>
+          </a>
+        </div>
+        
+        <!-- Trust Indicators -->
+        <div class="cta-trust-section">
+          <div class="trust-badges-epic grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto mb-12">
+            <div class="trust-badge-epic group">
+              <div class="trust-card-multi-border"></div>
+              <div class="trust-icon-wrapper">
+                <span class="trust-icon">💳</span>
+              </div>
+              <h4 class="trust-title">No Credit Card Required</h4>
+              <p class="trust-description">Start your journey risk-free today</p>
+            </div>
+            
+            <div class="trust-badge-epic group">
+              <div class="trust-card-multi-border"></div>
+              <div class="trust-icon-wrapper">
+                <span class="trust-icon">⚡</span>
+              </div>
+              <h4 class="trust-title">14-Day Free Trial</h4>
+              <p class="trust-description">Full access to all AI agents</p>
+            </div>
+            
+            <div class="trust-badge-epic group">
+              <div class="trust-card-multi-border"></div>
+              <div class="trust-icon-wrapper">
+                <span class="trust-icon">🔒</span>
+              </div>
+              <h4 class="trust-title">Cancel Anytime</h4>
+              <p class="trust-description">Complete flexibility and control</p>
+            </div>
+          </div>
+          
+          <!-- Quick Access Agent Grid -->
+          <div class="quick-access-section">
+            <h3 class="quick-access-title text-2xl font-bold mb-8 text-blue-300">
+              Start with any of our 27 AI Agents
+            </h3>
+            <div class="quick-access-grid grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 max-w-5xl mx-auto">
+              <a href="#" class="quick-agent-card group">
+                <div class="agent-multi-color-border"></div>
+                <div class="agent-icon">💬</div>
+                <span class="agent-name">NeoChat</span>
+              </a>
+              
+              <a href="#" class="quick-agent-card group">
+                <div class="agent-multi-color-border"></div>
+                <div class="agent-icon">💻</div>
+                <span class="agent-name">CodeMaster</span>
+              </a>
+              
+              <a href="#" class="quick-agent-card group">
+                <div class="agent-multi-color-border"></div>
+                <div class="agent-icon">🌌</div>
+                <span class="agent-name">ContentCrafter</span>
+              </a>
+              
+              <a href="#" class="quick-agent-card group">
+                <div class="agent-multi-color-border"></div>
+                <div class="agent-icon">📊</div>
+                <span class="agent-name">DataVision</span>
+              </a>
+              
+              <a href="#" class="quick-agent-card group">
+                <div class="agent-multi-color-border"></div>
+                <div class="agent-icon">😊</div>
+                <span class="agent-name">EmotiSense</span>
+              </a>
+              
+              <a href="#" class="quick-agent-card group view-all">
+                <div class="agent-multi-color-border"></div>
+                <div class="agent-icon">🔮</div>
+                <span class="agent-name">View All 24</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Depth Shadow -->
+  <div class="cta-smoky-depth-shadow absolute inset-0 pointer-events-none"></div>
+</section>
+<!-- End Call to Action Section -->

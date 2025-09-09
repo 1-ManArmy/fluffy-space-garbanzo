@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API Documentation - Royal AI™</title>
+
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <%= javascript_importmap_tags %>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+      background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+      color: #ffffff;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .hero-section {
+      padding: 6rem 2rem 4rem;
+      text-align: center;
+      background: radial-gradient(ellipse at center, rgba(0, 212, 255, 0.15) 0%, rgba(0, 0, 0, 0.3) 70%);
+      border-bottom: 2px solid #00d4ff;
+    }
+
+    .hero-title {
+      font-size: 3.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 20px #00d4ff;
+      background: linear-gradient(45deg, #00d4ff, #0099cc, #66d9ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 30px #00d4ff;
+    }
+
+    .hero-tagline {
+      font-size: 1.5rem;
+      color: #e0e0e0;
+      margin-bottom: 2rem;
+      font-weight: 300;
+    }
+
+    .content-section {
+      padding: 4rem 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .api-notice {
+      background: rgba(255, 193, 7, 0.1);
+      border: 1px solid rgba(255, 193, 7, 0.3);
+      border-radius: 15px;
+      padding: 2rem;
+      margin-bottom: 3rem;
+      text-align: center;
+      backdrop-filter: blur(10px);
+    }
+
+    .api-notice h2 {
+      color: #ffc107;
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .api-notice p {
+      color: #e0e0e0;
+      font-size: 1.1rem;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+
+    .contact-button {
+      display: inline-block;
+      background: linear-gradient(45deg, #ffc107, #ff9800);
+      color: #000;
+      padding: 1rem 2rem;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      margin-top: 1rem;
+    }
+
+    .contact-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(255, 193, 7, 0.4);
+    }
+
+    .api-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .api-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(0, 212, 255, 0.3);
+      border-radius: 15px;
+      padding: 2rem;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+    }
+
+    .api-card:hover {
+      transform: translateY(-5px);
+      border-color: #00d4ff;
+      box-shadow: 0 15px 40px rgba(0, 212, 255, 0.2);
+    }
+
+    .api-card h3 {
+      color: #00d4ff;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .api-card p {
+      color: #b8b8b8;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+
+    .feature-list {
+      list-style: none;
+      margin-top: 1rem;
+    }
+
+    .feature-list li {
+      color: #e0e0e0;
+      padding: 0.3rem 0;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .feature-list li::before {
+      content: "✓";
+      color: #00d4ff;
+      font-weight: bold;
+    }
+
+    .code-example {
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 1rem 0;
+      font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
+      font-size: 14px;
+      color: #e0e0e0;
+      overflow-x: auto;
+    }
+
+    .endpoint {
+      background: #2a2a2a;
+      border-left: 4px solid #00d4ff;
+      padding: 1rem;
+      margin: 1rem 0;
+      border-radius: 5px;
+    }
+
+    .method {
+      color: #00d4ff;
+      font-weight: bold;
+      margin-right: 1rem;
+    }
+
+    .section-title {
+      font-size: 2.5rem;
+      color: #00d4ff;
+      margin: 3rem 0 2rem 0;
+      text-align: center;
+    }
+
+    .agents-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+
+    .agent-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(0, 212, 255, 0.2);
+      border-radius: 12px;
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .agent-card:hover {
+      border-color: #00d4ff;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .agent-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .agent-emoji {
+      font-size: 2rem;
+    }
+
+    .agent-name {
+      color: #00d4ff;
+      font-size: 1.3rem;
+      font-weight: 600;
+    }
+
+    .agent-category {
+      color: #888;
+      font-size: 0.9rem;
+    }
+
+    .integration-steps {
+      background: rgba(0, 212, 255, 0.05);
+      border: 1px solid rgba(0, 212, 255, 0.2);
+      border-radius: 15px;
+      padding: 2rem;
+      margin: 2rem 0;
+    }
+
+    .step {
+      margin: 1.5rem 0;
+      padding-left: 2rem;
+      position: relative;
+    }
+
+    .step::before {
+      content: attr(data-step);
+      position: absolute;
+      left: 0;
+      top: 0;
+      background: #00d4ff;
+      color: #000;
+      width: 1.5rem;
+      height: 1.5rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: bold;
+    }
+
+    .pricing-info {
+      background: rgba(0, 255, 0, 0.1);
+      border: 1px solid rgba(0, 255, 0, 0.3);
+      border-radius: 15px;
+      padding: 2rem;
+      margin: 2rem 0;
+      text-align: center;
+    }
+
+    .pricing-info h3 {
+      color: #00ff00;
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+
+<body>
+  <section class="hero-section">
+    <div class="hero-icon">🚀</div>
+    <h1 class="hero-title">Royal AI™ API</h1>
+    <p class="hero-tagline">Powerful AI agents at your fingertips</p>
+  </section>
+
+  <section class="content-section">
+    <!-- API Access Notice -->
+    <div class="api-notice">
+      <h2>⚡ API Access Information</h2>
+      <p>
+        We're currently preparing our comprehensive API infrastructure for public release. 
+        Our 27 specialized AI agents will be available through a unified, developer-friendly API.
+      </p>
+      <p>
+        <strong>Interested in early access?</strong> Contact us to discuss your integration needs 
+        and join our developer preview program.
+      </p>
+      <a href="/contact" class="contact-button">📧 Contact Us for API Access</a>
+    </div>
+
+    <!-- What You'll Get -->
+    <h2 class="section-title">🎯 What You'll Get</h2>
+    <div class="api-grid">
+      <div class="api-card">
+        <h3>🤖 27 Specialized Agents</h3>
+        <p>Access all our AI agents through a single, unified API endpoint. Each agent brings unique capabilities and expertise.</p>
+        <ul class="feature-list">
+          <li>Content Creation Agents</li>
+          <li>AI Companions</li>
+          <li>Development Tools</li>
+          <li>Data Analytics</li>
+          <li>Creative Arts</li>
+          <li>Business Productivity</li>
+          <li>Educational Tutors</li>
+        </ul>
+      </div>
+
+      <div class="api-card">
+        <h3>⚡ Real-time Responses</h3>
+        <p>Lightning-fast API responses with streaming support for real-time conversations and content generation.</p>
+        <ul class="feature-list">
+          <li>WebSocket streaming</li>
+          <li>HTTP/2 support</li>
+          <li>Global CDN endpoints</li>
+          <li>99.9% uptime SLA</li>
+        </ul>
+      </div>
+
+      <div class="api-card">
+        <h3>🔒 Enterprise Security</h3>
+        <p>Bank-level security with encryption, authentication, and comprehensive access controls.</p>
+        <ul class="feature-list">
+          <li>API key authentication</li>
+          <li>Rate limiting</li>
+          <li>Data encryption</li>
+          <li>Audit logging</li>
+        </ul>
+      </div>
+
+      <div class="api-card">
+        <h3>📊 Advanced Analytics</h3>
+        <p>Detailed usage analytics and insights to help you optimize your AI integrations.</p>
+        <ul class="feature-list">
+          <li>Usage dashboards</li>
+          <li>Performance metrics</li>
+          <li>Cost tracking</li>
+          <li>Custom reports</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Available Agents -->
+    <h2 class="section-title">🤖 Available AI Agents</h2>
+    <div class="agents-grid">
+      <div class="agent-card">
+        <div class="agent-header">
+          <span class="agent-emoji">💬</span>
+          <div>
+            <div class="agent-name">NeoChat</div>
+            <div class="agent-category">Conversational AI</div>
+          </div>
+        </div>
+        <p>Advanced conversational AI with emotional intelligence and natural dialogue capabilities.</p>
+      </div>
+
+      <div class="agent-card">
+        <div class="agent-header">
+          <span class="agent-emoji">✍️</span>
+          <div>
+            <div class="agent-name">ContentCrafter</div>
+            <div class="agent-category">Content Creation</div>
+          </div>
+        </div>
+        <p>Expert content creator for blogs, articles, marketing materials, and creative writing.</p>
+      </div>
+
+      <div class="agent-card">
+        <div class="agent-header">
+          <span class="agent-emoji">❤️</span>
+          <div>
+            <div class="agent-name">EmotiSense</div>
+            <div class="agent-category">AI Companion</div>
+          </div>
+        </div>
+        <p>Emotional AI companion that understands and responds to feelings with empathy.</p>
+      </div>
+
+      <div class="agent-card">
+        <div class="agent-header">
+          <span class="agent-emoji">🌌</span>
+          <div>
+            <div class="agent-name">Memora</div>
+            <div class="agent-category">Memory Assistant</div>
+          </div>
+        </div>
+        <p>Memory companion that helps you remember and organize information intelligently.</p>
+      </div>
+
+      <div class="agent-card">
+        <div class="agent-header">
+          <span class="agent-emoji">⚡</span>
+          <div>
+            <div class="agent-name">CodeForge</div>
+            <div class="agent-category">Development Tool</div>
+          </div>
+        </div>
+        <p>Advanced coding assistant for all programming languages and development tasks.</p>
+      </div>
+
+      <div class="agent-card">
+        <div class="agent-header">
+          <span class="agent-emoji">🌐</span>
+          <div>
+            <div class="agent-name">NetScope</div>
+            <div class="agent-category">Data Analytics</div>
+          </div>
+        </div>
+        <p>Web research and data analysis specialist for comprehensive insights.</p>
+      </div>
+
+      <div class="agent-card">
+        <div class="agent-header">
+          <span class="agent-emoji">🎬</span>
+          <div>
+            <div class="agent-name">CineGen</div>
+            <div class="agent-category">Creative Arts</div>
+          </div>
+        </div>
+        <p>Cinematic content generator for video scripts, storyboards, and visual narratives.</p>
+      </div>
+
+      <div class="agent-card">
+        <div class="agent-header">
+          <span class="agent-emoji">👨‍🏫</span>
+          <div>
+            <div class="agent-name">KiddieAI Tutor</div>
+            <div class="agent-category">Education</div>
+          </div>
+        </div>
+        <p>Friendly AI tutor designed specifically for children's learning and growth.</p>
+      </div>
+    </div>
+
+    <!-- API Preview -->
+    <h2 class="section-title">📋 API Preview</h2>
+    <div class="api-card">
+      <h3>🔧 Example Integration</h3>
+      <p>Here's what the Royal AI™ API will look like:</p>
+
+      <div class="endpoint">
+        <span class="method">POST</span>
+        <code>https://api.royalai.com/v1/agents/{agent_name}/chat</code>
+      </div>
+
+      <div class="code-example">
+{
+  "message": "Hello, can you help me write a blog post?",
+  "context": {
+    "user_id": "user_123",
+    "session_id": "session_456"
+  },
+  "parameters": {
+    "temperature": 0.7,
+    "max_tokens": 1000
+  }
+}
+      </div>
+
+      <p><strong>Response:</strong></p>
+      <div class="code-example">
+{
+  "id": "response_789",
+  "agent": "contentcrafter",
+  "message": "I'd be happy to help you write a blog post! What topic would you like to focus on?",
+  "metadata": {
+    "tokens_used": 23,
+    "response_time": "145ms",
+    "emotion_detected": "enthusiastic"
+  }
+}
+      </div>
+    </div>
+
+    <!-- Integration Steps -->
+    <h2 class="section-title">🛠️ How to Get Started</h2>
+    <div class="integration-steps">
+      <div class="step" data-step="1">
+        <h3>Contact Our Team</h3>
+        <p>Reach out to us through our contact form to discuss your integration needs and use cases.</p>
+      </div>
+
+      <div class="step" data-step="2">
+        <h3>Developer Preview Access</h3>
+        <p>Join our developer preview program and get early access to API documentation and testing environment.</p>
+      </div>
+
+      <div class="step" data-step="3">
+        <h3>Integration Planning</h3>
+        <p>Work with our team to plan your integration and select the right agents for your needs.</p>
+      </div>
+
+      <div class="step" data-step="4">
+        <h3>Testing & Development</h3>
+        <p>Use our sandbox environment to test API calls and develop your integration.</p>
+      </div>
+
+      <div class="step" data-step="5">
+        <h3>Production Deployment</h3>
+        <p>Deploy to production with full API access, monitoring, and support.</p>
+      </div>
+    </div>
+
+    <!-- Pricing Information -->
+    <div class="pricing-info">
+      <h3>💎 Ethical Pricing Model</h3>
+      <p>
+        Our API pricing will be designed with fairness and accessibility in mind. 
+        We believe in empowering developers and businesses of all sizes.
+      </p>
+      <p>
+        <strong>Coming Soon:</strong> Flexible pricing tiers including free developer access, 
+        pay-per-use options, and enterprise plans.
+      </p>
+    </div>
+
+    <!-- Contact Section -->
+    <div class="api-notice">
+      <h2>🚀 Ready to Build with Royal AI™?</h2>
+      <p>
+        Our team is excited to work with developers who share our vision of ethical AI development 
+        and meaningful human-AI collaboration.
+      </p>
+      <p>
+        Whether you're building educational apps, creative tools, business automation, 
+        or the next generation of AI-powered experiences, we're here to help.
+      </p>
+      <a href="/contact" class="contact-button">📧 Get API Access</a>
+    </div>
+  </section>
+</body>
+</html>

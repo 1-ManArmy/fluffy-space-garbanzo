@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= @page_title %> - OneLast AI</title>
+    <meta name="description" content="Intelligence and analytics AI agents for data processing and analysis">
+    
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+</head>
+<body class="bg-gray-900 text-gray-100">
+    <!-- Header -->
+    <header class="bg-black/50 backdrop-blur-md border-b border-gray-800 fixed w-full top-0 z-50">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <a href="/" class="text-2xl font-bold text-white">OneLast AI</a>
+                <nav class="hidden md:flex space-x-8">
+                    <a href="/" class="text-gray-300 hover:text-white transition-colors">Home</a>
+                    <a href="/features" class="text-gray-300 hover:text-white transition-colors">Features</a>
+                    <a href="/about" class="text-gray-300 hover:text-white transition-colors">About</a>
+                    <a href="/contact" class="text-gray-300 hover:text-white transition-colors">Contact</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="pt-20">
+        <!-- Hero Section -->
+        <section class="py-20 bg-gradient-to-br from-gray-900 via-green-900/20 to-gray-900">
+            <div class="container mx-auto px-6 text-center">
+                <div class="text-6xl mb-6">🔍</div>
+                <h1 class="text-5xl lg:text-6xl font-bold text-white mb-6">
+                    Intelligence & Analytics
+                </h1>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto mb-8">
+                    Advanced data analysis, network intelligence, and smart search capabilities
+                </p>
+            </div>
+        </section>
+
+        <!-- Agents Grid -->
+        <section class="py-20">
+            <div class="container mx-auto px-6">
+                <div class="grid lg:grid-cols-3 gap-8">
+                    <% @agents.each do |agent| %>
+                        <div class="enhanced-feature-card group min-h-[400px]">
+                            <div class="feature-card-content">
+                                <div class="feature-icon-wrapper">
+                                    <span class="text-3xl">📊</span>
+                                </div>
+                                <h3 class="text-2xl font-semibold text-white mb-4"><%= agent[:name] %></h3>
+                                <p class="text-gray-300 mb-6 text-center">
+                                    <%= agent[:description] %>
+                                </p>
+                                <div class="feature-tags">
+                                    <% agent[:features].each do |feature| %>
+                                        <span class="feature-tag green"><%= feature %></span>
+                                    <% end %>
+                                </div>
+                                <a href="<%= agent[:path] %>" class="feature-action-btn green">
+                                    Try <%= agent[:name] %>
+                                    <span class="feature-action-arrow">→</span>
+                                </a>
+                            </div>
+                        </div>
+                    <% end %>
+                </div>
+            </div>
+        </section>
+
+        <!-- Back to Features -->
+        <section class="py-10 text-center">
+            <a href="/features" class="btn-secondary">← Back to All Features</a>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-black border-t border-gray-800">
+        <div class="container mx-auto px-6 py-8">
+            <div class="text-center text-gray-400">
+                <p>&copy; 2024 OneLast AI. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

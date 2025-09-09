@@ -1,0 +1,285 @@
+<div class="scene-composer-container">
+  <div class="composer-header">
+    <h1>🎬 Scene Composer</h1>
+    <p class="composer-subtitle">Create cinematic scenes with AI-powered tools</p>
+  </div>
+
+  <div class="composer-workspace">
+    <div class="style-selector">
+      <h3>Visual Style</h3>
+      <div class="style-grid">
+        <% @visual_styles.each do |style| %>
+          <div class="style-option" data-style="<%= style.downcase %>">
+            <span class="style-name"><%= style %></span>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="scene-builder">
+      <h3>Scene Configuration</h3>
+      <div class="scene-options">
+        <div class="option-group">
+          <label>Scene Type</label>
+          <select class="scene-type-select">
+            <% @scene_types.each do |type| %>
+              <option value="<%= type.downcase.gsub(' ', '_') %>"><%= type %></option>
+            <% end %>
+          </select>
+        </div>
+
+        <div class="option-group">
+          <label>Transition</label>
+          <select class="transition-select">
+            <% @transitions.each do |transition| %>
+              <option value="<%= transition.downcase.gsub(' ', '_') %>"><%= transition %></option>
+            <% end %>
+          </select>
+        </div>
+
+        <div class="option-group">
+          <label>Soundtrack</label>
+          <select class="soundtrack-select">
+            <% @soundtrack_types.each do |soundtrack| %>
+              <option value="<%= soundtrack.downcase.gsub(' ', '_') %>"><%= soundtrack %></option>
+            <% end %>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="scene-preview">
+      <h3>Scene Preview</h3>
+      <div class="preview-area">
+        <div class="preview-placeholder">
+          <p>🎥 Scene preview will appear here</p>
+          <p>Select your options and click "Compose Scene" to generate</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="composer-actions">
+      <button class="btn btn-primary compose-btn">
+        🎬 Compose Scene
+      </button>
+      <button class="btn btn-secondary preview-btn">
+        👁️ Preview
+      </button>
+      <button class="btn btn-success export-btn">
+        💾 Export Scene
+      </button>
+    </div>
+  </div>
+</div>
+
+<style>
+.scene-composer-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.composer-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.composer-header h1 {
+  color: #ff6b6b;
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.composer-subtitle {
+  color: #2c3e50;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.composer-workspace {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto auto;
+  gap: 2rem;
+}
+
+.style-selector {
+  grid-column: 1 / -1;
+}
+
+.style-selector h3 {
+  color: #2c3e50;
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.style-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.style-option {
+  padding: 1rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: white;
+}
+
+.style-name {
+  color: #2c3e50;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.style-option:hover {
+  border-color: #ff6b6b;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.2);
+}
+
+.style-option.selected {
+  border-color: #ff6b6b;
+  background: #fff5f5;
+}
+
+.style-option.selected .style-name {
+  color: #d63031;
+  font-weight: 700;
+}
+
+.scene-builder, .scene-preview {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.scene-builder h3, .scene-preview h3 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.scene-options {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.option-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #2c3e50;
+  font-size: 1rem;
+}
+
+.option-group select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 1rem;
+  color: #2c3e50;
+  background: white;
+}
+
+.option-group select:focus {
+  outline: none;
+  border-color: #ff6b6b;
+  box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
+}
+
+.preview-area {
+  min-height: 200px;
+  border: 2px dashed #e0e0e0;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f9f9f9;
+}
+
+.preview-placeholder {
+  text-align: center;
+  color: #2c3e50;
+  font-weight: 500;
+}
+
+.preview-placeholder p {
+  margin: 0.5rem 0;
+  font-size: 1.1rem;
+}
+
+.composer-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-primary {
+  background: #ff6b6b;
+  color: white;
+}
+
+.btn-secondary {
+  background: #4ecdc4;
+  color: white;
+}
+
+.btn-success {
+  background: #ffe66d;
+  color: #333;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Style selection
+  document.querySelectorAll('.style-option').forEach(option => {
+    option.addEventListener('click', function() {
+      document.querySelectorAll('.style-option').forEach(opt => opt.classList.remove('selected'));
+      this.classList.add('selected');
+    });
+  });
+
+  // Compose scene action
+  document.querySelector('.compose-btn').addEventListener('click', function() {
+    alert('🎬 Scene composition started! This would integrate with the CineGen AI engine.');
+  });
+
+  // Preview action
+  document.querySelector('.preview-btn').addEventListener('click', function() {
+    alert('👁️ Scene preview would be generated here!');
+  });
+
+  // Export action
+  document.querySelector('.export-btn').addEventListener('click', function() {
+    alert('💾 Scene would be exported for production!');
+  });
+});
+</script>

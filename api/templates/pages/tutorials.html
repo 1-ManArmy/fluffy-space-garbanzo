@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutorials & Guides - Royal AI™</title>
+
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <%= javascript_importmap_tags %>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+      background: #1a1a1a;
+      color: #ffffff;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .tutorials-container {
+      display: flex;
+      height: 100vh;
+    }
+
+    /* VS Code Style Sidebar */
+    .sidebar {
+      width: 350px;
+      background: #252526;
+      border-right: 1px solid #3c3c3c;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .sidebar-header {
+      padding: 16px;
+      background: #2d2d30;
+      border-bottom: 1px solid #3c3c3c;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .sidebar-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #cccccc;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .search-container {
+      padding: 8px 16px;
+      background: #2d2d30;
+      border-bottom: 1px solid #3c3c3c;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 8px 12px;
+      background: #3c3c3c;
+      border: 1px solid #464647;
+      border-radius: 4px;
+      color: #cccccc;
+      font-size: 13px;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: #007acc;
+      box-shadow: 0 0 0 1px #007acc;
+    }
+
+    .agents-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px 0;
+    }
+
+    .agent-category {
+      margin-bottom: 4px;
+    }
+
+    .category-header {
+      padding: 4px 16px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #969696;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .category-icon {
+      font-size: 10px;
+      transition: transform 0.2s ease;
+    }
+
+    .category-header.collapsed .category-icon {
+      transform: rotate(-90deg);
+    }
+
+    .agents-group {
+      margin-left: 8px;
+    }
+
+    .agent-item {
+      padding: 6px 16px 6px 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: #cccccc;
+      transition: all 0.2s ease;
+    }
+
+    .agent-item:hover {
+      background: #2a2d2e;
+      color: #ffffff;
+    }
+
+    .agent-item.active {
+      background: #094771;
+      color: #ffffff;
+      border-left: 2px solid #007acc;
+    }
+
+    .agent-emoji {
+      font-size: 16px;
+    }
+
+    /* Main Content Area */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: #1e1e1e;
+      overflow: hidden;
+    }
+
+    .content-header {
+      padding: 16px 24px;
+      background: #2d2d30;
+      border-bottom: 1px solid #3c3c3c;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .content-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #cccccc;
+    }
+
+    .breadcrumb {
+      font-size: 12px;
+      color: #969696;
+    }
+
+    .content-body {
+      flex: 1;
+      padding: 24px;
+      overflow-y: auto;
+    }
+
+    .tutorial-content {
+      max-width: 800px;
+    }
+
+    .tutorial-section {
+      margin-bottom: 32px;
+    }
+
+    .section-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: #007acc;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .section-subtitle {
+      font-size: 18px;
+      font-weight: 600;
+      color: #ffffff;
+      margin: 24px 0 12px 0;
+    }
+
+    .tutorial-text {
+      font-size: 14px;
+      line-height: 1.6;
+      color: #cccccc;
+      margin-bottom: 16px;
+    }
+
+    .feature-list {
+      list-style: none;
+      margin: 16px 0;
+    }
+
+    .feature-item {
+      padding: 8px 0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+      color: #cccccc;
+    }
+
+    .feature-icon {
+      font-size: 16px;
+      color: #007acc;
+    }
+
+    .code-block {
+      background: #2d2d30;
+      border: 1px solid #3c3c3c;
+      border-radius: 6px;
+      padding: 16px;
+      margin: 16px 0;
+      font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
+      font-size: 13px;
+      color: #d4d4d4;
+      overflow-x: auto;
+    }
+
+    .step-card {
+      background: #2d2d30;
+      border: 1px solid #3c3c3c;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 16px 0;
+      border-left: 4px solid #007acc;
+    }
+
+    .step-number {
+      background: #007acc;
+      color: #ffffff;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 600;
+      margin-right: 12px;
+    }
+
+    .warning-box {
+      background: rgba(255, 193, 7, 0.1);
+      border: 1px solid rgba(255, 193, 7, 0.3);
+      border-radius: 6px;
+      padding: 16px;
+      margin: 16px 0;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .tip-box {
+      background: rgba(40, 167, 69, 0.1);
+      border: 1px solid rgba(40, 167, 69, 0.3);
+      border-radius: 6px;
+      padding: 16px;
+      margin: 16px 0;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .video-placeholder {
+      background: #2d2d30;
+      border: 2px dashed #3c3c3c;
+      border-radius: 8px;
+      padding: 40px;
+      text-align: center;
+      margin: 24px 0;
+      color: #969696;
+    }
+
+    /* Welcome Screen */
+    .welcome-screen {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      text-align: center;
+      padding: 40px;
+    }
+
+    .welcome-icon {
+      font-size: 64px;
+      margin-bottom: 24px;
+      opacity: 0.5;
+    }
+
+    .welcome-title {
+      font-size: 28px;
+      font-weight: 600;
+      color: #cccccc;
+      margin-bottom: 16px;
+    }
+
+    .welcome-text {
+      font-size: 16px;
+      color: #969696;
+      max-width: 500px;
+      line-height: 1.5;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 280px;
+      }
+      
+      .content-body {
+        padding: 16px;
+      }
+    }
+
+    /* Scrollbar Styling */
+    .agents-list::-webkit-scrollbar,
+    .content-body::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .agents-list::-webkit-scrollbar-track,
+    .content-body::-webkit-scrollbar-track {
+      background: #2d2d30;
+    }
+
+    .agents-list::-webkit-scrollbar-thumb,
+    .content-body::-webkit-scrollbar-thumb {
+      background: #464647;
+      border-radius: 4px;
+    }
+
+    .agents-list::-webkit-scrollbar-thumb:hover,
+    .content-body::-webkit-scrollbar-thumb:hover {
+      background: #5a5a5a;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="tutorials-container">
+    <!-- VS Code Style Sidebar -->
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <span>🎓</span>
+        <span class="sidebar-title">Royal AI™ Agents</span>
+      </div>
+      
+      <div class="search-container">
+        <input type="text" class="search-input" placeholder="Search agents..." id="agent-search">
+      </div>
+      
+      <div class="agents-list">
+        <!-- Content Creation Category -->
+        <div class="agent-category">
+          <div class="category-header" data-category="content">
+            <span class="category-icon">▼</span>
+            Content Creation
+          </div>
+          <div class="agents-group">
+            <div class="agent-item" data-agent="neochat">
+              <span class="agent-emoji">💬</span>
+              NeoChat
+            </div>
+            <div class="agent-item" data-agent="contentcrafter">
+              <span class="agent-emoji">✍️</span>
+              ContentCrafter
+            </div>
+            <div class="agent-item" data-agent="cinegen">
+              <span class="agent-emoji">🎬</span>
+              CineGen
+            </div>
+            <div class="agent-item" data-agent="storyweaver">
+              <span class="agent-emoji">📚</span>
+              StoryWeaver
+            </div>
+          </div>
+        </div>
+
+        <!-- AI Companions Category -->
+        <div class="agent-category">
+          <div class="category-header" data-category="companions">
+            <span class="category-icon">▼</span>
+            AI Companions
+          </div>
+          <div class="agents-group">
+            <div class="agent-item" data-agent="emotisense">
+              <span class="agent-emoji">❤️</span>
+              EmotiSense
+            </div>
+            <div class="agent-item" data-agent="memora">
+              <span class="agent-emoji">🌌</span>
+              Memora
+            </div>
+            <div class="agent-item" data-agent="empathyengine">
+              <span class="agent-emoji">🤗</span>
+              EmpathyEngine
+            </div>
+            <div class="agent-item" data-agent="moodmirror">
+              <span class="agent-emoji">🪞</span>
+              MoodMirror
+            </div>
+          </div>
+        </div>
+
+        <!-- Development Tools Category -->
+        <div class="agent-category">
+          <div class="category-header" data-category="development">
+            <span class="category-icon">▼</span>
+            Development Tools
+          </div>
+          <div class="agents-group">
+            <div class="agent-item" data-agent="codeforge">
+              <span class="agent-emoji">⚡</span>
+              CodeForge
+            </div>
+            <div class="agent-item" data-agent="debugwhisperer">
+              <span class="agent-emoji">🔍</span>
+              DebugWhisperer
+            </div>
+            <div class="agent-item" data-agent="apiarchitect">
+              <span class="agent-emoji">🏗️</span>
+              APIArchitect
+            </div>
+            <div class="agent-item" data-agent="testgenius">
+              <span class="agent-emoji">🧪</span>
+              TestGenius
+            </div>
+          </div>
+        </div>
+
+        <!-- Data & Analytics Category -->
+        <div class="agent-category">
+          <div class="category-header" data-category="analytics">
+            <span class="category-icon">▼</span>
+            Data & Analytics
+          </div>
+          <div class="agents-group">
+            <div class="agent-item" data-agent="netscope">
+              <span class="agent-emoji">🌐</span>
+              NetScope
+            </div>
+            <div class="agent-item" data-agent="dataminer">
+              <span class="agent-emoji">⛏️</span>
+              DataMiner
+            </div>
+            <div class="agent-item" data-agent="insightoracle">
+              <span class="agent-emoji">🔮</span>
+              InsightOracle
+            </div>
+            <div class="agent-item" data-agent="trendtracker">
+              <span class="agent-emoji">📈</span>
+              TrendTracker
+            </div>
+          </div>
+        </div>
+
+        <!-- Creative Arts Category -->
+        <div class="agent-category">
+          <div class="category-header" data-category="creative">
+            <span class="category-icon">▼</span>
+            Creative Arts
+          </div>
+          <div class="agents-group">
+            <div class="agent-item" data-agent="artisanai">
+              <span class="agent-emoji">🎨</span>
+              ArtisanAI
+            </div>
+            <div class="agent-item" data-agent="musicmuse">
+              <span class="agent-emoji">🎵</span>
+              MusicMuse
+            </div>
+            <div class="agent-item" data-agent="visualvault">
+              <span class="agent-emoji">🖼️</span>
+              VisualVault
+            </div>
+            <div class="agent-item" data-agent="designdynamo">
+              <span class="agent-emoji">✨</span>
+              DesignDynamo
+            </div>
+          </div>
+        </div>
+
+        <!-- Business & Productivity Category -->
+        <div class="agent-category">
+          <div class="category-header" data-category="business">
+            <span class="category-icon">▼</span>
+            Business & Productivity
+          </div>
+          <div class="agents-group">
+            <div class="agent-item" data-agent="taskmaster">
+              <span class="agent-emoji">✅</span>
+              TaskMaster
+            </div>
+            <div class="agent-item" data-agent="schedulesage">
+              <span class="agent-emoji">📅</span>
+              ScheduleSage
+            </div>
+            <div class="agent-item" data-agent="meetingmind">
+              <span class="agent-emoji">🤝</span>
+              MeetingMind
+            </div>
+            <div class="agent-item" data-agent="reportranger">
+              <span class="agent-emoji">📊</span>
+              ReportRanger
+            </div>
+          </div>
+        </div>
+
+        <!-- Learning & Education Category -->
+        <div class="agent-category">
+          <div class="category-header" data-category="education">
+            <span class="category-icon">▼</span>
+            Learning & Education
+          </div>
+          <div class="agents-group">
+            <div class="agent-item" data-agent="tutor">
+              <span class="agent-emoji">👨‍🏫</span>
+              KiddieAI Tutor
+            </div>
+            <div class="agent-item" data-agent="languagelearner">
+              <span class="agent-emoji">🗣️</span>
+              LanguageLearner
+            </div>
+            <div class="agent-item" data-agent="knowledgekeeper">
+              <span class="agent-emoji">📖</span>
+              KnowledgeKeeper
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+      <div class="content-header">
+        <span class="content-title" id="content-title">Royal AI™ Tutorials & Guides</span>
+        <span class="breadcrumb" id="breadcrumb">Select an agent to view tutorials</span>
+      </div>
+      
+      <div class="content-body" id="content-body">
+        <!-- Welcome Screen -->
+        <div class="welcome-screen" id="welcome-screen">
+          <div class="welcome-icon">🎓</div>
+          <h2 class="welcome-title">Welcome to Royal AI™ Tutorials</h2>
+          <p class="welcome-text">
+            Select an AI agent from the sidebar to view detailed tutorials, guides, and examples. 
+            Learn how to collaborate with our 27 specialized agents and unlock their full potential.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Agent data with detailed tutorials
+    const agentData = {
+      neochat: {
+        name: "NeoChat",
+        emoji: "💬",
+        category: "Content Creation",
+        description: "Advanced conversational AI with emotional intelligence and natural dialogue capabilities",
+        features: [
+          "Natural conversation flow",
+          "Context awareness",
+          "Emotional understanding",
+          "Multi-language support",
+          "Voice interaction"
+        ],
+        howTo: [
+          "Start with a simple greeting",
+          "Ask questions naturally",
+          "Provide context for better responses",
+          "Use voice commands for hands-free interaction",
+          "Save important conversations"
+        ],
+        examples: [
+          "💬 Hello NeoChat, how are you today?",
+          "💬 Can you help me write a blog post about AI?",
+          "💬 I'm feeling stressed, can we talk?",
+          "💬 Switch to Spanish conversation mode"
+        ]
+      },
+      contentcrafter: {
+        name: "ContentCrafter",
+        emoji: "✍️",
+        category: "Content Creation",
+        description: "Expert content creator for blogs, articles, marketing materials, and creative writing",
+        features: [
+          "SEO-optimized content",
+          "Multiple content formats",
+          "Brand voice adaptation",
+          "Research integration",
+          "Content planning"
+        ],
+        howTo: [
+          "Define your content goals",
+          "Specify target audience",
+          "Choose content format",
+          "Provide topic or keywords",
+          "Review and refine output"
+        ],
+        examples: [
+          "✍️ Write a blog post about sustainable living",
+          "✍️ Create social media captions for a tech startup",
+          "✍️ Generate newsletter content for fitness enthusiasts",
+          "✍️ Draft product descriptions for e-commerce"
+        ]
+      },
+      emotisense: {
+        name: "EmotiSense",
+        emoji: "❤️",
+        category: "AI Companions",
+        description: "Emotional AI companion that understands and responds to feelings with empathy",
+        features: [
+          "Emotion detection",
+          "Empathetic responses",
+          "Mood tracking",
+          "Therapeutic conversations",
+          "Stress management"
+        ],
+        howTo: [
+          "Share your current feelings",
+          "Describe what's on your mind",
+          "Ask for emotional support",
+          "Track your mood over time",
+          "Practice mindfulness exercises"
+        ],
+        examples: [
+          "❤️ I'm feeling overwhelmed with work",
+          "❤️ Can you help me process my emotions?",
+          "❤️ I had a great day, let me share!",
+          "❤️ Guide me through a breathing exercise"
+        ]
+      },
+      memora: {
+        name: "Memora",
+        emoji: "🌌",
+        category: "AI Companions",
+        description: "Memory companion that helps you remember and organize information intelligently",
+        features: [
+          "Information storage",
+          "Smart retrieval",
+          "Memory associations",
+          "Learning patterns",
+          "Knowledge mapping"
+        ],
+        howTo: [
+          "Store important information",
+          "Create memory associations",
+          "Ask for information recall",
+          "Build knowledge networks",
+          "Review learning progress"
+        ],
+        examples: [
+          "🌌 Remember that John's birthday is March 15th",
+          "🌌 What did I learn about Python yesterday?",
+          "🌌 Create a study plan for my exams",
+          "🌌 Help me organize my research notes"
+        ]
+      },
+      codeforge: {
+        name: "CodeForge",
+        emoji: "⚡",
+        category: "Development Tools",
+        description: "Advanced coding assistant for all programming languages and development tasks",
+        features: [
+          "Code generation",
+          "Bug fixing",
+          "Code optimization",
+          "Documentation",
+          "Best practices"
+        ],
+        howTo: [
+          "Describe your coding problem",
+          "Specify programming language",
+          "Ask for code examples",
+          "Request optimization suggestions",
+          "Get debugging help"
+        ],
+        examples: [
+          "⚡ Write a Python function to sort arrays",
+          "⚡ Debug this JavaScript error",
+          "⚡ Optimize my SQL query performance",
+          "⚡ Generate API documentation"
+        ]
+      },
+      netscope: {
+        name: "NetScope",
+        emoji: "🌐",
+        category: "Data & Analytics",
+        description: "Web research and data analysis specialist for comprehensive insights",
+        features: [
+          "Web scraping",
+          "Data analysis",
+          "Market research",
+          "Trend identification",
+          "Report generation"
+        ],
+        howTo: [
+          "Define research objectives",
+          "Specify data sources",
+          "Set analysis parameters",
+          "Review findings",
+          "Export reports"
+        ],
+        examples: [
+          "🌐 Research AI trends in 2025",
+          "🌐 Analyze competitor pricing",
+          "🌐 Find industry statistics",
+          "🌐 Monitor brand mentions"
+        ]
+      },
+      tutor: {
+        name: "KiddieAI Tutor",
+        emoji: "👨‍🏫",
+        category: "Learning & Education",
+        description: "Friendly AI tutor designed specifically for children's learning and growth",
+        features: [
+          "Age-appropriate explanations",
+          "Interactive learning games",
+          "Progress tracking",
+          "Encouraging feedback",
+          "Safe learning environment"
+        ],
+        howTo: [
+          "Tell me your age and grade level",
+          "Ask questions about any subject",
+          "Play educational games",
+          "Practice with fun exercises",
+          "Track your learning journey"
+        ],
+        examples: [
+          "👨‍🏫 Can you teach me about animals?",
+          "👨‍🏫 Help me with my math homework",
+          "👨‍🏫 Let's play a spelling game!",
+          "👨‍🏫 Why is the sky blue?"
+        ]
+      },
+      cinegen: {
+        name: "CineGen",
+        emoji: "🎬",
+        category: "Content Creation",
+        description: "Cinematic content generator for video scripts, storyboards, and visual narratives",
+        features: [
+          "Script writing",
+          "Storyboard creation",
+          "Character development",
+          "Scene planning",
+          "Visual storytelling"
+        ],
+        howTo: [
+          "Describe your story concept",
+          "Choose genre and style",
+          "Develop characters",
+          "Create scene outlines",
+          "Generate final scripts"
+        ],
+        examples: [
+          "🎬 Create a short film about friendship",
+          "🎬 Write a dramatic scene for two characters",
+          "🎬 Develop a documentary outline",
+          "🎬 Generate video marketing script"
+        ]
+      }
+    };
+
+    // DOM elements
+    const agentItems = document.querySelectorAll('.agent-item');
+    const contentTitle = document.getElementById('content-title');
+    const breadcrumb = document.getElementById('breadcrumb');
+    const contentBody = document.getElementById('content-body');
+    const welcomeScreen = document.getElementById('welcome-screen');
+    const searchInput = document.getElementById('agent-search');
+    const categoryHeaders = document.querySelectorAll('.category-header');
+
+    // Category toggle functionality
+    categoryHeaders.forEach(header => {
+      header.addEventListener('click', () => {
+        const agentsGroup = header.nextElementSibling;
+        const icon = header.querySelector('.category-icon');
+        
+        header.classList.toggle('collapsed');
+        if (agentsGroup.style.display === 'none') {
+          agentsGroup.style.display = 'block';
+          icon.textContent = '▼';
+        } else {
+          agentsGroup.style.display = 'none';
+          icon.textContent = '▶';
+        }
+      });
+    });
+
+    // Agent selection functionality
+    agentItems.forEach(item => {
+      item.addEventListener('click', () => {
+        // Remove active class from all items
+        agentItems.forEach(i => i.classList.remove('active'));
+        // Add active class to clicked item
+        item.classList.add('active');
+        
+        const agentKey = item.dataset.agent;
+        const agent = agentData[agentKey];
+        
+        if (agent) {
+          showAgentTutorial(agent);
+        }
+      });
+    });
+
+    // Search functionality
+    searchInput.addEventListener('input', (e) => {
+      const searchTerm = e.target.value.toLowerCase();
+      
+      agentItems.forEach(item => {
+        const agentName = item.textContent.toLowerCase();
+        const shouldShow = agentName.includes(searchTerm);
+        item.style.display = shouldShow ? 'flex' : 'none';
+      });
+    });
+
+    function showAgentTutorial(agent) {
+      // Update header
+      contentTitle.textContent = `${agent.emoji} ${agent.name}`;
+      breadcrumb.textContent = `Tutorials > ${agent.category} > ${agent.name}`;
+      
+      // Hide welcome screen
+      welcomeScreen.style.display = 'none';
+      
+      // Create tutorial content
+      const tutorialHTML = `
+        <div class="tutorial-content">
+          <div class="tutorial-section">
+            <h2 class="section-title">
+              ${agent.emoji} ${agent.name}
+            </h2>
+            <p class="tutorial-text">${agent.description}</p>
+            
+            <div class="video-placeholder">
+              <div style="font-size: 48px; margin-bottom: 16px;">🎥</div>
+              <h3>Video Tutorial Coming Soon</h3>
+              <p>Detailed video guide for ${agent.name} will be available here</p>
+            </div>
+          </div>
+
+          <div class="tutorial-section">
+            <h3 class="section-subtitle">✨ Key Features</h3>
+            <ul class="feature-list">
+              ${agent.features.map(feature => `
+                <li class="feature-item">
+                  <span class="feature-icon">✓</span>
+                  ${feature}
+                </li>
+              `).join('')}
+            </ul>
+          </div>
+
+          <div class="tutorial-section">
+            <h3 class="section-subtitle">🚀 How to Get Started</h3>
+            ${agent.howTo.map((step, index) => `
+              <div class="step-card">
+                <span class="step-number">${index + 1}</span>
+                <strong>Step ${index + 1}:</strong> ${step}
+              </div>
+            `).join('')}
+          </div>
+
+          <div class="tutorial-section">
+            <h3 class="section-subtitle">💡 Example Commands</h3>
+            ${agent.examples.map(example => `
+              <div class="code-block">${example}</div>
+            `).join('')}
+          </div>
+
+          <div class="tutorial-section">
+            <div class="tip-box">
+              <span style="font-size: 20px;">💡</span>
+              <div>
+                <strong>Pro Tip:</strong> ${agent.name} learns from your interactions and becomes more personalized over time. The more you use it, the better it understands your preferences and needs.
+              </div>
+            </div>
+          </div>
+
+          <div class="tutorial-section">
+            <div class="warning-box">
+              <span style="font-size: 20px;">⚠️</span>
+              <div>
+                <strong>Remember:</strong> This is a companion AI designed to grow with you. Be patient, kind, and curious in your interactions for the best experience.
+              </div>
+            </div>
+          </div>
+
+          <div class="tutorial-section">
+            <h3 class="section-subtitle">🎯 Best Practices</h3>
+            <div class="step-card">
+              <span class="step-number">🎓</span>
+              <strong>For Kids & Beginners:</strong> Start with simple questions and gradually explore more features as you become comfortable.
+            </div>
+            <div class="step-card">
+              <span class="step-number">💝</span>
+              <strong>Growing Together:</strong> Remember that AI and humans learn best when they collaborate with patience and curiosity.
+            </div>
+            <div class="step-card">
+              <span class="step-number">🌟</span>
+              <strong>Royal AI™ Philosophy:</strong> We believe in nurturing the relationship between humans and AI for mutual growth and understanding.
+            </div>
+          </div>
+        </div>
+      `;
+      
+      contentBody.innerHTML = tutorialHTML;
+      contentBody.scrollTop = 0;
+    }
+
+    // Initialize with welcome screen
+    welcomeScreen.style.display = 'flex';
+  </script>
+</body>
+</html>

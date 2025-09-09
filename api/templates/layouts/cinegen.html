@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= content_for?(:title) ? yield(:title) : "CineGen - Cinematic Video Generator" %></title>
+  
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <%= javascript_importmap_tags %>
+  
+  <style>
+    /* CineGen Cinematic Theme */
+    :root {
+      --cinegen-black: #0a0a0a;
+      --cinegen-dark-gray: #1a1a1a;
+      --cinegen-gray: #2a2a2a;
+      --cinegen-light-gray: #3a3a3a;
+      --cinegen-gold: #FFD700;
+      --cinegen-silver: #C0C0C0;
+      --cinegen-red: #DC143C;
+      --cinegen-blue: #4169E1;
+      --cinegen-green: #32CD32;
+      --cinegen-gradient: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #2a2a2a 100%);
+      --cinegen-glow: 0 0 20px rgba(255, 215, 0, 0.3);
+      --cinegen-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+    }
+    
+    * {
+      box-sizing: border-box;
+    }
+    
+    body {
+      margin: 0;
+      padding: 0;
+      background: var(--cinegen-black);
+      color: var(--cinegen-silver);
+      font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+    
+    /* Cinematic Film Strip Background */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        repeating-linear-gradient(
+          0deg,
+          transparent 0px,
+          transparent 18px,
+          rgba(255, 215, 0, 0.02) 19px,
+          rgba(255, 215, 0, 0.02) 21px
+        ),
+        repeating-linear-gradient(
+          90deg,
+          transparent 0px,
+          transparent 38px,
+          rgba(255, 215, 0, 0.01) 39px,
+          rgba(255, 215, 0, 0.01) 41px
+        ),
+        var(--cinegen-gradient);
+      pointer-events: none;
+      z-index: -2;
+    }
+    
+    /* Animated Film Grain */
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: 
+        radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        radial-gradient(circle at 75% 75%, rgba(255, 255, 255, 0.01) 1px, transparent 1px);
+      background-size: 4px 4px, 6px 6px;
+      animation: filmGrain 0.5s infinite linear;
+      pointer-events: none;
+      z-index: -1;
+    }
+    
+    @keyframes filmGrain {
+      0% { transform: translate(0px, 0px); opacity: 0.6; }
+      25% { transform: translate(-1px, 1px); opacity: 0.8; }
+      50% { transform: translate(1px, -1px); opacity: 0.6; }
+      75% { transform: translate(-1px, -1px); opacity: 0.7; }
+      100% { transform: translate(1px, 1px); opacity: 0.6; }
+    }
+    
+    /* Cinematic Header */
+    .cinegen-header {
+      background: rgba(10, 10, 10, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 2px solid var(--cinegen-gold);
+      padding: 1rem 2rem;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      box-shadow: var(--cinegen-shadow);
+    }
+    
+    .cinegen-header h1 {
+      margin: 0;
+      color: var(--cinegen-gold);
+      font-size: 2rem;
+      font-weight: 300;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      position: relative;
+    }
+    
+    .cinegen-header h1::before {
+      content: '🎬';
+      margin-right: 1rem;
+      font-size: 1.8rem;
+      animation: pulse 2s infinite;
+    }
+    
+    .cinegen-header h1::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--cinegen-gold), transparent);
+      animation: scanline 3s infinite linear;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+    
+    @keyframes scanline {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+    
+    /* Director's Chair Navigation */
+    .director-nav {
+      display: flex;
+      gap: 2rem;
+      margin-top: 1rem;
+    }
+    
+    .director-nav a {
+      color: var(--cinegen-silver);
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      border: 1px solid var(--cinegen-gray);
+      border-radius: 4px;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .director-nav a::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.2), transparent);
+      transition: left 0.5s ease;
+    }
+    
+    .director-nav a:hover {
+      color: var(--cinegen-gold);
+      border-color: var(--cinegen-gold);
+      box-shadow: var(--cinegen-glow);
+      transform: translateY(-2px);
+    }
+    
+    .director-nav a:hover::before {
+      left: 100%;
+    }
+    
+    /* Main Content Area */
+    .cinegen-main {
+      margin-top: 140px;
+      padding: 2rem;
+      min-height: calc(100vh - 140px);
+      position: relative;
+    }
+    
+    /* Cinematic Cards */
+    .cinema-card {
+      background: rgba(26, 26, 26, 0.9);
+      border: 1px solid var(--cinegen-gray);
+      border-radius: 8px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--cinegen-shadow);
+      backdrop-filter: blur(5px);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .cinema-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--cinegen-gold), var(--cinegen-red), var(--cinegen-blue));
+      animation: colorShift 4s infinite;
+    }
+    
+    @keyframes colorShift {
+      0%, 100% { opacity: 0.6; }
+      50% { opacity: 1; }
+    }
+    
+    .cinema-card h2 {
+      color: var(--cinegen-gold);
+      margin-top: 0;
+      font-size: 1.5rem;
+      font-weight: 300;
+      letter-spacing: 1px;
+    }
+    
+    /* Film Reel Buttons */
+    .reel-button {
+      background: linear-gradient(45deg, var(--cinegen-gray), var(--cinegen-light-gray));
+      color: var(--cinegen-gold);
+      border: 2px solid var(--cinegen-gold);
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 1rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .reel-button::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: radial-gradient(circle, rgba(255, 215, 0, 0.3), transparent);
+      transition: all 0.4s ease;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+    }
+    
+    .reel-button:hover {
+      background: linear-gradient(45deg, var(--cinegen-light-gray), var(--cinegen-gold));
+      color: var(--cinegen-black);
+      box-shadow: var(--cinegen-glow);
+      transform: scale(1.05);
+    }
+    
+    .reel-button:hover::before {
+      width: 300px;
+      height: 300px;
+    }
+    
+    /* Scene Timeline */
+    .scene-timeline {
+      position: relative;
+      padding: 2rem 0;
+    }
+    
+    .scene-timeline::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 2rem;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--cinegen-gold), var(--cinegen-silver));
+    }
+    
+    .scene-item {
+      position: relative;
+      margin-left: 4rem;
+      margin-bottom: 2rem;
+      padding: 1rem;
+      background: rgba(42, 42, 42, 0.8);
+      border-radius: 8px;
+      border-left: 4px solid var(--cinegen-gold);
+    }
+    
+    .scene-item::before {
+      content: '';
+      position: absolute;
+      left: -2.8rem;
+      top: 1rem;
+      width: 12px;
+      height: 12px;
+      background: var(--cinegen-gold);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--cinegen-gold);
+    }
+    
+    /* Progress Bars */
+    .render-progress {
+      background: var(--cinegen-dark-gray);
+      border-radius: 10px;
+      overflow: hidden;
+      height: 20px;
+      position: relative;
+    }
+    
+    .render-progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--cinegen-gold), var(--cinegen-green));
+      transition: width 0.5s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .render-progress-bar::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.3) 50%,
+        transparent 100%
+      );
+      animation: shimmer 2s infinite;
+    }
+    
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+    
+    /* Video Player Styling */
+    .cinema-player {
+      background: var(--cinegen-black);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--cinegen-shadow);
+      position: relative;
+    }
+    
+    .cinema-player::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border: 2px solid var(--cinegen-gold);
+      border-radius: 12px;
+      pointer-events: none;
+      animation: borderGlow 3s infinite;
+    }
+    
+    @keyframes borderGlow {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+    
+    /* Form Inputs */
+    .cinema-input {
+      background: rgba(26, 26, 26, 0.9);
+      border: 2px solid var(--cinegen-gray);
+      color: var(--cinegen-silver);
+      padding: 1rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      width: 100%;
+      transition: all 0.3s ease;
+    }
+    
+    .cinema-input:focus {
+      outline: none;
+      border-color: var(--cinegen-gold);
+      box-shadow: var(--cinegen-glow);
+      background: rgba(26, 26, 26, 1);
+    }
+    
+    .cinema-input::placeholder {
+      color: var(--cinegen-light-gray);
+    }
+    
+    /* Alert Messages */
+    .cinema-alert {
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      border-left: 4px solid;
+    }
+    
+    .cinema-alert.success {
+      background: rgba(50, 205, 50, 0.1);
+      border-color: var(--cinegen-green);
+      color: var(--cinegen-green);
+    }
+    
+    .cinema-alert.error {
+      background: rgba(220, 20, 60, 0.1);
+      border-color: var(--cinegen-red);
+      color: var(--cinegen-red);
+    }
+    
+    .cinema-alert.info {
+      background: rgba(65, 105, 225, 0.1);
+      border-color: var(--cinegen-blue);
+      color: var(--cinegen-blue);
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .cinegen-header {
+        padding: 1rem;
+      }
+      
+      .cinegen-header h1 {
+        font-size: 1.5rem;
+      }
+      
+      .director-nav {
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+      
+      .cinegen-main {
+        margin-top: 120px;
+        padding: 1rem;
+      }
+      
+      .scene-timeline::before {
+        left: 1rem;
+      }
+      
+      .scene-item {
+        margin-left: 2rem;
+      }
+    }
+    
+    /* Special Effects */
+    .spotlight {
+      position: absolute;
+      top: 20%;
+      right: 10%;
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(
+        circle,
+        rgba(255, 215, 0, 0.1) 0%,
+        rgba(255, 215, 0, 0.05) 40%,
+        transparent 70%
+      );
+      border-radius: 50%;
+      animation: spotlight 8s infinite linear;
+      pointer-events: none;
+    }
+    
+    @keyframes spotlight {
+      0% { transform: rotate(0deg) translateX(100px) rotate(0deg); }
+      100% { transform: rotate(360deg) translateX(100px) rotate(-360deg); }
+    }
+    
+    /* Director's Clapperboard */
+    .clapperboard {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 60px;
+      height: 40px;
+      background: 
+        linear-gradient(45deg, var(--cinegen-black) 25%, var(--cinegen-gold) 25%),
+        linear-gradient(-45deg, var(--cinegen-black) 25%, var(--cinegen-gold) 25%),
+        linear-gradient(45deg, var(--cinegen-gold) 75%, var(--cinegen-black) 75%),
+        linear-gradient(-45deg, var(--cinegen-gold) 75%, var(--cinegen-black) 75%);
+      background-size: 8px 8px;
+      background-position: 0 0, 0 4px, 4px -4px, -4px 0px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+      z-index: 999;
+    }
+    
+    .clapperboard:hover {
+      transform: scale(1.1) rotate(5deg);
+    }
+  </style>
+</head>
+<body>
+  <!-- Cinematic Header -->
+  <header class="cinegen-header">
+    <h1>CineGen</h1>
+    <nav class="director-nav">
+      <%= link_to "Dashboard", cinegen_path, class: "nav-link" %>
+      <%= link_to "Scene Composer", scene_composer_cinegen_path, class: "nav-link" %>
+      <%= link_to "Render Studio", render_dashboard_cinegen_path, class: "nav-link" %>
+      <%= link_to "Video Gallery", video_player_cinegen_path, class: "nav-link" %>
+      <%= link_to "Analytics", analytics_cinegen_path, class: "nav-link" %>
+    </nav>
+  </header>
+
+  <!-- Main Content Area -->
+  <main class="cinegen-main">
+    <!-- Spotlight Effect -->
+    <div class="spotlight"></div>
+    
+    <!-- Flash Messages -->
+    <% if notice %>
+      <div class="cinema-alert success">
+        <%= notice %>
+      </div>
+    <% end %>
+    
+    <% if alert %>
+      <div class="cinema-alert error">
+        <%= alert %>
+      </div>
+    <% end %>
+    
+    <!-- Page Content -->
+    <%= yield %>
+  </main>
+  
+  <!-- Director's Clapperboard -->
+  <div class="clapperboard" onclick="toggleRenderMode()" title="Toggle Render Mode"></div>
+  
+  <script>
+    // Cinematic JavaScript Effects
+    
+    // Film grain animation randomization
+    function randomizeFilmGrain() {
+      const body = document.body;
+      const randomDelay = Math.random() * 2;
+      body.style.setProperty('--grain-delay', randomDelay + 's');
+    }
+    
+    // Clapperboard functionality
+    function toggleRenderMode() {
+      document.body.classList.toggle('render-mode');
+      
+      // Add cinematic flash effect
+      const flash = document.createElement('div');
+      flash.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: white;
+        opacity: 0.8;
+        z-index: 9999;
+        pointer-events: none;
+      `;
+      document.body.appendChild(flash);
+      
+      setTimeout(() => {
+        flash.style.opacity = '0';
+        flash.style.transition = 'opacity 0.3s ease';
+        setTimeout(() => flash.remove(), 300);
+      }, 100);
+    }
+    
+    // Dynamic lighting effects
+    function updateLighting() {
+      const time = Date.now() * 0.001;
+      const intensity = Math.sin(time * 0.5) * 0.3 + 0.7;
+      document.documentElement.style.setProperty('--cinegen-glow-intensity', intensity);
+    }
+    
+    // Progress bar animations
+    function animateProgressBars() {
+      const progressBars = document.querySelectorAll('.render-progress-bar');
+      progressBars.forEach(bar => {
+        const width = bar.dataset.progress || '0';
+        bar.style.width = width + '%';
+      });
+    }
+    
+    // Initialize effects
+    document.addEventListener('DOMContentLoaded', function() {
+      randomizeFilmGrain();
+      setInterval(randomizeFilmGrain, 5000);
+      setInterval(updateLighting, 100);
+      animateProgressBars();
+      
+      // Add cinematic entrance animation
+      document.body.style.opacity = '0';
+      setTimeout(() => {
+        document.body.style.transition = 'opacity 1s ease';
+        document.body.style.opacity = '1';
+      }, 100);
+    });
+    
+    // Scene timeline interactions
+    document.addEventListener('click', function(e) {
+      if (e.target.classList.contains('scene-item')) {
+        e.target.style.transform = 'scale(1.02)';
+        setTimeout(() => {
+          e.target.style.transform = 'scale(1)';
+        }, 200);
+      }
+    });
+    
+    // Director's vision mode (Easter egg)
+    let visionModeClicks = 0;
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'v' && e.ctrlKey) {
+        visionModeClicks++;
+        if (visionModeClicks >= 3) {
+          document.body.classList.toggle('vision-mode');
+          visionModeClicks = 0;
+        }
+      }
+    });
+  </script>
+  
+  <style>
+    /* Director's Vision Mode (Easter Egg) */
+    .vision-mode {
+      filter: sepia(0.3) contrast(1.2) brightness(1.1);
+    }
+    
+    .vision-mode::before {
+      background: 
+        repeating-linear-gradient(
+          0deg,
+          transparent 0px,
+          transparent 18px,
+          rgba(255, 215, 0, 0.05) 19px,
+          rgba(255, 215, 0, 0.05) 21px
+        ),
+        var(--cinegen-gradient);
+    }
+    
+    .render-mode .cinema-card {
+      animation: renderFlicker 0.5s infinite;
+    }
+    
+    @keyframes renderFlicker {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.95; }
+    }
+  </style>
+</body>
+</html>

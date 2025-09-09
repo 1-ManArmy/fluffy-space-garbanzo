@@ -1,0 +1,287 @@
+<div class="cinegen-dashboard">
+  <div class="hero-section">
+    <div class="hero-content">
+      <div class="logo">🎬</div>
+      <h1 class="hero-title">CineGen</h1>
+      <p class="hero-subtitle">AI-Powered Cinematic Video Generator</p>
+      <p class="hero-description">
+        Transform your creative vision into stunning cinematic videos with advanced AI technology.
+        From concept to completion, CineGen brings Hollywood-grade production to your fingertips.
+      </p>
+    </div>
+  </div>
+
+  <div class="features-section">
+    <div class="container">
+      <h2 class="section-title">🎭 Studio Features</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🎨</div>
+          <h3>Scene Composer</h3>
+          <p>Create compelling narrative structures with our AI-powered scene composition tools.</p>
+          <%= link_to "Compose Scenes", scene_composer_cinegen_path, class: "feature-btn" %>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3>Render Studio</h3>
+          <p>Monitor real-time rendering progress with professional-grade processing power.</p>
+          <%= link_to "Render Dashboard", render_dashboard_cinegen_path, class: "feature-btn" %>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">📹</div>
+          <h3>Video Gallery</h3>
+          <p>Browse, organize, and share your cinematic creations with integrated playback.</p>
+          <%= link_to "Video Library", video_player_cinegen_path, class: "feature-btn" %>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">📊</div>
+          <h3>Analytics Hub</h3>
+          <p>Track production metrics, performance insights, and creative analytics.</p>
+          <%= link_to "View Analytics", analytics_cinegen_path, class: "feature-btn" %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="quick-start-section">
+    <div class="container">
+      <h2 class="section-title">⚡ Quick Start</h2>
+      <div class="quick-start-grid">
+        <div class="quick-start-card">
+          <h3>🎭 New Project</h3>
+          <p>Start a fresh cinematic project with AI-guided scene composition.</p>
+          <button class="quick-btn" onclick="createNewProject()">Create Project</button>
+        </div>
+        
+        <div class="quick-start-card">
+          <h3>🎨 Style Transfer</h3>
+          <p>Apply cinematic styles to existing footage with neural enhancement.</p>
+          <button class="quick-btn" onclick="openStyleTransfer()">Apply Style</button>
+        </div>
+        
+        <div class="quick-start-card">
+          <h3>📊 View Analytics</h3>
+          <p>Access production metrics and performance insights for your projects.</p>
+          <button class="quick-btn" onclick="viewAnalytics()">View Stats</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .cinegen-dashboard {
+    min-height: calc(100vh - 120px);
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #2a2a2a 100%);
+    color: #ffffff;
+  }
+  
+  .hero-section {
+    padding: 4rem 2rem;
+    text-align: center;
+    background: radial-gradient(ellipse at center, rgba(255, 215, 0, 0.1) 0%, transparent 70%);
+    border-bottom: 2px solid #FFD700;
+  }
+  
+  .logo {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    text-shadow: 0 0 30px #FFD700;
+  }
+  
+  .hero-title {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #FFD700;
+    text-shadow: 0 0 20px #FFD700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  
+  .hero-subtitle {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #C0C0C0;
+    font-style: italic;
+  }
+  
+  .hero-description {
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto;
+    color: #C0C0C0;
+    line-height: 1.6;
+  }
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+  
+  .section-title {
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 3rem;
+    color: #FFD700;
+    font-weight: 300;
+    letter-spacing: 1px;
+  }
+  
+  .features-section {
+    padding: 4rem 0;
+    background: rgba(26, 26, 26, 0.5);
+  }
+  
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+  }
+  
+  .feature-card {
+    background: rgba(42, 42, 42, 0.8);
+    border: 2px solid #333;
+    border-radius: 12px;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .feature-card:hover {
+    border-color: #FFD700;
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
+  }
+  
+  .feature-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+  
+  .feature-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #FFD700;
+  }
+  
+  .feature-card p {
+    color: #C0C0C0;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+  }
+  
+  .feature-btn {
+    background: linear-gradient(45deg, #FFD700, #FFA500);
+    color: #0a0a0a;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: inline-block;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
+  .feature-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+  }
+  
+  .quick-start-section {
+    padding: 4rem 0;
+  }
+  
+  .quick-start-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+  }
+  
+  .quick-start-card {
+    background: rgba(42, 42, 42, 0.8);
+    border: 2px solid #333;
+    border-radius: 12px;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+  }
+  
+  .quick-start-card:hover {
+    border-color: #FFD700;
+    transform: scale(1.02);
+  }
+  
+  .quick-start-card h3 {
+    color: #FFD700;
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+  }
+  
+  .quick-start-card p {
+    color: #C0C0C0;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+  }
+  
+  .quick-btn {
+    background: linear-gradient(45deg, #333, #555);
+    color: #FFD700;
+    border: 2px solid #FFD700;
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
+  .quick-btn:hover {
+    background: linear-gradient(45deg, #FFD700, #FFA500);
+    color: #0a0a0a;
+    transform: scale(1.05);
+  }
+  
+  @media (max-width: 768px) {
+    .hero-title {
+      font-size: 2rem;
+    }
+    
+    .hero-subtitle {
+      font-size: 1.2rem;
+    }
+    
+    .section-title {
+      font-size: 2rem;
+    }
+    
+    .features-grid,
+    .quick-start-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  function createNewProject() {
+    window.location.href = '<%= scene_composer_cinegen_path %>';
+  }
+  
+  function openStyleTransfer() {
+    alert('🎨 Style Transfer feature coming soon! This will allow you to apply cinematic styles to your footage.');
+  }
+  
+  function viewAnalytics() {
+    window.location.href = '<%= analytics_cinegen_path %>';
+  }
+</script>

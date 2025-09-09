@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EmotiSense - Emotion Chat</title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <%= javascript_importmap_tags %>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Courier New', monospace;
+      background-color: #000;
+      color: #00ff00;
+      min-height: 100vh;
+      overflow-x: hidden;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    /* Terminal scanlines effect */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        transparent 50%, 
+        rgba(0, 255, 0, 0.03) 50%
+      );
+      background-size: 100% 4px;
+      pointer-events: none;
+      z-index: 1000;
+    }
+
+    .terminal-container {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background-color: #000;
+      border: 2px solid #00ff00;
+      position: relative;
+    }
+
+    /* Terminal header */
+    .terminal-header {
+      background-color: #001100;
+      border-bottom: 1px solid #00ff00;
+      padding: 8px 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+    }
+
+    .terminal-title {
+      color: #00ff00;
+      font-weight: bold;
+    }
+
+    .terminal-controls {
+      display: flex;
+      gap: 5px;
+    }
+
+    .control-btn {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    .control-btn.close { background: #ff0000; }
+    .control-btn.minimize { background: #ffff00; }
+    .control-btn.maximize { background: #00ff00; }
+
+    /* Navigation menu */
+    .nav-menu {
+      background-color: #001100;
+      border-bottom: 1px solid #00ff00;
+      padding: 10px 0;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .nav-link {
+      color: #00ff00;
+      text-decoration: none;
+      padding: 5px 10px;
+      border: 1px solid transparent;
+      transition: all 0.3s ease;
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+
+    .nav-link:hover {
+      background-color: #00ff00;
+      color: #000;
+      border: 1px solid #00ff00;
+      text-decoration: none;
+    }
+
+    .nav-link.active {
+      background-color: #003300;
+      border: 1px solid #00ff00;
+    }
+
+    /* Main content area */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Chat interface */
+    .chat-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      min-height: 0;
+    }
+
+    .chat-header {
+      text-align: center;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #00ff00;
+    }
+
+    .chat-title {
+      font-size: 24px;
+      color: #00ff00;
+      margin-bottom: 5px;
+      text-shadow: 0 0 10px #00ff00;
+    }
+
+    .chat-subtitle {
+      font-size: 14px;
+      color: #008800;
+    }
+
+    /* Messages area */
+    .messages-container {
+      flex: 1;
+      background-color: #001100;
+      border: 1px solid #00ff00;
+      border-radius: 5px;
+      padding: 15px;
+      margin-bottom: 20px;
+      overflow-y: auto;
+      position: relative;
+      min-height: 300px;
+      max-height: 60vh;
+    }
+
+    .message {
+      margin-bottom: 15px;
+      padding: 8px 12px;
+      border-radius: 3px;
+      max-width: 80%;
+    }
+
+    .message.user {
+      background-color: #003300;
+      border: 1px solid #00ff00;
+      margin-left: auto;
+      text-align: right;
+    }
+
+    .message.bot {
+      background-color: #002200;
+      border: 1px solid #008800;
+      margin-right: auto;
+    }
+
+    .message-meta {
+      font-size: 10px;
+      color: #008800;
+      margin-bottom: 5px;
+    }
+
+    .message-content {
+      color: #00ff00;
+      line-height: 1.4;
+    }
+
+    /* Input area */
+    .input-container {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .input-prompt {
+      color: #00ff00;
+      font-weight: bold;
+    }
+
+    .chat-input {
+      flex: 1;
+      background-color: #000;
+      border: 1px solid #00ff00;
+      color: #00ff00;
+      padding: 10px;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      border-radius: 3px;
+    }
+
+    .chat-input:focus {
+      outline: none;
+      box-shadow: 0 0 5px #00ff00;
+    }
+
+    .send-btn {
+      background-color: #003300;
+      border: 1px solid #00ff00;
+      color: #00ff00;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-family: 'Courier New', monospace;
+      transition: all 0.3s ease;
+      border-radius: 3px;
+    }
+
+    .send-btn:hover {
+      background-color: #00ff00;
+      color: #000;
+    }
+
+    /* Status bar */
+    .status-bar {
+      background-color: #001100;
+      border-top: 1px solid #00ff00;
+      padding: 8px 15px;
+      display: flex;
+      justify-content: between;
+      align-items: center;
+      font-size: 11px;
+    }
+
+    .status-left {
+      color: #008800;
+    }
+
+    .status-right {
+      color: #008800;
+      margin-left: auto;
+    }
+
+    /* Scrollbar styling */
+    .messages-container::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .messages-container::-webkit-scrollbar-track {
+      background: #000;
+    }
+
+    .messages-container::-webkit-scrollbar-thumb {
+      background: #00ff00;
+      border-radius: 4px;
+    }
+
+    .messages-container::-webkit-scrollbar-thumb:hover {
+      background: #008800;
+    }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+      body {
+        overflow-y: auto;
+      }
+      
+      .nav-menu {
+        gap: 10px;
+        padding: 8px 0;
+      }
+
+      .nav-link {
+        font-size: 10px;
+        padding: 3px 6px;
+      }
+
+      .chat-container {
+        padding: 15px;
+      }
+
+      .chat-title {
+        font-size: 20px;
+      }
+
+      .message {
+        max-width: 90%;
+      }
+
+      .messages-container {
+        max-height: 50vh;
+        min-height: 250px;
+      }
+    }
+
+    /* Terminal cursor animation */
+    .cursor {
+      display: inline-block;
+      background-color: #00ff00;
+      width: 8px;
+      height: 16px;
+      animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+      0%, 50% { opacity: 1; }
+      51%, 100% { opacity: 0; }
+    }
+
+    /* Loading animation */
+    .typing-indicator {
+      display: none;
+      color: #008800;
+      font-style: italic;
+    }
+
+    .typing-indicator.active {
+      display: block;
+    }
+
+    .typing-dots {
+      animation: typing 1.5s infinite;
+    }
+
+    @keyframes typing {
+      0%, 60%, 100% { opacity: 0.2; }
+      30% { opacity: 1; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="terminal-container">
+    <!-- Terminal Header -->
+    <div class="terminal-header">
+      <div class="terminal-title">EmotiSense Terminal - Emotion Chat Interface v2.1</div>
+      <div class="terminal-controls">
+        <div class="control-btn minimize"></div>
+        <div class="control-btn maximize"></div>
+        <div class="control-btn close"></div>
+      </div>
+    </div>
+
+    <!-- Navigation Menu -->
+    <nav class="nav-menu">
+      <%= link_to "Dashboard", "/emotisense", class: "nav-link" %>
+      <%= link_to "Mood Journal", "/emotisense/mood_journal", class: "nav-link" %>
+      <%= link_to "Emotion Chat", "/emotisense/emotion_chat", class: "nav-link active" %>
+      <%= link_to "Analytics", "/emotisense/emotion_dashboard", class: "nav-link" %>
+      <%= link_to "Wellness", "/emotisense/wellness_center", class: "nav-link" %>
+      <%= link_to "Training", "/emotisense/empathy_training", class: "nav-link" %>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <div class="chat-container">
+        <!-- Chat Header -->
+        <div class="chat-header">
+          <h1 class="chat-title">AI Emotion Chat</h1>
+          <p class="chat-subtitle">Intelligent emotional analysis and support</p>
+        </div>
+
+        <!-- Messages Container -->
+        <div class="messages-container" id="messagesContainer">
+          <div class="message bot">
+            <div class="message-meta">EmotiSense AI • <%= Time.current.strftime("%H:%M") %></div>
+            <div class="message-content">
+              Welcome to EmotiSense Emotion Chat! I'm here to help you explore and understand your emotions. 
+              How are you feeling today? You can share anything that's on your mind.
+            </div>
+          </div>
+        </div>
+
+        <!-- Input Container -->
+        <div class="input-container">
+          <span class="input-prompt">user@emotisense:~$</span>
+          <input type="text" id="chatInput" class="chat-input" placeholder="Type your message..." autocomplete="off">
+          <button id="sendBtn" class="send-btn">SEND</button>
+        </div>
+
+        <!-- Typing Indicator -->
+        <div class="typing-indicator" id="typingIndicator">
+          <span class="typing-dots">EmotiSense AI is analyzing...</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Status Bar -->
+    <div class="status-bar">
+      <div class="status-left">
+        EmotiSense v2.1.0 | Connected | Session Active
+      </div>
+      <div class="status-right">
+        <%= Time.current.strftime("%Y-%m-%d %H:%M:%S") %> | Messages: <span id="messageCount">1</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const chatInput = document.getElementById('chatInput');
+      const sendBtn = document.getElementById('sendBtn');
+      const messagesContainer = document.getElementById('messagesContainer');
+      const typingIndicator = document.getElementById('typingIndicator');
+      const messageCountElement = document.getElementById('messageCount');
+      let messageCount = 1;
+
+      // Sample emotion responses
+      const emotionResponses = {
+        happy: [
+          "That's wonderful to hear! Happiness is such a positive emotion. What specifically is bringing you joy today?",
+          "I'm glad you're feeling happy! Can you tell me more about what's contributing to this positive feeling?",
+          "It's great that you're experiencing happiness. Would you like to explore what makes this feeling so special?"
+        ],
+        sad: [
+          "I hear that you're feeling sad. It's completely normal to experience sadness. Would you like to talk about what's causing these feelings?",
+          "Sadness can be difficult to navigate. I'm here to listen and support you. What's been weighing on your mind?",
+          "Thank you for sharing that you're feeling sad. Sometimes talking about our emotions can help us understand them better."
+        ],
+        angry: [
+          "I understand you're feeling angry. Anger often signals that something important to us has been threatened or violated. Can you tell me more?",
+          "Anger is a valid emotion that tells us something needs attention. What situation or experience triggered these feelings?",
+          "It takes courage to acknowledge anger. Would you like to explore what's behind this emotion and how we might address it?"
+        ],
+        anxious: [
+          "Anxiety can feel overwhelming. I want you to know that what you're experiencing is valid. What thoughts or situations are contributing to your anxiety?",
+          "Thank you for sharing your anxiety with me. Sometimes breaking down our worries can make them feel more manageable. What's on your mind?",
+          "Anxiety affects many people, and you're not alone in this. Would you like to talk about what's causing these feelings?"
+        ],
+        excited: [
+          "Your excitement is contagious! It's wonderful to feel this kind of positive energy. What's got you so excited?",
+          "I love hearing about excitement! This kind of enthusiasm can be really energizing. Tell me more about what's happening.",
+          "Excitement is such a beautiful emotion to experience. What's creating this wonderful feeling for you?"
+        ],
+        confused: [
+          "Confusion can be frustrating, but it's often the first step toward clarity. What situation or thoughts are causing confusion for you?",
+          "It's okay to feel confused sometimes. Our minds process complex situations differently. What's been puzzling you?",
+          "Confusion shows that you're thinking deeply about something. Would you like to work through what's been unclear?"
+        ],
+        stressed: [
+          "Stress can really impact our well-being. I'm here to help you process these feelings. What's been causing stress in your life?",
+          "Thank you for recognizing and sharing your stress. Sometimes identifying the sources can be the first step in managing it. What's overwhelming you?",
+          "Stress affects us all differently. It sounds like you're dealing with quite a bit right now. What feels most pressing?"
+        ],
+        grateful: [
+          "Gratitude is such a powerful and positive emotion! It's wonderful that you're experiencing this. What are you feeling grateful for?",
+          "I love hearing about gratitude. It can really shift our perspective in beautiful ways. What's inspired this feeling of thankfulness?",
+          "Gratitude has amazing effects on our mental well-being. Tell me more about what's bringing you this sense of appreciation."
+        ]
+      };
+
+      function detectEmotion(message) {
+        const lowerMessage = message.toLowerCase();
+        
+        if (lowerMessage.includes('happy') || lowerMessage.includes('joy') || lowerMessage.includes('good') || lowerMessage.includes('great') || lowerMessage.includes('amazing')) {
+          return 'happy';
+        } else if (lowerMessage.includes('sad') || lowerMessage.includes('down') || lowerMessage.includes('depressed') || lowerMessage.includes('upset')) {
+          return 'sad';
+        } else if (lowerMessage.includes('angry') || lowerMessage.includes('mad') || lowerMessage.includes('furious') || lowerMessage.includes('irritated')) {
+          return 'angry';
+        } else if (lowerMessage.includes('anxious') || lowerMessage.includes('worried') || lowerMessage.includes('nervous') || lowerMessage.includes('scared')) {
+          return 'anxious';
+        } else if (lowerMessage.includes('excited') || lowerMessage.includes('thrilled') || lowerMessage.includes('enthusiastic')) {
+          return 'excited';
+        } else if (lowerMessage.includes('confused') || lowerMessage.includes('puzzled') || lowerMessage.includes('unclear')) {
+          return 'confused';
+        } else if (lowerMessage.includes('stressed') || lowerMessage.includes('overwhelmed') || lowerMessage.includes('pressure')) {
+          return 'stressed';
+        } else if (lowerMessage.includes('grateful') || lowerMessage.includes('thankful') || lowerMessage.includes('blessed')) {
+          return 'grateful';
+        }
+        
+        return 'neutral';
+      }
+
+      function getEmotionResponse(emotion, message) {
+        if (emotionResponses[emotion]) {
+          const responses = emotionResponses[emotion];
+          return responses[Math.floor(Math.random() * responses.length)];
+        }
+        
+        // Default neutral responses
+        const neutralResponses = [
+          "Thank you for sharing that with me. Can you tell me more about how you're feeling?",
+          "I'm here to listen and understand. What emotions are you experiencing right now?",
+          "Your feelings are important. Would you like to explore what you're experiencing in more detail?",
+          "I appreciate you opening up. What's been on your mind lately?",
+          "Tell me more about what you're going through. I'm here to support you."
+        ];
+        
+        return neutralResponses[Math.floor(Math.random() * neutralResponses.length)];
+      }
+
+      function addMessage(content, isUser = false) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${isUser ? 'user' : 'bot'}`;
+        
+        const timestamp = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        const sender = isUser ? 'You' : 'EmotiSense AI';
+        
+        messageDiv.innerHTML = `
+          <div class="message-meta">${sender} • ${timestamp}</div>
+          <div class="message-content">${content}</div>
+        `;
+        
+        messagesContainer.appendChild(messageDiv);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        
+        messageCount++;
+        messageCountElement.textContent = messageCount;
+      }
+
+      function sendMessage() {
+        const message = chatInput.value.trim();
+        if (!message) return;
+
+        // Add user message
+        addMessage(message, true);
+        chatInput.value = '';
+
+        // Show typing indicator
+        typingIndicator.classList.add('active');
+
+        // Simulate AI response delay
+        setTimeout(() => {
+          typingIndicator.classList.remove('active');
+          
+          // Detect emotion and generate response
+          const detectedEmotion = detectEmotion(message);
+          const response = getEmotionResponse(detectedEmotion, message);
+          
+          addMessage(response);
+        }, 1500 + Math.random() * 1500); // Random delay between 1.5-3 seconds
+      }
+
+      // Event listeners
+      sendBtn.addEventListener('click', sendMessage);
+      
+      chatInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          sendMessage();
+        }
+      });
+
+      // Focus on input
+      chatInput.focus();
+
+      // Terminal control buttons
+      document.querySelector('.control-btn.close').addEventListener('click', function() {
+        if (confirm('Close EmotiSense Emotion Chat?')) {
+          window.location.href = '/emotisense';
+        }
+      });
+
+      document.querySelector('.control-btn.minimize').addEventListener('click', function() {
+        document.body.style.transform = 'scale(0.8)';
+        document.body.style.transformOrigin = 'top left';
+      });
+
+      document.querySelector('.control-btn.maximize').addEventListener('click', function() {
+        document.body.style.transform = 'scale(1)';
+        document.body.style.transformOrigin = 'top left';
+      });
+    });
+  </script>
+</body>
+</html>

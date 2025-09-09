@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Service Temporarily Unavailable - Phantom AI</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  </head>
+
+  <body class="bg-gray-900 text-white">
+    <div class="min-h-screen flex items-center justify-center">
+      <div class="max-w-md mx-auto text-center">
+        <div class="mb-8">
+          <div class="w-24 h-24 mx-auto mb-6 bg-gradient-to-br from-orange-500 to-red-600 rounded-full flex items-center justify-center">
+            <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.082 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+            </svg>
+          </div>
+          
+          <h1 class="text-3xl font-bold mb-4 text-white">Service Temporarily Unavailable</h1>
+          
+          <p class="text-gray-300 mb-6 leading-relaxed">
+            We're experiencing a temporary connection issue with our database. 
+            Our team is working to restore full functionality.
+          </p>
+          
+          <div class="space-y-3 text-sm text-gray-400">
+            <p>• Most features are temporarily limited</p>
+            <p>• Data is safe and will be restored automatically</p>
+            <p>• No action required from your side</p>
+          </div>
+        </div>
+        
+        <div class="space-y-4">
+          <a href="/" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors">
+            Return to Home
+          </a>
+          
+          <div class="text-sm text-gray-500">
+            <p>Status will update automatically when service is restored</p>
+          </div>
+        </div>
+        
+        <!-- Auto-refresh every 30 seconds -->
+        <script>
+          setTimeout(function() {
+            window.location.reload();
+          }, 30000);
+        </script>
+      </div>
+    </div>
+  </body>
+</html>

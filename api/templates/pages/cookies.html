@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cookie Policy - AI Digital Friend</title>
+
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <%= javascript_importmap_tags %>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+      background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+      color: #eee;
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    .hero-section {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      padding: 4rem 2rem;
+      text-align: center;
+      color: #fff;
+    }
+
+    .hero-title {
+      font-size: 3.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+    }
+
+    .hero-subtitle {
+      font-size: 1.3rem;
+      font-weight: 300;
+      max-width: 600px;
+      margin: 0 auto;
+      opacity: 0.9;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .content-section {
+      background: rgba(30, 30, 30, 0.85);
+      border-radius: 15px;
+      padding: 2.5rem;
+      margin: 2rem 0;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(10px);
+      color: #ddd;
+    }
+
+    .effective-date {
+      background: linear-gradient(135deg, rgba(60, 60, 80, 0.95) 0%, rgba(40, 40, 60, 0.95) 100%);
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 2rem;
+      text-align: center;
+      border-left: 5px solid #aaaaff;
+    }
+
+    h1 {
+      color: #ffd700;
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      text-align: center;
+      border-bottom: 3px solid #764ba2;
+      padding-bottom: 1rem;
+    }
+
+    h2 {
+      color: #ffd700;
+      font-size: 1.8rem;
+      font-weight: 600;
+      margin: 2.5rem 0 1.5rem 0;
+      border-bottom: 2px solid #764ba2;
+      padding-bottom: 0.5rem;
+      scroll-margin-top: 100px;
+    }
+
+    h3 {
+      color: #ffcc00;
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin: 2rem 0 1rem 0;
+    }
+
+    p {
+      line-height: 1.7;
+      margin-bottom: 1rem;
+      color: #ccc;
+    }
+
+    ul {
+      margin-bottom: 1.5rem;
+      padding-left: 2rem;
+    }
+
+    ul li {
+      margin-bottom: 0.5rem;
+      color: #bbb;
+    }
+
+    .highlight {
+      background: linear-gradient(135deg, #222244 0%, #332255 100%);
+      color: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin: 1.5rem 0;
+    }
+
+    .friendly-message {
+      background: linear-gradient(135deg, rgba(50, 50, 70, 0.95) 0%, rgba(30, 30, 50, 0.95) 100%);
+      border-radius: 12px;
+      padding: 2rem;
+      margin: 2rem 0;
+      border-left: 5px solid #667eea;
+      color: #ddd;
+      text-align: center;
+    }
+
+    .emoji-large {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    strong {
+      color: #ffcc00;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+
+    .feature-card {
+      background: linear-gradient(135deg, rgba(40, 40, 60, 0.95) 0%, rgba(20, 20, 30, 0.95) 100%);
+      border-radius: 8px;
+      padding: 1.5rem;
+      border-left: 4px solid #667eea;
+    }
+
+    .feature-card h4 {
+      color: #aaaaff;
+      margin-bottom: 0.5rem;
+    }
+
+    @media (max-width: 768px) {
+      .hero-title {
+        font-size: 2.5rem;
+      }
+      
+      .hero-subtitle {
+        font-size: 1.1rem;
+      }
+      
+      .content-section {
+        padding: 1.5rem;
+        margin: 1rem 0;
+      }
+      
+      h1 {
+        font-size: 2rem;
+      }
+      
+      h2 {
+        font-size: 1.5rem;
+      }
+      
+      .container {
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <section class="hero-section">
+    <h1 class="hero-title">Cookie Policy</h1>
+    <p class="hero-subtitle">Simple, transparent, and cookie-free</p>
+  </section>
+
+  <div class="container">
+    <div class="content-section">
+      <div class="effective-date">
+        <strong>Effective Date:</strong> August 18, 2025 | <strong>Last Updated:</strong> August 18, 2025
+      </div>
+
+      <div class="friendly-message">
+        <span class="emoji-large">🎉</span>
+        <h2>Great News! We Don't Use Cookies</h2>
+        <p>
+          <strong>AI Digital Friend</strong> is designed with your privacy in mind. We're proud to say that our platform operates completely <strong>cookie-free</strong>!
+        </p>
+      </div>
+
+      <h2>🌟 What This Means for You</h2>
+      <p>
+        Unlike most websites that track your every move with cookies, we've built <strong>AI Digital Friend</strong> to respect your privacy from the ground up. Here's what makes us different:
+      </p>
+
+      <div class="feature-grid">
+        <div class="feature-card">
+          <h4>✨ No Tracking Cookies</h4>
+          <p>We don't place any tracking cookies on your device. Your browsing habits and personal data stay private.</p>
+        </div>
+
+        <div class="feature-card">
+          <h4>🔒 No Marketing Cookies</h4>
+          <p>We don't use cookies to build advertising profiles or share your data with third-party marketers.</p>
+        </div>
+
+        <div class="feature-card">
+          <h4>📊 No Analytics Cookies</h4>
+          <p>We don't use cookies to track your usage patterns or create detailed user profiles.</p>
+        </div>
+
+        <div class="feature-card">
+          <h4>🚫 No Third-Party Cookies</h4>
+          <p>We don't allow external services to place cookies through our platform.</p>
+        </div>
+      </div>
+
+      <h2>🤖 How We Provide Personalized AI Without Cookies</h2>
+      <p>
+        You might wonder: "How can AI Digital Friend remember my preferences and provide personalized experiences without cookies?" Great question! Here's our approach:
+      </p>
+
+      <ul>
+        <li><strong>Account-Based Memory:</strong> When you create an account, your AI preferences are securely stored with your profile, not in cookies</li>
+        <li><strong>Session Storage:</strong> We use temporary browser session storage that automatically clears when you close your browser</li>
+        <li><strong>Local Processing:</strong> Many personalization features happen directly in your browser without sending data to our servers</li>
+        <li><strong>Explicit Consent:</strong> Any data we store is with your explicit permission and can be deleted anytime</li>
+      </ul>
+
+      <h2>🛡️ Essential Technical Functions</h2>
+      <p>
+        The only data we temporarily store in your browser is essential for the platform to function:
+      </p>
+
+      <ul>
+        <li><strong>Authentication Tokens:</strong> To keep you securely logged in during your session</li>
+        <li><strong>Security Measures:</strong> To protect against unauthorized access and ensure platform security</li>
+        <li><strong>User Interface Preferences:</strong> To remember your theme preferences during your current session</li>
+      </ul>
+
+      <div class="highlight">
+        <p>
+          <strong>Important:</strong> These are not "cookies" in the traditional sense - they're temporary session data that expires when you close your browser.
+        </p>
+      </div>
+
+      <h2>🌍 Why We Chose to Go Cookie-Free</h2>
+      <p>
+        At <strong>Grand Pa United™</strong>, we believe that powerful AI should come with powerful privacy protections. Our cookie-free approach reflects our core values:
+      </p>
+
+      <div class="feature-grid">
+        <div class="feature-card">
+          <h4>🎯 Privacy by Design</h4>
+          <p>We built AI Digital Friend from the ground up with privacy as a fundamental feature, not an afterthought.</p>
+        </div>
+
+        <div class="feature-card">
+          <h4>🤝 Trust Through Transparency</h4>
+          <p>We believe in being completely transparent about how we handle your data - and how we don't handle it.</p>
+        </div>
+
+        <div class="feature-card">
+          <h4>🚀 Innovation Without Compromise</h4>
+          <p>We prove that cutting-edge AI experiences don't require sacrificing user privacy.</p>
+        </div>
+      </div>
+
+      <h2>📱 What About Third-Party Services?</h2>
+      <p>
+        While <strong>AI Digital Friend</strong> doesn't use cookies, some integrated services might have their own policies:
+      </p>
+
+      <ul>
+        <li><strong>Payment Processors:</strong> When you make payments, secure payment providers may use their own session management</li>
+        <li><strong>AI Model Providers:</strong> Our AI partners (like OpenAI) have their own privacy policies for API interactions</li>
+        <li><strong>Security Services:</strong> Anti-fraud and security services may use temporary identifiers for protection</li>
+      </ul>
+
+      <p>
+        We carefully vet all our partners to ensure they meet our high privacy standards.
+      </p>
+
+      <h2>⚙️ Your Control Options</h2>
+      <p>
+        Even though we don't use cookies, you still have complete control:
+      </p>
+
+      <ul>
+        <li><strong>Browser Settings:</strong> You can configure your browser to block all cookies if you prefer</li>
+        <li><strong>Account Settings:</strong> Manage all your data preferences directly in your AI Digital Friend account</li>
+        <li><strong>Data Export:</strong> Download all your data anytime you want</li>
+        <li><strong>Account Deletion:</strong> Permanently delete your account and all associated data</li>
+      </ul>
+
+      <div class="friendly-message">
+        <span class="emoji-large">💎</span>
+        <h3>The Bottom Line</h3>
+        <p>
+          <strong>AI Digital Friend</strong> is committed to providing you with an amazing AI companion experience while keeping your privacy crystal clear. No cookies, no tracking, no hidden agendas - just powerful AI that respects your digital autonomy.
+        </p>
+        <p>
+          <strong>Questions?</strong> Contact our privacy team at <strong>privacy@aidigitalfriend.com</strong>
+        </p>
+      </div>
+
+      <div class="highlight">
+        <p>
+          <strong>Remember:</strong> Your privacy is fundamental to our mission of building trustworthy AI companions. We're committed to transparency, security, and giving you control over your data. If you have any questions or concerns, we're here to help.
+        </p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

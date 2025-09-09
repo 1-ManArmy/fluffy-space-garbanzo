@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OneLastAI - 27 AI Agents Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .agent-card {
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .agent-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .status-dot {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <div class="bg-white rounded-full p-2">
+                        <i class="fas fa-robot text-blue-600 text-2xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-3xl font-bold">OneLastAI</h1>
+                        <p class="text-blue-100">27 Specialized AI Agents</p>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <div class="flex items-center space-x-2">
+                        <span class="status-dot w-3 h-3 bg-green-400 rounded-full"></span>
+                        <span class="text-sm">All Systems Operational</span>
+                    </div>
+                    <p class="text-xs text-blue-100 mt-1">Last Updated: <span id="lastUpdated"></span></p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Stats Overview -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white rounded-lg shadow-md p-6 text-center">
+                <div class="text-3xl font-bold text-blue-600">27</div>
+                <div class="text-gray-600">Total AI Agents</div>
+            </div>
+            <div class="bg-white rounded-lg shadow-md p-6 text-center">
+                <div class="text-3xl font-bold text-green-600" id="activeAgents">27</div>
+                <div class="text-gray-600">Active Agents</div>
+            </div>
+            <div class="bg-white rounded-lg shadow-md p-6 text-center">
+                <div class="text-3xl font-bold text-purple-600">5</div>
+                <div class="text-gray-600">Agent Categories</div>
+            </div>
+            <div class="bg-white rounded-lg shadow-md p-6 text-center">
+                <div class="text-3xl font-bold text-orange-600">99.9%</div>
+                <div class="text-gray-600">Uptime</div>
+            </div>
+        </div>
+
+        <!-- Agent Categories -->
+        <div class="space-y-8">
+            <!-- Communication & Chat Agents -->
+            <section>
+                <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+                    <i class="fas fa-comments text-blue-500 mr-3"></i>
+                    Communication & Chat Agents
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+                    <div class="agent-card text-white rounded-lg p-4 cursor-pointer" onclick="openAgent('neochat')">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-semibold">NeoChat</h3>
+                            <span class="status-dot w-2 h-2 bg-green-400 rounded-full"></span>
+                        </div>
+                        <p class="text-sm opacity-90">Advanced AI chat companion</p>
+                        <div class="mt-2 text-xs opacity-75">neochat.onelastai.com</div>
+                    </div>
+                    
+                    <div class="agent-card text-white rounded-lg p-4 cursor-pointer" onclick="openAgent('emotisense')">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-semibold">EmotiSense</h3>
+                            <span class="status-dot w-2 h-2 bg-green-400 rounded-full"></span>
+                        </div>
+                        <p class="text-sm opacity-90">Emotion analysis AI</p>
+                        <div class="mt-2 text-xs opacity-75">emotisense.onelastai.com</div>
+                    </div>
+                    
+                    <div class="agent-card text-white rounded-lg p-4 cursor-pointer" onclick="openAgent('girlfriend')">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-semibold">Girlfriend</h3>
+                            <span class="status-dot w-2 h-2 bg-green-400 rounded-full"></span>
+                        </div>
+                        <p class="text-sm opacity-90">Personal AI companion</p>
+                        <div class="mt-2 text-xs opacity-75">girlfriend.onelastai.com</div>
+                    </div>
+                    
+                    <div class="agent-card text-white rounded-lg p-4 cursor-pointer" onclick="openAgent('carebot')">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-semibold">CareBot</h3>
+                            <span class="status-dot w-2 h-2 bg-green-400 rounded-full"></span>
+                        </div>
+                        <p class="text-sm opacity-90">Healthcare AI assistant</p>
+                        <div class="mt-2 text-xs opacity-75">carebot.onelastai.com</div>
+                    </div>
+                    
+                    <div class="agent-card text-white rounded-lg p-4 cursor-pointer" onclick="openAgent('callghost')">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-semibold">CallGhost</h3>
+                            <span class="status-dot w-2 h-2 bg-green-400 rounded-full"></span>
+                        </div>
+                        <p class="text-sm opacity-90">Voice AI specialist</p>
+                        <div class="mt-2 text-xs opacity-75">callghost.onelastai.com</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Creative & Content Agents -->
+            <section>
+                <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+                    <i class="fas fa-palette text-purple-500 mr-3"></i>
+                    Creative & Content Agents
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+                    <div class="agent-card text-white rounded-lg p-4 cursor-pointer" onclick="openAgent('cinegen')">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-semibold">CineGen</h3>
+                            <span class="status-dot w-2 h-2 bg-green-400 rounded-full"></span>
+                        </div>
+                        <p class="text-sm opacity-90">Video generation AI</p>
+                        <div class="mt-2 text-xs opacity-75">cinegen.onelastai.com</div>
+                    </div>
+                    
+                    <div class="agent-card text-white rounded-lg p-4 cursor-pointer" onclick="openAgent('contentcrafter')">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-semibold">ContentCrafter</h3>
+                            <span class="status-dot w-2 h-2 bg-green-400 rounded-full"></span>
+                        </div>
+                        <p class="text-sm opacity-90">Content creation AI</p>
+                        <div class="mt-2 text-xs opacity-75">contentcrafter.onelastai.com</div>
+                    </div>
+                    
+                    <div class="agent-card text-white rounded-lg p-4 cursor-pointer" onclick="openAgent('dreamweaver')">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-semibold">DreamWeaver</h3>
+                            <span class="status-dot w-2 h-2 bg-green-400 rounded-full"></span>
+                        </div>
+                        <p class="text-sm opacity-90">Creative storytelling AI</p>
+                        <div class="mt-2 text-xs opacity-75">dreamweaver.onelastai.com</div>
+                    </div>
+                    
+                    <div class="agent-card text-white rounded-lg p-4 cursor-pointer" onclick="openAgent('aiblogster')">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-semibold">AIBlogster</h3>
+                            <span class="status-dot w-2 h-2 bg-green-400 rounded-full"></span>
+                        </div>
+                        <p class="text-sm opacity-90">Blog writing AI</p>
+                        <div class="mt-2 text-xs opacity-75">aiblogster.onelastai.com</div>
+                    </div>
+                    
+                    <div class="agent-card text-white rounded-lg p-4 cursor-pointer" onclick="openAgent('vocamind')">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-semibold">VocaMind</h3>
+                            <span class="status-dot w-2 h-2 bg-green-400 rounded-full"></span>
+                        </div>
+                        <p class="text-sm opacity-90">Voice synthesis AI</p>
+                        <div class="mt-2 text-xs opacity-75">vocamind.onelastai.com</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Technical & Development Agents -->
+            <section>
+                <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+                    <i class="fas fa-code text-green-500 mr-3"></i>
+                    Technical & Development Agents
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+                    <div class="agent-card text-white rounded-lg p-4 cursor-pointer" onclick="openAgent('codemaster')">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-semibold">CodeMaster</h3>
+                            <span class="status-dot w-2 h-2 bg-green-400 rounded-full"></span>
+                        </div>
+                        <p class="text-sm opacity-90">Programming AI</p>
+                        <div class="mt-2 text-xs opacity-75">codemaster.onelastai.com</div>
+                    </div>
+                    
+                    <div class="agent-card text-white rounded-lg p-4 cursor-pointer" onclick="openAgent('configai')">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-semibold">ConfigAI</h3>
+                            <span class="status-dot w-2 h-2 bg-green-400 rounded-full"></span>
+                        </div>
+                        <p class="text-sm opacity-90">DevOps AI assistant</p>
+                        <div class="mt-2 text-xs opacity-75">configai.onelastai.com</div>
+                    </div>
+                    
+                    <div class="agent-card text-white rounded-lg p-4 cursor-pointer" onclick="openAgent('dnaforge')">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-semibold">DNAForge</h3>
+                            <span class="status-dot w-2 h-2 bg-green-400 rounded-full"></span>
+                        </div>
+                        <p class="text-sm opacity-90">Bioinformatics AI</p>
+                        <div class="mt-2 text-xs opacity-75">dnaforge.onelastai.com</div>
+                    </div>
+                    
+                    <div class="agent-card text-white rounded-lg p-4 cursor-pointer" onclick="openAgent('netscope')">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-semibold">NetScope</h3>
+                            <span class="status-dot w-2 h-2 bg-green-400 rounded-full"></span>
+                        </div>
+                        <p class="text-sm opacity-90">Network security AI</p>
+                        <div class="mt-2 text-xs opacity-75">netscope.onelastai.com</div>
+                    </div>
+                    
+                    <div class="agent-card text-white rounded-lg p-4 cursor-pointer" onclick="openAgent('labx')">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-semibold">LabX</h3>
+                            <span class="status-dot w-2 h-2 bg-green-400 rounded-full"></span>
+                        </div>
+                        <p class="text-sm opacity-90">Scientific research AI</p>
+                        <div class="mt-2 text-xs opacity-75">labx.onelastai.com</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Data & Analytics Agents -->
+            <section>
+                <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+                    <i class="fas fa-chart-bar text-orange-500 mr-3"></i>
+                    Data & Analytics Agents
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+                    <div class="agent-card text-white rounded-lg p-4 cursor-pointer" onclick="openAgent('datavision')">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-semibold">DataVision</h3>
+                            <span class="status-dot w-2 h-2 bg-green-400 rounded-full"></span>
+                        </div>
+                        <p class="text-sm opacity-90">Data visualization AI</p>
+                        <div class="mt-2 text-xs opacity-75">datavision.onelastai.com</div>
+                    </div>
+                    
+                    <div class="agent-card text-white rounded-lg p-4 cursor-pointer" onclick="openAgent('datasphere')">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-semibold">DataSphere</h3>
+                            <span class="status-dot w-2 h-2 bg-green-400 rounded-full"></span>
+                        </div>
+                        <p class="text-sm opacity-90">Big data analytics AI</p>
+                        <div class="mt-2 text-xs opacity-75">datasphere.onelastai.com</div>
+                    </div>
+                    
+                    <div class="agent-card text-white rounded-lg p-4 cursor-pointer" onclick="openAgent('reportly')">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-semibold">Reportly</h3>
+                            <span class="status-dot w-2 h-2 bg-green-400 rounded-full"></span>
+                        </div>
+                        <p class="text-sm opacity-90">Automated reporting AI</p>
+                        <div class="mt-2 text-xs opacity-75">reportly.onelastai.com</div>
+                    </div>
+                    
+                    <div class="agent-card text-white rounded-lg p-4 cursor-pointer" onclick="openAgent('spylens')">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-semibold">SpyLens</h3>
+                            <span class="status-dot w-2 h-2 bg-green-400 rounded-full"></span>
+                        </div>
+                        <p class="text-sm opacity-90">Market intelligence AI</p>
+                        <div class="mt-2 text-xs opacity-75">spylens.onelastai.com</div>
+                    </div>
+                    
+                    <div class="agent-card text-white rounded-lg p-4 cursor-pointer" onclick="openAgent('tradesage')">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-semibold">TradeSage</h3>
+                            <span class="status-dot w-2 h-2 bg-green-400 rounded-full"></span>
+                        </div>
+                        <p class="text-sm opacity-90">Financial trading AI</p>
+                        <div class="mt-2 text-xs opacity-75">tradesage.onelastai.com</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Knowledge & Productivity Agents -->
+            <section>
+                <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+                    <i class="fas fa-brain text-red-500 mr-3"></i>
+                    Knowledge & Productivity Agents
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-7 gap-4">
+                    <div class="agent-card text-white rounded-lg p-4 cursor-pointer" onclick="openAgent('infoseek')">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-semibold">InfoSeek</h3>
+                            <span class="status-dot w-2 h-2 bg-green-400 rounded-full"></span>
+                        </div>
+                        <p class="text-sm opacity-90">Information retrieval AI</p>
+                        <div class="mt-2 text-xs opacity-75">infoseek.onelastai.com</div>
+                    </div>
+                    
+                    <div class="agent-card text-white rounded-lg p-4 cursor-pointer" onclick="openAgent('documind')">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-semibold">DocuMind</h3>
+                            <span class="status-dot w-2 h-2 bg-green-400 rounded-full"></span>
+                        </div>
+                        <p class="text-sm opacity-90">Document analysis AI</p>
+                        <div class="mt-2 text-xs opacity-75">documind.onelastai.com</div>
+                    </div>
+                    
+                    <div class="agent-card text-white rounded-lg p-4 cursor-pointer" onclick="openAgent('memora')">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-semibold">Memora</h3>
+                            <span class="status-dot w-2 h-2 bg-green-400 rounded-full"></span>
+                        </div>
+                        <p class="text-sm opacity-90">Memory enhancement AI</p>
+                        <div class="mt-2 text-xs opacity-75">memora.onelastai.com</div>
+                    </div>
+                    
+                    <div class="agent-card text-white rounded-lg p-4 cursor-pointer" onclick="openAgent('ideaforge')">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-semibold">IdeaForge</h3>
+                            <span class="status-dot w-2 h-2 bg-green-400 rounded-full"></span>
+                        </div>
+                        <p class="text-sm opacity-90">Innovation AI</p>
+                        <div class="mt-2 text-xs opacity-75">ideaforge.onelastai.com</div>
+                    </div>
+                    
+                    <div class="agent-card text-white rounded-lg p-4 cursor-pointer" onclick="openAgent('taskmaster')">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-semibold">TaskMaster</h3>
+                            <span class="status-dot w-2 h-2 bg-green-400 rounded-full"></span>
+                        </div>
+                        <p class="text-sm opacity-90">Productivity AI</p>
+                        <div class="mt-2 text-xs opacity-75">taskmaster.onelastai.com</div>
+                    </div>
+                    
+                    <div class="agent-card text-white rounded-lg p-4 cursor-pointer" onclick="openAgent('authwise')">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-semibold">AuthWise</h3>
+                            <span class="status-dot w-2 h-2 bg-green-400 rounded-full"></span>
+                        </div>
+                        <p class="text-sm opacity-90">Authentication AI</p>
+                        <div class="mt-2 text-xs opacity-75">authwise.onelastai.com</div>
+                    </div>
+                    
+                    <div class="agent-card text-white rounded-lg p-4 cursor-pointer" onclick="openAgent('awards')">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-semibold">Awards</h3>
+                            <span class="status-dot w-2 h-2 bg-green-400 rounded-full"></span>
+                        </div>
+                        <p class="text-sm opacity-90">Achievement tracking AI</p>
+                        <div class="mt-2 text-xs opacity-75">awards.onelastai.com</div>
+                    </div>
+                    
+                    <div class="agent-card text-white rounded-lg p-4 cursor-pointer" onclick="openAgent('personax')">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-semibold">PersonaX</h3>
+                            <span class="status-dot w-2 h-2 bg-green-400 rounded-full"></span>
+                        </div>
+                        <p class="text-sm opacity-90">Personal branding AI</p>
+                        <div class="mt-2 text-xs opacity-75">personax.onelastai.com</div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="mt-12 bg-white rounded-lg shadow-lg p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-4">Quick Actions</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <button class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors" onclick="testAllAgents()">
+                    <i class="fas fa-play mr-2"></i>Test All Agents
+                </button>
+                <button class="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors" onclick="downloadAgentData()">
+                    <i class="fas fa-download mr-2"></i>Download Agent Data
+                </button>
+                <button class="bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition-colors" onclick="openDocumentation()">
+                    <i class="fas fa-book mr-2"></i>View Documentation
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 mt-12">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; 2024 OneLastAI. All rights reserved.</p>
+            <p class="text-gray-400 mt-2">Powered by 27 specialized AI agents</p>
+        </div>
+    </footer>
+
+    <script>
+        // Update timestamp
+        document.getElementById('lastUpdated').textContent = new Date().toLocaleString();
+
+        // Agent navigation
+        function openAgent(agentName) {
+            const url = `https://${agentName}.onelastai.com`;
+            window.open(url, '_blank');
+        }
+
+        // Quick actions
+        function testAllAgents() {
+            alert('Testing all 27 AI agents... This may take a few moments.');
+            // Implement actual testing logic here
+        }
+
+        function downloadAgentData() {
+            alert('Downloading agent configuration data...');
+            // Implement download logic here
+        }
+
+        function openDocumentation() {
+            window.open('https://docs.onelastai.com', '_blank');
+        }
+
+        // Auto-refresh status every 30 seconds
+        setInterval(() => {
+            document.getElementById('lastUpdated').textContent = new Date().toLocaleString();
+        }, 30000);
+    </script>
+</body>
+</html>

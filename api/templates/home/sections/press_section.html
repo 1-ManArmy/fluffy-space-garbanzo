@@ -1,0 +1,242 @@
+<!-- Press-Section Component -->
+<section class="press-section">
+<div class="animated-background">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+
+    <!-- Main App Container -->
+    <div id="app" class="relative z-10 p-4 md:p-8"></div>
+
+    <script>
+        const pressArticlesData = [
+            {
+                id: 'techcrunch',
+                publication: 'TechCrunch',
+                title: 'Revolutionary AI Platform Changing How People Learn to Code',
+                date: 'December 2025',
+                excerpt: 'OneLastAI\'s phantom-powered learning platform represents a quantum leap in educational technology...',
+                logo: 'TC',
+                color: 'green',
+                rating: 5,
+                badge: 'Editor\'s Choice'
+            },
+            {
+                id: 'wired',
+                publication: 'Wired',
+                title: 'The Phantom AI Teaching the Next Generation of Developers',
+                date: 'November 2025',
+                excerpt: 'In the shadowy realm of artificial intelligence, OneLastAI emerges as a groundbreaking force...',
+                logo: 'WR',
+                color: 'red',
+                rating: 5,
+                badge: 'Must Read'
+            },
+            {
+                id: 'forbes',
+                publication: 'Forbes',
+                title: 'Best AI Learning Platform of 2025',
+                date: 'October 2025',
+                excerpt: 'Forbes recognizes OneLastAI as the premier AI-powered learning platform transforming education...',
+                logo: 'FB',
+                color: 'blue',
+                rating: 5,
+                badge: 'Top Pick'
+            }
+        ];
+
+        const fullArticlesData = {
+            'techcrunch': {
+                publication: 'TechCrunch',
+                title: 'Revolutionary AI Platform Changing How People Learn to Code',
+                date: 'December 15, 2025',
+                author: 'Sarah Chen',
+                logo: 'TC',
+                color: 'green',
+                excerpt: 'OneLastAI\'s phantom-powered learning platform represents a quantum leap in educational technology...',
+                content: [
+                    {
+                        type: 'paragraph',
+                        text: 'In the rapidly evolving landscape of artificial intelligence and education technology, OneLastAI has emerged as a revolutionary force that\'s fundamentally changing how people approach learning to code.'
+                    },
+                    {
+                        type: 'quote',
+                        text: 'We\'re not just teaching code; we\'re creating a new paradigm where AI becomes your personal coding mentor, understanding your learning style and adapting in real-time.',
+                        author: 'OneLastAI Team'
+                    },
+                    {
+                        type: 'paragraph',
+                        text: 'The platform\'s phantom AI technology represents a breakthrough in personalized learning, offering an experience that feels almost magical in its ability to anticipate and respond to learner needs.'
+                    }
+                ],
+                tags: ['AI', 'Education', 'Technology', 'Innovation'],
+                rating: 5,
+                badge: 'Editor\'s Choice'
+            },
+            'wired': {
+                publication: 'Wired',
+                title: 'The Phantom AI Teaching the Next Generation of Developers',
+                date: 'November 28, 2025',
+                author: 'Marcus Rodriguez',
+                logo: 'WR',
+                color: 'red',
+                excerpt: 'In the shadowy realm of artificial intelligence, OneLastAI emerges as a groundbreaking force...',
+                content: [
+                    {
+                        type: 'paragraph',
+                        text: 'In the shadowy realm of artificial intelligence, where algorithms dance with data and machines learn to think, OneLastAI emerges as a groundbreaking force that\'s redefining the very essence of coding education.'
+                    },
+                    {
+                        type: 'paragraph',
+                        text: 'Unlike traditional coding bootcamps or online tutorials, OneLastAI\'s phantom technology creates an almost sentient learning companion that evolves with each interaction.'
+                    },
+                    {
+                        type: 'quote',
+                        text: 'It\'s like having a master programmer\'s ghost whispering the secrets of code directly into your consciousness.',
+                        author: 'Beta User Review'
+                    }
+                ],
+                tags: ['AI', 'Programming', 'Future Tech', 'Learning'],
+                rating: 5,
+                badge: 'Must Read'
+            },
+            'forbes': {
+                publication: 'Forbes',
+                title: 'Best AI Learning Platform of 2025',
+                date: 'October 10, 2025',
+                author: 'Jennifer Walsh',
+                logo: 'FB',
+                color: 'blue',
+                excerpt: 'Forbes recognizes OneLastAI as the premier AI-powered learning platform transforming education...',
+                content: [
+                    {
+                        type: 'paragraph',
+                        text: 'Forbes recognizes OneLastAI as the premier AI-powered learning platform transforming education and professional development in 2025.'
+                    },
+                    {
+                        type: 'paragraph',
+                        text: 'With its innovative phantom AI technology and comprehensive suite of learning tools, OneLastAI has established itself as the gold standard for AI-assisted education.'
+                    },
+                    {
+                        type: 'quote',
+                        text: 'OneLastAI represents the future of learning - where artificial intelligence doesn\'t replace human creativity but amplifies it exponentially.',
+                        author: 'Forbes Editorial Board'
+                    }
+                ],
+                tags: ['Business', 'AI', 'Education', 'Awards'],
+                rating: 5,
+                badge: 'Top Pick'
+            }
+        };
+
+        const app = document.getElementById('app');
+
+        // Function to render the main card view
+        function renderCards() {
+            app.innerHTML = `
+                <header class="text-center py-10 md:py-20 max-w-4xl mx-auto">
+                    <h1 class="text-5xl md:text-6xl font-extrabold text-white text-glow leading-tight">In the <span class="text-purple-500">Press</span></h1>
+                    <p class="text-lg md:text-xl text-gray-400 mt-4 max-w-3xl mx-auto">See what leading publications are saying about our revolutionary AI learning platform.</p>
+                </header>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-4 md:px-8 max-w-7xl mx-auto">
+                    ${pressArticlesData.map(article => `
+                        <div class="press-card glass-card p-6 md:p-8 rounded-3xl cursor-pointer relative flex flex-col justify-between hover:purple-shadow" onclick="showArticle('${article.id}')">
+                            <div class="flex items-center space-x-4 mb-4">
+                                <div class="w-12 h-12 rounded-full flex items-center justify-center font-bold text-white uppercase text-xl bg-color-${article.color}">
+                                    ${article.logo}
+                                </div>
+                                <div>
+                                    <span class="text-xs text-gray-400">${article.date}</span>
+                                    <h2 class="text-xl md:text-2xl font-semibold mt-1">${article.publication}</h2>
+                                </div>
+                            </div>
+                            <div class="flex-grow">
+                                <h3 class="text-xl md:text-2xl font-bold mt-4 mb-2 text-white">${article.title}</h3>
+                                <p class="text-gray-300 text-sm md:text-base">${article.excerpt}</p>
+                            </div>
+                            <div class="flex items-center justify-between mt-6">
+                                <div class="flex items-center space-x-1 text-yellow-400">
+                                    ${Array(article.rating).fill('<i class="fa-solid fa-star"></i>').join('')}
+                                </div>
+                                <span class="bg-purple-600 text-white text-xs font-semibold px-3 py-1 rounded-full">${article.badge}</span>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        // Function to render a single article
+        function showArticle(id) {
+            const article = fullArticlesData[id];
+            if (!article) {
+                app.innerHTML = `<div class="text-center text-red-500 mt-20">Article not found.</div>`;
+                return;
+            }
+
+            app.innerHTML = `
+                <div class="max-w-4xl mx-auto py-10 md:py-16 px-4 md:px-8">
+                    <button onclick="renderCards()" class="mb-8 md:mb-12 text-gray-400 hover:text-white transition-colors flex items-center">
+                        <i class="fas fa-arrow-left mr-2"></i>
+                        <span>Back to Press</span>
+                    </button>
+                    
+                    <div class="glass-card p-6 md:p-12 rounded-3xl">
+                        <div class="flex flex-col md:flex-row items-start md:items-center space-y-4 md:space-y-0 md:space-x-8 mb-6">
+                            <div class="w-16 h-16 rounded-full flex items-center justify-center font-bold text-white uppercase text-2xl bg-color-${article.color}">
+                                ${article.logo}
+                            </div>
+                            <div>
+                                <h1 class="text-3xl md:text-4xl font-extrabold text-white leading-tight">${article.title}</h1>
+                                <p class="text-gray-400 mt-2">
+                                    <span class="font-semibold text-white">${article.publication}</span> • By ${article.author} • ${article.date}
+                                </p>
+                                <div class="flex items-center mt-2 space-x-1 text-yellow-400">
+                                    ${Array(article.rating).fill('<i class="fa-solid fa-star"></i>').join('')}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <hr class="border-gray-700 my-6 md:my-8">
+                        
+                        <div class="prose max-w-none text-gray-300 space-y-6">
+                            ${article.content.map(block => {
+                                if (block.type === 'paragraph') {
+                                    return `<p class="leading-relaxed text-lg">${block.text}</p>`;
+                                } else if (block.type === 'quote') {
+                                    return `
+                                        <blockquote class="border-l-4 border-purple-500 pl-4 md:pl-6 my-4 italic text-gray-400">
+                                            <p class="text-xl md:text-2xl font-light leading-relaxed">${block.text}</p>
+                                            <footer class="mt-2 text-sm text-gray-500">— ${block.author}</footer>
+                                        </blockquote>
+                                    `;
+                                }
+                                return '';
+                            }).join('')}
+                        </div>
+                        
+                        <div class="mt-8 flex flex-wrap items-center gap-2">
+                            ${article.tags.map(tag => `
+                                <span class="bg-gray-700 text-gray-300 text-xs font-medium px-3 py-1 rounded-full">${tag}</span>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Initial render on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check for a specific article ID in the URL hash, if it exists
+            const hashId = window.location.hash.slice(1);
+            if (hashId && fullArticlesData[hashId]) {
+                showArticle(hashId);
+            } else {
+                renderCards();
+            }
+        });
+        
+    </script>
+</section>
+<!-- End Press-Section -->

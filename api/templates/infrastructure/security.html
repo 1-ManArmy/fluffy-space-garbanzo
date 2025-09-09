@@ -1,0 +1,420 @@
+<% content_for :title, @page_title %>
+<% content_for :meta_description, "OneLastAI security infrastructure with Keycloak identity management and enterprise-grade protection." %>
+
+<div class="min-h-screen bg-gradient-to-br from-slate-50 to-red-50">
+  <div class="container mx-auto px-4 py-12">
+    <!-- Header -->
+    <div class="text-center mb-12">
+      <h1 class="text-4xl font-bold text-gray-900 mb-4">
+        <span class="text-red-600">🔐</span> Security Infrastructure
+      </h1>
+      <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+        Enterprise-grade security with Keycloak identity management protecting all 27 AI agents
+      </p>
+    </div>
+
+    <!-- Keycloak Identity Provider -->
+    <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
+      <div class="flex items-center mb-6">
+        <div class="w-12 h-12 bg-red-600 rounded-lg flex items-center justify-center mr-4">
+          <span class="text-white text-2xl">🛡️</span>
+        </div>
+        <div>
+          <h2 class="text-2xl font-bold text-gray-900"><%= @security_info[:identity_provider][:name] %></h2>
+          <p class="text-gray-600"><%= @security_info[:identity_provider][:description] %></p>
+        </div>
+      </div>
+      
+      <div class="grid md:grid-cols-2 gap-6 mb-6">
+        <div>
+          <h3 class="text-lg font-semibold text-gray-800 mb-3">Identity Features</h3>
+          <ul class="space-y-2">
+            <% @security_info[:identity_provider][:features].each do |feature| %>
+              <li class="flex items-center text-gray-600">
+                <span class="text-green-500 mr-2">✅</span>
+                <%= feature %>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+        
+        <div>
+          <h3 class="text-lg font-semibold text-gray-800 mb-3">Authentication Flows</h3>
+          <div class="space-y-3">
+            <div class="p-3 bg-blue-50 rounded-lg">
+              <h4 class="font-medium text-blue-900">Standard Login</h4>
+              <p class="text-blue-700 text-sm">Username/password with MFA</p>
+            </div>
+            <div class="p-3 bg-green-50 rounded-lg">
+              <h4 class="font-medium text-green-900">Social Login</h4>
+              <p class="text-green-700 text-sm">Google, GitHub, Microsoft</p>
+            </div>
+            <div class="p-3 bg-purple-50 rounded-lg">
+              <h4 class="font-medium text-purple-900">Enterprise SSO</h4>
+              <p class="text-purple-700 text-sm">SAML, LDAP integration</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-4 bg-green-50 rounded-lg">
+        <div class="flex items-center justify-between">
+          <span class="font-semibold text-green-900">Deployment Status</span>
+          <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">
+            <%= @security_info[:identity_provider][:status] %>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SSL Security -->
+    <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">
+        <span class="text-green-600">🔒</span> SSL/TLS Security
+      </h2>
+      
+      <div class="grid md:grid-cols-2 gap-6">
+        <div>
+          <h3 class="text-lg font-semibold text-gray-800 mb-3">SSL Provider</h3>
+          <div class="p-4 bg-green-50 rounded-lg">
+            <p class="font-semibold text-green-900"><%= @security_info[:ssl_security][:provider] %></p>
+            <p class="text-green-700 text-sm">Dual certificate strategy for maximum uptime</p>
+          </div>
+        </div>
+        
+        <div>
+          <h3 class="text-lg font-semibold text-gray-800 mb-3">Certificate Features</h3>
+          <ul class="space-y-2">
+            <% @security_info[:ssl_security][:features].each do |feature| %>
+              <li class="flex items-center text-gray-600">
+                <span class="text-green-500 mr-2">🔐</span>
+                <%= feature %>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Application Security -->
+    <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">
+        <span class="text-blue-600">🛡️</span> Application Security
+      </h2>
+      
+      <div class="grid md:grid-cols-3 gap-6">
+        <% @security_info[:application_security][:features].each_with_index do |feature, index| %>
+          <div class="text-center p-6 bg-gray-50 rounded-lg">
+            <div class="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+              <span class="text-white text-2xl">
+                <%= ['🚫', '⚡', '🔍', '💉', '🚨', '🎫'][index] || '🔒' %>
+              </span>
+            </div>
+            <h3 class="font-semibold text-gray-800 mb-2"><%= feature %></h3>
+            <p class="text-gray-600 text-sm">Active protection layer</p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Compliance & Standards -->
+    <div class="bg-white rounded-xl shadow-lg p-8">
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">
+        <span class="text-purple-600">📜</span> Compliance & Standards
+      </h2>
+      
+      <div class="grid md:grid-cols-3 gap-6">
+        <% @security_info[:compliance].each_with_index do |standard, index| %>
+          <div class="text-center p-6 bg-purple-50 rounded-lg">
+            <div class="w-16 h-16 bg-purple-500 rounded-full flex items-center justify-center mx-auto mb-4">
+              <span class="text-white text-2xl">
+                <%= ['🇪🇺', '🏛️', '🌍'][index] || '📋' %>
+              </span>
+            </div>
+            <h3 class="font-semibold text-gray-800 mb-2"><%= standard %></h3>
+            <div class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm font-medium">
+              Compliant
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="mt-12 text-center">
+      <div class="space-x-4">
+        <%= link_to "← View Database Config", infrastructure_database_path, 
+            class: "px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors" %>
+        <%= link_to "View Payment Systems →", infrastructure_payments_path, 
+            class: "px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors" %>
+      </div>
+    </div>
+  </div>
+</div>
+                    <h2 class="text-4xl font-bold text-white mb-6">Security Architecture</h2>
+                    <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                        Multi-layered security approach with zero-trust architecture
+                    </p>
+                </div>
+                
+                <div class="grid lg:grid-cols-2 gap-12 items-center mb-16">
+                    <!-- Left Side - Security Features -->
+                    <div>
+                        <h3 class="text-2xl font-bold text-white mb-8">Core Security Features</h3>
+                        <div class="space-y-6">
+                            <div class="tech-stack-card p-6">
+                                <div class="flex items-center gap-4">
+                                    <div class="tech-icon">
+                                        <span class="text-2xl">🔐</span>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-white font-semibold text-lg mb-2">Passwordless Authentication</h4>
+                                        <p class="text-gray-300">Passage by 1Password for secure, biometric authentication</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="tech-stack-card p-6">
+                                <div class="flex items-center gap-4">
+                                    <div class="tech-icon">
+                                        <span class="text-2xl">🛡️</span>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-white font-semibold text-lg mb-2">End-to-End Encryption</h4>
+                                        <p class="text-gray-300">AES-256 encryption for data at rest and TLS 1.3 in transit</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="tech-stack-card p-6">
+                                <div class="flex items-center gap-4">
+                                    <div class="tech-icon">
+                                        <span class="text-2xl">👁️</span>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-white font-semibold text-lg mb-2">Real-time Monitoring</h4>
+                                        <p class="text-gray-300">24/7 security monitoring with threat detection and response</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Right Side - Security Terminal -->
+                    <div class="linux-terminal">
+                        <div class="terminal-header">
+                            <div class="terminal-dots">
+                                <div class="terminal-dot bg-red-500"></div>
+                                <div class="terminal-dot bg-yellow-500"></div>
+                                <div class="terminal-dot bg-green-500"></div>
+                            </div>
+                            <div class="terminal-title">
+                                <span class="linux-logo"></span>
+                                <span>security@onelast-ai:~/compliance</span>
+                            </div>
+                        </div>
+                        <div class="terminal-content">
+                            <div class="terminal-prompt">
+                                <span class="terminal-user">security</span>
+                                <span class="text-gray-400">@</span>
+                                <span class="terminal-host">fortress</span>
+                                <span class="text-gray-400">:</span>
+                                <span class="terminal-path">~/audit</span>
+                                <span class="text-gray-400">$</span>
+                            </div>
+                            
+                            <div class="terminal-command">cat security-status.log</div>
+                            <div class="terminal-output">
+                                <div class="mb-2">
+                                    <span class="terminal-key">encryption_status:</span> 
+                                    <span class="terminal-success">AES-256 ACTIVE</span>
+                                </div>
+                                <div class="mb-2">
+                                    <span class="terminal-key">tls_version:</span> 
+                                    <span class="terminal-success">1.3</span>
+                                </div>
+                                <div class="mb-2">
+                                    <span class="terminal-key">auth_provider:</span> 
+                                    <span class="terminal-value">passage-1password</span>
+                                </div>
+                                <div class="mb-2">
+                                    <span class="terminal-key">firewall_status:</span> 
+                                    <span class="terminal-success">ENABLED</span>
+                                </div>
+                                <div class="mb-2">
+                                    <span class="terminal-key">intrusion_detection:</span> 
+                                    <span class="terminal-success">MONITORING</span>
+                                </div>
+                                <div class="mb-4">
+                                    <span class="terminal-key">vulnerability_scans:</span> 
+                                    <span class="terminal-success">DAILY</span>
+                                </div>
+                            </div>
+                            
+                            <div class="terminal-prompt">
+                                <span class="terminal-user">security</span>
+                                <span class="text-gray-400">@</span>
+                                <span class="terminal-host">fortress</span>
+                                <span class="text-gray-400">:</span>
+                                <span class="terminal-path">~/audit</span>
+                                <span class="text-gray-400">$</span>
+                                <span class="terminal-success">compliance-check --all</span>
+                            </div>
+                            <div class="terminal-output">
+                                <div class="terminal-success">✓ SOC 2 Type II - COMPLIANT</div>
+                                <div class="terminal-success">✓ GDPR - COMPLIANT</div>
+                                <div class="terminal-success">✓ HIPAA - COMPLIANT</div>
+                                <div class="terminal-success">✓ ISO 27001 - CERTIFIED</div>
+                                <div class="terminal-success">✓ PCI DSS - LEVEL 1</div>
+                            </div>
+                            
+                            <div class="terminal-prompt mt-4">
+                                <span class="terminal-user">security</span>
+                                <span class="text-gray-400">@</span>
+                                <span class="terminal-host">fortress</span>
+                                <span class="text-gray-400">:</span>
+                                <span class="terminal-path">~/audit</span>
+                                <span class="text-gray-400">$</span>
+                                <span class="terminal-cursor"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Compliance Certifications -->
+                <div class="mb-16">
+                    <h3 class="text-3xl font-bold text-white mb-8 text-center">Compliance & Certifications</h3>
+                    <div class="grid md:grid-cols-3 gap-8">
+                        <div class="tech-stack-card p-8 text-center">
+                            <div class="text-5xl mb-6">🏆</div>
+                            <h4 class="text-2xl font-semibold text-white mb-4">SOC 2 Type II</h4>
+                            <p class="text-gray-300 mb-4">
+                                Comprehensive audit of security, availability, and confidentiality controls
+                            </p>
+                            <div class="text-sm text-blue-400">
+                                Annually Audited • Third-Party Verified
+                            </div>
+                        </div>
+                        
+                        <div class="tech-stack-card p-8 text-center">
+                            <div class="text-5xl mb-6">🌍</div>
+                            <h4 class="text-2xl font-semibold text-white mb-4">GDPR Compliant</h4>
+                            <p class="text-gray-300 mb-4">
+                                Full compliance with EU General Data Protection Regulation
+                            </p>
+                            <div class="text-sm text-green-400">
+                                Data Privacy • Right to Delete • Consent Management
+                            </div>
+                        </div>
+                        
+                        <div class="tech-stack-card p-8 text-center">
+                            <div class="text-5xl mb-6">🏥</div>
+                            <h4 class="text-2xl font-semibold text-white mb-4">HIPAA Ready</h4>
+                            <p class="text-gray-300 mb-4">
+                                Healthcare data protection with Business Associate Agreements
+                            </p>
+                            <div class="text-sm text-purple-400">
+                                PHI Protection • Audit Trails • Access Controls
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Security Features Grid -->
+                <div class="mb-16">
+                    <h3 class="text-3xl font-bold text-white mb-8 text-center">Advanced Security Features</h3>
+                    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div class="tech-stack-card p-6 text-center">
+                            <div class="text-3xl mb-4">🔒</div>
+                            <h4 class="text-lg font-semibold text-white mb-3">Zero Trust</h4>
+                            <p class="text-gray-300 text-sm">Never trust, always verify architecture</p>
+                        </div>
+                        
+                        <div class="tech-stack-card p-6 text-center">
+                            <div class="text-3xl mb-4">🧬</div>
+                            <h4 class="text-lg font-semibold text-white mb-3">Biometric Auth</h4>
+                            <p class="text-gray-300 text-sm">Face ID, Touch ID, and hardware keys</p>
+                        </div>
+                        
+                        <div class="tech-stack-card p-6 text-center">
+                            <div class="text-3xl mb-4">🔍</div>
+                            <h4 class="text-lg font-semibold text-white mb-3">Threat Detection</h4>
+                            <p class="text-gray-300 text-sm">AI-powered anomaly detection</p>
+                        </div>
+                        
+                        <div class="tech-stack-card p-6 text-center">
+                            <div class="text-3xl mb-4">📊</div>
+                            <h4 class="text-lg font-semibold text-white mb-3">Audit Logs</h4>
+                            <p class="text-gray-300 text-sm">Immutable activity tracking</p>
+                        </div>
+                        
+                        <div class="tech-stack-card p-6 text-center">
+                            <div class="text-3xl mb-4">🌐</div>
+                            <h4 class="text-lg font-semibold text-white mb-3">VPN Access</h4>
+                            <p class="text-gray-300 text-sm">Secure remote access tunnels</p>
+                        </div>
+                        
+                        <div class="tech-stack-card p-6 text-center">
+                            <div class="text-3xl mb-4">🚨</div>
+                            <h4 class="text-lg font-semibold text-white mb-3">Incident Response</h4>
+                            <p class="text-gray-300 text-sm">24/7 security operations center</p>
+                        </div>
+                        
+                        <div class="tech-stack-card p-6 text-center">
+                            <div class="text-3xl mb-4">🔄</div>
+                            <h4 class="text-lg font-semibold text-white mb-3">Auto Backup</h4>
+                            <p class="text-gray-300 text-sm">Encrypted, geo-redundant backups</p>
+                        </div>
+                        
+                        <div class="tech-stack-card p-6 text-center">
+                            <div class="text-3xl mb-4">⚡</div>
+                            <h4 class="text-lg font-semibold text-white mb-3">DDoS Protection</h4>
+                            <p class="text-gray-300 text-sm">Multi-layer attack mitigation</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Security Stats -->
+                <div class="text-center">
+                    <h3 class="text-3xl font-bold text-white mb-8">Security Metrics</h3>
+                    <div class="grid md:grid-cols-4 gap-6">
+                        <div class="tech-stack-card p-6 text-center">
+                            <div class="text-3xl font-bold text-green-400 mb-2">99.99%</div>
+                            <div class="text-gray-300">Security Uptime</div>
+                        </div>
+                        
+                        <div class="tech-stack-card p-6 text-center">
+                            <div class="text-3xl font-bold text-blue-400 mb-2">0</div>
+                            <div class="text-gray-300">Data Breaches</div>
+                        </div>
+                        
+                        <div class="tech-stack-card p-6 text-center">
+                            <div class="text-3xl font-bold text-purple-400 mb-2">< 1ms</div>
+                            <div class="text-gray-300">Threat Detection</div>
+                        </div>
+                        
+                        <div class="tech-stack-card p-6 text-center">
+                            <div class="text-3xl font-bold text-yellow-400 mb-2">24/7</div>
+                            <div class="text-gray-300">SOC Monitoring</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Back to Infrastructure -->
+        <section class="py-10 text-center">
+            <a href="/infrastructure" class="btn-secondary">← Back to Infrastructure</a>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-black border-t border-gray-800">
+        <div class="container mx-auto px-6 py-8">
+            <div class="text-center text-gray-400">
+                <p>&copy; 2024 OneLast AI. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Emotion Dashboard - EmotiSense | Terminal Interface</title>
+  
+  <%= csrf_meta_tags if defined?(csrf_meta_tags) %>
+  <%= csp_meta_tag if defined?(csp_meta_tag) %>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Courier New', 'Monaco', 'Menlo', 'Consolas', monospace;
+      background: #000000;
+      color: #00ff00;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+    
+    /* Terminal scanlines effect */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        transparent 50%, 
+        rgba(0, 255, 0, 0.03) 50%
+      );
+      background-size: 100% 2px;
+      pointer-events: none;
+      z-index: 1000;
+      animation: scanlines 0.1s linear infinite;
+    }
+    
+    @keyframes scanlines {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(2px); }
+    }
+
+    /* Top Header Menu Bar - Linux Command Style */
+    .top-menu-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 35px;
+      background: rgba(0, 0, 0, 0.98);
+      border-bottom: 1px solid #00ff00;
+      display: flex;
+      align-items: center;
+      z-index: 2000;
+      font-family: 'Courier New', monospace;
+      font-size: 0.8rem;
+      box-shadow: 0 1px 5px rgba(0, 255, 0, 0.5);
+    }
+
+    .terminal-prompt {
+      color: #ffff00;
+      padding: 0 10px;
+      font-weight: bold;
+      border-right: 1px solid #333;
+    }
+
+    .menu-bar-items {
+      display: flex;
+      flex: 1;
+      align-items: center;
+    }
+
+    .top-menu-item {
+      color: #00ff00;
+      padding: 8px 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-transform: lowercase;
+      border-right: 1px solid #333;
+      text-decoration: none;
+    }
+
+    .top-menu-item:hover {
+      background: rgba(0, 255, 0, 0.1);
+      color: #33ff33;
+      text-shadow: 0 0 5px #00ff00;
+    }
+
+    .system-info {
+      color: #666;
+      font-size: 0.7rem;
+      padding: 0 15px;
+      margin-left: auto;
+      border-left: 1px solid #333;
+    }
+
+    /* Main content area */
+    .page-container {
+      margin-top: 35px;
+      min-height: calc(100vh - 35px);
+      padding: 1rem;
+    }
+
+    /* Terminal window styling */
+    .terminal-window {
+      background: rgba(0, 0, 0, 0.9);
+      border: 1px solid #00ff00;
+      border-radius: 0;
+      margin: 1rem auto;
+      max-width: 1200px;
+      box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+      position: relative;
+    }
+
+    .terminal-header {
+      background: rgba(0, 100, 0, 0.3);
+      padding: 0.5rem;
+      border-bottom: 1px solid #00ff00;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .terminal-title {
+      color: #00ff00;
+      font-weight: bold;
+      font-size: 0.9rem;
+    }
+
+    .terminal-controls {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .terminal-btn {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 1px solid #00ff00;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .terminal-btn.close { border-color: #ff0000; }
+    .terminal-btn.minimize { border-color: #ffff00; }
+    .terminal-btn.maximize { border-color: #00ff00; }
+
+    .terminal-content {
+      padding: 1rem;
+      min-height: 400px;
+    }
+
+    /* Dashboard grid */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .dashboard-widget {
+      background: rgba(0, 100, 0, 0.1);
+      border: 1px solid #00ff00;
+      border-radius: 0;
+      padding: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .dashboard-widget:hover {
+      background: rgba(0, 150, 0, 0.15);
+      box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+    }
+
+    .widget-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid rgba(0, 255, 0, 0.3);
+    }
+
+    .widget-icon {
+      color: #ffff00;
+      margin-right: 0.5rem;
+    }
+
+    .widget-title {
+      color: #00ff00;
+      font-size: 1rem;
+      font-weight: bold;
+    }
+
+    .widget-content {
+      color: #cccccc;
+      line-height: 1.4;
+      font-size: 0.85rem;
+    }
+
+    .widget-stats {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 0.5rem;
+      padding-top: 0.5rem;
+      border-top: 1px solid rgba(0, 255, 0, 0.3);
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-value {
+      color: #ffff00;
+      font-size: 1.2rem;
+      font-weight: bold;
+      display: block;
+    }
+
+    .stat-label {
+      color: #00ff00;
+      font-size: 0.7rem;
+    }
+
+    /* Command interface */
+    .command-interface {
+      background: rgba(0, 0, 0, 0.8);
+      border: 1px solid #00ff00;
+      padding: 1rem;
+      margin-top: 1rem;
+    }
+
+    .command-line {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .command-prompt {
+      color: #ffff00;
+      margin-right: 0.5rem;
+    }
+
+    .command-input {
+      background: transparent;
+      border: none;
+      color: #00ff00;
+      font-family: inherit;
+      font-size: inherit;
+      flex: 1;
+      outline: none;
+    }
+
+    .command-history {
+      max-height: 200px;
+      overflow-y: auto;
+      margin-bottom: 1rem;
+    }
+
+    .history-line {
+      color: #cccccc;
+      margin-bottom: 0.25rem;
+      font-size: 0.8rem;
+    }
+
+    .history-command {
+      color: #ffff00;
+    }
+
+    .history-output {
+      color: #00ff00;
+      margin-left: 1rem;
+    }
+
+    /* Action buttons */
+    .action-buttons {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .action-btn {
+      background: transparent;
+      color: #00ff00;
+      border: 1px solid #00ff00;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.8rem;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      text-transform: uppercase;
+    }
+
+    .action-btn:hover {
+      background: rgba(0, 255, 0, 0.1);
+      box-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
+      text-shadow: 0 0 5px #00ff00;
+    }
+
+    /* Quick stats bar */
+    .quick-stats {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .quick-stat {
+      background: rgba(0, 0, 0, 0.8);
+      border: 1px solid #00ff00;
+      padding: 0.5rem;
+      flex: 1;
+      min-width: 150px;
+      text-align: center;
+    }
+
+    .quick-stat-value {
+      color: #ffff00;
+      font-size: 1.4rem;
+      font-weight: bold;
+      display: block;
+    }
+
+    .quick-stat-label {
+      color: #00ff00;
+      font-size: 0.7rem;
+      margin-top: 0.25rem;
+    }
+
+    /* Chart placeholder */
+    .chart-container {
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(0, 255, 0, 0.3);
+      padding: 1rem;
+      margin-top: 0.5rem;
+      min-height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #666;
+      font-size: 0.8rem;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Top Linux-Style Menu Bar -->
+  <div class="top-menu-bar">
+    <div class="terminal-prompt">root@emotisense:~#</div>
+    <div class="menu-bar-items">
+      <a href="/emotisense" class="top-menu-item">home</a>
+      <a href="/emotisense/emotion_chat" class="top-menu-item">emotion_chat</a>
+      <a href="/emotisense/mood_journal" class="top-menu-item">mood_journal</a>
+      <a href="/emotisense/emotion_dashboard" class="top-menu-item">emotion_dashboard</a>
+      <a href="/emotisense/wellness_center" class="top-menu-item">wellness_center</a>
+      <a href="/emotisense/empathy_training" class="top-menu-item">empathy_training</a>
+    </div>
+    <div class="system-info">DASHBOARD | MEM: 2.1GB | CPU: 45%</div>
+  </div>
+
+  <div class="page-container">
+    <!-- Main Dashboard Terminal -->
+    <div class="terminal-window">
+      <div class="terminal-header">
+        <div class="terminal-title">EmotiSense Dashboard v2.1</div>
+        <div class="terminal-controls">
+          <div class="terminal-btn close"></div>
+          <div class="terminal-btn minimize"></div>
+          <div class="terminal-btn maximize"></div>
+        </div>
+      </div>
+      
+      <div class="terminal-content">
+        <!-- Quick Stats -->
+        <div class="quick-stats">
+          <div class="quick-stat">
+            <span class="quick-stat-value"><%= session[:interaction_count] || 0 %></span>
+            <span class="quick-stat-label">Total Sessions</span>
+          </div>
+          <div class="quick-stat">
+            <span class="quick-stat-value"><%= (session[:emotion_history] || []).length %></span>
+            <span class="quick-stat-label">Emotions Tracked</span>
+          </div>
+          <div class="quick-stat">
+            <span class="quick-stat-value"><%= (session[:mood_journal] || []).length %></span>
+            <span class="quick-stat-label">Journal Entries</span>
+          </div>
+          <div class="quick-stat">
+            <span class="quick-stat-value"><%= session[:current_emotion] || 'neutral' %></span>
+            <span class="quick-stat-label">Current Mood</span>
+          </div>
+        </div>
+
+        <!-- Dashboard Widgets -->
+        <div class="dashboard-grid">
+          <!-- Emotion Analysis Widget -->
+          <div class="dashboard-widget">
+            <div class="widget-header">
+              <span class="widget-icon">📊</span>
+              <span class="widget-title">Emotion Analysis</span>
+            </div>
+            <div class="widget-content">
+              <p>Real-time emotion detection and pattern analysis</p>
+              <div class="chart-container">
+                [EMOTION ANALYSIS GRAPH]
+              </div>
+              <div class="widget-stats">
+                <div class="stat-item">
+                  <span class="stat-value"><%= (@emotion_wheel_data || []).length %></span>
+                  <span class="stat-label">Emotions</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-value">95%</span>
+                  <span class="stat-label">Accuracy</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mood Timeline Widget -->
+          <div class="dashboard-widget">
+            <div class="widget-header">
+              <span class="widget-icon">📈</span>
+              <span class="widget-title">Mood Timeline</span>
+            </div>
+            <div class="widget-content">
+              <p>Your emotional journey over time</p>
+              <div class="chart-container">
+                [MOOD TIMELINE CHART]
+              </div>
+              <div class="widget-stats">
+                <div class="stat-item">
+                  <span class="stat-value">7</span>
+                  <span class="stat-label">Days</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-value">+12%</span>
+                  <span class="stat-label">Trend</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Wellness Metrics Widget -->
+          <div class="dashboard-widget">
+            <div class="widget-header">
+              <span class="widget-icon">💚</span>
+              <span class="widget-title">Wellness Metrics</span>
+            </div>
+            <div class="widget-content">
+              <p>Emotional wellness and mental health indicators</p>
+              <div class="widget-stats">
+                <div class="stat-item">
+                  <span class="stat-value">8.2</span>
+                  <span class="stat-label">Wellness</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-value">85%</span>
+                  <span class="stat-label">Balance</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-value">92%</span>
+                  <span class="stat-label">Progress</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- AI Insights Widget -->
+          <div class="dashboard-widget">
+            <div class="widget-header">
+              <span class="widget-icon">🌌</span>
+              <span class="widget-title">AI Insights</span>
+            </div>
+            <div class="widget-content">
+              <p>Personalized recommendations and patterns</p>
+              <div class="widget-stats">
+                <div class="stat-item">
+                  <span class="stat-value">3</span>
+                  <span class="stat-label">Insights</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-value">5</span>
+                  <span class="stat-label">Tips</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Command Interface -->
+        <div class="command-interface">
+          <div class="command-history" id="commandHistory">
+            <div class="history-line">
+              <span class="history-command">$ emotisense --status</span>
+            </div>
+            <div class="history-line">
+              <span class="history-output">EmotiSense Dashboard v2.1 - ACTIVE</span>
+            </div>
+            <div class="history-line">
+              <span class="history-output">Emotional AI: ONLINE | Mood Tracking: ENABLED</span>
+            </div>
+          </div>
+          
+          <div class="command-line">
+            <span class="command-prompt">dashboard@emotisense:~$</span>
+            <input type="text" class="command-input" id="commandInput" placeholder="Enter command..." autocomplete="off">
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+          <a href="/emotisense/emotion_chat" class="action-btn">Start Chat</a>
+          <a href="/emotisense/mood_journal" class="action-btn">New Entry</a>
+          <a href="/emotisense/wellness_center" class="action-btn">Wellness</a>
+          <a href="/emotisense/export_data" class="action-btn">Export Data</a>
+          <button class="action-btn" onclick="refreshDashboard()">Refresh</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  // Terminal command functionality
+  const commandInput = document.getElementById('commandInput');
+  const commandHistory = document.getElementById('commandHistory');
+  
+  const commands = {
+    'help': 'Available commands: help, status, clear, refresh, chat, journal, wellness, export',
+    'status': 'EmotiSense Dashboard - All systems operational',
+    'clear': 'CLEAR_SCREEN',
+    'refresh': 'REFRESH_DASHBOARD',
+    'chat': 'NAVIGATE_CHAT',
+    'journal': 'NAVIGATE_JOURNAL',
+    'wellness': 'NAVIGATE_WELLNESS',
+    'export': 'NAVIGATE_EXPORT',
+    'ls': 'emotion_chat  mood_journal  wellness_center  empathy_training  export_data',
+    'pwd': '/emotisense/dashboard',
+    'whoami': 'emotisense_user',
+    'date': new Date().toLocaleString(),
+    'uptime': 'System uptime: 2 days, 14 hours, 23 minutes'
+  };
+
+  commandInput.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+      const command = this.value.trim();
+      if (command) {
+        executeCommand(command);
+        this.value = '';
+      }
+    }
+  });
+
+  function executeCommand(command) {
+    // Add command to history
+    addToHistory(`$ ${command}`, 'command');
+    
+    // Execute command
+    if (commands[command]) {
+      const response = commands[command];
+      
+      switch(response) {
+        case 'CLEAR_SCREEN':
+          commandHistory.innerHTML = '';
+          break;
+        case 'REFRESH_DASHBOARD':
+          location.reload();
+          break;
+        case 'NAVIGATE_CHAT':
+          window.location.href = '/emotisense/emotion_chat';
+          break;
+        case 'NAVIGATE_JOURNAL':
+          window.location.href = '/emotisense/mood_journal';
+          break;
+        case 'NAVIGATE_WELLNESS':
+          window.location.href = '/emotisense/wellness_center';
+          break;
+        case 'NAVIGATE_EXPORT':
+          window.location.href = '/emotisense/export_data';
+          break;
+        default:
+          addToHistory(response, 'output');
+      }
+    } else {
+      addToHistory(`Command '${command}' not found. Type 'help' for available commands.`, 'output');
+    }
+    
+    // Scroll to bottom
+    commandHistory.scrollTop = commandHistory.scrollHeight;
+  }
+
+  function addToHistory(text, type) {
+    const line = document.createElement('div');
+    line.className = 'history-line';
+    
+    if (type === 'command') {
+      line.innerHTML = `<span class="history-command">${text}</span>`;
+    } else {
+      line.innerHTML = `<span class="history-output">${text}</span>`;
+    }
+    
+    commandHistory.appendChild(line);
+  }
+
+  function refreshDashboard() {
+    addToHistory('$ refresh', 'command');
+    addToHistory('Refreshing dashboard...', 'output');
+    setTimeout(() => {
+      location.reload();
+    }, 500);
+  }
+
+  // Focus on command input when page loads
+  window.addEventListener('load', () => {
+    commandInput.focus();
+  });
+
+  // Keep focus on command input
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.command-interface')) {
+      commandInput.focus();
+    }
+  });
+</script>
+
+</body>
+</html>

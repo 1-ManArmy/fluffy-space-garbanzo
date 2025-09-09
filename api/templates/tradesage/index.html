@@ -1,0 +1,476 @@
+<!-- TradeSage Agent Interface -->
+<div class="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black">
+  <!-- Header -->
+  <div class="bg-gray-900/90 backdrop-blur-sm border-b border-gray-700 sticky top-0 z-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center py-4">
+        <div class="flex items-center space-x-4">
+          <div class="w-12 h-12 bg-gradient-to-br from-emerald-500 to-green-500 rounded-xl flex items-center justify-center">
+            <span class="text-2xl">📈</span>
+          </div>
+          <div>
+            <h1 class="text-2xl font-bold text-white">TradeSage</h1>
+            <p class="text-emerald-400 text-sm">Financial Markets Oracle</p>
+          </div>
+        </div>
+        <div class="flex items-center space-x-4">
+          <div class="hidden md:flex items-center space-x-6">
+            <div class="text-center">
+              <div class="text-white font-bold text-lg"><%= @agent_stats[:total_conversations] %></div>
+              <div class="text-gray-400 text-xs">Conversations</div>
+            </div>
+            <div class="text-center">
+              <div class="text-white font-bold text-lg"><%= @agent_stats[:average_rating] %>⭐</div>
+              <div class="text-gray-400 text-xs">Rating</div>
+            </div>
+            <div class="text-center">
+              <div class="text-white font-bold text-lg"><%= @agent_stats[:response_time] %></div>
+              <div class="text-gray-400 text-xs">Response Time</div>
+            </div>
+          </div>
+          <a href="/agents" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors">
+            ← Back to Agents
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Agent Introduction -->
+    <div class="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 mb-8 border border-gray-700">
+      <div class="grid md:grid-cols-2 gap-8 items-center">
+        <div>
+          <h2 class="text-3xl font-bold text-white mb-4">Your Financial Markets Oracle</h2>
+          <p class="text-gray-300 mb-6 leading-relaxed">
+            I'm TradeSage, your elite AI financial advisor specializing in market analysis, portfolio optimization, 
+            and trading strategies. With advanced algorithms and real-time data, I provide comprehensive insights 
+            for your investment decisions.
+          </p>
+          <div class="flex flex-wrap gap-2">
+            <% @agent_stats[:specializations].each do |spec| %>
+              <span class="px-3 py-1 bg-emerald-500/20 text-emerald-300 rounded-full text-sm border border-emerald-500/30">
+                <%= spec %>
+              </span>
+            <% end %>
+          </div>
+        </div>
+        <div class="space-y-4">
+          <div class="bg-gray-700/50 rounded-xl p-4 border border-gray-600">
+            <h3 class="text-lg font-semibold text-white mb-2">Market Overview</h3>
+            <div class="grid grid-cols-2 gap-4 text-sm">
+              <div>
+                <div class="text-gray-400">S&P 500</div>
+                <div class="text-green-400 font-semibold">4,847.29 (+0.87%)</div>
+              </div>
+              <div>
+                <div class="text-gray-400">NASDAQ</div>
+                <div class="text-green-400 font-semibold">15,234.45 (+1.23%)</div>
+              </div>
+              <div>
+                <div class="text-gray-400">VIX</div>
+                <div class="text-red-400 font-semibold">13.45 (-2.34%)</div>
+              </div>
+              <div>
+                <div class="text-gray-400">Sentiment</div>
+                <div class="text-emerald-400 font-semibold"><%= @market_data[:market_sentiment][:overall] %></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Interactive Features Grid -->
+    <div class="grid lg:grid-cols-3 gap-8 mb-8">
+      <!-- Chat Interface -->
+      <div class="lg:col-span-2">
+        <div class="bg-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-700 h-full">
+          <div class="p-6 border-b border-gray-700">
+            <h3 class="text-xl font-semibold text-white flex items-center">
+              <span class="w-8 h-8 bg-emerald-500/20 rounded-lg flex items-center justify-center mr-3">💬</span>
+              Financial Advisor Chat
+            </h3>
+            <p class="text-gray-400 text-sm mt-1">Ask me about stocks, portfolio analysis, market trends, or trading strategies</p>
+          </div>
+          
+          <div class="p-6">
+            <!-- Chat Terminal -->
+            <div id="chat-container" class="bg-black/50 rounded-xl p-4 mb-4 h-96 overflow-y-auto font-mono text-sm">
+              <div class="text-emerald-400 mb-2">
+                TradeSage Financial Terminal v2.0.1
+                <br>Connected to real-time market data feeds
+                <br>Type your financial questions below...
+                <br><span class="text-gray-500">═══════════════════════════════════════</span>
+              </div>
+              <div id="chat-messages" class="space-y-2">
+                <div class="text-gray-300">
+                  <span class="text-emerald-400">TradeSage></span> Welcome! I'm ready to help with your investment analysis. 
+                  What would you like to explore today?
+                </div>
+              </div>
+            </div>
+
+            <!-- Chat Input -->
+            <div class="flex space-x-2">
+              <input type="text" id="chat-input" 
+                     placeholder="Ask about stocks, market analysis, portfolio optimization..."
+                     class="flex-1 bg-gray-700/50 border border-gray-600 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:outline-none focus:border-emerald-500">
+              <button onclick="sendMessage()" 
+                      class="px-6 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors">
+                Send
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="space-y-6">
+        <!-- Market Analysis Tools -->
+        <div class="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-6 border border-gray-700">
+          <h3 class="text-lg font-semibold text-white mb-4 flex items-center">
+            <span class="w-6 h-6 bg-blue-500/20 rounded mr-2 flex items-center justify-center">📊</span>
+            Analysis Tools
+          </h3>
+          <div class="space-y-3">
+            <button onclick="analyzeStock()" 
+                    class="w-full text-left p-3 bg-gray-700/50 hover:bg-gray-600/50 rounded-lg transition-colors text-white">
+              <div class="font-semibold text-sm">Stock Analysis</div>
+              <div class="text-gray-400 text-xs">Technical & fundamental analysis</div>
+            </button>
+            <button onclick="portfolioAnalysis()" 
+                    class="w-full text-left p-3 bg-gray-700/50 hover:bg-gray-600/50 rounded-lg transition-colors text-white">
+              <div class="font-semibold text-sm">Portfolio Review</div>
+              <div class="text-gray-400 text-xs">Optimization & risk assessment</div>
+            </button>
+            <button onclick="marketSentiment()" 
+                    class="w-full text-left p-3 bg-gray-700/50 hover:bg-gray-600/50 rounded-lg transition-colors text-white">
+              <div class="font-semibold text-sm">Market Sentiment</div>
+              <div class="text-gray-400 text-xs">Current market mood analysis</div>
+            </button>
+            <button onclick="generateStrategy()" 
+                    class="w-full text-left p-3 bg-gray-700/50 hover:bg-gray-600/50 rounded-lg transition-colors text-white">
+              <div class="font-semibold text-sm">Investment Strategy</div>
+              <div class="text-gray-400 text-xs">Personalized investment plan</div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Trending Stocks -->
+        <div class="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-6 border border-gray-700">
+          <h3 class="text-lg font-semibold text-white mb-4 flex items-center">
+            <span class="w-6 h-6 bg-yellow-500/20 rounded mr-2 flex items-center justify-center">🔥</span>
+            Trending Stocks
+          </h3>
+          <div class="space-y-3">
+            <% @market_data[:trending_stocks].each do |stock| %>
+              <div class="flex justify-between items-center">
+                <div>
+                  <div class="text-white font-semibold text-sm"><%= stock[:symbol] %></div>
+                  <div class="text-gray-400 text-xs"><%= stock[:name] %></div>
+                </div>
+                <div class="text-right">
+                  <div class="text-white text-sm">$<%= stock[:price] %></div>
+                  <div class="text-<%= stock[:change].include?('+') ? 'green' : 'red' %>-400 text-xs">
+                    <%= stock[:change] %>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Portfolio Recommendations -->
+    <div class="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 border border-gray-700">
+      <h2 class="text-2xl font-bold text-white mb-6 flex items-center">
+        <span class="w-10 h-10 bg-purple-500/20 rounded-xl flex items-center justify-center mr-4">🎯</span>
+        Strategic Portfolio Recommendations
+      </h2>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <% @market_data[:portfolio_suggestions].each do |suggestion| %>
+          <div class="bg-gray-700/30 rounded-xl p-6 border border-gray-600">
+            <div class="flex justify-between items-start mb-3">
+              <h3 class="text-lg font-semibold text-white"><%= suggestion[:allocation] %></h3>
+              <span class="bg-emerald-500/20 text-emerald-300 px-3 py-1 rounded-full text-sm font-semibold">
+                <%= suggestion[:percentage] %>%
+              </span>
+            </div>
+            <p class="text-gray-400 text-sm leading-relaxed">
+              <%= suggestion[:rationale] %>
+            </p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Market Sentiment Dashboard -->
+    <div class="mt-8 bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 border border-gray-700">
+      <h2 class="text-2xl font-bold text-white mb-6 flex items-center">
+        <span class="w-10 h-10 bg-orange-500/20 rounded-xl flex items-center justify-center mr-4">📈</span>
+        Market Sentiment Analysis
+      </h2>
+      <div class="grid md:grid-cols-2 lg:grid-cols-5 gap-6">
+        <div class="bg-emerald-500/10 rounded-xl p-6 border border-emerald-500/30">
+          <div class="text-center">
+            <div class="text-3xl font-bold text-emerald-400 mb-2"><%= @market_data[:market_sentiment][:score] %></div>
+            <div class="text-emerald-300 font-semibold">Overall Score</div>
+            <div class="text-gray-400 text-sm mt-1"><%= @market_data[:market_sentiment][:overall] %></div>
+          </div>
+        </div>
+        <% @market_data[:market_sentiment][:sectors].each do |sector, data| %>
+          <div class="bg-gray-700/30 rounded-xl p-6 border border-gray-600">
+            <div class="text-center">
+              <div class="text-2xl font-bold text-white mb-2"><%= data[:score] %></div>
+              <div class="text-gray-300 font-semibold text-sm"><%= sector %></div>
+              <div class="text-gray-400 text-xs mt-1"><%= data[:sentiment] %></div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TradeSage Specific JavaScript -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Auto-focus chat input
+    document.getElementById('chat-input').focus();
+    
+    // Handle Enter key in chat input
+    document.getElementById('chat-input').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            sendMessage();
+        }
+    });
+});
+
+function sendMessage() {
+    const input = document.getElementById('chat-input');
+    const message = input.value.trim();
+    
+    if (!message) return;
+    
+    const chatMessages = document.getElementById('chat-messages');
+    
+    // Add user message
+    const userMessage = document.createElement('div');
+    userMessage.className = 'text-gray-300 mb-2';
+    userMessage.innerHTML = `<span class="text-blue-400">You></span> ${message}`;
+    chatMessages.appendChild(userMessage);
+    
+    // Clear input
+    input.value = '';
+    
+    // Show typing indicator
+    const typingIndicator = document.createElement('div');
+    typingIndicator.className = 'text-gray-500 mb-2';
+    typingIndicator.innerHTML = '<span class="text-emerald-400">TradeSage></span> <em>Analyzing market data...</em>';
+    typingIndicator.id = 'typing-indicator';
+    chatMessages.appendChild(typingIndicator);
+    
+    // Scroll to bottom
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    
+    // Send message to backend
+    fetch('/tradesage/chat', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({ message: message })
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Remove typing indicator
+        const indicator = document.getElementById('typing-indicator');
+        if (indicator) indicator.remove();
+        
+        // Add TradeSage response
+        const botMessage = document.createElement('div');
+        botMessage.className = 'text-gray-300 mb-2';
+        botMessage.innerHTML = `<span class="text-emerald-400">TradeSage></span> ${data.response}`;
+        chatMessages.appendChild(botMessage);
+        
+        // Add processing time
+        if (data.processing_time) {
+            const timeInfo = document.createElement('div');
+            timeInfo.className = 'text-gray-500 text-xs mb-2';
+            timeInfo.innerHTML = `<em>Response generated in ${data.processing_time}</em>`;
+            chatMessages.appendChild(timeInfo);
+        }
+        
+        // Scroll to bottom
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        
+        // Remove typing indicator
+        const indicator = document.getElementById('typing-indicator');
+        if (indicator) indicator.remove();
+        
+        // Show error message
+        const errorMessage = document.createElement('div');
+        errorMessage.className = 'text-red-400 mb-2';
+        errorMessage.innerHTML = '<span class="text-emerald-400">TradeSage></span> <em>Sorry, I encountered an error. Please try again.</em>';
+        chatMessages.appendChild(errorMessage);
+        
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    });
+}
+
+function analyzeStock() {
+    const symbol = prompt('Enter stock symbol (e.g., AAPL, MSFT):');
+    if (!symbol) return;
+    
+    addChatMessage(`Please analyze ${symbol.toUpperCase()} stock`, 'user');
+    
+    fetch('/tradesage/analyze_stock', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({ symbol: symbol.toUpperCase() })
+    })
+    .then(response => response.json())
+    .then(data => {
+        const analysis = data.analysis;
+        const response = `
+📊 **${data.symbol} Analysis**
+
+**Fundamental Analysis:**
+• P/E Ratio: ${analysis.fundamental_analysis.pe_ratio}
+• ROE: ${analysis.fundamental_analysis.roe}%
+• Revenue Growth: ${analysis.fundamental_analysis.revenue_growth}%
+
+**Technical Analysis:**
+• Trend: ${analysis.technical_analysis.trend}
+• RSI: ${analysis.technical_analysis.rsi}
+• MACD Signal: ${analysis.technical_analysis.macd_signal}
+
+**Recommendation:** ${analysis.recommendation} (${analysis.confidence_score}% confidence)
+        `;
+        
+        addChatMessage(response, 'agent');
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        addChatMessage('Sorry, I couldn\'t analyze that stock right now. Please try again.', 'agent');
+    });
+}
+
+function portfolioAnalysis() {
+    addChatMessage('I\'d like to analyze my portfolio', 'user');
+    
+    const response = `
+📈 **Portfolio Analysis Service**
+
+To provide a comprehensive portfolio analysis, I'll need:
+
+1. **Current Holdings** - List your stocks/funds with percentages
+2. **Investment Goals** - Growth, income, or balanced
+3. **Risk Tolerance** - Conservative, moderate, or aggressive
+4. **Time Horizon** - Short-term or long-term
+
+Please share your portfolio details, and I'll provide:
+• Diversification analysis
+• Risk assessment
+• Optimization recommendations
+• Performance projections
+    `;
+    
+    addChatMessage(response, 'agent');
+}
+
+function marketSentiment() {
+    addChatMessage('What\'s the current market sentiment?', 'user');
+    
+    fetch('/tradesage/market_sentiment', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({ sector: 'overall' })
+    })
+    .then(response => response.json())
+    .then(data => {
+        const sentiment = data.sentiment;
+        const response = `
+📊 **Current Market Sentiment**
+
+**Overall Score:** ${sentiment.current_score}/100 (${sentiment.trend})
+**Confidence Level:** ${sentiment.confidence}%
+
+**Key Market Drivers:**
+${sentiment.market_drivers.map(driver => `• ${driver}`).join('\n')}
+
+**Supporting Factors:**
+${sentiment.key_factors.map(factor => `• ${factor}`).join('\n')}
+
+The market is showing ${sentiment.current_score > 60 ? 'optimistic' : 'cautious'} sentiment across major sectors.
+        `;
+        
+        addChatMessage(response, 'agent');
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        addChatMessage('Unable to fetch market sentiment data right now. Please try again.', 'agent');
+    });
+}
+
+function generateStrategy() {
+    addChatMessage('Help me create an investment strategy', 'user');
+    
+    const response = `
+🎯 **Investment Strategy Generator**
+
+I can create a personalized investment strategy based on your:
+
+**1. Investment Goals:**
+• Growth (capital appreciation)
+• Income (dividends/interest)
+• Balanced (growth + income)
+• Retirement planning
+
+**2. Risk Profile:**
+• Conservative (low risk, stable returns)
+• Moderate (balanced risk/reward)
+• Aggressive (high risk, high potential returns)
+
+**3. Time Horizon:**
+• Short-term (< 2 years)
+• Medium-term (2-10 years)
+• Long-term (10+ years)
+
+**4. Investment Capital:**
+• Starting amount
+• Monthly contributions
+
+Please share these details, and I'll create a customized strategy with specific asset allocation recommendations!
+    `;
+    
+    addChatMessage(response, 'agent');
+}
+
+function addChatMessage(message, sender) {
+    const chatMessages = document.getElementById('chat-messages');
+    const messageDiv = document.createElement('div');
+    messageDiv.className = 'text-gray-300 mb-2';
+    
+    if (sender === 'user') {
+        messageDiv.innerHTML = `<span class="text-blue-400">You></span> ${message}`;
+    } else {
+        messageDiv.innerHTML = `<span class="text-emerald-400">TradeSage></span> ${message.replace(/\n/g, '<br>')}`;
+    }
+    
+    chatMessages.appendChild(messageDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+</script>

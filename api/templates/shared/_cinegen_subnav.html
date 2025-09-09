@@ -1,0 +1,244 @@
+<!-- CineGen Agent Sub-Navigation -->
+<div class="cinegen-subnav">
+  <div class="subnav-container">
+    <div class="subnav-brand">
+      <span class="subnav-icon">🎬</span>
+      <span class="subnav-title">CineGen</span>
+      <span class="subnav-subtitle">Cinematic Video Generator</span>
+    </div>
+    
+    <nav class="subnav-menu">
+      <%= link_to cinegen_path, class: "subnav-item #{'active' if action_name == 'index'}" do %>
+        <span class="subnav-icon">🏠</span>
+        <span class="subnav-text">Dashboard</span>
+      <% end %>
+      
+      <%= link_to scene_composer_cinegen_path, class: "subnav-item #{'active' if action_name == 'scene_composer'}" do %>
+        <span class="subnav-icon">🎭</span>
+        <span class="subnav-text">Scene Composer</span>
+      <% end %>
+      
+      <%= link_to render_dashboard_cinegen_path, class: "subnav-item #{'active' if action_name == 'render_dashboard'}" do %>
+        <span class="subnav-icon">⚡</span>
+        <span class="subnav-text">Render Studio</span>
+      <% end %>
+      
+      <%= link_to video_player_cinegen_path, class: "subnav-item #{'active' if action_name == 'video_player'}" do %>
+        <span class="subnav-icon">📹</span>
+        <span class="subnav-text">Video Gallery</span>
+      <% end %>
+      
+      <%= link_to analytics_cinegen_path, class: "subnav-item #{'active' if action_name == 'analytics'}" do %>
+        <span class="subnav-icon">📊</span>
+        <span class="subnav-text">Analytics</span>
+      <% end %>
+    </nav>
+    
+    <!-- Agent Status Indicator -->
+    <div class="agent-status">
+      <div class="status-indicator active" title="CineGen Agent Online"></div>
+      <span class="status-text">Online</span>
+    </div>
+  </div>
+</div>
+
+<!-- CineGen Sub-Navigation Styles -->
+<style>
+  /* CineGen Sub-Navigation */
+  .cinegen-subnav {
+    position: fixed;
+    top: 0; /* Start at top for agent pages */
+    left: 0;
+    right: 0;
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #2a2a2a 100%);
+    border-bottom: 2px solid #FFD700;
+    box-shadow: 0 2px 15px rgba(255, 215, 0, 0.3);
+    z-index: 999;
+    padding: 0.75rem 1rem;
+    backdrop-filter: blur(10px);
+  }
+  
+  .subnav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+  }
+  
+  .subnav-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: #FFD700;
+  }
+  
+  .subnav-brand .subnav-icon {
+    font-size: 1.5rem;
+    animation: cinegenPulse 2s infinite;
+  }
+  
+  .subnav-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  
+  .subnav-subtitle {
+    font-size: 0.85rem;
+    color: #C0C0C0;
+    font-style: italic;
+  }
+  
+  .subnav-menu {
+    display: flex;
+    gap: 0.5rem;
+    flex: 1;
+    justify-content: center;
+  }
+  
+  .subnav-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    color: #C0C0C0;
+    text-decoration: none;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .subnav-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.2), transparent);
+    transition: left 0.5s ease;
+  }
+  
+  .subnav-item:hover {
+    color: #FFD700;
+    border-color: #FFD700;
+    background: rgba(255, 215, 0, 0.1);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+    transform: translateY(-2px);
+  }
+  
+  .subnav-item:hover::before {
+    left: 100%;
+  }
+  
+  .subnav-item.active {
+    color: #0a0a0a;
+    background: linear-gradient(45deg, #FFD700, #FFA500);
+    border-color: #FFD700;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+    font-weight: 600;
+  }
+  
+  .subnav-item .subnav-icon {
+    font-size: 1rem;
+  }
+  
+  .agent-status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #32CD32;
+    font-size: 0.85rem;
+  }
+  
+  .status-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #32CD32;
+    animation: cinegenStatusPulse 2s infinite;
+  }
+  
+  .status-indicator.active {
+    box-shadow: 0 0 10px #32CD32;
+  }
+  
+  @keyframes cinegenPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+  }
+  
+  @keyframes cinegenStatusPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .cinegen-subnav {
+      padding: 0.5rem;
+    }
+    
+    .subnav-container {
+      flex-direction: column;
+      gap: 1rem;
+    }
+    
+    .subnav-brand {
+      text-align: center;
+    }
+    
+    .subnav-menu {
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.25rem;
+    }
+    
+    .subnav-item {
+      font-size: 0.8rem;
+      padding: 0.4rem 0.8rem;
+    }
+    
+    .subnav-subtitle {
+      display: none;
+    }
+  }
+  
+  /* Cinematic film strip effect on subnav */
+  .cinegen-subnav::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+      repeating-linear-gradient(
+        90deg,
+        transparent 0px,
+        transparent 18px,
+        rgba(255, 215, 0, 0.05) 19px,
+        rgba(255, 215, 0, 0.05) 21px
+      );
+    pointer-events: none;
+  }
+  
+  /* Adjust body spacing for CineGen pages */
+  body.cinegen-page {
+    padding-top: 60px; /* Only CineGen subnav since global nav is hidden */
+  }
+  
+  /* Specific content area adjustments for CineGen */
+  body.cinegen-page .main-content,
+  body.cinegen-page main,
+  body.cinegen-page .container {
+    margin-top: 0;
+    padding-top: 2rem;
+  }
+</style>

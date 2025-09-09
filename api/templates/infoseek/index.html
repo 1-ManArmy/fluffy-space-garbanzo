@@ -1,0 +1,1907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InfoSeek - IP Intelligence Terminal | onelastai.com</title>
+  
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  
+  <!-- Custom InfoSeek Styles -->
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Consolas', 'Monaco', 'Lucida Console', monospace;
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+      color: #00d4ff;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    
+    
+    
+    /* Hero Section */
+    .hero-section {
+      padding: 4rem 2rem;
+      text-align: center;
+      background: radial-gradient(ellipse at center, rgba(0, 212, 255, 0.1) 0%, rgba(0, 0, 0, 0.3) 70%);
+      border-bottom: 2px solid #00d4ff;
+      position: relative;
+    }
+    
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="%2300d4ff" stroke-width="0.5" opacity="0.3"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+      opacity: 0.2;
+      animation: gridMove 20s linear infinite;
+    }
+    
+    @keyframes gridMove {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(10px, 10px); }
+    }
+    
+    .hero-content {
+      position: relative;
+      z-index: 1;
+    }
+    
+    .agent-logo {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 20px #00d4ff;
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.05); opacity: 0.8; }
+    }
+    
+    .agent-title {
+      font-size: 3rem;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+      text-shadow: 0 0 10px #00d4ff;
+      background: linear-gradient(45deg, #00d4ff, #ffffff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .agent-tagline {
+      font-size: 1.2rem;
+      color: #b3b3b3;
+      margin-bottom: 2rem;
+      opacity: 0.9;
+    }
+    
+    .agent-description {
+      max-width: 600px;
+      margin: 0 auto 2rem;
+      color: #cccccc;
+      line-height: 1.6;
+      font-size: 1rem;
+    }
+    
+    .agent-stats {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+    
+    .stat-item {
+      background: rgba(0, 212, 255, 0.1);
+      border: 1px solid #00d4ff;
+      border-radius: 8px;
+      padding: 1rem;
+      min-width: 120px;
+      text-align: center;
+    }
+    
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #00d4ff;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 0.8rem;
+      color: #b3b3b3;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    /* Terminal Section */
+    .terminal-section {
+      padding: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .terminal-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    
+    .terminal-title {
+      font-size: 1.5rem;
+      color: #00d4ff;
+      margin-bottom: 0.5rem;
+    }
+    
+    .terminal-subtitle {
+      color: #b3b3b3;
+      font-size: 0.9rem;
+    }
+    
+    .terminal-container {
+      background: #000000;
+      border: 2px solid #00d4ff;
+      border-radius: 12px;
+      box-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .terminal-titlebar {
+      background: linear-gradient(90deg, #00d4ff 0%, #0099cc 100%);
+      padding: 0.75rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .terminal-button {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ff5f56;
+    }
+    
+    .terminal-button.yellow { background: #ffbd2e; }
+    .terminal-button.green { background: #27ca3f; }
+    
+    .terminal-title-text {
+      margin-left: 1rem;
+      color: #000;
+      font-weight: bold;
+      font-size: 0.9rem;
+    }
+    
+    .terminal-output {
+      height: 400px;
+      padding: 1rem;
+      overflow-y: auto;
+      background: #000000;
+      color: #00ff00;
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+    
+    .terminal-output::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    .terminal-output::-webkit-scrollbar-track {
+      background: #1a1a1a;
+    }
+    
+    .terminal-output::-webkit-scrollbar-thumb {
+      background: #00d4ff;
+      border-radius: 4px;
+    }
+    
+    .terminal-output::-webkit-scrollbar-thumb:hover {
+      background: #00a8cc;
+    }
+
+    /* InfoSeek Menu Bar Styles */
+    .infoseek-menu-bar {
+      background: linear-gradient(90deg, #1a1a2e 0%, #16213e 100%);
+      border-bottom: 2px solid #00d4ff;
+      border-top: 2px solid #00d4ff;
+      padding: 0.75rem 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 20px rgba(0, 212, 255, 0.2);
+    }
+    
+    .infoseek-menu-items {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      justify-content: center;
+    }
+    
+    .infoseek-menu-item {
+      position: relative;
+    }
+    
+    .infoseek-menu-button {
+      background: transparent;
+      border: 2px solid #00d4ff;
+      color: #00d4ff;
+      padding: 0.75rem 1.5rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-family: 'Consolas', 'Monaco', 'Lucida Console', monospace;
+      font-size: 14px;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .infoseek-menu-button:hover {
+      background: linear-gradient(45deg, #00d4ff, #0099cc);
+      color: #000;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(0, 212, 255, 0.4);
+    }
+
+    /* Terminal-style Dropdown */
+    .dropdown {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: #000000;
+      border: 2px solid #00d4ff;
+      border-radius: 8px;
+      box-shadow: 0 5px 20px rgba(0, 212, 255, 0.4);
+      min-width: 250px;
+      max-height: 400px;
+      overflow-y: auto;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px);
+      transition: all 0.3s ease;
+      z-index: 15000;
+    }
+
+    .dropdown.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .dropdown-header {
+      background: linear-gradient(90deg, #00d4ff 0%, #0099cc 100%);
+      color: #000;
+      padding: 0.5rem 1rem;
+      font-weight: bold;
+      font-size: 12px;
+      border-bottom: 1px solid #00d4ff;
+    }
+
+    /* Linux Tree Structure */
+    .tree-container {
+      padding: 0.5rem;
+      color: #00ff00;
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 12px;
+      line-height: 1.3;
+    }
+
+    .tree-item {
+      position: relative;
+      padding: 0.2rem 0;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .tree-item:hover {
+      background: rgba(0, 255, 0, 0.1);
+    }
+
+    .tree-item.expandable {
+      position: relative;
+    }
+
+    .tree-item.expandable::before {
+      content: "├── ";
+      color: #00d4ff;
+    }
+
+    .tree-item.last::before {
+      content: "└── ";
+      color: #00d4ff;
+    }
+
+    .tree-item.folder::after {
+      content: "/";
+      color: #ffff00;
+    }
+
+    .tree-item.executable {
+      color: #00ff00;
+      font-weight: bold;
+    }
+
+    .tree-item.config {
+      color: #ff9900;
+    }
+
+    .tree-item.link {
+      color: #ff00ff;
+    }
+
+    .tree-children {
+      margin-left: 1.5rem;
+      border-left: 1px solid #333;
+      padding-left: 0.5rem;
+      display: none;
+    }
+
+    .tree-children.expanded {
+      display: block;
+    }
+
+    .tree-children .tree-item::before {
+      content: "├── ";
+      color: #00d4ff;
+    }
+
+    .tree-children .tree-item:last-child::before {
+      content: "└── ";
+      color: #00d4ff;
+    }
+
+    /* Sub-menu arrow */
+    .has-submenu::after {
+      content: " ▶";
+      color: #ffff00;
+      font-size: 10px;
+      margin-left: 0.5rem;
+    }
+
+    .tree-item.expanded .has-submenu::after {
+      content: " ▼";
+    }
+    
+    .main-nav-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.95);
+      z-index: 50000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+    
+    .main-nav-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    .main-nav-content {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 90%;
+      max-width: 400px;
+      height: 100%;
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+      border-left: 3px solid #00d4ff;
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+      overflow-y: auto;
+      box-shadow: -5px 0 20px rgba(0, 212, 255, 0.3);
+    }
+    
+    .main-nav-overlay.active .main-nav-content {
+      transform: translateX(0);
+    }
+    
+    .main-nav-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem;
+      background: linear-gradient(90deg, #00d4ff 0%, #0099cc 100%);
+      color: #000;
+      font-weight: bold;
+      border-bottom: 2px solid #00d4ff;
+    }
+    
+    .main-nav-title {
+      font-size: 18px;
+      font-weight: bold;
+    }
+    
+    .main-nav-close {
+      background: transparent;
+      border: none;
+      color: #000;
+      font-size: 24px;
+      font-weight: bold;
+      cursor: pointer;
+      padding: 0.25rem;
+      border-radius: 4px;
+      transition: background 0.2s ease;
+    }
+    
+    .main-nav-close:hover {
+      background: rgba(0, 0, 0, 0.1);
+    }
+    
+    .main-nav-items {
+      padding: 1.5rem;
+    }
+    
+    .nav-section {
+      margin-bottom: 2rem;
+    }
+    
+    .nav-section h4 {
+      color: #00d4ff;
+      margin-bottom: 1rem;
+      font-size: 16px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 2px solid #333;
+      padding-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .nav-item {
+      color: #cccccc;
+      padding: 1rem;
+      cursor: pointer;
+      border-bottom: 1px solid #333;
+      transition: all 0.3s ease;
+      font-size: 15px;
+      border-radius: 6px;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .nav-item:hover {
+      color: #00d4ff;
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(0, 153, 204, 0.1));
+      border-color: #00d4ff;
+      transform: translateX(5px);
+      box-shadow: 0 2px 10px rgba(0, 212, 255, 0.2);
+    }
+    
+    .nav-item.current-agent {
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(0, 153, 204, 0.2));
+      border: 1px solid #00d4ff;
+      color: #00d4ff;
+      font-weight: bold;
+    }
+    
+    .nav-item:last-child {
+      border-bottom: none;
+    }
+    
+    .terminal-message {
+      margin-bottom: 1rem;
+      display: block;
+    }
+    
+    .user-message {
+      color: #00d4ff;
+    }
+    
+    .user-message::before {
+      content: '$ ';
+      color: #00ff00;
+      font-weight: bold;
+    }
+    
+    .agent-message {
+      color: #ffffff;
+      margin-left: 2rem;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+    
+    .timestamp {
+      color: #666666;
+      font-size: 12px;
+      margin-left: 1rem;
+    }
+    
+    .terminal-input-container {
+      background: #111111;
+      border-top: 1px solid #333333;
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .terminal-prompt {
+      color: #00ff00;
+      font-weight: bold;
+      flex-shrink: 0;
+    }
+    
+    .terminal-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: #00d4ff;
+      font-family: inherit;
+      font-size: 14px;
+      outline: none;
+      padding: 0.5rem;
+    }
+    
+    .terminal-input::placeholder {
+      color: #666666;
+    }
+    
+    .send-button {
+      background: linear-gradient(45deg, #00d4ff, #0099cc);
+      border: none;
+      border-radius: 6px;
+      color: #000;
+      padding: 0.5rem 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: inherit;
+    }
+    
+    .send-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(0, 212, 255, 0.4);
+    }
+    
+    .send-button:active {
+      transform: translateY(0);
+    }
+
+    /* Documentation Section Styles */
+    .docs-section {
+      padding: 2rem;
+      background: rgba(0, 0, 0, 0.9);
+      border-top: 2px solid #00d4ff;
+      margin-top: 2rem;
+    }
+    
+    .docs-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      border: 2px solid #00d4ff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0, 212, 255, 0.3);
+    }
+    
+    .docs-header {
+      background: linear-gradient(90deg, #00d4ff, #0099cc);
+      color: #000;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'Consolas', 'Monaco', 'Lucida Console', monospace;
+    }
+    
+    .docs-title {
+      margin: 0;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+    
+    .docs-close {
+      background: transparent;
+      border: 2px solid #000;
+      color: #000;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+    
+    .docs-close:hover {
+      background: #000;
+      color: #00d4ff;
+      transform: scale(1.1);
+    }
+    
+    .docs-content {
+      padding: 2rem;
+      color: #ffffff;
+      line-height: 1.6;
+      font-family: 'Consolas', 'Monaco', 'Lucida Console', monospace;
+      max-height: 600px;
+      overflow-y: auto;
+    }
+    
+    .docs-content h1, .docs-content h2, .docs-content h3 {
+      color: #00d4ff;
+      margin-bottom: 1rem;
+    }
+    
+    .docs-content p {
+      margin-bottom: 1rem;
+    }
+    
+    .docs-content code {
+      background: rgba(0, 212, 255, 0.1);
+      color: #00d4ff;
+      padding: 0.2rem 0.5rem;
+      border-radius: 3px;
+      font-family: inherit;
+    }
+    
+    .docs-content pre {
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid #00d4ff;
+      border-radius: 5px;
+      padding: 1rem;
+      overflow-x: auto;
+      margin: 1rem 0;
+    }
+    
+    .docs-content ul, .docs-content ol {
+      margin-left: 2rem;
+      margin-bottom: 1rem;
+    }
+    
+    .docs-content li {
+      margin-bottom: 0.5rem;
+    }
+    
+    .loading {
+      opacity: 0.6;
+      pointer-events: none;
+    }
+    
+    .typing-indicator {
+      color: #00ff00;
+      display: none;
+    }
+    
+    .typing-indicator.active {
+      display: block;
+    }
+    
+    .typing-indicator::after {
+      content: '...';
+      animation: typing 1.5s infinite;
+    }
+    
+    @keyframes typing {
+      0%, 60% { content: '...'; }
+      20% { content: '.'; }
+      40% { content: '..'; }
+    }
+    
+    /* Welcome message */
+    .welcome-message {
+      color: #00ff00;
+      margin-bottom: 1rem;
+    }
+    
+    .system-info {
+      color: #666666;
+      font-size: 12px;
+      margin-bottom: 1rem;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero-section {
+        padding: 2rem 1rem;
+      }
+      
+      .agent-title {
+        font-size: 2rem;
+      }
+      
+      .agent-stats {
+        gap: 1rem;
+      }
+      
+      .terminal-section {
+        padding: 1rem;
+      }
+      
+      .terminal-output {
+        height: 300px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navigation Toggle - Fixed Position on Top Right -->
+  <div class="global-nav-toggle">
+    <button class="nav-toggle-btn" onclick="toggleMainNavigation()" id="nav-menu-btn">
+      ☰
+    </button>
+  </div>
+
+  <!-- Main Navigation Overlay -->
+  <div id="main-nav-overlay" class="main-nav-overlay">
+    <div class="main-nav-content">
+      <div class="main-nav-header">
+        <span class="main-nav-title">OneLastAI Navigation</span>
+        <button class="main-nav-close" onclick="toggleMainNavigation()">✕</button>
+      </div>
+      <div class="main-nav-items">
+        <div class="nav-section">
+          <h4>🏠 Main Site</h4>
+          <div class="nav-item" onclick="goToHome()">🏠 Home Page</div>
+          <div class="nav-item" onclick="goToAbout()">ℹ️ About Us</div>
+          <div class="nav-item" onclick="goToContact()">📧 Contact</div>
+        </div>
+        <div class="nav-section">
+          <h4>🤖 AI Agents</h4>
+          <div class="nav-item" onclick="goToAgent('neochat')">💬 NeoChat - Conversation AI</div>
+          <div class="nav-item" onclick="goToAgent('infoseek')" class="current-agent">🌐 InfoSeek - IP Intelligence (Current)</div>
+          <div class="nav-item" onclick="goToAgent('emotiSense')">❤️ EmotiSense - Emotion Analysis</div>
+          <div class="nav-item" onclick="goToAgent('cinegen')">🎬 CineGen - Video Generation</div>
+          <div class="nav-item" onclick="goToAgent('contentcrafter')">✍️ ContentCrafter - Content Creation</div>
+          <div class="nav-item" onclick="goToAgent('carebot')">🏥 CareBot - Healthcare Assistant</div>
+          <div class="nav-item" onclick="goToAgent('codemaster')">💻 CodeMaster - Programming Help</div>
+          <div class="nav-item" onclick="goToAgent('datasphere')">📊 DataSphere - Data Analysis</div>
+        </div>
+        <div class="nav-section">
+          <h4>🔧 Tools & Services</h4>
+          <div class="nav-item" onclick="goToTools()">🛠️ All Tools</div>
+          <div class="nav-item" onclick="goToDashboard()">📊 Dashboard</div>
+          <div class="nav-item" onclick="goToSettings()">⚙️ Settings</div>
+        </div>
+        <div class="nav-section">
+          <h4>📚 Resources</h4>
+          <div class="nav-item" onclick="goToDocumentation()">📖 Documentation</div>
+          <div class="nav-item" onclick="goToAPI()">🔌 API Reference</div>
+          <div class="nav-item" onclick="goToSupport()">🆘 Support Center</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <div class="agent-logo">🌐</div>
+      <h1 class="agent-title">InfoSeek</h1>
+      <p class="agent-tagline">IP Intelligence & Network Research Specialist</p>
+      <p class="agent-description">
+        I am InfoSeek, your expert IP intelligence and network research specialist. I provide detailed 
+        information about IP addresses, domains, network infrastructure, and digital investigations. 
+        Simply enter an IP address or domain name to get comprehensive geolocation, security, and 
+        network analysis powered by industry-leading databases like IPinfo.io.
+      </p>
+      
+      <div class="agent-stats">
+        <div class="stat-item">
+          <span class="stat-value"><%= @agent_stats[:total_conversations] %></span>
+          <span class="stat-label">Conversations</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value"><%= @agent_stats[:average_rating] %></span>
+          <span class="stat-label">Rating</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value"><%= @agent_stats[:response_time] %></span>
+          <span class="stat-label">Response Time</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Terminal Section -->
+  <section class="terminal-section">
+    <div class="terminal-header">
+      <h2 class="terminal-title">🌐 InfoSeek IP Intelligence Terminal</h2>
+      <p class="terminal-subtitle">Enter IP addresses, domains, or commands for comprehensive network intelligence</p>
+    </div>
+
+    <!-- InfoSeek Menu Bar -->
+    <nav class="infoseek-menu-bar">
+      <div class="infoseek-menu-items">
+        <div class="infoseek-menu-item">
+          <button class="infoseek-menu-button" onclick="toggleDropdown('file-menu')">File</button>
+          <div id="file-menu" class="dropdown">
+            <div class="dropdown-header">IP Intelligence Operations</div>
+            <div class="tree-container">
+              <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
+                investigations
+                <div class="tree-children">
+                  <div class="tree-item executable" onclick="newInvestigation()">new_lookup.sh</div>
+                  <div class="tree-item config" onclick="loadHistory()">lookup_history.log</div>
+                  <div class="tree-item config" onclick="exportResults()">results_export.json</div>
+                  <div class="tree-item last config" onclick="clearHistory()">clear_cache.sh</div>
+                </div>
+              </div>
+              <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
+                settings
+                <div class="tree-children">
+                  <div class="tree-item config" onclick="openSettings()">ipinfo_config.yml</div>
+                  <div class="tree-item config" onclick="openPreferences()">api_keys.ini</div>
+                  <div class="tree-item last link" onclick="openThemes()">terminal_theme.conf → /usr/share/themes/</div>
+                </div>
+              </div>
+              <div class="tree-item last executable" onclick="exitInfoSeek()">exit.sh</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="infoseek-menu-item">
+          <button class="infoseek-menu-button" onclick="toggleDropdown('features-menu')">Features</button>
+          <div id="features-menu" class="dropdown">
+            <div class="dropdown-header">IP Intelligence Capabilities</div>
+            <div class="tree-container">
+              <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
+                lookup_tools
+                <div class="tree-children">
+                  <div class="tree-item executable" onclick="setMode('geolocation')">ip_geolocation.py</div>
+                  <div class="tree-item executable" onclick="setMode('network')">network_analysis.py</div>
+                  <div class="tree-item executable" onclick="setMode('security')">security_check.py</div>
+                  <div class="tree-item last executable" onclick="setMode('forensics')">digital_forensics.py</div>
+                </div>
+              </div>
+              <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
+                investigation
+                <div class="tree-children">
+                  <div class="tree-item executable" onclick="openWhois()">whois_lookup.sh</div>
+                  <div class="tree-item executable" onclick="openTraceroute()">traceroute.py</div>
+                  <div class="tree-item executable" onclick="openPortScan()">port_scanner.rb</div>
+                  <div class="tree-item last config" onclick="openThreatIntel()">threat_intel.js</div>
+                </div>
+              </div>
+              <div class="tree-item last folder has-submenu" onclick="toggleSubmenu(this)">
+                databases
+                <div class="tree-children">
+                  <div class="tree-item config" onclick="showIPInfo()">ipinfo.db → /var/lib/infoseek/</div>
+                  <div class="tree-item last link" onclick="showGeoIP()">maxmind_geoip.sqlite → /usr/share/GeoIP/</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="infoseek-menu-item">
+          <button class="infoseek-menu-button" onclick="toggleDropdown('agents-menu')">Agents</button>
+          <div id="agents-menu" class="dropdown">
+            <div class="dropdown-header">InfoSeek Network</div>
+            <div class="tree-container">
+              <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
+                active
+                <div class="tree-children">
+                  <div class="tree-item executable config">infoseek.service ● running</div>
+                  <div class="tree-item last link" onclick="switchAgent('ipinfo')">ipinfo_api.agent → /apis/ipinfo/</div>
+                </div>
+              </div>
+              <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
+                available
+                <div class="tree-children">
+                  <div class="tree-item executable" onclick="switchAgent('netscope')">netscope.agent</div>
+                  <div class="tree-item executable" onclick="switchAgent('datasphere')">datasphere.agent</div>
+                  <div class="tree-item executable" onclick="switchAgent('cinegen')">cinegen.agent</div>
+                  <div class="tree-item last config" onclick="createAgent()">custom_intel.template</div>
+                </div>
+              </div>
+              <div class="tree-item last folder has-submenu" onclick="toggleSubmenu(this)">
+                network
+                <div class="tree-children">
+                  <div class="tree-item config">infoseek.onelastai.com</div>
+                  <div class="tree-item config">ipinfo.status</div>
+                  <div class="tree-item last link">api.endpoint → https://api.onelastai.com/infoseek/</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="infoseek-menu-item">
+          <button class="infoseek-menu-button" onclick="toggleDropdown('help-menu')">Help</button>
+          <div id="help-menu" class="dropdown">
+            <div class="dropdown-header">InfoSeek Documentation & Support</div>
+            <div class="tree-container">
+              <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
+                docs
+                <div class="tree-children">
+                  <div class="tree-item config" onclick="showDocs('getting-started')">ip_lookup_guide.md</div>
+                  <div class="tree-item config" onclick="showDocs('commands')">infoseek_commands.txt</div>
+                  <div class="tree-item config" onclick="showDocs('api')">ipinfo_api_docs.html</div>
+                  <div class="tree-item last config" onclick="showDocs('examples')">lookup_examples.json</div>
+                </div>
+              </div>
+              <div class="tree-item expandable folder has-submenu" onclick="toggleSubmenu(this)">
+                support
+                <div class="tree-children">
+                  <div class="tree-item link" onclick="openInfoSeekSupport()">github.com/onelastai/InfoSeek</div>
+                  <div class="tree-item link" onclick="openDiscord()">discord.gg/onelastai</div>
+                  <div class="tree-item last config" onclick="reportBug()">infoseek_bug_report.template</div>
+                </div>
+              </div>
+              <div class="tree-item last executable" onclick="showAbout()">about_infoseek.sh</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    
+    <div class="terminal-container">
+      <div class="terminal-titlebar">
+        <div class="terminal-button"></div>
+        <div class="terminal-button yellow"></div>
+        <div class="terminal-button green"></div>
+        <span class="terminal-title-text">infoseek@ipintel.com:~$</span>
+      </div>
+      
+      <div class="terminal-output" id="terminal-output">
+        <div class="welcome-message">
+╔══════════════════════════════════════════════════════════════════╗
+║                       Welcome to InfoSeek                        ║
+║             IP Intelligence & Network Research Terminal           ║
+╚══════════════════════════════════════════════════════════════════╝
+
+<div class="system-info">System: InfoSeek v2.0 | Status: Online | Agent ID: infoseek-demo
+<%= Time.current.strftime("Date: %Y-%m-%d %H:%M:%S") %> | Session: Active</div>
+
+<span style="color: #00d4ff;">Ready for IP intelligence queries. Enter an IP address or domain to analyze.</span>
+
+<div id="user-ip-info" style="margin-top: 1rem; padding: 1rem; background: rgba(0, 255, 0, 0.1); border: 1px solid #00ff00; border-radius: 5px;">
+  <span style="color: #00ff00;">🔄 Detecting your IP address...</span>
+</div>
+
+        </div>
+        
+        <div class="typing-indicator" id="typing-indicator">
+          InfoSeek is analyzing
+        </div>
+      </div>
+      
+      <div class="terminal-input-container">
+        <span class="terminal-prompt">infoseek@onelastai:~$ </span>
+        <input 
+          type="text" 
+          class="terminal-input" 
+          id="user-input"
+          placeholder="Enter IP address, domain, or query..."
+          autocomplete="off"
+        >
+        <button class="send-button" id="send-button">Send</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Documentation Display Area -->
+  <section id="docs-section" class="docs-section" style="display: none;">
+    <div class="docs-container">
+      <div class="docs-header">
+        <h3 class="docs-title" id="docs-title">InfoSeek Documentation</h3>
+        <button class="docs-close" onclick="closeDocs()">✕</button>
+      </div>
+      <div class="docs-content" id="docs-content">
+        <!-- Documentation content will be loaded here -->
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // Menu System Functions
+    function toggleDropdown(menuId) {
+      // Close all other dropdowns first
+      const allDropdowns = document.querySelectorAll('.dropdown');
+      allDropdowns.forEach(dropdown => {
+        if (dropdown.id !== menuId) {
+          dropdown.classList.remove('active');
+        }
+      });
+      
+      // Toggle the target dropdown
+      const dropdown = document.getElementById(menuId);
+      dropdown.classList.toggle('active');
+      
+      // Toggle active state on menu button
+      const button = dropdown.previousElementSibling;
+      button.classList.toggle('active');
+    }
+
+    function toggleSubmenu(element) {
+      const children = element.querySelector('.tree-children');
+      if (children) {
+        children.classList.toggle('expanded');
+        element.classList.toggle('expanded');
+      }
+    }
+
+    function toggleMainNavigation() {
+      const overlay = document.getElementById('main-nav-overlay');
+      const btn = document.getElementById('nav-menu-btn');
+      
+      overlay.classList.toggle('active');
+      btn.classList.toggle('active');
+      
+      // Prevent body scroll when navigation is open
+      if (overlay.classList.contains('active')) {
+        document.body.style.overflow = 'hidden';
+      } else {
+        document.body.style.overflow = '';
+      }
+    }
+
+    function closeMainNavigation() {
+      const overlay = document.getElementById('main-nav-overlay');
+      const btn = document.getElementById('nav-menu-btn');
+      
+      if (overlay.classList.contains('active')) {
+        overlay.classList.remove('active');
+        btn.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    }
+
+    // Navigation functions
+    function goToHome() {
+      window.location.href = '/';
+    }
+
+    function goToAbout() {
+      window.location.href = '/about';
+    }
+
+    function goToContact() {
+      window.location.href = '/contact';
+    }
+
+    function goToAgent(agentName) {
+      const agentRoutes = {
+        'neochat': '/neochat',
+        'infoseek': '/infoseek',
+        'emotiSense': '/emotisense',
+        'cinegen': '/cinegen',
+        'contentcrafter': '/contentcrafter',
+        'carebot': '/carebot',
+        'codemaster': '/codemaster',
+        'datasphere': '/datasphere'
+      };
+      
+      const route = agentRoutes[agentName];
+      if (route) {
+        if (agentName === 'infoseek') {
+          closeMainNavigation();
+          return; // Already on InfoSeek
+        }
+        window.location.href = route;
+      }
+    }
+
+    function goToTools() {
+      window.location.href = '/tools';
+    }
+
+    function goToDashboard() {
+      window.location.href = '/dashboard';
+    }
+
+    function goToSettings() {
+      window.location.href = '/settings';
+    }
+
+    function goToDocumentation() {
+      window.open('/docs', '_blank');
+    }
+
+    function goToAPI() {
+      window.open('/api/docs', '_blank');
+    }
+
+    function goToSupport() {
+      window.open('/support', '_blank');
+    }
+
+    // Documentation Functions
+    function showDocs(docType) {
+      const docsSection = document.getElementById('docs-section');
+      const docsTitle = document.getElementById('docs-title');
+      const docsContent = document.getElementById('docs-content');
+      
+      // Close any open dropdowns
+      const allDropdowns = document.querySelectorAll('.dropdown');
+      allDropdowns.forEach(dropdown => {
+        dropdown.classList.remove('active');
+      });
+      
+      // Define documentation content
+      const docs = {
+        'getting-started': {
+          title: 'InfoSeek - Getting Started Guide',
+          content: \`
+            <h2>🌐 Welcome to InfoSeek IP Intelligence Terminal</h2>
+            
+            <h3>📋 Overview</h3>
+            <p>InfoSeek is your professional IP intelligence and network research specialist. This powerful terminal interface provides comprehensive information about IP addresses, domains, and network infrastructure.</p>
+            
+            <h3>🚀 Quick Start</h3>
+            <ol>
+              <li><strong>IP Address Lookup:</strong> Simply enter any IP address (e.g., <code>8.8.8.8</code>) in the terminal</li>
+              <li><strong>Domain Analysis:</strong> Enter a domain name (e.g., <code>google.com</code>) for comprehensive analysis</li>
+              <li><strong>Network Commands:</strong> Use terminal commands like <code>whois</code>, <code>ping</code>, or <code>traceroute</code></li>
+            </ol>
+            
+            <h3>💡 Features Available</h3>
+            <ul>
+              <li><strong>Geolocation Data:</strong> Country, region, city, ISP information</li>
+              <li><strong>Security Analysis:</strong> Threat intelligence and reputation scoring</li>
+              <li><strong>Network Information:</strong> ASN, organization, hosting details</li>
+              <li><strong>WHOIS Data:</strong> Registration and ownership information</li>
+              <li><strong>DNS Analysis:</strong> Record lookups and DNS configuration</li>
+            </ul>
+            
+            <h3>📝 Example Queries</h3>
+            <pre>
+# Basic IP lookup
+8.8.8.8
+
+# Domain analysis  
+google.com
+
+# Network commands
+whois google.com
+ping 8.8.8.8
+traceroute cloudflare.com
+            </pre>
+            
+            <p><strong>Pro Tip:</strong> Use the terminal commands for advanced network diagnostics and detailed investigation workflows.</p>
+          \`
+        },
+        'commands': {
+          title: 'InfoSeek Terminal Commands',
+          content: \`
+            <h2>🖥️ InfoSeek Terminal Command Reference</h2>
+            
+            <h3>📍 Basic IP & Domain Lookup</h3>
+            <pre>
+# IP Address Analysis
+192.168.1.1          # Basic IP information
+8.8.8.8              # Public DNS server analysis
+1.1.1.1              # Cloudflare DNS analysis
+
+# Domain Analysis
+example.com          # Domain information lookup
+subdomain.example.com # Subdomain analysis
+*.example.com        # Wildcard domain search
+            </pre>
+            
+            <h3>🔍 Network Investigation Commands</h3>
+            <pre>
+whois [domain/ip]    # WHOIS database lookup
+dig [domain]         # DNS record analysis
+nslookup [domain]    # DNS server query
+ping [host]          # Network connectivity test
+traceroute [host]    # Network path tracing
+host [domain]        # Hostname resolution
+            </pre>
+            
+            <h3>🛡️ Security & Threat Intelligence</h3>
+            <pre>
+threat [ip]          # Threat intelligence lookup
+reputation [ip]      # IP reputation scoring
+blacklist [ip]       # Blacklist database check
+malware [domain]     # Malware domain analysis
+phishing [url]       # Phishing detection scan
+            </pre>
+            
+            <h3>📊 Advanced Network Analysis</h3>
+            <pre>
+asn [ip]            # Autonomous System Number lookup
+bgp [ip]            # BGP routing information
+geoip [ip]          # Detailed geolocation data
+isp [ip]            # Internet Service Provider info
+hosting [domain]    # Web hosting analysis
+ssl [domain]        # SSL certificate analysis
+            </pre>
+            
+            <h3>🔧 Terminal Control Commands</h3>
+            <pre>
+clear               # Clear terminal output
+history             # Show command history
+help                # Display this help
+exit                # Exit InfoSeek terminal
+version             # Show InfoSeek version
+settings            # Open configuration panel
+            </pre>
+            
+            <p><strong>Note:</strong> All commands support both IPv4 and IPv6 addresses, and most accept both domains and IP addresses as parameters.</p>
+          \`
+        },
+        'api': {
+          title: 'InfoSeek API Documentation',
+          content: \`
+            <h2>🔌 InfoSeek API Reference</h2>
+            
+            <h3>🌐 Base API Endpoint</h3>
+            <pre>https://api.onelastai.com/infoseek/</pre>
+            
+            <h3>🔑 Authentication</h3>
+            <p>API requests require authentication using API keys. Include your key in the request headers:</p>
+            <pre>
+Authorization: Bearer YOUR_API_KEY
+Content-Type: application/json
+            </pre>
+            
+            <h3>📍 IP Intelligence Endpoints</h3>
+            
+            <h4>Basic IP Lookup</h4>
+            <pre>
+GET /api/lookup/{ip_address}
+
+Response:
+{
+  "ip": "8.8.8.8",
+  "country": "United States",
+  "region": "California", 
+  "city": "Mountain View",
+  "isp": "Google LLC",
+  "organization": "Google Public DNS",
+  "asn": "AS15169",
+  "timezone": "America/Los_Angeles"
+}
+            </pre>
+            
+            <h4>Domain Analysis</h4>
+            <pre>
+GET /api/domain/{domain_name}
+
+Response:
+{
+  "domain": "google.com",
+  "registrar": "MarkMonitor Inc.",
+  "creation_date": "1997-09-15",
+  "expiration_date": "2028-09-14",
+  "nameservers": ["ns1.google.com", "ns2.google.com"],
+  "dns_records": {...}
+}
+            </pre>
+            
+            <h4>Security Intelligence</h4>
+            <pre>
+GET /api/threat/{ip_or_domain}
+
+Response:
+{
+  "target": "malicious.example.com",
+  "threat_score": 85,
+  "categories": ["malware", "phishing"],
+  "last_seen": "2024-08-29T10:30:00Z",
+  "source_feeds": ["abuse.ch", "malwaredomainlist"]
+}
+            </pre>
+            
+            <h3>📊 Batch Processing</h3>
+            <pre>
+POST /api/batch/lookup
+
+Body:
+{
+  "targets": ["8.8.8.8", "1.1.1.1", "google.com"],
+  "include_security": true,
+  "format": "json"
+}
+            </pre>
+            
+            <h3>⚙️ Rate Limits</h3>
+            <ul>
+              <li><strong>Free Tier:</strong> 1000 requests/day</li>
+              <li><strong>Pro Tier:</strong> 10,000 requests/day</li>
+              <li><strong>Enterprise:</strong> Unlimited requests</li>
+            </ul>
+            
+            <h3>📝 Code Examples</h3>
+            <pre>
+# Python Example
+import requests
+
+url = "https://api.onelastai.com/infoseek/lookup/8.8.8.8"
+headers = {"Authorization": "Bearer YOUR_API_KEY"}
+response = requests.get(url, headers=headers)
+data = response.json()
+
+# JavaScript Example  
+const response = await fetch('https://api.onelastai.com/infoseek/lookup/8.8.8.8', {
+  headers: {'Authorization': 'Bearer YOUR_API_KEY'}
+});
+const data = await response.json();
+            </pre>
+          \`
+        },
+        'examples': {
+          title: 'InfoSeek Usage Examples',
+          content: \`
+            <h2>💡 InfoSeek Practical Examples</h2>
+            
+            <h3>🔍 Scenario 1: Investigating Suspicious IP</h3>
+            <p><strong>Situation:</strong> You received suspicious traffic from IP 185.220.101.40</p>
+            
+            <h4>Step-by-step Investigation:</h4>
+            <ol>
+              <li><strong>Basic Lookup:</strong></li>
+              <pre>185.220.101.40</pre>
+              
+              <li><strong>Threat Intelligence:</strong></li>
+              <pre>threat 185.220.101.40</pre>
+              
+              <li><strong>WHOIS Information:</strong></li>
+              <pre>whois 185.220.101.40</pre>
+              
+              <li><strong>Network Analysis:</strong></li>
+              <pre>asn 185.220.101.40</pre>
+            </ol>
+            
+            <h3>🌐 Scenario 2: Domain Security Assessment</h3>
+            <p><strong>Situation:</strong> Analyzing domain "suspicious-bank.com" for phishing</p>
+            
+            <h4>Investigation Workflow:</h4>
+            <ol>
+              <li><strong>Domain Lookup:</strong></li>
+              <pre>suspicious-bank.com</pre>
+              
+              <li><strong>DNS Analysis:</strong></li>
+              <pre>dig suspicious-bank.com</pre>
+              
+              <li><strong>SSL Certificate Check:</strong></li>
+              <pre>ssl suspicious-bank.com</pre>
+              
+              <li><strong>Phishing Detection:</strong></li>
+              <pre>phishing suspicious-bank.com</pre>
+              
+              <li><strong>Registration Details:</strong></li>
+              <pre>whois suspicious-bank.com</pre>
+            </ol>
+            
+            <h3>🏢 Scenario 3: Corporate Network Audit</h3>
+            <p><strong>Situation:</strong> Auditing company's external IP ranges</p>
+            
+            <h4>Audit Process:</h4>
+            <ol>
+              <li><strong>IP Range Analysis:</strong></li>
+              <pre>203.0.113.0/24</pre>
+              
+              <li><strong>Service Discovery:</strong></li>
+              <pre>portscan 203.0.113.10</pre>
+              
+              <li><strong>ISP Verification:</strong></li>
+              <pre>isp 203.0.113.10</pre>
+              
+              <li><strong>Geographic Validation:</strong></li>
+              <pre>geoip 203.0.113.10</pre>
+            </ol>
+            
+            <h3>🚨 Scenario 4: Incident Response</h3>
+            <p><strong>Situation:</strong> Malware callback to C2 server detected</p>
+            
+            <h4>Rapid Response Commands:</h4>
+            <pre>
+# Quick threat assessment
+threat 198.51.100.50
+
+# Infrastructure mapping  
+traceroute 198.51.100.50
+
+# Historical analysis
+reputation 198.51.100.50
+
+# Related domain check
+whois 198.51.100.50
+
+# Network context
+asn 198.51.100.50
+            </pre>
+            
+            <h3>📊 Scenario 5: Competitor Analysis</h3>
+            <p><strong>Situation:</strong> Analyzing competitor's web infrastructure</p>
+            
+            <h4>Analysis Commands:</h4>
+            <pre>
+# Main domain analysis
+competitor.com
+
+# Hosting provider identification
+hosting competitor.com
+
+# CDN and infrastructure
+dig competitor.com
+
+# SSL configuration
+ssl competitor.com
+
+# Geographic distribution
+geoip competitor.com
+            </pre>
+            
+            <h3>🛡️ Best Practices</h3>
+            <ul>
+              <li><strong>Start Broad:</strong> Begin with basic IP/domain lookup</li>
+              <li><strong>Layer Analysis:</strong> Use multiple data sources for verification</li>
+              <li><strong>Document Findings:</strong> Save important results using the export function</li>
+              <li><strong>Monitor Changes:</strong> Recheck suspicious targets regularly</li>
+              <li><strong>Cross-Reference:</strong> Validate findings with external tools</li>
+            </ul>
+          \`
+        }
+      };
+      
+      const doc = docs[docType];
+      if (doc) {
+        docsTitle.textContent = doc.title;
+        docsContent.innerHTML = doc.content;
+        docsSection.style.display = 'block';
+        docsSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+    
+    function closeDocs() {
+      const docsSection = document.getElementById('docs-section');
+      docsSection.style.display = 'none';
+    }
+
+    // Helper function to close all dropdowns
+    function closeAllDropdowns() {
+      const allDropdowns = document.querySelectorAll('.dropdown');
+      const allButtons = document.querySelectorAll('.infoseek-menu-button');
+      
+      allDropdowns.forEach(dropdown => {
+        dropdown.classList.remove('active');
+      });
+      
+      allButtons.forEach(button => {
+        button.classList.remove('active');
+      });
+    }
+
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.infoseek-menu-item')) {
+        const allDropdowns = document.querySelectorAll('.dropdown');
+        const allButtons = document.querySelectorAll('.infoseek-menu-button');
+        
+        allDropdowns.forEach(dropdown => {
+          dropdown.classList.remove('active');
+        });
+        
+        allButtons.forEach(button => {
+          button.classList.remove('active');
+        });
+      }
+    });
+
+    // InfoSeek Menu Action Functions
+    function newInvestigation() {
+      if (window.terminal) {
+        window.terminal.addMessage('system', '$ ./new_lookup.sh\nStarting new IP investigation session...\nInvestigation cleared. Ready for IP intelligence queries!');
+        window.terminal.focusInput();
+      }
+      closeAllDropdowns();
+    }
+
+    function loadHistory() {
+      if (window.terminal) {
+        window.terminal.addMessage('system', '$ cat lookup_history.log\nLoading IP lookup history...\n[Feature coming soon - investigation persistence]');
+      }
+      closeAllDropdowns();
+    }
+
+    function exportResults() {
+      if (window.terminal) {
+        const resultsData = {
+          timestamp: new Date().toISOString(),
+          agent: 'infoseek',
+          investigations: [],
+          api_version: 'v2.0'
+        };
+        
+        const blob = new Blob([JSON.stringify(resultsData, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `infoseek-results-${Date.now()}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+        
+        window.terminal.addMessage('system', '$ python3 results_export.py\nExporting investigation results...\nResults exported successfully as JSON file!');
+      }
+      closeAllDropdowns();
+    }
+
+    function clearHistory() {
+      if (window.terminal && confirm('Clear all investigation history? This cannot be undone.')) {
+        window.terminal.output.innerHTML = '';
+        window.terminal.addMessage('system', '$ ./clear_cache.sh\nClearing investigation history...\nCache cleared successfully!');
+      }
+      closeAllDropdowns();
+    }
+
+    function openSettings() {
+      if (window.terminal) {
+        window.terminal.addMessage('system', '$ nano ipinfo_config.yml\nOpening InfoSeek configuration...\n[IP Intelligence settings panel coming soon]');
+      }
+      closeAllDropdowns();
+    }
+
+    function openPreferences() {
+      if (window.terminal) {
+        window.terminal.addMessage('system', '$ vim api_keys.ini\nOpening API key preferences...\n[IPinfo.io API configuration coming soon]');
+      }
+      closeAllDropdowns();
+    }
+
+    function openThemes() {
+      if (window.terminal) {
+        window.terminal.addMessage('system', '$ ls /usr/share/themes/\nAvailable themes:\n├── matrix-green\n├── cyber-blue\n├── neon-purple\n└── classic-amber\n[Theme switching coming soon]');
+      }
+      closeAllDropdowns();
+    }
+
+    function exitInfoSeek() {
+      if (confirm('Exit InfoSeek terminal? This will end your session.')) {
+        window.location.href = '/';
+      }
+    }
+
+    function setMode(mode) {
+      if (window.terminal) {
+        const modeMessages = {
+          geolocation: '$ python3 ip_geolocation.py\nActivating IP geolocation mode...\nReady for location-based IP analysis!',
+          network: '$ python3 network_analysis.py\nActivating network analysis mode...\nReady for ISP and infrastructure investigation!',
+          security: '$ python3 security_check.py\nActivating security mode...\nReady for threat intelligence and reputation analysis!',
+          forensics: '$ python3 digital_forensics.py\nActivating forensics mode...\nReady for digital investigation and OSINT!'
+        };
+        
+        window.terminal.addMessage('system', modeMessages[mode] || 'InfoSeek mode activated');
+      }
+      closeMobileMenu();
+    }
+
+    // InfoSeek-specific tool functions
+    function openWhois() {
+      if (window.terminal) {
+        window.terminal.addMessage('system', '$ ./whois_lookup.sh\nActivating WHOIS lookup tool...\n[Domain registration investigation tool ready]');
+      }
+      closeMobileMenu();
+    }
+
+    function openTraceroute() {
+      if (window.terminal) {
+        window.terminal.addMessage('system', '$ python3 traceroute.py\nActivating network path analysis...\n[Route tracing tool ready]');
+      }
+      closeMobileMenu();
+    }
+
+    function openPortScan() {
+      if (window.terminal) {
+        window.terminal.addMessage('system', '$ ruby port_scanner.rb\nActivating port scanner...\n[Network service discovery tool ready]');
+      }
+      closeMobileMenu();
+    }
+
+    function openThreatIntel() {
+      if (window.terminal) {
+        window.terminal.addMessage('system', '$ node threat_intel.js\nActivating threat intelligence...\n[Security reputation analysis ready]');
+      }
+      closeMobileMenu();
+    }
+
+    function showIPInfo() {
+      if (window.terminal) {
+        window.terminal.addMessage('system', '$ ls /var/lib/infoseek/\nIPinfo.io database status:\n├── ipinfo.db (Active)\n├── geolocation.cache (Updated)\n└── api_quota.log (75% remaining)');
+      }
+      closeMobileMenu();
+    }
+
+    function showGeoIP() {
+      if (window.terminal) {
+        window.terminal.addMessage('system', '$ ls /usr/share/GeoIP/\nMaxMind GeoIP database status:\n├── GeoLite2-City.mmdb (Current)\n├── GeoLite2-Country.mmdb (Current)\n└── GeoLite2-ASN.mmdb (Current)');
+      }
+      closeMobileMenu();
+    }
+
+    function switchAgent(agentName) {
+      if (window.terminal) {
+        const agents = {
+          ipinfo: 'Switching to IPinfo.io integration...\n[Enhanced IP geolocation capabilities activated]',
+          netscope: 'Switching to NetScope agent...\n[Network topology analysis ready]',
+          datasphere: 'Switching to DataSphere agent...\n[Data intelligence analysis ready]',
+          cinegen: 'Switching to CineGen agent...\n[Visual network mapping ready]'
+        };
+        
+        window.terminal.addMessage('system', `$ systemctl switch ${agentName}.agent\n${agents[agentName] || 'Agent switch completed'}`);
+      }
+      closeMobileMenu();
+    }
+
+    function createAgent() {
+      if (window.terminal) {
+        window.terminal.addMessage('system', '$ cp custom.template my_agent.py\nCreating custom agent...\n[Custom agent creation coming soon]');
+      }
+      closeMobileMenu();
+    }
+
+    function showDocs(docType) {
+      if (window.terminal) {
+        const docs = {
+          'getting-started': 'Welcome to InfoSeek!\n\nQuick Start Guide:\n- Enter any IP address (e.g., 8.8.8.8)\n- Type domain names for analysis\n- Use menu for advanced features\n- Export investigation results as JSON\n',
+          'commands': 'InfoSeek Commands:\n- [IP] - Instant IP lookup\n- [domain] - Domain investigation\n- /whois [domain] - Registration info\n- /trace [IP] - Network path analysis\n- /security [IP] - Threat assessment\n',
+          'api': 'InfoSeek API Integration:\n\nEndpoints:\n- POST /infoseek/chat - IP Intelligence\n- GET /infoseek/status - Service status\n- POST /infoseek/deep_research - Comprehensive analysis\n\nPowered by:\n- IPinfo.io API\n- MaxMind GeoIP2\n- Threat intelligence feeds\n',
+          'examples': '{\n  "ip_lookup_examples": [\n    {"input": "8.8.8.8", "type": "Google DNS"},\n    {"input": "1.1.1.1", "type": "Cloudflare DNS"},\n    {"input": "github.com", "type": "Domain analysis"}\n  ]\n}'
+        };
+        
+        window.terminal.addMessage('system', `$ cat ${docType}.md\n${docs[docType] || 'Documentation not found'}`);
+      }
+      closeMobileMenu();
+    }
+
+    function openInfoSeekSupport() {
+      window.open('https://github.com/onelastai/InfoSeek', '_blank');
+      closeMobileMenu();
+    }
+
+    function openDiscord() {
+      window.open('https://discord.gg/onelastai', '_blank');
+      closeMobileMenu();
+    }
+
+    function reportBug() {
+      if (window.terminal) {
+        window.terminal.addMessage('system', '$ nano infoseek_bug_report.template\nOpening InfoSeek bug report template...\n[IP Intelligence bug reporting system coming soon]');
+      }
+      closeMobileMenu();
+    }
+
+    function showAbout() {
+      if (window.terminal) {
+        window.terminal.addMessage('system', `$ ./about_infoseek.sh
+╔══════════════════════════════════════╗
+║             InfoSeek v2.0            ║
+║                                      ║
+║     IP Intelligence Terminal         ║
+║     Built by onelastai.com          ║
+║                                      ║
+║  • IP Geolocation & Analysis         ║
+║  • Network Investigation Tools       ║
+║  • Security Threat Assessment        ║
+║  • Digital Forensics & OSINT         ║
+║  • Powered by IPinfo.io API          ║
+║                                      ║
+║  © 2025 onelastai.com               ║
+╚══════════════════════════════════════╝`);
+      }
+      closeMobileMenu();
+    }
+
+    function closeMobileMenu() {
+      // For backward compatibility - redirect to closeMainNavigation
+      closeMainNavigation();
+    }
+    // Terminal Chat Functionality - InfoSeek
+        class InfoSeekTerminal {
+          constructor() {
+            this.output = document.getElementById('terminal-output');
+            this.input = document.getElementById('user-input');
+            this.sendButton = document.getElementById('send-button');
+            this.typingIndicator = document.getElementById('typing-indicator');
+            
+            this.setupEventListeners();
+            this.focusInput();
+            this.detectUserIP(); // Add IP detection
+          }
+      
+      setupEventListeners() {
+        this.input.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            this.sendMessage();
+          }
+        });
+        
+        this.sendButton.addEventListener('click', () => {
+          this.sendMessage();
+        });
+        
+        this.output.addEventListener('click', () => {
+          this.input.focus();
+        });
+      }
+      
+      focusInput() {
+        this.input.focus();
+      }
+      
+      async sendMessage() {
+        const message = this.input.value.trim();
+        if (!message) return;
+        
+        // Display user message
+        this.addMessage('user', message);
+        this.input.value = '';
+        
+        // Show loading state
+        this.setLoading(true);
+        this.showTyping(true);
+        
+        try {
+          const response = await fetch('/infoseek/chat', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRF-Token': document.querySelector('[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({ message: message })
+          });
+          
+          const data = await response.json();
+          
+          if (data.success) {
+            this.addMessage('agent', data.response, data.timestamp);
+          } else {
+            this.addMessage('error', data.error || 'Sorry, there was an error processing your message.');
+          }
+        } catch (error) {
+          console.error('Chat error:', error);
+          this.addMessage('error', 'Connection error. Please check your internet and try again.');
+        } finally {
+          this.setLoading(false);
+          this.showTyping(false);
+          this.focusInput();
+        }
+      }
+      
+      addMessage(type, content, timestamp = null) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'terminal-message';
+        
+        const time = timestamp || new Date().toLocaleTimeString();
+        
+        if (type === 'user') {
+          messageDiv.innerHTML = `<span class="user-message">${this.escapeHtml(content)}</span><span class="timestamp">[${time}]</span>`;
+        } else if (type === 'agent') {
+          messageDiv.innerHTML = `<div class="agent-message">${this.escapeHtml(content)}</div><span class="timestamp">[${time}]</span>`;
+        } else if (type === 'system') {
+          messageDiv.innerHTML = `<div class="agent-message" style="color: #00ff00;">${this.escapeHtml(content)}</div>`;
+        } else if (type === 'error') {
+          messageDiv.innerHTML = `<div class="agent-message" style="color: #ff6b6b;">❌ ${this.escapeHtml(content)}</div>`;
+        }
+        
+        this.output.appendChild(messageDiv);
+        this.scrollToBottom();
+      }
+      
+      setLoading(isLoading) {
+        this.sendButton.disabled = isLoading;
+        this.input.disabled = isLoading;
+        
+        if (isLoading) {
+          this.sendButton.textContent = 'Sending...';
+          this.sendButton.classList.add('loading');
+        } else {
+          this.sendButton.textContent = 'Send';
+          this.sendButton.classList.remove('loading');
+        }
+      }
+      
+      showTyping(show) {
+        if (show) {
+          this.typingIndicator.classList.add('active');
+          this.scrollToBottom();
+        } else {
+          this.typingIndicator.classList.remove('active');
+        }
+      }
+      
+      scrollToBottom() {
+        this.output.scrollTop = this.output.scrollHeight;
+      }
+      
+      escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+      }
+      
+      // Detect user's IP address automatically
+      async detectUserIP() {
+        const userIpDiv = document.getElementById('user-ip-info');
+        
+        try {
+          // Try multiple IP detection services for reliability
+          let ipData = null;
+          
+          // First try: ipinfo.io (our primary service)
+          try {
+            const response = await fetch('https://ipinfo.io/json');
+            if (response.ok) {
+              ipData = await response.json();
+            }
+          } catch (e) {
+            console.log('ipinfo.io unavailable, trying alternative...');
+          }
+          
+          // Fallback: httpbin.org
+          if (!ipData) {
+            try {
+              const response = await fetch('https://httpbin.org/ip');
+              if (response.ok) {
+                const data = await response.json();
+                ipData = { ip: data.origin.split(',')[0].trim() };
+              }
+            } catch (e) {
+              console.log('httpbin.org unavailable...');
+            }
+          }
+          
+          if (ipData && ipData.ip) {
+            // Display comprehensive IP information if available
+            let infoHtml = `<span style="color: #00ff00;">✅ Your Current IP Information:</span><br>`;
+            infoHtml += `<span style="color: #00d4ff;">IP Address:</span> ${ipData.ip}<br>`;
+            
+            if (ipData.city && ipData.region && ipData.country) {
+              infoHtml += `<span style="color: #00d4ff;">Location:</span> ${ipData.city}, ${ipData.region}, ${ipData.country}<br>`;
+            }
+            
+            if (ipData.org) {
+              infoHtml += `<span style="color: #00d4ff;">ISP/Organization:</span> ${ipData.org}<br>`;
+            }
+            
+            if (ipData.timezone) {
+              infoHtml += `<span style="color: #00d4ff;">Timezone:</span> ${ipData.timezone}<br>`;
+            }
+            
+            infoHtml += `<span style="color: #ffff00;">💡 Click your IP to analyze: </span><button onclick="window.terminal.analyzeIP('${ipData.ip}')" style="background: #00d4ff; color: #000; border: none; padding: 2px 8px; border-radius: 3px; cursor: pointer; font-family: monospace;">${ipData.ip}</button>`;
+            
+            userIpDiv.innerHTML = infoHtml;
+          } else {
+            // If we can't detect IP, show a helpful message
+            userIpDiv.innerHTML = `
+              <span style="color: #ffff00;">⚠️ Unable to auto-detect your IP address</span><br>
+              <span style="color: #cccccc;">Try entering your IP manually or check your internet connection</span><br>
+              <span style="color: #00d4ff;">You can still analyze any other IP addresses!</span>
+            `;
+          }
+        } catch (error) {
+          console.error('IP detection error:', error);
+          userIpDiv.innerHTML = `
+            <span style="color: #ff6b6b;">❌ IP detection failed</span><br>
+            <span style="color: #cccccc;">You can still manually enter IP addresses for analysis</span>
+          `;
+        }
+      }
+      
+      // Method to analyze a specific IP
+      analyzeIP(ipAddress) {
+        this.input.value = ipAddress;
+        this.sendMessage();
+      }
+    }
+    
+    // Initialize InfoSeek terminal when page loads
+    document.addEventListener('DOMContentLoaded', () => {
+      window.terminal = new InfoSeekTerminal();
+    });
+  </script>
+</body>
+</html>

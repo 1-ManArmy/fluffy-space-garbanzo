@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Changelog - Royal AI™</title>
+
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <%= javascript_importmap_tags %>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+      background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+      color: #ffffff;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .hero-section {
+      padding: 6rem 2rem 4rem;
+      text-align: center;
+      background: radial-gradient(ellipse at center, rgba(0, 212, 255, 0.15) 0%, rgba(0, 0, 0, 0.3) 70%);
+      border-bottom: 2px solid #00d4ff;
+    }
+
+    .hero-title {
+      font-size: 3.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 20px #00d4ff;
+      background: linear-gradient(45deg, #00d4ff, #0099cc, #66d9ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 30px #00d4ff;
+    }
+
+    .hero-tagline {
+      font-size: 1.5rem;
+      color: #e0e0e0;
+      margin-bottom: 2rem;
+      font-weight: 300;
+    }
+
+    .content-section {
+      padding: 4rem 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .timeline {
+      position: relative;
+      margin: 2rem 0;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 30px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, #00d4ff, #0099cc, #66d9ff);
+    }
+
+    .release {
+      position: relative;
+      margin-bottom: 3rem;
+      padding-left: 80px;
+    }
+
+    .release-marker {
+      position: absolute;
+      left: 20px;
+      top: 0;
+      width: 20px;
+      height: 20px;
+      background: #00d4ff;
+      border: 3px solid #1a1a2e;
+      border-radius: 50%;
+      z-index: 1;
+    }
+
+    .release-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(0, 212, 255, 0.3);
+      border-radius: 15px;
+      padding: 2rem;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+    }
+
+    .release-card:hover {
+      transform: translateY(-3px);
+      border-color: #00d4ff;
+      box-shadow: 0 10px 30px rgba(0, 212, 255, 0.2);
+    }
+
+    .release-header {
+      display: flex;
+      justify-content: between;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .release-version {
+      background: linear-gradient(45deg, #00d4ff, #0099cc);
+      color: #000;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 0.9rem;
+    }
+
+    .release-date {
+      color: #888;
+      font-size: 0.9rem;
+    }
+
+    .release-title {
+      color: #00d4ff;
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .release-subtitle {
+      color: #b8b8b8;
+      font-size: 1.1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .changes-section {
+      margin: 1.5rem 0;
+    }
+
+    .changes-type {
+      color: #00d4ff;
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .change-item {
+      background: rgba(0, 212, 255, 0.05);
+      border-left: 3px solid #00d4ff;
+      padding: 1rem;
+      margin: 0.5rem 0;
+      border-radius: 5px;
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .change-emoji {
+      font-size: 1.2rem;
+      margin-top: 0.2rem;
+    }
+
+    .change-text {
+      flex: 1;
+      line-height: 1.6;
+    }
+
+    .agent-tag {
+      background: rgba(0, 212, 255, 0.2);
+      color: #00d4ff;
+      padding: 0.2rem 0.6rem;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      margin-left: 0.5rem;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+
+    .stat-card {
+      background: rgba(0, 212, 255, 0.1);
+      border: 1px solid rgba(0, 212, 255, 0.2);
+      border-radius: 10px;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .stat-number {
+      color: #00d4ff;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    .stat-label {
+      color: #b8b8b8;
+      font-size: 0.9rem;
+    }
+
+    .feature-highlight {
+      background: rgba(255, 215, 0, 0.1);
+      border: 1px solid rgba(255, 215, 0, 0.3);
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin: 1rem 0;
+    }
+
+    .feature-highlight h4 {
+      color: #ffd700;
+      margin-bottom: 0.5rem;
+    }
+
+    .upcoming-section {
+      background: rgba(0, 255, 0, 0.05);
+      border: 1px solid rgba(0, 255, 0, 0.3);
+      border-radius: 15px;
+      padding: 2rem;
+      margin: 3rem 0;
+      text-align: center;
+    }
+
+    .upcoming-section h2 {
+      color: #00ff00;
+      margin-bottom: 1rem;
+    }
+
+    .roadmap-item {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 1rem;
+      margin: 0.5rem 0;
+      text-align: left;
+    }
+
+    @media (max-width: 768px) {
+      .timeline::before {
+        left: 15px;
+      }
+      
+      .release {
+        padding-left: 50px;
+      }
+      
+      .release-marker {
+        left: 5px;
+      }
+      
+      .release-header {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <section class="hero-section">
+    <div class="hero-icon">🚀</div>
+    <h1 class="hero-title">Royal AI™ Changelog</h1>
+    <p class="hero-tagline">Evolution of AI companions and ethical technology</p>
+  </section>
+
+  <section class="content-section">
+    <div class="timeline">
+      
+      <!-- Version 2.1 - Current -->
+      <div class="release">
+        <div class="release-marker"></div>
+        <div class="release-card">
+          <div class="release-header">
+            <div>
+              <div class="release-version">v2.1.0 CURRENT</div>
+              <div class="release-date">August 18, 2025</div>
+            </div>
+          </div>
+          <h2 class="release-title">🌟 Grand Pa United™ Alliance Launch</h2>
+          <p class="release-subtitle">Uniting OneManArmy.ai and OneLast.ai platforms for ethical AI education</p>
+          
+          <div class="feature-highlight">
+            <h4>🎯 Mission Focus: Kiddie AI Education</h4>
+            <p>Introducing AI to the younger generation so they can grow together - the foundation of our ethical AI movement.</p>
+          </div>
+
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-number">27</div>
+              <div class="stat-label">AI Agents</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number">2</div>
+              <div class="stat-label">Platforms United</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number">100%</div>
+              <div class="stat-label">Ethical Focus</div>
+            </div>
+          </div>
+
+          <div class="changes-section">
+            <div class="changes-type">✨ New Features</div>
+            <div class="change-item">
+              <span class="change-emoji">🤝</span>
+              <div class="change-text">
+                Grand Pa United™ alliance officially announced, connecting OneManArmy.ai and OneLast.ai ecosystems
+              </div>
+            </div>
+            <div class="change-item">
+              <span class="change-emoji">👶</span>
+              <div class="change-text">
+                KiddieAI Tutor agent launched with age-appropriate learning and safe AI interaction<span class="agent-tag">KiddieAI</span>
+              </div>
+            </div>
+            <div class="change-item">
+              <span class="change-emoji">🎬</span>
+              <div class="change-text">
+                CineGen agent enhanced with cinematic storytelling and visual narrative capabilities<span class="agent-tag">CineGen</span>
+              </div>
+            </div>
+            <div class="change-item">
+              <span class="change-emoji">📚</span>
+              <div class="change-text">
+                Comprehensive Tutorials & Guides page with VS Code-style interface for all 27 agents
+              </div>
+            </div>
+          </div>
+
+          <div class="changes-section">
+            <div class="changes-type">🔧 Improvements</div>
+            <div class="change-item">
+              <span class="change-emoji">❤️</span>
+              <div class="change-text">
+                EmotiSense agent improved emotional intelligence and empathetic response system<span class="agent-tag">EmotiSense</span>
+              </div>
+            </div>
+            <div class="change-item">
+              <span class="change-emoji">🌌</span>
+              <div class="change-text">
+                Memora agent enhanced memory association and knowledge mapping features<span class="agent-tag">Memora</span>
+              </div>
+            </div>
+            <div class="change-item">
+              <span class="change-emoji">🎨</span>
+              <div class="change-text">
+                Complete UI redesign with dark, wavy backgrounds and crystal-clear visual effects
+              </div>
+            </div>
+          </div>
+
+          <div class="changes-section">
+            <div class="changes-type">📄 Content Updates</div>
+            <div class="change-item">
+              <span class="change-emoji">🏢</span>
+              <div class="change-text">
+                Enterprise About Us page showcasing AI Digital Friend vision and Royal AI™ ecosystem
+              </div>
+            </div>
+            <div class="change-item">
+              <span class="change-emoji">🔒</span>
+              <div class="change-text">
+                Comprehensive Privacy Policy with AI-specific protections and international compliance
+              </div>
+            </div>
+            <div class="change-item">
+              <span class="change-emoji">⚖️</span>
+              <div class="change-text">
+                Updated Terms of Service with complete legal framework for AI companion services
+              </div>
+            </div>
+            <div class="change-item">
+              <span class="change-emoji">🍪</span>
+              <div class="change-text">
+                Cookie-free policy implemented - we don't use cookies, privacy by design
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Version 2.0 -->
+      <div class="release">
+        <div class="release-marker"></div>
+        <div class="release-card">
+          <div class="release-header">
+            <div>
+              <div class="release-version">v2.0.0</div>
+              <div class="release-date">July 15, 2025</div>
+            </div>
+          </div>
+          <h2 class="release-title">🎭 Royal AI™ Ecosystem Launch</h2>
+          <p class="release-subtitle">Community-first platform where every user becomes a co-creator</p>
+
+          <div class="changes-section">
+            <div class="changes-type">🚀 Major Features</div>
+            <div class="change-item">
+              <span class="change-emoji">💬</span>
+              <div class="change-text">
+                NeoChat agent with advanced conversational AI and emotional intelligence<span class="agent-tag">NeoChat</span>
+              </div>
+            </div>
+            <div class="change-item">
+              <span class="change-emoji">✍️</span>
+              <div class="change-text">
+                ContentCrafter agent for professional content creation and SEO optimization<span class="agent-tag">ContentCrafter</span>
+              </div>
+            </div>
+            <div class="change-item">
+              <span class="change-emoji">⚡</span>
+              <div class="change-text">
+                CodeForge agent with advanced coding assistance for all programming languages<span class="agent-tag">CodeForge</span>
+              </div>
+            </div>
+            <div class="change-item">
+              <span class="change-emoji">🌐</span>
+              <div class="change-text">
+                NetScope agent for comprehensive web research and data analysis<span class="agent-tag">NetScope</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="changes-section">
+            <div class="changes-type">🎨 Design Philosophy</div>
+            <div class="change-item">
+              <span class="change-emoji">🎬</span>
+              <div class="change-text">
+                Cinematic UI design meets emotional resonance in every interaction
+              </div>
+            </div>
+            <div class="change-item">
+              <span class="change-emoji">🔮</span>
+              <div class="change-text">
+                Modular AI agents - not tools, but characters you collaborate with
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Version 1.5 -->
+      <div class="release">
+        <div class="release-marker"></div>
+        <div class="release-card">
+          <div class="release-header">
+            <div>
+              <div class="release-version">v1.5.0</div>
+              <div class="release-date">June 1, 2025</div>
+            </div>
+          </div>
+          <h2 class="release-title">🤗 AI Companions Foundation</h2>
+          <p class="release-subtitle">Emotional AI companions that understand and grow with users</p>
+
+          <div class="changes-section">
+            <div class="changes-type">💝 Companion Agents</div>
+            <div class="change-item">
+              <span class="change-emoji">❤️</span>
+              <div class="change-text">
+                EmotiSense agent launched with emotion detection and empathetic responses<span class="agent-tag">EmotiSense</span>
+              </div>
+            </div>
+            <div class="change-item">
+              <span class="change-emoji">🌌</span>
+              <div class="change-text">
+                Memora agent introduced for intelligent memory and information organization<span class="agent-tag">Memora</span>
+              </div>
+            </div>
+            <div class="change-item">
+              <span class="change-emoji">🤗</span>
+              <div class="change-text">
+                EmpathyEngine agent for therapeutic conversations and emotional support<span class="agent-tag">EmpathyEngine</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Version 1.0 -->
+      <div class="release">
+        <div class="release-marker"></div>
+        <div class="release-card">
+          <div class="release-header">
+            <div>
+              <div class="release-version">v1.0.0</div>
+              <div class="release-date">May 1, 2025</div>
+            </div>
+          </div>
+          <h2 class="release-title">🌱 Royal AI™ Genesis</h2>
+          <p class="release-subtitle">The beginning of ethical AI education and human-AI collaboration</p>
+
+          <div class="changes-section">
+            <div class="changes-type">🎯 Foundation</div>
+            <div class="change-item">
+              <span class="change-emoji">🏗️</span>
+              <div class="change-text">
+                Platform architecture built with ethics-first approach
+              </div>
+            </div>
+            <div class="change-item">
+              <span class="change-emoji">👨‍👩‍👧‍👦</span>
+              <div class="change-text">
+                Community-first ecosystem established - every user as co-creator
+              </div>
+            </div>
+            <div class="change-item">
+              <span class="change-emoji">🔒</span>
+              <div class="change-text">
+                Privacy-by-design implementation with transparent intelligence
+              </div>
+            </div>
+            <div class="change-item">
+              <span class="change-emoji">🎓</span>
+              <div class="change-text">
+                Educational focus established - AI for learning, not just productivity
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Upcoming Features -->
+    <div class="upcoming-section">
+      <h2>🔮 What's Coming Next</h2>
+      <p style="margin-bottom: 2rem;">Our roadmap focuses on expanding ethical AI education and human-AI collaboration</p>
+      
+      <div class="roadmap-item">
+        <strong>📱 Mobile AI Companions</strong> - Native apps for iOS and Android with offline capabilities
+      </div>
+      <div class="roadmap-item">
+        <strong>🎮 AI Learning Games</strong> - Interactive games where kids learn with AI in fun, safe environments
+      </div>
+      <div class="roadmap-item">
+        <strong>🗣️ Voice-to-Code</strong> - Natural language programming for the next generation
+      </div>
+      <div class="roadmap-item">
+        <strong>🌍 Multi-language Support</strong> - Global accessibility with 50+ languages
+      </div>
+      <div class="roadmap-item">
+        <strong>🤝 Collaborative AI Projects</strong> - Platform for humans and AI to build together
+      </div>
+      <div class="roadmap-item">
+        <strong>🎓 AI Education Curriculum</strong> - Structured learning paths for different age groups
+      </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 3rem;">
+      <h3 style="color: #00d4ff; margin-bottom: 1rem;">💝 Our Promise</h3>
+      <p style="color: #b8b8b8; max-width: 600px; margin: 0 auto; line-height: 1.6;">
+        Every update brings us closer to our vision: introducing AI to the younger generation 
+        so they can grow together. This is not about business or competition - it's about 
+        love, care, and passion for building a better future where humans and AI understand each other.
+      </p>
+    </div>
+  </section>
+</body>
+</html>

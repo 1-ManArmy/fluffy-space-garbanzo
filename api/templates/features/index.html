@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= @page_title %> - OneLast AI</title>
+    <meta name="description" content="Explore all AI agents and features available on the OneLast AI platform">
+    
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+</head>
+<body class="bg-gray-900 text-gray-100">
+    <!-- Header -->
+    <header class="bg-black/50 backdrop-blur-md border-b border-gray-800 fixed w-full top-0 z-50">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <a href="/" class="text-2xl font-bold text-white">OneLast AI</a>
+                <nav class="hidden md:flex space-x-8">
+                    <a href="/" class="text-gray-300 hover:text-white transition-colors">Home</a>
+                    <a href="/features" class="text-purple-400 font-medium">Features</a>
+                    <a href="/about" class="text-gray-300 hover:text-white transition-colors">About</a>
+                    <a href="/contact" class="text-gray-300 hover:text-white transition-colors">Contact</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="pt-20">
+        <!-- Hero Section -->
+        <section class="py-20 bg-gradient-to-br from-gray-900 via-purple-900/20 to-gray-900">
+            <div class="container mx-auto px-6 text-center">
+                <h1 class="text-5xl lg:text-6xl font-bold text-white mb-6">
+                    AI Features & Capabilities
+                </h1>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto mb-8">
+                    Discover the full range of AI agents and intelligent features designed to transform your workflow
+                </p>
+            </div>
+        </section>
+
+        <!-- Features Grid -->
+        <section class="py-20">
+            <div class="container mx-auto px-6">
+                <div class="grid lg:grid-cols-3 gap-8">
+                    <% @features.each do |feature| %>
+                        <div class="enhanced-feature-card group min-h-[450px]">
+                            <div class="feature-card-content">
+                                <div class="feature-icon-wrapper">
+                                    <span class="text-4xl"><%= feature[:icon] %></span>
+                                </div>
+                                <h3 class="text-2xl font-semibold text-white mb-4"><%= feature[:title] %></h3>
+                                <p class="text-gray-300 mb-6 text-center">
+                                    <%= feature[:description] %>
+                                </p>
+                                <div class="feature-tags">
+                                    <% feature[:agents].each do |agent| %>
+                                        <span class="feature-tag <%= feature[:color] %>"><%= agent %></span>
+                                    <% end %>
+                                </div>
+                                <a href="/features/<%= feature[:id] %>" class="feature-action-btn <%= feature[:color] %>">
+                                    Explore Category
+                                    <span class="feature-action-arrow">→</span>
+                                </a>
+                            </div>
+                        </div>
+                    <% end %>
+                </div>
+            </div>
+        </section>
+
+        <!-- All Agents Overview -->
+        <section class="py-20 bg-gray-800/50">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold text-white mb-6">All Available Agents</h2>
+                    <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                        Quick access to all 27 AI agents across our platform
+                    </p>
+                </div>
+                
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <% %w[neochat emotisense cinegen contentcrafter memora netscope tradesage codemaster aiblogster datavision infoseek documind carebot personax authwise ideaforge vocamind taskmaster reportly datasphere configai labx spylens girlfriend].each do |agent| %>
+                        <a href="/<%= agent %>" class="glass-card p-4 text-center hover:border-purple-500/50 transition-all duration-300 transform hover:scale-105">
+                            <div class="text-2xl mb-2">🌌</div>
+                            <div class="text-white font-medium capitalize"><%= agent.gsub(/([A-Z])/, ' \1').strip %></div>
+                        </a>
+                    <% end %>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-black border-t border-gray-800">
+        <div class="container mx-auto px-6 py-8">
+            <div class="text-center text-gray-400">
+                <p>&copy; 2024 OneLast AI. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

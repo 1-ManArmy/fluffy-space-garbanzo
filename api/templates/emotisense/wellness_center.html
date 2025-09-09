@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wellness Center - EmotiSense Terminal</title>
+  
+  <%= csrf_meta_tags if defined?(csrf_meta_tags) %>
+  <%= csp_meta_tag if defined?(csp_meta_tag) %>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Courier New', 'Monaco', 'Menlo', 'Consolas', monospace;
+      background: linear-gradient(135deg, #1a0d2e 0%, #2d1b4e 50%, #0f0f23 100%);
+      color: #e8b4ff;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+    
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(transparent 50%, rgba(232, 180, 255, 0.03) 50%);
+      background-size: 100% 4px;
+      pointer-events: none;
+      z-index: 1000;
+      animation: scanlines 0.1s linear infinite;
+    }
+    
+    @keyframes scanlines {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(4px); }
+    }
+
+    /* Top Menu Bar */
+    .top-menu-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 40px;
+      background: rgba(0, 0, 0, 0.95);
+      border-bottom: 2px solid #00ff00;
+      display: flex;
+      align-items: center;
+      z-index: 2000;
+      font-family: 'Courier New', monospace;
+      font-size: 0.85rem;
+      box-shadow: 0 2px 10px rgba(0, 255, 0, 0.3);
+    }
+
+    .terminal-prompt {
+      color: #ffff00;
+      padding: 0 10px;
+      font-weight: bold;
+    }
+
+    .menu-bar-items {
+      display: flex;
+      flex: 1;
+      align-items: center;
+    }
+
+    .top-menu-item {
+      position: relative;
+      color: #00ff00;
+      padding: 10px 15px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-transform: lowercase;
+      border-right: 1px solid #333;
+      text-decoration: none;
+    }
+
+    .top-menu-item:hover {
+      background: rgba(0, 255, 0, 0.1);
+      color: #33ff33;
+      text-decoration: none;
+    }
+
+    .system-info {
+      color: #666;
+      font-size: 0.7rem;
+      padding: 0 15px;
+      margin-left: auto;
+      border-left: 1px solid #333;
+    }
+
+    /* Main Content */
+    .main-container {
+      margin-top: 40px;
+      min-height: calc(100vh - 40px);
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .page-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .page-title {
+      font-size: 3rem;
+      color: #e8b4ff;
+      text-shadow: 0 0 20px #e8b4ff;
+      margin-bottom: 1rem;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.8; }
+    }
+
+    .page-subtitle {
+      font-size: 1.2rem;
+      color: #c77dff;
+      margin-bottom: 0.5rem;
+    }
+
+    .page-description {
+      font-size: 1rem;
+      color: #a8dadc;
+      max-width: 600px;
+    }
+
+    /* Terminal Window */
+    .terminal-window {
+      width: 100%;
+      max-width: 1200px;
+      background: rgba(0, 0, 0, 0.9);
+      border: 2px solid #00ff00;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+    }
+
+    .terminal-header {
+      background: rgba(0, 0, 0, 0.95);
+      padding: 0.5rem 1rem;
+      border-bottom: 1px solid #00ff00;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .terminal-title {
+      color: #00ff00;
+      font-size: 0.9rem;
+    }
+
+    .terminal-controls {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .terminal-btn {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-close { background: #ff5555; }
+    .btn-minimize { background: #ffff55; }
+    .btn-maximize { background: #55ff55; }
+
+    .terminal-content {
+      padding: 1.5rem;
+      min-height: 500px;
+      background: rgba(0, 0, 0, 0.8);
+    }
+
+    /* Wellness Dashboard Grid */
+    .wellness-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .wellness-card {
+      background: rgba(232, 180, 255, 0.1);
+      border: 1px solid #e8b4ff;
+      border-radius: 8px;
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .wellness-card:hover {
+      background: rgba(232, 180, 255, 0.2);
+      border-color: #33ff33;
+      transform: translateY(-5px);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .card-icon {
+      font-size: 1.5rem;
+    }
+
+    .card-title {
+      color: #e8b4ff;
+      font-size: 1.1rem;
+      font-weight: bold;
+    }
+
+    .card-content {
+      color: #c77dff;
+      line-height: 1.6;
+    }
+
+    .wellness-metrics {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 1rem;
+      gap: 1rem;
+    }
+
+    .metric {
+      text-align: center;
+      flex: 1;
+    }
+
+    .metric-value {
+      display: block;
+      font-size: 1.5rem;
+      color: #00ff00;
+      font-weight: bold;
+    }
+
+    .metric-label {
+      font-size: 0.8rem;
+      color: #999;
+    }
+
+    /* Command Bar */
+    .command-bar {
+      background: rgba(0, 0, 0, 0.9);
+      border: 1px solid #00ff00;
+      border-radius: 4px;
+      padding: 1rem;
+      margin-top: 2rem;
+    }
+
+    .command-prompt {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .prompt-symbol {
+      color: #ffff00;
+    }
+
+    .command-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: #00ff00;
+      font-family: inherit;
+      font-size: 1rem;
+      outline: none;
+    }
+
+    .command-input::placeholder {
+      color: #666;
+    }
+
+    /* Action Buttons */
+    .action-buttons {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .action-btn {
+      background: rgba(0, 255, 0, 0.1);
+      border: 1px solid #00ff00;
+      color: #00ff00;
+      padding: 0.75rem 1.5rem;
+      font-family: inherit;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .action-btn:hover {
+      background: rgba(0, 255, 0, 0.2);
+      color: #fff;
+      transform: translateY(-2px);
+      text-decoration: none;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .main-container {
+        padding: 1rem;
+      }
+      
+      .page-title {
+        font-size: 2rem;
+      }
+      
+      .wellness-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .action-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Top Menu Bar -->
+  <div class="top-menu-bar">
+    <div class="terminal-prompt">EmotiSense@wellness:~$</div>
+    <div class="menu-bar-items">
+      <a href="/emotisense" class="top-menu-item">home</a>
+      <a href="/emotisense/mood_journal" class="top-menu-item">journal</a>
+      <a href="/emotisense/emotion_chat" class="top-menu-item">chat</a>
+      <a href="/emotisense/emotion_dashboard" class="top-menu-item">dashboard</a>
+      <a href="/emotisense/wellness_center" class="top-menu-item">wellness</a>
+    </div>
+    <div class="system-info">WELLNESS | STATUS: ACTIVE</div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-container">
+    <!-- Page Header -->
+    <div class="page-header">
+      <h1 class="page-title">🏥 Wellness Center</h1>
+      <p class="page-subtitle">Holistic Mental Health & Emotional Wellness Hub</p>
+      <p class="page-description">
+        Your comprehensive wellness center for mental health monitoring, stress management, 
+        and emotional balance tracking with AI-powered insights.
+      </p>
+    </div>
+
+    <!-- Terminal Window -->
+    <div class="terminal-window">
+      <div class="terminal-header">
+        <div class="terminal-title">$ ./wellness_monitor --dashboard</div>
+        <div class="terminal-controls">
+          <button class="terminal-btn btn-close"></button>
+          <button class="terminal-btn btn-minimize"></button>
+          <button class="terminal-btn btn-maximize"></button>
+        </div>
+      </div>
+      
+      <div class="terminal-content">
+        <!-- Wellness Dashboard Grid -->
+        <div class="wellness-grid">
+          <!-- Mental Health Card -->
+          <div class="wellness-card">
+            <div class="card-header">
+              <span class="card-icon">🌌</span>
+              <span class="card-title">Mental Health Monitor</span>
+            </div>
+            <div class="card-content">
+              Real-time mental health assessment based on emotional patterns, stress levels, and behavioral indicators.
+              <div class="wellness-metrics">
+                <div class="metric">
+                  <span class="metric-value">85%</span>
+                  <span class="metric-label">Mental Clarity</span>
+                </div>
+                <div class="metric">
+                  <span class="metric-value">Good</span>
+                  <span class="metric-label">Overall State</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Stress Management Card -->
+          <div class="wellness-card">
+            <div class="card-header">
+              <span class="card-icon">😌</span>
+              <span class="card-title">Stress Management</span>
+            </div>
+            <div class="card-content">
+              Personalized stress reduction techniques, breathing exercises, and mindfulness practices.
+              <div class="wellness-metrics">
+                <div class="metric">
+                  <span class="metric-value">Low</span>
+                  <span class="metric-label">Stress Level</span>
+                </div>
+                <div class="metric">
+                  <span class="metric-value">12</span>
+                  <span class="metric-label">Techniques</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Emotional Balance Card -->
+          <div class="wellness-card">
+            <div class="card-header">
+              <span class="card-icon">⚖️</span>
+              <span class="card-title">Emotional Balance</span>
+            </div>
+            <div class="card-content">
+              Track emotional stability, mood patterns, and provide insights for maintaining emotional equilibrium.
+              <div class="wellness-metrics">
+                <div class="metric">
+                  <span class="metric-value">Stable</span>
+                  <span class="metric-label">Balance</span>
+                </div>
+                <div class="metric">
+                  <span class="metric-value">78%</span>
+                  <span class="metric-label">Consistency</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sleep Quality Card -->
+          <div class="wellness-card">
+            <div class="card-header">
+              <span class="card-icon">😴</span>
+              <span class="card-title">Sleep Quality</span>
+            </div>
+            <div class="card-content">
+              Monitor sleep patterns, quality metrics, and their impact on emotional well-being.
+              <div class="wellness-metrics">
+                <div class="metric">
+                  <span class="metric-value">7.5h</span>
+                  <span class="metric-label">Last Night</span>
+                </div>
+                <div class="metric">
+                  <span class="metric-value">Good</span>
+                  <span class="metric-label">Quality</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mindfulness Card -->
+          <div class="wellness-card">
+            <div class="card-header">
+              <span class="card-icon">🧘</span>
+              <span class="card-title">Mindfulness Practice</span>
+            </div>
+            <div class="card-content">
+              Guided meditation sessions, mindfulness exercises, and awareness-building activities.
+              <div class="wellness-metrics">
+                <div class="metric">
+                  <span class="metric-value">15min</span>
+                  <span class="metric-label">Today</span>
+                </div>
+                <div class="metric">
+                  <span class="metric-value">7</span>
+                  <span class="metric-label">Streak</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Social Wellness Card -->
+          <div class="wellness-card">
+            <div class="card-header">
+              <span class="card-icon">👥</span>
+              <span class="card-title">Social Wellness</span>
+            </div>
+            <div class="card-content">
+              Evaluate social connections, relationship health, and community engagement impact.
+              <div class="wellness-metrics">
+                <div class="metric">
+                  <span class="metric-value">Strong</span>
+                  <span class="metric-label">Connections</span>
+                </div>
+                <div class="metric">
+                  <span class="metric-value">92%</span>
+                  <span class="metric-label">Satisfaction</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Command Bar -->
+        <div class="command-bar">
+          <div class="command-prompt">
+            <span class="prompt-symbol">wellness@emotisense:~$</span>
+            <input type="text" class="command-input" placeholder="Enter wellness command (help for options)">
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+          <a href="/emotisense/mood_journal" class="action-btn">📝 Start Journal</a>
+          <a href="/emotisense/emotion_chat" class="action-btn">💬 Talk to AI</a>
+          <a href="/emotisense/emotion_dashboard" class="action-btn">📊 View Dashboard</a>
+          <button class="action-btn" onclick="generateWellnessReport()">📋 Wellness Report</button>
+          <button class="action-btn" onclick="startMeditation()">🧘 Start Meditation</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Terminal navigation functionality
+    function generateWellnessReport() {
+      const commandInput = document.querySelector('.command-input');
+      commandInput.value = '$ ./generate_wellness_report --comprehensive';
+      setTimeout(() => {
+        alert('Wellness report generated! Check your downloads folder.');
+        commandInput.value = '';
+      }, 1000);
+    }
+
+    function startMeditation() {
+      const commandInput = document.querySelector('.command-input');
+      commandInput.value = '$ ./meditation --guided --duration=10min';
+      setTimeout(() => {
+        alert('Starting guided meditation session...');
+        commandInput.value = '';
+      }, 1000);
+    }
+
+    // Command input functionality
+    document.querySelector('.command-input').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        const command = this.value.trim();
+        if (command === 'help') {
+          alert('Available commands:\\n- wellness_scan\\n- stress_check\\n- meditation_start\\n- report_generate\\n- clear');
+        } else if (command === 'clear') {
+          this.value = '';
+        } else if (command) {
+          console.log(`Executing: ${command}`);
+          this.value = '';
+        }
+      }
+    });
+
+    // Update system info
+    function updateSystemInfo() {
+      const systemInfo = document.querySelector('.system-info');
+      const statuses = ['ACTIVE', 'MONITORING', 'ANALYZING', 'OPTIMIZING'];
+      const randomStatus = statuses[Math.floor(Math.random() * statuses.length)];
+      systemInfo.textContent = `WELLNESS | STATUS: ${randomStatus}`;
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('EmotiSense Wellness Center initialized');
+      setInterval(updateSystemInfo, 3000);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,386 @@
+# OneLastAI - Comprehensive .gitignore Configuration
+
+# =============================================================================
+# ENVIRONMENT VARIABLES & SECRETS
+# =============================================================================
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.*.local
+
+# Secret keys and configuration
+config/secrets.yml
+config/master.key
+config/credentials.yml.enc
+
+# API Keys and sensitive configuration
+api_keys.txt
+secrets.txt
+*.pem
+*.key
+*.crt
+*.p12
+roombreaker.pem
+*.ppk
+
+# Cloud credentials and configurations
+*.terraform
+terraform.tfstate*
+terraform.tfvars
+
+# SSH Keys and certificates
+id_rsa*
+id_dsa*
+id_ecdsa*
+id_ed25519*
+known_hosts
+authorized_keys
+
+# OneLastAI specific secrets
+onelatai_secrets/
+deployment_keys/
+production_keys/
+
+# Render deployment files with API keys
+RENDER_ALL_VARIABLES.txt
+RENDER_COMPLETE_DEPLOY.txt
+RENDER_FINAL_DEPLOY.txt
+*_DEPLOY.txt
+*_VARIABLES.txt
+
+# Deployment configuration files
+deploy-*.sh
+*-deploy-*.sh
+deployment-*.txt
+
+# =============================================================================
+# RAILS SPECIFIC
+# =============================================================================
+
+# Ignore bundler config.
+/.bundle
+
+# Ignore the default SQLite database.
+/db/*.sqlite3
+/db/*.sqlite3-*
+
+# Ignore all logfiles and tempfiles.
+/log/*
+/tmp/*
+!/log/.keep
+!/tmp/.keep
+
+# Ignore pidfiles, but keep the directory.
+/tmp/pids/*
+!/tmp/pids/
+!/tmp/pids/.keep
+
+# Ignore uploaded files in development.
+/storage/*
+!/storage/.keep
+/tmp/storage/*
+!/tmp/storage/
+!/tmp/storage/.keep
+
+/public/assets
+
+# Ignore master key for decrypting credentials and more.
+/config/master.key
+
+# Redis dump
+dump.rdb
+
+# Rails cache
+tmp/cache/*
+!tmp/cache/.keep
+
+# Rails uploads
+storage/*
+!storage/.keep
+
+# Rails temporary files
+tmp/pids/*
+tmp/cache/*
+tmp/sockets/*
+tmp/storage/*
+!tmp/pids/.keep
+!tmp/cache/.keep
+!tmp/sockets/.keep
+!tmp/storage/.keep
+
+# Spring files
+/spring/*.pid
+
+# =============================================================================
+# DATABASE FILES
+# =============================================================================
+
+# Database configuration
+config/database.yml
+database.yml
+
+# Database dumps
+*.sql
+*.dump
+
+# =============================================================================
+# BUNDLER & GEMS
+# =============================================================================
+
+# Bundler configuration
+.bundle/
+vendor/bundle/
+
+# Gem files
+*.gem
+.gems
+
+# =============================================================================
+# NODE.JS & JAVASCRIPT
+# =============================================================================
+
+# Node modules
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Package manager files
+package-lock.json
+yarn.lock
+
+# Build outputs
+dist/
+build/
+
+# =============================================================================
+# ASSET COMPILATION
+# =============================================================================
+
+# Compiled assets
+/app/assets/builds/*
+/public/packs/
+/public/packs-test/
+
+# Webpack bundles
+/public/webpack/
+
+# =============================================================================
+# DEVELOPMENT TOOLS
+# =============================================================================
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# =============================================================================
+# OPERATING SYSTEM FILES
+# =============================================================================
+
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+
+# =============================================================================
+# TESTING & COVERAGE
+# =============================================================================
+
+# Test coverage
+coverage/
+.nyc_output/
+.coverage
+
+# RSpec
+spec/reports/
+spec/examples.txt
+
+# Minitest
+test/tmp/
+test/version_tmp/
+
+# SimpleCov
+coverage.data
+coverage/
+
+# =============================================================================
+# DOCUMENTATION
+# =============================================================================
+
+# Generated documentation
+doc/
+.yardoc/
+.yard/
+
+# RDoc
+rdoc/
+
+# =============================================================================
+# DEPLOYMENT & DOCKER
+# =============================================================================
+
+# Docker
+Dockerfile.dev
+docker-compose.override.yml
+.dockerignore
+
+# Kubernetes
+k8s/secrets/
+*.secret.yaml
+
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+terraform.tfvars
+
+# =============================================================================
+# CLOUD & INFRASTRUCTURE
+# =============================================================================
+
+# Google Cloud
+.gcloud/
+gcloud-service-key.json
+
+# Azure
+.azure/
+
+# Heroku
+.heroku/
+
+# =============================================================================
+# AI MODEL FILES & CACHES
+# =============================================================================
+
+# Large model files
+*.bin
+*.h5
+*.pb
+models/
+weights/
+
+# AI API response caches
+ai_cache/
+model_cache/
+.ai_cache/
+
+# Vector databases
+*.faiss
+*.annoy
+vector_db/
+
+# =============================================================================
+# UPLOADS & USER CONTENT
+# =============================================================================
+
+# User uploads
+uploads/
+user_content/
+generated_content/
+
+# Temporary files
+temp/
+temporary/
+
+# =============================================================================
+# BACKUP FILES
+# =============================================================================
+
+# Backup files
+*.bak
+*.backup
+*.old
+*.orig
+
+# Archive files
+*.tar
+*.tar.gz
+*.zip
+*.rar
+
+# =============================================================================
+# LOGS & MONITORING
+# =============================================================================
+
+# Application logs
+*.log
+logs/
+log/*.log
+
+# Error logs
+error.log
+errors.log
+
+# =============================================================================
+# ONELASTAI SPECIFIC
+# =============================================================================
+
+# Agent configuration files (if they contain sensitive data)
+agent_configs/*.sensitive.yml
+agent_secrets/
+
+# Generated API documentation
+api_docs/generated/
+
+# Local development databases
+local_dev.db
+dev_data/
+
+# Agent training data (if sensitive)
+training_data/*.private
+sensitive_data/
+
+# Local AI model weights
+local_models/
+downloaded_models/
+
+# User session data
+sessions/
+user_sessions/
+
+# Rate limiting data
+rate_limit_data/
+
+# =============================================================================
+# TEMPORARY DEVELOPMENT FILES
+# =============================================================================
+
+# Experimental files
+experiments/
+experimental/
+prototype/
+
+# Testing files
+test_data/
+sample_data/
+mock_data/
+
+/app/assets/builds/*
+!/app/assets/builds/.keep

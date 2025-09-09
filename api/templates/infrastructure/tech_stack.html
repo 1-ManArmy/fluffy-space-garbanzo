@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= @page_title %> - OneLast AI</title>
+    <meta name="description" content="Detailed technology stack powering OneLast AI">
+    
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+</head>
+<body class="bg-gray-900 text-gray-100">
+    <!-- Header -->
+    <header class="bg-black/50 backdrop-blur-md border-b border-gray-800 fixed w-full top-0 z-50">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <a href="/" class="text-2xl font-bold text-white">OneLast AI</a>
+                <nav class="hidden md:flex space-x-8">
+                    <a href="/" class="text-gray-300 hover:text-white transition-colors">Home</a>
+                    <a href="/features" class="text-gray-300 hover:text-white transition-colors">Features</a>
+                    <a href="/infrastructure" class="text-green-400 font-medium">Infrastructure</a>
+                    <a href="/about" class="text-gray-300 hover:text-white transition-colors">About</a>
+                    <a href="/contact" class="text-gray-300 hover:text-white transition-colors">Contact</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="pt-20">
+        <!-- Hero Section -->
+        <section class="py-20 bg-gradient-to-br from-gray-900 via-blue-900/20 to-gray-900">
+            <div class="container mx-auto px-6 text-center">
+                <div class="text-6xl mb-6">⚡</div>
+                <h1 class="text-5xl lg:text-6xl font-bold text-white mb-6">
+                    Technology Stack
+                </h1>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto mb-8">
+                    Deep dive into the technologies powering our AI platform
+                </p>
+            </div>
+        </section>
+
+        <!-- Technologies by Category -->
+        <section class="py-20">
+            <div class="container mx-auto px-6">
+                <% @technologies.each do |category, techs| %>
+                    <div class="mb-16">
+                        <h2 class="text-3xl font-bold text-white mb-8 capitalize text-center"><%= category %> Technologies</h2>
+                        <div class="grid md:grid-cols-3 gap-6">
+                            <% techs.each do |tech| %>
+                                <div class="tech-stack-card p-6">
+                                    <div class="text-center">
+                                        <div class="tech-icon mx-auto mb-4">
+                                            <span class="text-2xl">
+                                                <%= case category
+                                                    when :cloud then '☁️'
+                                                    when :database then '🗄️'
+                                                    when :ai then '🌌'
+                                                    else '⚙️'
+                                                    end %>
+                                            </span>
+                                        </div>
+                                        <h3 class="text-xl font-semibold text-white mb-3"><%= tech[:name] %></h3>
+                                        <p class="text-gray-300 mb-4"><%= tech[:description] %></p>
+                                        <span class="px-3 py-1 rounded-full text-sm <%= 
+                                            case tech[:status]
+                                            when 'active' then 'bg-green-600/20 text-green-300 border border-green-600/30'
+                                            when 'standby' then 'bg-yellow-600/20 text-yellow-300 border border-yellow-600/30'
+                                            else 'bg-gray-600/20 text-gray-300 border border-gray-600/30'
+                                            end %>">
+                                            <%= tech[:status].capitalize %>
+                                        </span>
+                                    </div>
+                                </div>
+                            <% end %>
+                        </div>
+                    </div>
+                <% end %>
+            </div>
+        </section>
+
+        <!-- Back to Infrastructure -->
+        <section class="py-10 text-center">
+            <a href="/infrastructure" class="btn-secondary">← Back to Infrastructure</a>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-black border-t border-gray-800">
+        <div class="container mx-auto px-6 py-8">
+            <div class="text-center text-gray-400">
+                <p>&copy; 2024 OneLast AI. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

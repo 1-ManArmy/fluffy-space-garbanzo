@@ -1,0 +1,231 @@
+<div class="min-h-screen bg-gray-900">
+  <!-- Path Header -->
+  <section class="relative py-20 overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-<%= @path[:color] %>-900/20 via-purple-900/20 to-indigo-900/20"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/40"></div>
+    
+    <div class="container mx-auto px-6 relative z-10">
+      <div class="max-w-4xl mx-auto">
+        <!-- Breadcrumb -->
+        <nav class="mb-8">
+          <ol class="flex items-center gap-2 text-sm text-gray-400">
+            <li><a href="/learn" class="hover:text-white transition-colors">Learning</a></li>
+            <li>→</li>
+            <li><a href="/learn/paths" class="hover:text-white transition-colors">Learning Paths</a></li>
+            <li>→</li>
+            <li class="text-white"><%= @path[:title] %></li>
+          </ol>
+        </nav>
+        
+        <div class="flex items-start gap-8">
+          <div class="flex-1">
+            <div class="flex items-center gap-6 mb-6">
+              <div class="w-20 h-20 bg-<%= @path[:color] %>-600/20 rounded-2xl flex items-center justify-center">
+                <span class="text-4xl"><%= @path[:icon] %></span>
+              </div>
+              <div>
+                <span class="px-4 py-2 bg-<%= @path[:level] == 'Beginner' ? 'green' : @path[:level] == 'Intermediate' ? 'yellow' : 'red' %>-600/20 text-<%= @path[:level] == 'Beginner' ? 'green' : @path[:level] == 'Intermediate' ? 'yellow' : 'red' %>-400 rounded-full">
+                  <%= @path[:level] %> Level
+                </span>
+              </div>
+            </div>
+            
+            <h1 class="text-4xl lg:text-5xl font-bold text-white mb-6"><%= @path[:title] %></h1>
+            <p class="text-xl text-gray-300 mb-8"><%= @path[:description] %></p>
+            <p class="text-gray-300 mb-8"><%= @path[:overview] %></p>
+            
+            <!-- Path Stats -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
+              <div class="text-center">
+                <div class="text-2xl font-bold text-<%= @path[:color] %>-400 mb-1"><%= @path[:tutorials] %></div>
+                <div class="text-sm text-gray-400">Tutorials</div>
+              </div>
+              <div class="text-center">
+                <div class="text-2xl font-bold text-<%= @path[:color] %>-400 mb-1"><%= @path[:duration] %></div>
+                <div class="text-sm text-gray-400">Total Time</div>
+              </div>
+              <div class="text-center">
+                <div class="text-2xl font-bold text-<%= @path[:color] %>-400 mb-1"><%= number_with_delimiter(@path[:students]) %></div>
+                <div class="text-sm text-gray-400">Students</div>
+              </div>
+              <div class="text-center">
+                <div class="text-2xl font-bold text-<%= @path[:color] %>-400 mb-1"><%= @estimated_completion %></div>
+                <div class="text-sm text-gray-400">Est. Completion</div>
+              </div>
+            </div>
+            
+            <button class="bg-<%= @path[:color] %>-600 hover:bg-<%= @path[:color] %>-500 text-white font-bold py-4 px-8 rounded-lg transition-colors text-lg">
+              Start Learning Path
+            </button>
+          </div>
+          
+          <!-- Progress Card -->
+          <div class="w-80 bg-gray-800/50 border border-gray-700 rounded-xl p-6">
+            <h3 class="text-lg font-bold text-white mb-4">Your Progress</h3>
+            
+            <div class="mb-6">
+              <div class="flex justify-between text-sm mb-2">
+                <span class="text-gray-300">Completed</span>
+                <span class="text-white"><%= @path_progress[:completed_tutorials] %>/<%= @path_progress[:total_tutorials] %> tutorials</span>
+              </div>
+              <div class="w-full bg-gray-700 rounded-full h-3">
+                <div class="bg-<%= @path[:color] %>-600 h-3 rounded-full" style="width: <%= @path_progress[:completion_percentage] %>%"></div>
+              </div>
+            </div>
+            
+            <div class="space-y-3 text-sm">
+              <div class="flex justify-between">
+                <span class="text-gray-400">Time Spent:</span>
+                <span class="text-white"><%= @path_progress[:time_spent] %></span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-400">Est. Remaining:</span>
+                <span class="text-white"><%= @path_progress[:estimated_remaining] %></span>
+              </div>
+              <% if @path_progress[:last_accessed] %>
+                <div class="flex justify-between">
+                  <span class="text-gray-400">Last Accessed:</span>
+                  <span class="text-white"><%= @path_progress[:last_accessed] %></span>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Curriculum -->
+  <section class="py-20 border-t border-gray-800">
+    <div class="container mx-auto px-6">
+      <div class="max-w-6xl mx-auto">
+        <h2 class="text-3xl font-bold text-white mb-12">Curriculum</h2>
+        
+        <div class="space-y-8">
+          <% @path[:curriculum].each_with_index do |module_data, module_index| %>
+            <div class="bg-gray-800/50 border border-gray-700 rounded-xl p-6">
+              <h3 class="text-xl font-bold text-white mb-6">
+                Module <%= module_index + 1 %>: <%= module_data[:module] %>
+              </h3>
+              
+              <div class="space-y-3">
+                <% module_data[:tutorials].each_with_index do |tutorial, tutorial_index| %>
+                  <div class="flex items-center justify-between p-4 bg-gray-700/50 rounded-lg hover:bg-gray-700 transition-colors">
+                    <div class="flex items-center gap-4">
+                      <div class="w-8 h-8 bg-<%= @path[:color] %>-600/20 rounded-full flex items-center justify-center text-sm font-bold text-<%= @path[:color] %>-400">
+                        <%= tutorial_index + 1 %>
+                      </div>
+                      <div>
+                        <div class="text-white font-medium"><%= tutorial[:title] %></div>
+                        <div class="text-sm text-gray-400"><%= tutorial[:duration] %></div>
+                      </div>
+                    </div>
+                    
+                    <div class="flex items-center gap-3">
+                      <% if tutorial[:free] %>
+                        <span class="px-2 py-1 bg-green-600/20 text-green-400 rounded text-xs">FREE</span>
+                      <% else %>
+                        <span class="px-2 py-1 bg-amber-600/20 text-amber-400 rounded text-xs">PRO</span>
+                      <% end %>
+                      
+                      <% if tutorial[:completed] %>
+                        <svg class="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                          <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                        </svg>
+                      <% else %>
+                        <svg class="w-5 h-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
+                          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                      <% end %>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Instructors -->
+  <section class="py-20 border-t border-gray-800">
+    <div class="container mx-auto px-6">
+      <div class="max-w-4xl mx-auto">
+        <h2 class="text-3xl font-bold text-white mb-12 text-center">Your Instructors</h2>
+        
+        <div class="grid md:grid-cols-2 gap-8">
+          <% @path[:instructors].each do |instructor| %>
+            <div class="bg-gray-800/50 border border-gray-700 rounded-xl p-6">
+              <div class="flex items-center gap-4 mb-4">
+                <div class="w-16 h-16 bg-<%= @path[:color] %>-600 rounded-full flex items-center justify-center">
+                  <span class="text-white font-bold text-lg"><%= instructor[:name].split.map(&:first).join %></span>
+                </div>
+                <div>
+                  <div class="text-white font-bold text-lg"><%= instructor[:name] %></div>
+                  <div class="text-<%= @path[:color] %>-400"><%= instructor[:title] %></div>
+                  <div class="text-sm text-gray-400"><%= instructor[:experience] %></div>
+                </div>
+              </div>
+              
+              <div class="flex flex-wrap gap-2">
+                <% instructor[:specialties].each do |specialty| %>
+                  <span class="px-2 py-1 bg-<%= @path[:color] %>-600/20 text-<%= @path[:color] %>-300 rounded text-xs"><%= specialty %></span>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Certification -->
+  <section class="py-20 border-t border-gray-800">
+    <div class="container mx-auto px-6">
+      <div class="max-w-4xl mx-auto">
+        <div class="bg-gradient-to-r from-<%= @path[:color] %>-600/20 to-purple-600/20 border border-<%= @path[:color] %>-500/50 rounded-xl p-8">
+          <div class="text-center mb-8">
+            <div class="w-16 h-16 bg-<%= @path[:color] %>-600/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <svg class="w-8 h-8 text-<%= @path[:color] %>-400" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+            <h2 class="text-2xl font-bold text-white mb-4">Earn Your Certification</h2>
+            <p class="text-gray-300">Complete this learning path to earn an industry-recognized certificate</p>
+          </div>
+          
+          <div class="grid md:grid-cols-2 gap-8">
+            <div>
+              <h3 class="text-lg font-bold text-white mb-4">Requirements</h3>
+              <ul class="space-y-2">
+                <% @path[:certificate][:requirements].each do |requirement| %>
+                  <li class="flex items-center gap-3 text-gray-300">
+                    <svg class="w-5 h-5 text-<%= @path[:color] %>-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                    </svg>
+                    <%= requirement %>
+                  </li>
+                <% end %>
+              </ul>
+            </div>
+            
+            <div>
+              <h3 class="text-lg font-bold text-white mb-4">Benefits</h3>
+              <ul class="space-y-2">
+                <% @path[:certificate][:benefits].each do |benefit| %>
+                  <li class="flex items-center gap-3 text-gray-300">
+                    <svg class="w-5 h-5 text-<%= @path[:color] %>-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"/>
+                    </svg>
+                    <%= benefit %>
+                  </li>
+                <% end %>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

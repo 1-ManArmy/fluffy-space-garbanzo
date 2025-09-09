@@ -1,0 +1,839 @@
+<% content_for :head do %>
+  <style>
+    .neochat-container {
+      min-height: calc(100vh - 60px);
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+      color: #ffffff;
+      font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .neochat-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(circle at 20% 50%, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255, 0, 150, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 40% 80%, rgba(0, 255, 100, 0.05) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .neochat-header {
+      text-align: center;
+      padding: 2rem 1rem;
+      position: relative;
+      z-index: 2;
+      border-bottom: 2px solid rgba(0, 212, 255, 0.3);
+    }
+
+    .agent-avatar {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    .agent-title {
+      font-size: 3rem;
+      font-weight: bold;
+      background: linear-gradient(45deg, #00d4ff, #ff0096, #00ff64);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin: 0 0 0.5rem 0;
+      text-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+    }
+
+    .agent-subtitle {
+      font-size: 1.2rem;
+      color: #a0a0a0;
+      margin: 0 0 1rem 0;
+    }
+
+    .agent-status {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      color: #00ff64;
+      font-weight: bold;
+    }
+
+    .status-dot {
+      width: 12px;
+      height: 12px;
+      background: #00ff64;
+      border-radius: 50%;
+      animation: blink 1.5s ease-in-out infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .hero-feature-card {
+      background: rgba(255, 0, 150, 0.1);
+      border: 2px solid rgba(255, 0, 150, 0.3);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 1rem auto;
+      max-width: 400px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .hero-feature-card:hover {
+      background: rgba(255, 0, 150, 0.2);
+      border-color: #ff0096;
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(255, 0, 150, 0.3);
+    }
+
+    .hero-feature-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .hero-feature-name {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #ff0096;
+      margin-bottom: 0.5rem;
+    }
+
+    .hero-feature-desc {
+      color: #a0a0a0;
+      line-height: 1.6;
+    }
+
+    .neochat-workspace {
+      display: flex;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem;
+      gap: 2rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .features-left {
+      width: 300px;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .features-right {
+      width: 300px;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .chat-terminal {
+      flex: 1;
+      background: rgba(0, 0, 0, 0.8);
+      border: 2px solid rgba(0, 212, 255, 0.3);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+
+    .terminal-header {
+      background: linear-gradient(90deg, #1a1a2e, #16213e);
+      padding: 0.75rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+    }
+
+    .terminal-controls {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .control-btn {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    .control-btn.close { background: #ff5f56; }
+    .control-btn.minimize { background: #ffbd2e; }
+    .control-btn.maximize { background: #27ca3f; }
+
+    .terminal-title {
+      color: #00d4ff;
+      font-weight: bold;
+      font-size: 0.9rem;
+    }
+
+    .terminal-status {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #00ff64;
+      font-size: 0.8rem;
+    }
+
+    .status-indicator {
+      width: 8px;
+      height: 8px;
+      background: #00ff64;
+      border-radius: 50%;
+      animation: blink 1s ease-in-out infinite;
+    }
+
+    .chat-messages {
+      height: 400px;
+      overflow-y: auto;
+      padding: 1rem;
+      background: rgba(0, 0, 0, 0.3);
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    .chat-messages::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .chat-messages::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.3);
+    }
+
+    .chat-messages::-webkit-scrollbar-thumb {
+      background: rgba(0, 212, 255, 0.5);
+      border-radius: 4px;
+    }
+
+    .welcome-message {
+      color: #00d4ff;
+      text-align: center;
+      padding: 2rem;
+      border: 1px solid rgba(0, 212, 255, 0.3);
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      background: rgba(0, 212, 255, 0.05);
+    }
+
+    .message {
+      margin-bottom: 1rem;
+      padding: 0.75rem;
+      border-radius: 8px;
+      animation: slideIn 0.3s ease-out;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .message.user {
+      background: rgba(0, 212, 255, 0.1);
+      border-left: 3px solid #00d4ff;
+      margin-left: 2rem;
+    }
+
+    .message.assistant {
+      background: rgba(0, 255, 100, 0.1);
+      border-left: 3px solid #00ff64;
+      margin-right: 2rem;
+    }
+
+    .message-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+      font-size: 0.8rem;
+      opacity: 0.8;
+    }
+
+    .message-content {
+      color: #ffffff;
+    }
+
+    .chat-input-area {
+      padding: 1rem;
+      background: rgba(0, 0, 0, 0.5);
+      border-top: 1px solid rgba(0, 212, 255, 0.2);
+    }
+
+    .input-group {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .chat-input {
+      flex: 1;
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(0, 212, 255, 0.3);
+      border-radius: 6px;
+      padding: 0.75rem;
+      color: #ffffff;
+      font-family: inherit;
+      font-size: 0.9rem;
+    }
+
+    .chat-input:focus {
+      outline: none;
+      border-color: #00d4ff;
+      box-shadow: 0 0 0 2px rgba(0, 212, 255, 0.2);
+    }
+
+    .send-btn {
+      background: linear-gradient(45deg, #00d4ff, #0099cc);
+      border: none;
+      border-radius: 6px;
+      padding: 0.75rem 1.5rem;
+      color: #ffffff;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .send-btn:hover {
+      background: linear-gradient(45deg, #0099cc, #00d4ff);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 212, 255, 0.3);
+    }
+
+    .send-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .features-panel {
+      background: rgba(0, 0, 0, 0.8);
+      border: 2px solid rgba(255, 0, 150, 0.3);
+      border-radius: 12px;
+      padding: 1.5rem;
+      height: fit-content;
+    }
+
+    .features-title {
+      color: #ff0096;
+      font-size: 1.3rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .feature-grid {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .feature-btn {
+      background: rgba(255, 0, 150, 0.1);
+      border: 1px solid rgba(255, 0, 150, 0.3);
+      border-radius: 8px;
+      padding: 1rem;
+      color: #ffffff;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: left;
+    }
+
+    .feature-btn:hover {
+      background: rgba(255, 0, 150, 0.2);
+      border-color: #ff0096;
+      transform: translateY(-2px);
+    }
+
+    .feature-icon {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .feature-name {
+      font-weight: bold;
+      color: #ff0096;
+      margin-bottom: 0.25rem;
+    }
+
+    .feature-desc {
+      font-size: 0.8rem;
+      color: #a0a0a0;
+      line-height: 1.4;
+    }
+
+    .stats-section {
+      background: rgba(0, 255, 100, 0.1);
+      border: 1px solid rgba(0, 255, 100, 0.3);
+      border-radius: 8px;
+      padding: 1rem;
+      margin-top: 1rem;
+    }
+
+    .stats-title {
+      color: #00ff64;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.25rem;
+      font-size: 0.8rem;
+    }
+
+    .stat-label {
+      color: #a0a0a0;
+    }
+
+    .stat-value {
+      color: #00ff64;
+      font-weight: bold;
+    }
+
+    .typing-indicator {
+      display: none;
+      align-items: center;
+      gap: 0.5rem;
+      color: #00ff64;
+      font-style: italic;
+      padding: 0.5rem;
+    }
+
+    .typing-dots {
+      display: flex;
+      gap: 2px;
+    }
+
+    .typing-dot {
+      width: 4px;
+      height: 4px;
+      background: #00ff64;
+      border-radius: 50%;
+      animation: typingBounce 1.4s ease-in-out infinite;
+    }
+
+    .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes typingBounce {
+      0%, 60%, 100% { transform: translateY(0); }
+      30% { transform: translateY(-10px); }
+    }
+
+    .error-message {
+      background: rgba(255, 0, 0, 0.1);
+      border: 1px solid rgba(255, 0, 0, 0.3);
+      border-radius: 6px;
+      padding: 0.75rem;
+      color: #ff6b6b;
+      margin-bottom: 1rem;
+      animation: shake 0.5s ease-in-out;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+
+    @media (max-width: 768px) {
+      .neochat-workspace {
+        flex-direction: column;
+        padding: 1rem;
+        gap: 1rem;
+      }
+      
+      .features-left, .features-right {
+        width: 100%;
+      }
+      
+      .hero-feature-card {
+        max-width: 100%;
+      }
+      
+      .agent-title {
+        font-size: 2rem;
+      }
+    }
+  </style>
+<% end %>
+
+<div class="neochat-container">
+  <div class="neochat-header">
+    <div class="agent-avatar">🌌</div>
+    <h1 class="agent-title">NeoChat</h1>
+    <p class="agent-subtitle">Advanced AI Conversation Assistant</p>
+    <div class="agent-status">
+      <span class="status-dot"></span>
+      <span>Online & Ready</span>
+    </div>
+    
+    <!-- Featured Card in Hero -->
+    <div class="hero-feature-card" onclick="clearChat()">
+      <div class="hero-feature-icon">🔄</div>
+      <div class="hero-feature-name">Clear Chat</div>
+      <div class="hero-feature-desc">Start a fresh conversation and reset the chat history</div>
+    </div>
+  </div>
+
+  <div class="neochat-workspace">
+    <!-- Left Features Panel -->
+    <div class="features-left">
+      <div class="features-panel">
+        <h3 class="features-title">🎯 Core Features</h3>
+        <div class="feature-grid">
+          <button class="feature-btn" onclick="startFeature('natural_language')">
+            <div class="feature-icon">🗣️</div>
+            <div class="feature-name">Natural Language</div>
+            <div class="feature-desc">Advanced natural language processing and understanding</div>
+          </button>
+
+          <button class="feature-btn" onclick="startFeature('creative_writing')">
+            <div class="feature-icon">🌌</div>
+            <div class="feature-name">Creative Writing</div>
+            <div class="feature-desc">Collaborative creative writing and storytelling</div>
+          </button>
+
+          <button class="feature-btn" onclick="startFeature('problem_solving')">
+            <div class="feature-icon">🧩</div>
+            <div class="feature-name">Problem Solving</div>
+            <div class="feature-desc">Analytical thinking and solution development</div>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Chat Terminal -->
+    <div class="chat-terminal">
+      <!-- Terminal Header -->
+      <div class="terminal-header">
+        <div class="terminal-controls">
+          <div class="control-btn close"></div>
+          <div class="control-btn minimize"></div>
+          <div class="control-btn maximize"></div>
+        </div>
+        <span class="terminal-title"></span>
+        <div class="terminal-status">
+          <span class="status-indicator"></span>
+          <span>ONLINE</span>
+        </div>
+      </div>
+
+      <!-- Messages Area -->
+      <div class="chat-messages" id="chatMessages">
+        <div class="welcome-message">
+          <h3>╔═══════════════════════════════════════════════════════════════════╗</h3>
+          <h3>║                        🌌 NeoChat v2.0                           ║</h3>
+          <h3>║              Your Advanced AI Conversation Partner               ║</h3>
+          <h3>╚═══════════════════════════════════════════════════════════════════╝</h3>
+          <br>
+          <p><strong>System:</strong> NeoChat v<%= @agent.version %> | Status: Online | Session: <%= @agent.id[0,8] %>...</p>
+          <p><strong>Date:</strong> <%= Time.current.strftime("%Y-%m-%d %H:%M:%S") %> | Agent Ready</p>
+          <br>
+          <p style="color: #00d4ff;"><strong>Welcome!</strong> I'm NeoChat, your intelligent AI conversation partner.</p>
+          <br>
+          <p><strong>I can help you with:</strong></p>
+          <p>• 💭 Natural conversations and discussions</p>
+          <p>• 🎯 Questions & answers on any topic</p>
+          <p>• 🛠️ Problem solving and analysis</p>
+          <p>• 💡 Creative writing and brainstorming</p>
+          <p>• 📖 Learning and knowledge exploration</p>
+          <p>• 🤔 Deep thinking and philosophical insights</p>
+          <br>
+          <p style="color: #00ff64;"><strong>Type your message below to start our conversation!</strong></p>
+        </div>
+
+        <div class="typing-indicator" id="typingIndicator">
+          <span>NeoChat is thinking</span>
+          <div class="typing-dots">
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Input Area -->
+      <div class="chat-input-area">
+        <div class="input-group">
+          <input 
+            type="text" 
+            id="chatInput" 
+            class="chat-input" 
+            placeholder="Type your message here... (Press Enter to send)"
+            maxlength="1000"
+          >
+          <button id="sendBtn" class="send-btn">Send</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Features Panel -->
+    <div class="features-right">
+      <div class="features-panel">
+        <h3 class="features-title">🚀 Advanced Tools</h3>
+        <div class="feature-grid">
+          <button class="feature-btn" onclick="startFeature('learning_support')">
+            <div class="feature-icon">📚</div>
+            <div class="feature-name">Learning Support</div>
+            <div class="feature-desc">Educational assistance and knowledge exploration</div>
+          </button>
+
+          <button class="feature-btn" onclick="startFeature('code_analysis')">
+            <div class="feature-icon">💻</div>
+            <div class="feature-name">Code Analysis</div>
+            <div class="feature-desc">Programming help and code review assistance</div>
+          </button>
+
+          <button class="feature-btn" onclick="startFeature('contextual_understanding')">
+            <div class="feature-icon">🌌</div>
+            <div class="feature-name">Context Analysis</div>
+            <div class="feature-desc">Deep contextual understanding and memory integration</div>
+          </button>
+        </div>
+
+        <div class="stats-section">
+          <div class="stats-title">📊 Session Stats</div>
+          <div class="stat-item">
+            <span class="stat-label">Conversations:</span>
+            <span class="stat-value"><%= @agent_stats[:total_conversations] %></span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Rating:</span>
+            <span class="stat-value"><%= @agent_stats[:average_rating] %></span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Response Time:</span>
+            <span class="stat-value"><%= @agent_stats[:response_time] %></span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Status:</span>
+            <span class="stat-value">Online</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<% content_for :javascript do %>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const chatInput = document.getElementById('chatInput');
+  const sendBtn = document.getElementById('sendBtn');
+  const chatMessages = document.getElementById('chatMessages');
+  const typingIndicator = document.getElementById('typingIndicator');
+  
+  let conversationId = '<%= @agent.id %>';
+  let messageCount = 0;
+
+  // Initialize chat functionality
+  function initializeChat() {
+    chatInput.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+
+    sendBtn.addEventListener('click', sendMessage);
+    
+    // Auto-focus input
+    chatInput.focus();
+    
+    // Auto-scroll to bottom
+    scrollToBottom();
+  }
+
+  // Send message function
+  async function sendMessage() {
+    const message = chatInput.value.trim();
+    
+    if (!message) {
+      showError('Please enter a message to continue our conversation.');
+      return;
+    }
+
+    if (message.length > 1000) {
+      showError('Message is too long. Please keep it under 1000 characters.');
+      return;
+    }
+
+    // Disable input while processing
+    setInputState(false);
+    
+    // Add user message to chat
+    addMessage('user', message);
+    
+    // Clear input
+    chatInput.value = '';
+    
+    // Show typing indicator
+    showTypingIndicator();
+    
+    try {
+      // Send to server
+      const response = await fetch('/neochat/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest',
+          'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+        },
+        body: JSON.stringify({
+          message: message,
+          conversation_id: conversationId
+        })
+      });
+
+      const data = await response.json();
+      
+      if (data.success) {
+        // Add AI response
+        addMessage('assistant', data.response, data.timestamp);
+        messageCount++;
+      } else {
+        showError(data.error || 'Something went wrong. Please try again.');
+      }
+    } catch (error) {
+      console.error('Chat error:', error);
+      showError('Connection error. Please check your internet connection and try again.');
+    } finally {
+      // Hide typing indicator and re-enable input
+      hideTypingIndicator();
+      setInputState(true);
+      chatInput.focus();
+    }
+  }
+
+  // Add message to chat
+  function addMessage(role, content, timestamp = null) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message ${role}`;
+    
+    const now = timestamp || new Date().toLocaleTimeString();
+    const roleLabel = role === 'user' ? 'You' : 'NeoChat';
+    const roleIcon = role === 'user' ? '👤' : '🌌';
+    
+    messageDiv.innerHTML = `
+      <div class="message-header">
+        <span>${roleIcon} ${roleLabel}</span>
+        <span>${now}</span>
+      </div>
+      <div class="message-content">${escapeHtml(content)}</div>
+    `;
+    
+    chatMessages.appendChild(messageDiv);
+    scrollToBottom();
+  }
+
+  // Show typing indicator
+  function showTypingIndicator() {
+    typingIndicator.style.display = 'flex';
+    scrollToBottom();
+  }
+
+  // Hide typing indicator
+  function hideTypingIndicator() {
+    typingIndicator.style.display = 'none';
+  }
+
+  // Set input state
+  function setInputState(enabled) {
+    chatInput.disabled = !enabled;
+    sendBtn.disabled = !enabled;
+    
+    if (enabled) {
+      sendBtn.textContent = 'Send';
+    } else {
+      sendBtn.textContent = 'Sending...';
+    }
+  }
+
+  // Show error message
+  function showError(message) {
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'error-message';
+    errorDiv.textContent = message;
+    
+    chatMessages.appendChild(errorDiv);
+    scrollToBottom();
+    
+    // Remove error after 5 seconds
+    setTimeout(() => {
+      if (errorDiv.parentNode) {
+        errorDiv.parentNode.removeChild(errorDiv);
+      }
+    }, 5000);
+  }
+
+  // Escape HTML to prevent XSS
+  function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  // Scroll to bottom
+  function scrollToBottom() {
+    setTimeout(() => {
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }, 100);
+  }
+
+  // Feature functions
+  window.startFeature = function(feature) {
+    const featureMessages = {
+      'natural_language': 'I\'m activating my natural language processing capabilities. Feel free to speak naturally, and I\'ll understand context, nuance, and meaning in our conversation.',
+      'creative_writing': 'Let\'s dive into creative writing! I can help with stories, poetry, character development, plot ideas, or any creative project you have in mind.',
+      'problem_solving': 'Problem-solving mode activated! Describe any challenge you\'re facing, and I\'ll help break it down and find solutions step by step.',
+      'learning_support': 'I\'m ready to help you learn! Whether it\'s explaining concepts, answering questions, or guiding you through new topics, just let me know what you\'d like to explore.',
+      'code_analysis': 'Code analysis mode ready! I can help review code, explain programming concepts, debug issues, or discuss software architecture and best practices.'
+    };
+
+    const message = featureMessages[feature] || 'Feature activated! How can I help you today?';
+    addMessage('assistant', message);
+  };
+
+  // Clear chat function
+  window.clearChat = function() {
+    if (confirm('Are you sure you want to clear the chat history?')) {
+      // Remove all messages except welcome message
+      const messages = chatMessages.querySelectorAll('.message, .error-message');
+      messages.forEach(msg => msg.remove());
+      
+      messageCount = 0;
+      chatInput.focus();
+      
+      // Optionally, you could also clear server-side session here
+      fetch('/neochat/clear', {
+        method: 'POST',
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest',
+          'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+        }
+      }).catch(error => console.log('Clear session error:', error));
+    }
+  };
+
+  // Initialize everything
+  initializeChat();
+});
+</script>
+<% end %>

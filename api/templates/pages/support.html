@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Support Center - OneLastAI</title>
+
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <%= javascript_importmap_tags %>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+      background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+      color: #ffffff;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .hero-section {
+      padding: 6rem 2rem 4rem;
+      text-align: center;
+      background: radial-gradient(ellipse at center, rgba(0, 212, 255, 0.15) 0%, rgba(0, 0, 0, 0.3) 70%);
+      border-bottom: 2px solid rgba(0, 212, 255, 0.3);
+    }
+
+    .hero-title {
+      font-size: 3.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 20px #00d4ff;
+      background: linear-gradient(45deg, #00d4ff, #0099cc, #66d9ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 30px #00d4ff;
+    }
+
+    .hero-tagline {
+      font-size: 1.5rem;
+      color: #e0e0e0;
+      margin-bottom: 2rem;
+      font-weight: 300;
+    }
+
+    .search-container {
+      max-width: 600px;
+      margin: 2rem auto 0;
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 1rem 1.5rem 1rem 3rem;
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid rgba(0, 212, 255, 0.3);
+      border-radius: 25px;
+      color: white;
+      font-size: 1.1rem;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+
+    .search-input:focus {
+      border-color: #00d4ff;
+      box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.2rem;
+      color: #00d4ff;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .section {
+      padding: 4rem 0;
+    }
+
+    .section-title {
+      font-size: 2.5rem;
+      color: #00d4ff;
+      text-align: center;
+      margin-bottom: 3rem;
+      font-weight: 600;
+    }
+
+    /* Quick Actions Grid */
+    .quick-actions {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-bottom: 4rem;
+    }
+
+    .action-card {
+      background: rgba(0, 212, 255, 0.1);
+      border: 1px solid rgba(0, 212, 255, 0.3);
+      border-radius: 15px;
+      padding: 2rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .action-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(0, 212, 255, 0.3);
+      border-color: #00d4ff;
+    }
+
+    .action-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .action-title {
+      font-size: 1.3rem;
+      color: #00d4ff;
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+
+    .action-description {
+      color: #b8b8b8;
+      line-height: 1.6;
+    }
+
+    /* FAQ Section */
+    .faq-container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .faq-item {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(0, 212, 255, 0.2);
+      border-radius: 12px;
+      margin-bottom: 1rem;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .faq-item:hover {
+      border-color: rgba(0, 212, 255, 0.5);
+    }
+
+    .faq-question {
+      padding: 1.5rem;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(0, 212, 255, 0.05);
+      font-weight: 600;
+      color: #e0e0e0;
+    }
+
+    .faq-question:hover {
+      background: rgba(0, 212, 255, 0.1);
+      color: #00d4ff;
+    }
+
+    .faq-toggle {
+      font-size: 1.2rem;
+      transition: transform 0.3s ease;
+    }
+
+    .faq-answer {
+      padding: 0 1.5rem;
+      max-height: 0;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      color: #b8b8b8;
+      line-height: 1.6;
+    }
+
+    .faq-answer.active {
+      padding: 1.5rem;
+      max-height: 500px;
+    }
+
+    .faq-item.active .faq-toggle {
+      transform: rotate(45deg);
+    }
+
+    /* Contact Options */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .contact-card {
+      background: rgba(0, 212, 255, 0.08);
+      border: 1px solid rgba(0, 212, 255, 0.3);
+      border-radius: 15px;
+      padding: 2rem;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .contact-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(0, 212, 255, 0.2);
+    }
+
+    .contact-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      color: #00d4ff;
+    }
+
+    .contact-title {
+      font-size: 1.5rem;
+      color: #00d4ff;
+      margin-bottom: 1rem;
+    }
+
+    .contact-info {
+      color: #b8b8b8;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+
+    .contact-button {
+      background: linear-gradient(45deg, #00d4ff, #0099cc);
+      color: white;
+      padding: 0.8rem 2rem;
+      border: none;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .contact-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 212, 255, 0.4);
+    }
+
+    /* Status Indicators */
+    .status-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 1rem;
+      font-size: 0.9rem;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #00ff88;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    /* Support Forms */
+    .support-form {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(0, 212, 255, 0.3);
+      border-radius: 12px;
+      padding: 2rem;
+      max-width: 600px;
+      margin: 0 auto;
+      backdrop-filter: blur(10px);
+    }
+
+    .form-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+    }
+
+    .form-header h3 {
+      color: #00d4ff;
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      color: #888;
+      font-size: 2rem;
+      cursor: pointer;
+      padding: 0;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: all 0.3s ease;
+    }
+
+    .close-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      color: #e0e0e0;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(0, 212, 255, 0.3);
+      border-radius: 8px;
+      color: white;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #00d4ff;
+      box-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .submit-btn {
+      flex: 1;
+      padding: 0.75rem 1.5rem;
+      background: linear-gradient(45deg, #00d4ff, #0099cc);
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 212, 255, 0.4);
+    }
+
+    .cancel-btn {
+      flex: 1;
+      padding: 0.75rem 1.5rem;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .cancel-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Live Chat Styles */
+    .chat-container {
+      max-width: 100%;
+    }
+
+    .chat-messages {
+      height: 300px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(0, 212, 255, 0.2);
+      border-radius: 8px;
+      padding: 1rem;
+      overflow-y: auto;
+      margin-bottom: 1rem;
+    }
+
+    .system-message {
+      background: rgba(0, 212, 255, 0.1);
+      border-left: 3px solid #00d4ff;
+      padding: 0.75rem;
+      border-radius: 4px;
+      color: #e0e0e0;
+      margin-bottom: 1rem;
+    }
+
+    .user-message {
+      background: rgba(0, 255, 136, 0.1);
+      border-left: 3px solid #00ff88;
+      padding: 0.75rem;
+      border-radius: 4px;
+      color: #e0e0e0;
+      margin-bottom: 1rem;
+      margin-left: 2rem;
+    }
+
+    .chat-input-container {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .chat-input-container input {
+      flex: 1;
+      padding: 0.75rem;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(0, 212, 255, 0.3);
+      border-radius: 8px;
+      color: white;
+    }
+
+    .send-btn {
+      padding: 0.75rem 1.5rem;
+      background: linear-gradient(45deg, #00d4ff, #0099cc);
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .send-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 3px 10px rgba(0, 212, 255, 0.4);
+    }
+
+    /* Knowledge Base */
+    .knowledge-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .knowledge-item {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(0, 212, 255, 0.2);
+      border-radius: 12px;
+      padding: 1.5rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .knowledge-item:hover {
+      border-color: #00d4ff;
+      background: rgba(0, 212, 255, 0.1);
+    }
+
+    .knowledge-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: #00d4ff;
+    }
+
+    .knowledge-title {
+      font-size: 1.2rem;
+      color: #e0e0e0;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    .knowledge-description {
+      color: #b8b8b8;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 768px) {
+      .hero-title {
+        font-size: 2.5rem;
+      }
+      
+      .section-title {
+        font-size: 2rem;
+      }
+      
+      .quick-actions {
+        grid-template-columns: 1fr;
+      }
+      
+      .container {
+        padding: 0 1rem;
+      }
+
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-icon">🎧</div>
+    <h1 class="hero-title">Support Center</h1>
+    <p class="hero-tagline">Get help, find answers, and connect with our support team</p>
+    
+    <div class="search-container">
+      <span class="search-icon">🔍</span>
+      <input type="text" class="search-input" placeholder="Search for help articles, FAQs, and guides..." id="supportSearch">
+    </div>
+  </section>
+
+  <!-- Quick Actions Section -->
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">🚀 Quick Actions</h2>
+      <div class="quick-actions">
+        <div class="action-card" onclick="scrollToSection('faq')">
+          <span class="action-icon">❓</span>
+          <h3 class="action-title">Frequently Asked Questions</h3>
+          <p class="action-description">Find quick answers to the most common questions about OneLastAI</p>
+        </div>
+        
+        <div class="action-card" onclick="scrollToSection('contact')">
+          <span class="action-icon">📧</span>
+          <h3 class="action-title">Contact Support</h3>
+          <p class="action-description">Get in touch with our support team for personalized assistance</p>
+        </div>
+        
+        <div class="action-card" onclick="window.location='/docs'">
+          <span class="action-icon">📚</span>
+          <h3 class="action-title">Documentation</h3>
+          <p class="action-description">Browse comprehensive guides and API documentation</p>
+        </div>
+        
+        <div class="action-card" onclick="window.location='/community/forum'">
+          <span class="action-icon">👥</span>
+          <h3 class="action-title">Community Forum</h3>
+          <p class="action-description">Join discussions and get help from the community</p>
+        </div>
+        
+        <div class="action-card" onclick="scrollToSection('knowledge')">
+          <span class="action-icon">🌌</span>
+          <h3 class="action-title">Knowledge Base</h3>
+          <p class="action-description">Explore tutorials, guides, and best practices</p>
+        </div>
+        
+        <div class="action-card" onclick="window.location='/learn'">
+          <span class="action-icon">🎯</span>
+          <h3 class="action-title">Learning Center</h3>
+          <p class="action-description">Interactive tutorials and learning paths</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="section" id="faq">
+    <div class="container">
+      <h2 class="section-title">❓ Frequently Asked Questions</h2>
+      <div class="faq-container">
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span>What is OneLastAI and how does it work?</span>
+            <span class="faq-toggle">+</span>
+          </div>
+          <div class="faq-answer">
+            OneLastAI is a comprehensive AI platform featuring 24+ specialized AI agents for various tasks including content creation, data analysis, document processing, and more. Each agent is designed for specific use cases and can be accessed through our web interface or API.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span>How do I get started with OneLastAI?</span>
+            <span class="faq-toggle">+</span>
+          </div>
+          <div class="faq-answer">
+            Getting started is easy! Sign up for a free account, explore our 24+ AI agents, try our templates library, and start with the free tier. You can upgrade to Pro or Enterprise plans as your needs grow. Check out our tutorials in the Learning Center for step-by-step guidance.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span>What AI agents are available on the platform?</span>
+            <span class="faq-toggle">+</span>
+          </div>
+          <div class="faq-answer">
+            We offer 24+ specialized AI agents including: CineGen (video generation), ContentCrafter (content creation), DataSphere (data analysis), DocuMind (document processing), EmotiSense (emotion analysis), TaskMaster (project management), NetScope (network analysis), and many more. Each agent is optimized for specific tasks.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span>What are the pricing plans and what's included?</span>
+            <span class="faq-toggle">+</span>
+          </div>
+          <div class="faq-answer">
+            <strong>Free Tier:</strong> 100 requests/month, basic agent access, community support<br>
+            <strong>Pro Plan ($29/month):</strong> 10,000 requests/month, all agents unlocked, priority support, API access<br>
+            <strong>Enterprise ($99/month):</strong> Unlimited requests, custom integrations, dedicated support, SLA guarantee
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span>How do I integrate OneLastAI into my application?</span>
+            <span class="faq-toggle">+</span>
+          </div>
+          <div class="faq-answer">
+            Integration is straightforward with our REST API. Get your API key from Settings, use Bearer token authentication, and make requests to our endpoints. We provide SDKs for Python, Node.js, and Ruby, plus comprehensive documentation with code examples.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span>What if I'm experiencing technical issues?</span>
+            <span class="faq-toggle">+</span>
+          </div>
+          <div class="faq-answer">
+            For technical issues: 1) Check our status page for known issues, 2) Clear browser cache and cookies, 3) Verify your API key and request format, 4) Check rate limits, 5) Contact our support team at mail@onelastai.com with specific error details.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span>How can I get help from the community?</span>
+            <span class="faq-toggle">+</span>
+          </div>
+          <div class="faq-answer">
+            Join our vibrant community forum with categories for General Discussion, Technical Support, Feature Requests, and Showcase. Connect with other developers, share your projects, get tips and best practices, and participate in community challenges.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span>Do you offer training and learning resources?</span>
+            <span class="faq-toggle">+</span>
+          </div>
+          <div class="faq-answer">
+            Yes! We offer comprehensive learning resources including interactive tutorials, step-by-step guides, video walkthroughs, best practices documentation, use case examples, and structured learning paths for beginners to advanced users.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section class="section" id="contact">
+    <div class="container">
+      <h2 class="section-title">📞 Contact Support</h2>
+      <div class="contact-grid">
+        <div class="contact-card">
+          <div class="contact-icon">📧</div>
+          <h3 class="contact-title">Email Support</h3>
+          <p class="contact-info">Get help via email for any questions or issues. We typically respond within 24 hours.</p>
+          <button class="contact-button" onclick="showEmailForm()">Send Email</button>
+          <div class="status-indicator">
+            <span class="status-dot"></span>
+            <span>Response time: 24 hours</span>
+          </div>
+        </div>
+
+        <div class="contact-card">
+          <div class="contact-icon">💬</div>
+          <h3 class="contact-title">Live Chat</h3>
+          <p class="contact-info">Chat with our support team in real-time. Available for Pro and Enterprise users.</p>
+          <button class="contact-button" onclick="showLiveChat()">Start Chat</button>
+          <div class="status-indicator">
+            <span class="status-dot"></span>
+            <span>Available: 9 AM - 6 PM EST</span>
+          </div>
+        </div>
+
+        <div class="contact-card">
+          <div class="contact-icon">🎫</div>
+          <h3 class="contact-title">Support Tickets</h3>
+          <p class="contact-info">Submit detailed support tickets for complex issues that require investigation.</p>
+          <button class="contact-button" onclick="showTicketForm()">Create Ticket</button>
+          <div class="status-indicator">
+            <span class="status-dot"></span>
+            <span>Priority support available</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Support Forms Container -->
+      <div id="support-forms-container" style="display: none; margin-top: 3rem;">
+        <!-- Email Form -->
+        <div id="email-form" class="support-form" style="display: none;">
+          <div class="form-header">
+            <h3>📧 Email Support</h3>
+            <button onclick="hideForms()" class="close-btn">×</button>
+          </div>
+          <form id="email-support-form" action="/send_support_email" method="POST">
+            <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+            <div class="form-group">
+              <label for="email-name">Your Name</label>
+              <input type="text" id="email-name" name="sender_name" required>
+            </div>
+            <div class="form-group">
+              <label for="email-address">Email Address</label>
+              <input type="email" id="email-address" name="sender_email" required>
+            </div>
+            <div class="form-group">
+              <label for="email-subject">Subject</label>
+              <input type="text" id="email-subject" name="subject" required>
+            </div>
+            <div class="form-group">
+              <label for="email-message">Message</label>
+              <textarea id="email-message" name="message" rows="6" required></textarea>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="submit-btn">Send Email</button>
+              <button type="button" onclick="hideForms()" class="cancel-btn">Cancel</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Live Chat Form -->
+        <div id="chat-form" class="support-form" style="display: none;">
+          <div class="form-header">
+            <h3>💬 Live Chat</h3>
+            <button onclick="hideForms()" class="close-btn">×</button>
+          </div>
+          <div class="chat-container">
+            <div class="chat-messages" id="chat-messages">
+              <div class="system-message">Welcome to OneLastAI Support! How can we help you today?</div>
+            </div>
+            <div class="chat-input-container">
+              <input type="text" id="chat-input" placeholder="Type your message..." onkeypress="handleChatKeyPress(event)">
+              <button onclick="sendChatMessage()" class="send-btn">Send</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Support Ticket Form -->
+        <div id="ticket-form" class="support-form" style="display: none;">
+          <div class="form-header">
+            <h3>🎫 Support Ticket</h3>
+            <button onclick="hideForms()" class="close-btn">×</button>
+          </div>
+          <form id="ticket-support-form" action="/send_support_email" method="POST">
+            <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+            <div class="form-group">
+              <label for="ticket-name">Your Name</label>
+              <input type="text" id="ticket-name" name="sender_name" required>
+            </div>
+            <div class="form-group">
+              <label for="ticket-email">Email Address</label>
+              <input type="email" id="ticket-email" name="sender_email" required>
+            </div>
+            <div class="form-group">
+              <label for="ticket-priority">Priority Level</label>
+              <select id="ticket-priority" name="priority" required>
+                <option value="low">Low</option>
+                <option value="medium" selected>Medium</option>
+                <option value="high">High</option>
+                <option value="urgent">Urgent</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="ticket-subject">Subject</label>
+              <input type="text" id="ticket-subject" name="subject" required>
+            </div>
+            <div class="form-group">
+              <label for="ticket-description">Issue Description</label>
+              <textarea id="ticket-description" name="message" rows="8" placeholder="Please describe your issue in detail..." required></textarea>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="submit-btn">Submit Ticket</button>
+              <button type="button" onclick="hideForms()" class="cancel-btn">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Knowledge Base Section -->
+  <section class="section" id="knowledge">
+    <div class="container">
+      <h2 class="section-title">🌌 Knowledge Base</h2>
+      <div class="knowledge-grid">
+        <div class="knowledge-item" onclick="window.location='/docs/getting-started'">
+          <div class="knowledge-icon">🚀</div>
+          <h3 class="knowledge-title">Getting Started Guide</h3>
+          <p class="knowledge-description">Complete guide to setting up and using OneLastAI</p>
+        </div>
+
+        <div class="knowledge-item" onclick="window.location='/docs/api'">
+          <div class="knowledge-icon">🔌</div>
+          <h3 class="knowledge-title">API Documentation</h3>
+          <p class="knowledge-description">Comprehensive API reference and integration guides</p>
+        </div>
+
+        <div class="knowledge-item" onclick="window.location='/docs/agents'">
+          <div class="knowledge-icon">🤖</div>
+          <h3 class="knowledge-title">AI Agent Guides</h3>
+          <p class="knowledge-description">Detailed documentation for each AI agent</p>
+        </div>
+
+        <div class="knowledge-item" onclick="window.location='/docs/tutorials'">
+          <div class="knowledge-icon">📖</div>
+          <h3 class="knowledge-title">Tutorials</h3>
+          <p class="knowledge-description">Step-by-step tutorials and use case examples</p>
+        </div>
+
+        <div class="knowledge-item" onclick="window.location='/docs/troubleshooting'">
+          <div class="knowledge-icon">🔧</div>
+          <h3 class="knowledge-title">Troubleshooting</h3>
+          <p class="knowledge-description">Common issues and their solutions</p>
+        </div>
+
+        <div class="knowledge-item" onclick="window.location='/docs/best-practices'">
+          <div class="knowledge-icon">💡</div>
+          <h3 class="knowledge-title">Best Practices</h3>
+          <p class="knowledge-description">Tips and best practices for optimal results</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    function toggleFAQ(element) {
+      const faqItem = element.parentElement;
+      const faqAnswer = element.nextElementSibling;
+      const toggle = element.querySelector('.faq-toggle');
+      
+      // Close all other FAQs
+      document.querySelectorAll('.faq-item').forEach(item => {
+        if (item !== faqItem) {
+          item.classList.remove('active');
+          item.querySelector('.faq-answer').classList.remove('active');
+          item.querySelector('.faq-toggle').textContent = '+';
+        }
+      });
+      
+      // Toggle current FAQ
+      faqItem.classList.toggle('active');
+      faqAnswer.classList.toggle('active');
+      toggle.textContent = faqItem.classList.contains('active') ? '×' : '+';
+    }
+
+    function scrollToSection(sectionId) {
+      document.getElementById(sectionId).scrollIntoView({
+        behavior: 'smooth'
+      });
+    }
+
+    function showEmailForm() {
+      document.getElementById('support-forms-container').style.display = 'block';
+      document.getElementById('email-form').style.display = 'block';
+      document.getElementById('chat-form').style.display = 'none';
+      document.getElementById('ticket-form').style.display = 'none';
+      document.getElementById('email-form').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function showLiveChat() {
+      document.getElementById('support-forms-container').style.display = 'block';
+      document.getElementById('chat-form').style.display = 'block';
+      document.getElementById('email-form').style.display = 'none';
+      document.getElementById('ticket-form').style.display = 'none';
+      document.getElementById('chat-form').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function showTicketForm() {
+      document.getElementById('support-forms-container').style.display = 'block';
+      document.getElementById('ticket-form').style.display = 'block';
+      document.getElementById('email-form').style.display = 'none';
+      document.getElementById('chat-form').style.display = 'none';
+      document.getElementById('ticket-form').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function hideForms() {
+      document.getElementById('support-forms-container').style.display = 'none';
+      document.getElementById('email-form').style.display = 'none';
+      document.getElementById('chat-form').style.display = 'none';
+      document.getElementById('ticket-form').style.display = 'none';
+    }
+
+    function sendChatMessage() {
+      const input = document.getElementById('chat-input');
+      const messages = document.getElementById('chat-messages');
+      const message = input.value.trim();
+      
+      if (message) {
+        // Add user message
+        const userMessage = document.createElement('div');
+        userMessage.className = 'user-message';
+        userMessage.textContent = `You: ${message}`;
+        messages.appendChild(userMessage);
+        
+        // Clear input
+        input.value = '';
+        
+        // Scroll to bottom
+        messages.scrollTop = messages.scrollHeight;
+        
+        // Simulate support response (in real implementation, this would connect to live chat system)
+        setTimeout(() => {
+          const response = document.createElement('div');
+          response.className = 'system-message';
+          response.textContent = 'Support: Thank you for your message. A support agent will respond shortly. For immediate assistance, please email mail@onelastai.com';
+          messages.appendChild(response);
+          messages.scrollTop = messages.scrollHeight;
+        }, 1000);
+      }
+    }
+
+    function handleChatKeyPress(event) {
+      if (event.key === 'Enter') {
+        sendChatMessage();
+      }
+    }
+
+    // Search functionality
+    document.getElementById('supportSearch').addEventListener('input', function(e) {
+      const searchTerm = e.target.value.toLowerCase();
+      const faqItems = document.querySelectorAll('.faq-item');
+      const knowledgeItems = document.querySelectorAll('.knowledge-item');
+      
+      // Search FAQ items
+      faqItems.forEach(item => {
+        const question = item.querySelector('.faq-question span').textContent.toLowerCase();
+        const answer = item.querySelector('.faq-answer').textContent.toLowerCase();
+        
+        if (question.includes(searchTerm) || answer.includes(searchTerm)) {
+          item.style.display = 'block';
+        } else {
+          item.style.display = searchTerm ? 'none' : 'block';
+        }
+      });
+      
+      // Search knowledge base items
+      knowledgeItems.forEach(item => {
+        const title = item.querySelector('.knowledge-title').textContent.toLowerCase();
+        const description = item.querySelector('.knowledge-description').textContent.toLowerCase();
+        
+        if (title.includes(searchTerm) || description.includes(searchTerm)) {
+          item.style.display = 'block';
+        } else {
+          item.style.display = searchTerm ? 'none' : 'block';
+        }
+      });
+    });
+  </script>
+</body>
+</html>

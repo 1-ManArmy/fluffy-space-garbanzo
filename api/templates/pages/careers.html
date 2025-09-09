@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Careers - Join OneLastAI Team</title>
+
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <%= javascript_importmap_tags %>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+      background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+      color: #ffffff;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .hero-section {
+      padding: 4rem 2rem 3rem;
+      text-align: center;
+      background: radial-gradient(ellipse at center, rgba(0, 212, 255, 0.15) 0%, rgba(0, 0, 0, 0.3) 70%);
+      border-bottom: 2px solid #00d4ff;
+    }
+
+    .hero-title {
+      font-size: 3.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 20px #00d4ff;
+      background: linear-gradient(45deg, #00d4ff, #0099cc, #66d9ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 30px #00d4ff;
+    }
+
+    .hero-tagline {
+      font-size: 1.5rem;
+      color: #e0e0e0;
+      margin-bottom: 1rem;
+      font-weight: 300;
+    }
+
+    .hero-subtitle {
+      font-size: 1.1rem;
+      color: #b8b8b8;
+      margin-bottom: 2rem;
+    }
+
+    .content-section {
+      padding: 3rem 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .jobs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .job-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(0, 212, 255, 0.2);
+      border-radius: 16px;
+      padding: 2.5rem;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .job-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #00d4ff, #0099cc, #66d9ff);
+    }
+
+    .job-card:hover {
+      border-color: #00d4ff;
+      transform: translateY(-8px);
+      box-shadow: 0 15px 40px rgba(0, 212, 255, 0.25);
+    }
+
+    .job-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .job-icon {
+      font-size: 3rem;
+      margin-right: 1.5rem;
+      text-shadow: 0 0 15px #00d4ff;
+    }
+
+    .job-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #00d4ff;
+      margin-bottom: 0.5rem;
+    }
+
+    .job-type {
+      background: linear-gradient(45deg, #00ff88, #00cc66);
+      color: #000;
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      display: inline-block;
+      margin-bottom: 1rem;
+    }
+
+    .job-description {
+      color: #e0e0e0;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+      font-size: 1rem;
+    }
+
+    .job-requirements {
+      margin-bottom: 2rem;
+    }
+
+    .job-requirements h4 {
+      color: #00d4ff;
+      margin-bottom: 0.8rem;
+      font-size: 1.1rem;
+    }
+
+    .requirements-list {
+      list-style: none;
+    }
+
+    .requirements-list li {
+      color: #b8b8b8;
+      margin-bottom: 0.5rem;
+      padding-left: 1.5rem;
+      position: relative;
+      font-size: 0.95rem;
+    }
+
+    .requirements-list li::before {
+      content: "✦";
+      position: absolute;
+      left: 0;
+      color: #00d4ff;
+    }
+
+    .apply-button {
+      width: 100%;
+      background: linear-gradient(45deg, #00d4ff, #0099cc);
+      color: #ffffff;
+      padding: 1rem 2rem;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 600;
+      text-align: center;
+      display: block;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .apply-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(0, 212, 255, 0.4);
+      background: linear-gradient(45deg, #0099cc, #00d4ff);
+    }
+
+    .contact-section {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(0, 212, 255, 0.3);
+      border-radius: 20px;
+      padding: 3rem;
+      text-align: center;
+      margin-bottom: 3rem;
+      backdrop-filter: blur(10px);
+    }
+
+    .contact-title {
+      font-size: 2.5rem;
+      color: #00d4ff;
+      margin-bottom: 1.5rem;
+      text-shadow: 0 0 15px #00d4ff;
+    }
+
+    .contact-description {
+      font-size: 1.2rem;
+      color: #e0e0e0;
+      margin-bottom: 2.5rem;
+      line-height: 1.6;
+    }
+
+    .contact-methods {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .contact-method {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(0, 212, 255, 0.2);
+      border-radius: 15px;
+      padding: 2rem;
+      transition: all 0.3s ease;
+    }
+
+    .contact-method:hover {
+      border-color: #00d4ff;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(0, 212, 255, 0.2);
+    }
+
+    .contact-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 10px #00d4ff;
+    }
+
+    .contact-label {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #00d4ff;
+      margin-bottom: 0.5rem;
+    }
+
+    .contact-info {
+      color: #e0e0e0;
+      font-size: 1rem;
+      word-break: break-all;
+    }
+
+    .contact-link {
+      color: #66d9ff;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .contact-link:hover {
+      color: #00d4ff;
+      text-decoration: underline;
+    }
+
+    .back-button {
+      display: inline-block;
+      background: linear-gradient(45deg, #666, #888);
+      color: #ffffff;
+      padding: 1rem 2rem;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      margin-top: 2rem;
+    }
+
+    .back-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(136, 136, 136, 0.4);
+    }
+
+    .hiring-badge {
+      background: linear-gradient(45deg, #ff6b6b, #ff5722);
+      color: #fff;
+      padding: 0.5rem 1rem;
+      border-radius: 25px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      display: inline-block;
+      margin-bottom: 1rem;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    /* Application Modal Styles */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(10px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .application-modal {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      border: 2px solid #00d4ff;
+      border-radius: 20px;
+      padding: 3rem;
+      max-width: 600px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+      box-shadow: 0 20px 60px rgba(0, 212, 255, 0.3);
+      animation: slideUp 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      color: #ffffff;
+      font-size: 2rem;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+
+    .modal-close:hover {
+      color: #00d4ff;
+    }
+
+    .modal-title {
+      font-size: 2rem;
+      color: #00d4ff;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .modal-subtitle {
+      color: #e0e0e0;
+      text-align: center;
+      margin-bottom: 2rem;
+      font-size: 1.1rem;
+    }
+
+    .application-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-label {
+      color: #00d4ff;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      font-size: 1rem;
+    }
+
+    .form-input, .form-textarea {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(0, 212, 255, 0.3);
+      border-radius: 10px;
+      padding: 1rem;
+      color: #ffffff;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .form-input:focus, .form-textarea:focus {
+      outline: none;
+      border-color: #00d4ff;
+      box-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+    }
+
+    .form-textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .file-upload-area {
+      border: 2px dashed rgba(0, 212, 255, 0.5);
+      border-radius: 15px;
+      padding: 2rem;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.05);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .file-upload-area:hover {
+      border-color: #00d4ff;
+      background: rgba(0, 212, 255, 0.1);
+    }
+
+    .file-upload-area.dragover {
+      border-color: #00ff88;
+      background: rgba(0, 255, 136, 0.1);
+    }
+
+    .file-input {
+      display: none;
+    }
+
+    .upload-icon {
+      font-size: 3rem;
+      color: #00d4ff;
+      margin-bottom: 1rem;
+    }
+
+    .upload-text {
+      color: #e0e0e0;
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .upload-subtext {
+      color: #b8b8b8;
+      font-size: 0.9rem;
+    }
+
+    .uploaded-files {
+      margin-top: 1rem;
+    }
+
+    .file-item {
+      background: rgba(0, 212, 255, 0.1);
+      border: 1px solid rgba(0, 212, 255, 0.3);
+      border-radius: 10px;
+      padding: 0.8rem;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .file-name {
+      color: #e0e0e0;
+      font-size: 0.9rem;
+    }
+
+    .file-remove {
+      background: #ff6b6b;
+      border: none;
+      color: white;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+
+    .submit-application {
+      background: linear-gradient(45deg, #00d4ff, #0099cc);
+      color: #ffffff;
+      padding: 1.2rem 2rem;
+      border-radius: 12px;
+      border: none;
+      font-weight: 600;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 1rem;
+    }
+
+    .submit-application:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(0, 212, 255, 0.4);
+    }
+
+    .submit-application:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    @media (max-width: 768px) {
+      .hero-title {
+        font-size: 2.5rem;
+      }
+      
+      .jobs-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .contact-methods {
+        grid-template-columns: 1fr;
+      }
+      
+      .job-card {
+        padding: 2rem;
+      }
+
+      .application-modal {
+        padding: 2rem;
+        margin: 1rem;
+      }
+
+      .modal-title {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <section class="hero-section">
+    <div class="hero-icon">🚀</div>
+    <h1 class="hero-title">Join Our Team</h1>
+    <p class="hero-tagline">Shape the Future of AI Technology</p>
+    <p class="hero-subtitle">We're actively hiring talented individuals to join our growing team</p>
+    <div class="hiring-badge">🔥 NOW HIRING</div>
+  </section>
+
+  <section class="content-section">
+    <div class="jobs-grid">
+      <!-- Sales Representative -->
+      <div class="job-card">
+        <div class="job-header">
+          <div class="job-icon">💼</div>
+          <div>
+            <h3 class="job-title">Sales Representative</h3>
+            <span class="job-type">Full-Time / Remote</span>
+          </div>
+        </div>
+        <p class="job-description">
+          Drive revenue growth by identifying and closing new business opportunities. Build relationships with enterprise clients and help them discover the power of AI-driven solutions.
+        </p>
+        <div class="job-requirements">
+          <h4>Requirements:</h4>
+          <ul class="requirements-list">
+            <li>3+ years of B2B sales experience</li>
+            <li>Proven track record in tech/SaaS sales</li>
+            <li>Excellent communication and negotiation skills</li>
+            <li>Understanding of AI/ML technologies (preferred)</li>
+            <li>Self-motivated and results-driven</li>
+          </ul>
+        </div>
+        <a href="mailto:job@onelastai.us?subject=Sales Representative Application" class="apply-button" onclick="openApplicationModal('Sales Representative', 'Drive revenue growth by identifying and closing new business opportunities. Build relationships with enterprise clients and help them discover the power of AI-driven solutions.'); return false;">Apply Now</a>
+      </div>
+
+      <!-- Customer Support Specialist -->
+      <div class="job-card">
+        <div class="job-header">
+          <div class="job-icon">🎧</div>
+          <div>
+            <h3 class="job-title">Customer Support Specialist</h3>
+            <span class="job-type">Full-Time / Remote</span>
+          </div>
+        </div>
+        <p class="job-description">
+          Provide exceptional customer support and help users maximize their experience with our AI platform. Be the friendly face of OneLastAI and ensure customer success.
+        </p>
+        <div class="job-requirements">
+          <h4>Requirements:</h4>
+          <ul class="requirements-list">
+            <li>2+ years in customer support or service</li>
+            <li>Strong problem-solving abilities</li>
+            <li>Excellent written and verbal communication</li>
+            <li>Tech-savvy with quick learning ability</li>
+            <li>Patience and empathy for customer needs</li>
+          </ul>
+        </div>
+        <a href="mailto:job@onelastai.us?subject=Customer Support Specialist Application" class="apply-button" onclick="openApplicationModal('Customer Support Specialist', 'Provide exceptional customer support and help users maximize their experience with our AI platform. Be the friendly face of OneLastAI and ensure customer success.'); return false;">Apply Now</a>
+      </div>
+
+      <!-- Affiliate Manager -->
+      <div class="job-card">
+        <div class="job-header">
+          <div class="job-icon">🤝</div>
+          <div>
+            <h3 class="job-title">Affiliate Manager</h3>
+            <span class="job-type">Full-Time / Remote</span>
+          </div>
+        </div>
+        <p class="job-description">
+          Build and manage our affiliate program, recruit top-performing partners, and optimize commission structures to drive growth through strategic partnerships.
+        </p>
+        <div class="job-requirements">
+          <h4>Requirements:</h4>
+          <ul class="requirements-list">
+            <li>Experience in affiliate or partner marketing</li>
+            <li>Strong relationship building skills</li>
+            <li>Data-driven approach to optimization</li>
+            <li>Knowledge of affiliate platforms and tools</li>
+            <li>Creative marketing mindset</li>
+          </ul>
+        </div>
+        <a href="mailto:job@onelastai.us?subject=Affiliate Manager Application" class="apply-button" onclick="openApplicationModal('Affiliate Manager', 'Build and manage our affiliate program, recruit top-performing partners, and optimize commission structures to drive growth through strategic partnerships.'); return false;">Apply Now</a>
+      </div>
+
+      <!-- Marketing Specialist -->
+      <div class="job-card">
+        <div class="job-header">
+          <div class="job-icon">📱</div>
+          <div>
+            <h3 class="job-title">Marketing Specialist</h3>
+            <span class="job-type">Full-Time / Remote</span>
+          </div>
+        </div>
+        <p class="job-description">
+          Create compelling marketing campaigns, manage social media presence, and develop content strategies that showcase our AI innovations to the world.
+        </p>
+        <div class="job-requirements">
+          <h4>Requirements:</h4>
+          <ul class="requirements-list">
+            <li>3+ years in digital marketing</li>
+            <li>Experience with social media management</li>
+            <li>Content creation and copywriting skills</li>
+            <li>Analytics and performance tracking</li>
+            <li>Creative and strategic thinking</li>
+          </ul>
+        </div>
+        <a href="mailto:job@onelastai.us?subject=Marketing Specialist Application" class="apply-button" onclick="openApplicationModal('Marketing Specialist', 'Create compelling marketing campaigns, manage social media presence, and develop content strategies that showcase our AI innovations to the world.'); return false;">Apply Now</a>
+      </div>
+
+      <!-- Business Development -->
+      <div class="job-card">
+        <div class="job-header">
+          <div class="job-icon">📈</div>
+          <div>
+            <h3 class="job-title">Business Development</h3>
+            <span class="job-type">Full-Time / Remote</span>
+          </div>
+        </div>
+        <p class="job-description">
+          Identify new market opportunities, forge strategic partnerships, and help expand OneLastAI into new verticals and geographic markets.
+        </p>
+        <div class="job-requirements">
+          <h4>Requirements:</h4>
+          <ul class="requirements-list">
+            <li>5+ years in business development</li>
+            <li>Strategic planning and execution experience</li>
+            <li>Network in tech/AI industry (preferred)</li>
+            <li>Strong analytical and presentation skills</li>
+            <li>Entrepreneurial mindset</li>
+          </ul>
+        </div>
+        <a href="mailto:job@onelastai.us?subject=Business Development Application" class="apply-button" onclick="openApplicationModal('Business Development', 'Identify new market opportunities, forge strategic partnerships, and help expand OneLastAI into new verticals and geographic markets.'); return false;">Apply Now</a>
+      </div>
+
+      <!-- Content Creator -->
+      <div class="job-card">
+        <div class="job-header">
+          <div class="job-icon">🎨</div>
+          <div>
+            <h3 class="job-title">Content Creator</h3>
+            <span class="job-type">Part-Time / Freelance</span>
+          </div>
+        </div>
+        <p class="job-description">
+          Create engaging video content, tutorials, and demonstrations showcasing our AI agents. Help educate and inspire our community through creative storytelling.
+        </p>
+        <div class="job-requirements">
+          <h4>Requirements:</h4>
+          <ul class="requirements-list">
+            <li>Video production and editing skills</li>
+            <li>Experience with social media content</li>
+            <li>Understanding of AI/tech topics</li>
+            <li>Creative storytelling abilities</li>
+            <li>Portfolio of previous work</li>
+          </ul>
+        </div>
+        <a href="mailto:job@onelastai.us?subject=Content Creator Application" class="apply-button" onclick="openApplicationModal('Content Creator', 'Create engaging video content, tutorials, and demonstrations showcasing our AI agents. Help educate and inspire our community through creative storytelling.'); return false;">Apply Now</a>
+      </div>
+    </div>
+
+    <div class="contact-section">
+      <h2 class="contact-title">📞 Get In Touch</h2>
+      <p class="contact-description">
+        Ready to join our mission? We'd love to hear from you! Reach out through any of these channels and let's start a conversation about your future with OneLastAI.
+      </p>
+      
+      <div class="contact-methods">
+        <div class="contact-method">
+          <div class="contact-icon">📧</div>
+          <div class="contact-label">Email</div>
+          <div class="contact-info">
+            <a href="mailto:job@onelastai.us" class="contact-link">job@onelastai.us</a>
+          </div>
+        </div>
+        
+        <div class="contact-method">
+          <div class="contact-icon">📱</div>
+          <div class="contact-label">Telegram</div>
+          <div class="contact-info">
+            <a href="https://t.me/onelastai" class="contact-link">@onelastai</a>
+          </div>
+        </div>
+        
+        <div class="contact-method">
+          <div class="contact-icon">💬</div>
+          <div class="contact-label">Line</div>
+          <div class="contact-info">
+            <a href="https://line.me/ti/p/@onelastai" class="contact-link">@onelastai</a>
+          </div>
+        </div>
+      </div>
+      
+      <p style="color: #b8b8b8; font-size: 0.95rem; margin-top: 1.5rem;">
+        💡 <strong>Pro Tip:</strong> Include your portfolio, resume, and a brief cover letter explaining why you're excited about AI and OneLastAI specifically.
+      </p>
+    </div>
+
+    <div style="text-align: center;">
+      <a href="/" class="back-button">← Back to Home</a>
+    </div>
+  </section>
+
+  <!-- Application Modal -->
+  <div class="modal-overlay" id="applicationModal">
+    <div class="application-modal">
+      <button class="modal-close" onclick="closeApplicationModal()">&times;</button>
+      
+      <h2 class="modal-title" id="modalJobTitle">Apply for Position</h2>
+      <p class="modal-subtitle" id="modalJobDescription">Tell us why you're perfect for this role</p>
+      
+      <form class="application-form" id="applicationForm">
+        <div class="form-group">
+          <label class="form-label" for="applicantName">Full Name *</label>
+          <input type="text" id="applicantName" class="form-input" required placeholder="Enter your full name">
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label" for="applicantEmail">Email Address *</label>
+          <input type="email" id="applicantEmail" class="form-input" required placeholder="your.email@example.com">
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label" for="applicantPhone">Phone Number</label>
+          <input type="tel" id="applicantPhone" class="form-input" placeholder="+1 (555) 123-4567">
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label" for="applicantLocation">Location</label>
+          <input type="text" id="applicantLocation" class="form-input" placeholder="City, State/Country">
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label" for="coverLetter">Why are you interested in this position? *</label>
+          <textarea id="coverLetter" class="form-textarea" required placeholder="Tell us about your experience, passion for AI, and why you want to join OneLastAI..."></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label" for="experience">Relevant Experience</label>
+          <textarea id="experience" class="form-textarea" placeholder="Describe your relevant work experience, skills, and achievements..."></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">Upload Documents</label>
+          <div class="file-upload-area" id="fileUploadArea" onclick="document.getElementById('fileInput').click()">
+            <div class="upload-icon">📎</div>
+            <div class="upload-text">Click to upload or drag files here</div>
+            <div class="upload-subtext">Resume, Portfolio, Cover Letter (PDF, DOC, DOCX - Max 10MB each)</div>
+          </div>
+          <input type="file" id="fileInput" class="file-input" multiple accept=".pdf,.doc,.docx,.txt" onchange="handleFileSelect(event)">
+          <div class="uploaded-files" id="uploadedFiles"></div>
+        </div>
+        
+        <button type="submit" class="submit-application">
+          📤 Submit Application
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    let currentJobTitle = '';
+    let uploadedFiles = [];
+
+    function openApplicationModal(jobTitle, jobDescription) {
+      currentJobTitle = jobTitle;
+      document.getElementById('modalJobTitle').textContent = `Apply for ${jobTitle}`;
+      document.getElementById('modalJobDescription').textContent = jobDescription;
+      document.getElementById('applicationModal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeApplicationModal() {
+      document.getElementById('applicationModal').classList.remove('active');
+      document.body.style.overflow = 'auto';
+      // Reset form
+      document.getElementById('applicationForm').reset();
+      uploadedFiles = [];
+      document.getElementById('uploadedFiles').innerHTML = '';
+    }
+
+    // Close modal when clicking outside
+    document.getElementById('applicationModal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeApplicationModal();
+      }
+    });
+
+    // Handle file upload
+    function handleFileSelect(event) {
+      const files = event.target.files;
+      for (let file of files) {
+        if (file.size > 10 * 1024 * 1024) { // 10MB limit
+          alert(`File "${file.name}" is too large. Maximum size is 10MB.`);
+          continue;
+        }
+        
+        if (uploadedFiles.length >= 5) {
+          alert('Maximum 5 files allowed.');
+          break;
+        }
+        
+        uploadedFiles.push(file);
+        displayUploadedFile(file);
+      }
+    }
+
+    function displayUploadedFile(file) {
+      const fileContainer = document.getElementById('uploadedFiles');
+      const fileItem = document.createElement('div');
+      fileItem.className = 'file-item';
+      fileItem.innerHTML = `
+        <span class="file-name">📄 ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)</span>
+        <button type="button" class="file-remove" onclick="removeFile('${file.name}')">&times;</button>
+      `;
+      fileContainer.appendChild(fileItem);
+    }
+
+    function removeFile(fileName) {
+      uploadedFiles = uploadedFiles.filter(file => file.name !== fileName);
+      const fileItems = document.querySelectorAll('.file-item');
+      fileItems.forEach(item => {
+        if (item.querySelector('.file-name').textContent.includes(fileName)) {
+          item.remove();
+        }
+      });
+    }
+
+    // Drag and drop functionality
+    const fileUploadArea = document.getElementById('fileUploadArea');
+    
+    fileUploadArea.addEventListener('dragover', function(e) {
+      e.preventDefault();
+      this.classList.add('dragover');
+    });
+    
+    fileUploadArea.addEventListener('dragleave', function(e) {
+      e.preventDefault();
+      this.classList.remove('dragover');
+    });
+    
+    fileUploadArea.addEventListener('drop', function(e) {
+      e.preventDefault();
+      this.classList.remove('dragover');
+      
+      const files = e.dataTransfer.files;
+      for (let file of files) {
+        if (file.size > 10 * 1024 * 1024) {
+          alert(`File "${file.name}" is too large. Maximum size is 10MB.`);
+          continue;
+        }
+        
+        if (uploadedFiles.length >= 5) {
+          alert('Maximum 5 files allowed.');
+          break;
+        }
+        
+        uploadedFiles.push(file);
+        displayUploadedFile(file);
+      }
+    });
+
+    // Handle form submission
+    document.getElementById('applicationForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const formData = new FormData();
+      const name = document.getElementById('applicantName').value;
+      const email = document.getElementById('applicantEmail').value;
+      const phone = document.getElementById('applicantPhone').value;
+      const location = document.getElementById('applicantLocation').value;
+      const coverLetter = document.getElementById('coverLetter').value;
+      const experience = document.getElementById('experience').value;
+      
+      if (!name || !email || !coverLetter) {
+        alert('Please fill in all required fields.');
+        return;
+      }
+      
+      // Create email content
+      const emailSubject = `Job Application: ${currentJobTitle} - ${name}`;
+      const emailBody = `
+NEW JOB APPLICATION
+===================
+
+Position: ${currentJobTitle}
+Applicant: ${name}
+Email: ${email}
+Phone: ${phone || 'Not provided'}
+Location: ${location || 'Not provided'}
+
+WHY INTERESTED:
+${coverLetter}
+
+RELEVANT EXPERIENCE:
+${experience || 'Not provided'}
+
+ATTACHED FILES: ${uploadedFiles.length} file(s)
+${uploadedFiles.map(file => `- ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`).join('\n')}
+
+Application submitted via OneLastAI Careers page.
+      `;
+      
+      // For now, we'll create a mailto link with the application details
+      // In a production environment, you would send this via a backend service
+      const mailtoLink = `mailto:job@onelastai.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+      
+      // Show success message
+      alert(`Thank you for your application, ${name}! Your email client will open to send your application. Please attach your uploaded files manually to the email.`);
+      
+      // Open email client
+      window.location.href = mailtoLink;
+      
+      // Close modal
+      closeApplicationModal();
+    });
+  </script>
+</body>
+</html>
