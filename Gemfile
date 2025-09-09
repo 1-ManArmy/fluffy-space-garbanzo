@@ -167,7 +167,7 @@ gem 'ransack', '~> 4.1'
 
 # Error monitoring
 gem 'sentry-rails', '~> 5.15'
-gem 'sentry-ruby', '~> 5.15'
+gem 'sentry-ruby', '~> 5.27'
 
 # Performance monitoring
 gem 'newrelic_rpm', '~> 9.6'
