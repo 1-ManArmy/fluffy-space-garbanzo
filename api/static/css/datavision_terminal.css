@@ -1,0 +1,27 @@
+/* === Datavision Terminal Section === */
+.datavision-terminal-container {
+	background: #0f172a;
+	border-radius: 14px;
+	box-shadow: 0 4px 24px rgba(56,189,248,0.12);
+	padding: 2rem 1.5rem;
+	max-width: 700px;
+	margin: 2rem auto;
+	color: #e0f2fe;
+}
+.datavision-terminal-header {
+	font-size: 1.75rem;
+	font-weight: 700;
+	color: #38bdf8;
+	margin-bottom: 1rem;
+}
+.datavision-terminal-log {
+	background: #18181b;
+	border-radius: 8px;
+	padding: 1rem;
+	min-height: 180px;
+	color: #e0e7ef;
+	font-family: 'Fira Mono', 'Consolas', monospace;
+	font-size: 1rem;
+	margin-bottom: 1rem;
+	overflow-y: auto;
+}

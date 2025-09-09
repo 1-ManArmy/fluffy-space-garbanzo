@@ -1,0 +1,116 @@
+<!-- Phantom-Stats-Section Component -->
+<section class="phantom-stats-section">
+<!-- Phantom Dark Stats Section -->
+  <section class="phantom-stats relative py-32 overflow-hidden min-h-screen flex items-center">
+    <!-- Fog and Shadow Background -->
+    <div class="phantom-background absolute inset-0 z-0">
+      <div class="fog-layer fog-1"></div>
+      <div class="fog-layer fog-2"></div>
+      <div class="fog-layer fog-3"></div>
+    </div>
+
+    <!-- Floating Spectral Particles -->
+    <div class="spectral-particles absolute inset-0 pointer-events-none z-10">
+      <div class="spectral-orb orb-1"></div>
+      <div class="spectral-orb orb-2"></div>
+      <div class="spectral-orb orb-3"></div>
+      <div class="spectral-orb orb-4"></div>
+      <div class="spectral-orb orb-5"></div>
+      <div class="spectral-orb orb-6"></div>
+    </div>
+
+    <!-- Stats Content -->
+    <div class="container mx-auto px-6 relative z-20">
+      <div class="text-center mb-20">
+        <h2 class="text-5xl lg:text-7xl font-bold mb-6 text-white drop-shadow-lg">
+          <span class="inline-block bg-gradient-to-r from-purple-500 via-indigo-500 to-blue-500 bg-clip-text text-transparent animate-pulse">
+            Into The Shadows
+          </span>
+        </h2>
+        <p class="text-xl text-white/80 max-w-3xl mx-auto">
+          Where darkness meets intelligence, our AI emerges from the void to serve enterprise needs.
+        </p>
+      </div>
+
+      <!-- Glassmorphism Stats Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-6xl mx-auto">
+        <!-- Card 1 -->
+        <div class="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-8 text-center transition duration-300 hover:border-purple-500/50 hover:shadow-purple-500/30 hover:shadow-lg">
+          <div class="text-4xl mb-4">👻</div>
+          <div class="text-5xl font-bold text-white drop-shadow-md phantom-number" data-target="250">0</div>
+          <div class="text-xl text-purple-400 font-semibold">K+</div>
+          <div class="mt-2 text-lg text-white/90 font-medium">Souls Guided</div>
+          <p class="mt-4 text-sm text-white/60">Lost developers found their path through our AI darkness.</p>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-8 text-center transition duration-300 hover:border-indigo-500/50 hover:shadow-indigo-500/30 hover:shadow-lg">
+          <div class="text-4xl mb-4">🌑</div>
+          <div class="text-5xl font-bold text-white drop-shadow-md phantom-number" data-target="75">0</div>
+          <div class="text-xl text-indigo-400 font-semibold">&nbsp;</div>
+          <div class="mt-2 text-lg text-white/90 font-medium">Realms Conquered</div>
+          <p class="mt-4 text-sm text-white/60">Countries where our shadow intelligence has spread.</p>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-8 text-center transition duration-300 hover:border-blue-500/50 hover:shadow-blue-500/30 hover:shadow-lg">
+          <div class="text-4xl mb-4">⚡</div>
+          <div class="text-5xl font-bold text-white drop-shadow-md phantom-number" data-target="99.99">0</div>
+          <div class="text-xl text-blue-400 font-semibold">%</div>
+          <div class="mt-2 text-lg text-white/90 font-medium">Eternal Vigilance</div>
+          <p class="mt-4 text-sm text-white/60">Uptime that never sleeps, watching from the shadows.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Counter Script -->
+  <script>
+    // Intersection Observer to trigger the counter when it's visible
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          startCounters(entry.target);
+          observer.unobserve(entry.target); // Stop observing after it's triggered once
+        }
+      });
+    }, {
+      threshold: 0.5 // Trigger when 50% of the element is visible
+    });
+
+    // Function to start the counting animation
+    function startCounters(container) {
+      container.querySelectorAll('.phantom-number').forEach(el => {
+        const target = parseFloat(el.getAttribute('data-target'));
+        let count = 0;
+        const duration = 2000; // 2 seconds
+        const increment = target / (duration / 16); // ~60fps
+
+        const update = () => {
+          count += increment;
+          if (count < target) {
+            // Updated formatting logic to handle various decimal places
+            const targetString = target.toString();
+            if (targetString.includes('.')) {
+                const decimalPlaces = targetString.split('.')[1].length;
+                el.textContent = count.toFixed(decimalPlaces);
+            } else {
+                el.textContent = Math.ceil(count);
+            }
+            requestAnimationFrame(update);
+          } else {
+            el.textContent = target;
+          }
+        };
+        update();
+      });
+    }
+
+    // Observe the main stats section
+    const statsSection = document.querySelector('.phantom-stats');
+    if (statsSection) {
+      observer.observe(statsSection);
+    }
+  </script>
+</section>
+<!-- End Phantom-Stats-Section -->

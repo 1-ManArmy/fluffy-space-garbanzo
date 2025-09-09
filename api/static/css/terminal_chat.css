@@ -1,0 +1,54 @@
+/* === Terminal Chat Section === */
+.terminal-chat-container {
+	background: #18181b;
+	border-radius: 12px;
+	box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+	padding: 2rem;
+	max-width: 700px;
+	margin: 2rem auto;
+}
+.terminal-chat-header {
+	font-size: 1.5rem;
+	font-weight: 700;
+	color: #38bdf8;
+	margin-bottom: 1rem;
+}
+.terminal-chat-log {
+	background: #23232a;
+	border-radius: 8px;
+	padding: 1rem;
+	min-height: 200px;
+	color: #e2e8f0;
+	font-family: 'Fira Mono', 'Consolas', monospace;
+	font-size: 1rem;
+	margin-bottom: 1rem;
+	overflow-y: auto;
+}
+.terminal-chat-input {
+	width: 100%;
+	padding: 0.75rem 1rem;
+	border-radius: 8px;
+	border: 1px solid #38bdf8;
+	background: #18181b;
+	color: #e2e8f0;
+	font-size: 1rem;
+	outline: none;
+	transition: border-color 0.2s;
+}
+.terminal-chat-input:focus {
+	border-color: #6366f1;
+}
+.terminal-chat-send-btn {
+	background: linear-gradient(to right, #38bdf8, #6366f1);
+	color: #fff;
+	border: none;
+	border-radius: 8px;
+	padding: 0.75rem 1.5rem;
+	font-weight: 600;
+	cursor: pointer;
+	margin-top: 1rem;
+	transition: background 0.2s;
+}
+.terminal-chat-send-btn:hover {
+	background: linear-gradient(to right, #6366f1, #38bdf8);
+}
