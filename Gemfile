@@ -182,7 +182,7 @@ gem 'rswag', '~> 2.12'
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   # SQLite for development and test
-  gem 'sqlite3', '~> 1.4'
+  gem 'sqlite3', '~> 2.7'
   
   # Testing framework
   gem 'factory_bot_rails', '~> 6.4'
