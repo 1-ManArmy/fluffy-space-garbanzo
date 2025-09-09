@@ -504,10 +504,10 @@ GEM
       childprocess (>= 0.5, < 5.0)
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2)
-    sentry-rails (5.26.0)
+    sentry-rails (5.27.0)
       railties (>= 5.0)
-      sentry-ruby (~> 5.26.0)
-    sentry-ruby (5.26.0)
+      sentry-ruby (~> 5.27.0)
+    sentry-ruby (5.27.0)
       bigdecimal
       concurrent-ruby (~> 1.0, >= 1.0.2)
     sidekiq (8.0.7)
@@ -669,7 +669,7 @@ DEPENDENCIES
   scenic (~> 1.7)
   secure_headers (~> 7.1)
   selenium-webdriver
-  sentry-rails (~> 5.15)
+  sentry-rails (~> 5.27)
   sentry-ruby (~> 5.15)
   sidekiq (~> 8.0)
   solargraph
