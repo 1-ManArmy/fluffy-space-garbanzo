@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Welcome to FastAPI Website</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Link to static CSS files -->
+    <link rel="stylesheet" href="{{ url_for('static', path='css/application.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', path='css/call_to_action_section.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', path='css/newsletter_section.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', path='css/infrastructure_section.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', path='css/terminal_chat.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', path='css/railway_application.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', path='css/datavision_terminal.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', path='css/emotisense_performance.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', path='css/hello.css') }}">
+</head>
+<body>
+    {# Homepage Jinja2 template - all sections included #}
+    <div class="min-h-screen hero-gradient">
+        {% include 'home/sections/hero_section.html' %}
+        {% include 'home/sections/phantom_stats_section.html' %}
+        {% include 'home/sections/global_partners_section.html' %}
+        {% include 'home/sections/core_features_section.html' %}
+        {% include 'home/sections/live_demo_section.html' %}
+        {% include 'home/sections/industry_use_cases_section.html' %}
+        {% include 'home/sections/testimonials_section.html' %}
+        {% include 'home/sections/pricing_plans_section.html' %}
+        {% include 'home/sections/special_offers_section.html' %}
+        {% include 'home/sections/call_to_action_section.html' %}
+        {% include 'home/sections/community_section.html' %}
+        {% include 'home/sections/press_section.html' %}
+        {% include 'home/sections/newsletter_section.html' %}
+        {% include 'home/sections/infrastructure_section.html' %}
+        {% include 'home/sections/terminal_chat.html' %}
+        {% include 'home/sections/footer_section.html' %}
+    </div>
+</body>
+</html>

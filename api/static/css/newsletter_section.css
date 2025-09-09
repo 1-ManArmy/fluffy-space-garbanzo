@@ -1,0 +1,46 @@
+/* === Newsletter Section === */
+.newsletter-section {
+	background: linear-gradient(120deg, #f472b6 0%, #6366f1 100%);
+	border-radius: 14px;
+	box-shadow: 0 4px 24px rgba(99,102,241,0.12);
+	padding: 2rem 1.5rem;
+	max-width: 600px;
+	margin: 2rem auto;
+	color: #fff;
+}
+.newsletter-title {
+	font-size: 2rem;
+	font-weight: 700;
+	margin-bottom: 1rem;
+}
+.newsletter-description {
+	font-size: 1.1rem;
+	margin-bottom: 1.5rem;
+	color: #f3f4f6;
+}
+.newsletter-form {
+	display: flex;
+	gap: 1rem;
+	margin-bottom: 1rem;
+}
+.newsletter-input {
+	flex: 1;
+	padding: 0.75rem 1rem;
+	border-radius: 8px;
+	border: none;
+	font-size: 1rem;
+	color: #1e293b;
+}
+.newsletter-submit {
+	background: linear-gradient(90deg, #6366f1, #f472b6);
+	color: #fff;
+	border: none;
+	border-radius: 8px;
+	padding: 0.75rem 1.5rem;
+	font-weight: 600;
+	cursor: pointer;
+	transition: background 0.2s;
+}
+.newsletter-submit:hover {
+	background: linear-gradient(90deg, #f472b6, #6366f1);
+}

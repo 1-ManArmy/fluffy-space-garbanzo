@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Agents Multiverse</title>
+    <link rel="stylesheet" href="/static/css/application.css">
+</head>
+<body>
+    {% include 'shared/navigation.html' %}
+    
+    <!-- AI Agents Index Page -->
+    <div class="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-black">
+      <!-- Header Section -->
+      <section class="relative pt-20 pb-16 overflow-hidden">
+        <div class="container mx-auto px-6 relative z-10">
+          <div class="text-center mb-16">
+            <h1 class="text-5xl lg:text-7xl font-bold mb-6 leading-tight">
+              <span class="text-gradient">AI Agents</span><br>
+              <span class="text-white">Multiverse</span>
+            </h1>
+            <p class="text-xl text-gray-300 mb-8 leading-relaxed max-w-3xl mx-auto">
+              Discover and deploy our complete collection of specialized AI agents. Each agent is designed with unique capabilities and personalities to handle specific tasks and domains.
+            </p>
+          </div>
+        </div>
+        
+        <!-- Background decorations -->
+        <div class="absolute inset-0 overflow-hidden">
+          <div class="absolute -top-40 -right-40 w-80 h-80 bg-purple-600/20 rounded-full blur-3xl"></div>
+          <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-600/20 rounded-full blur-3xl"></div>
+        </div>
+      </section>
+
+      <!-- Agents Grid Section -->
+      <section class="py-16 relative">
+        <div class="container mx-auto px-6">
+          <!-- Filter Categories -->
+          <div class="flex flex-wrap justify-center gap-4 mb-12">
+            <button class="filter-btn active" data-category="all">All Agents</button>
+            <button class="filter-btn" data-category="conversational">Conversational AI</button>
+            <button class="filter-btn" data-category="productivity">Productivity</button>
+            <button class="filter-btn" data-category="creative">Creative</button>
+            <button class="filter-btn" data-category="analysis">Analysis</button>
+          </div>
+
+          <!-- Agents Grid -->
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" id="agents-grid">
+            <!-- Individual agent cards would go here -->
+            <div class="agent-card bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700 hover:border-purple-500 transition-all duration-300">
+              <div class="text-center">
+                <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-blue-500 rounded-full mx-auto mb-4 flex items-center justify-center">
+                  <span class="text-white font-bold text-xl">AI</span>
+                </div>
+                <h3 class="text-xl font-semibold text-white mb-2">Sample Agent</h3>
+                <p class="text-gray-400 text-sm mb-4">A specialized AI agent for various tasks and conversations.</p>
+                <a href="/agent/sample" class="inline-block bg-gradient-to-r from-purple-500 to-blue-500 text-white px-4 py-2 rounded-lg hover:shadow-lg transition-all">
+                  Launch Agent
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    {% include 'shared/footer.html' %}
+</body>
+</html>

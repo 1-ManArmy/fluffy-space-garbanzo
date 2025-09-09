@@ -1,0 +1,22 @@
+/* === Application Section === */
+.application-section {
+	background: linear-gradient(135deg, #6366f1 0%, #f472b6 100%);
+	border-radius: 16px;
+	box-shadow: 0 8px 32px rgba(99,102,241,0.15);
+	padding: 2.5rem;
+	max-width: 900px;
+	margin: 2rem auto;
+	color: #fff;
+}
+.application-title {
+	font-size: 2.25rem;
+	font-weight: 800;
+	color: #fff;
+	margin-bottom: 1.5rem;
+	text-shadow: 0 2px 8px #f472b6;
+}
+.application-description {
+	color: #f3f4f6;
+	font-size: 1.125rem;
+	margin-bottom: 2rem;
+}

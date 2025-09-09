@@ -1,0 +1,148 @@
+<!-- Main Navigation Header -->
+<nav class="main-navigation" id="mainNav">
+  <div class="nav-container">
+    <!-- Logo/Brand -->
+    <div class="nav-brand">
+      <a href="/" class="brand-link">
+        <span class="brand-icon">🌌</span>
+        <span class="brand-text">OneLastAI</span>
+      </a>
+    </div>
+
+    <!-- Navigation Menu -->
+    <div class="nav-menu">
+      <!-- Home Link -->
+      <div class="nav-item">
+        <a href="/" class="nav-link">🏠 Home</a>
+      </div>
+
+      <!-- AI Agents Dropdown -->
+      <div class="nav-item dropdown" id="agentsDropdown">
+        <button class="nav-link dropdown-toggle" onclick="toggleAgentsDropdown()">
+          🌌 AI Agents 
+          <span class="dropdown-arrow">▼</span>
+        </button>
+        
+        <!-- Rolling Dropdown Menu -->
+        <div class="dropdown-menu" id="agentsDropdownMenu">
+          <div class="dropdown-content">
+            <div class="dropdown-header">
+              <h3>🌌 AI Specialists</h3>
+              <p>Choose your AI expert</p>
+            </div>
+            
+            <div class="agents-grid">
+              <!-- Content & Writing -->
+              <div class="agent-category">
+                <h4>📝 Content & Writing</h4>
+                <div class="agent-links">
+                  <a href="/aiblogster" class="agent-link">
+                    <span class="agent-emoji">🌌</span>
+                    <span class="agent-name">AIBlogster</span>
+                    <small>Blog Writing</small>
+                  </a>
+                  <a href="/contentcrafter" class="agent-link">
+                    <span class="agent-emoji">✨</span>
+                    <span class="agent-name">ContentCrafter</span>
+                    <small>Content Creation</small>
+                  </a>
+                  <a href="/dreamweaver" class="agent-link">
+                    <span class="agent-emoji">🌙</span>
+                    <span class="agent-name">DreamWeaver</span>
+                    <small>Creative Writing</small>
+                  </a>
+                </div>
+              </div>
+              
+              <!-- Development & Code -->
+              <div class="agent-category">
+                <h4>💻 Development & Code</h4>
+                <div class="agent-links">
+                  <a href="/codemaster" class="agent-link">
+                    <span class="agent-emoji">👨‍💻</span>
+                    <span class="agent-name">CodeMaster</span>
+                    <small>Code Generation</small>
+                  </a>
+                  <a href="/dnaforge" class="agent-link">
+                    <span class="agent-emoji">🧬</span>
+                    <span class="agent-name">DNAForge</span>
+                    <small>Algorithm Design</small>
+                  </a>
+                </div>
+              </div>
+              
+              <!-- Data & Analytics -->
+              <div class="agent-category">
+                <h4>📊 Data & Analytics</h4>
+                <div class="agent-links">
+                  <a href="/datasphere" class="agent-link">
+                    <span class="agent-emoji">🌐</span>
+                    <span class="agent-name">DataSphere</span>
+                    <small>Data Analysis</small>
+                  </a>
+                  <a href="/datavision" class="agent-link">
+                    <span class="agent-emoji">📈</span>
+                    <span class="agent-name">DataVision</span>
+                    <small>Visualization</small>
+                  </a>
+                </div>
+              </div>
+              
+              <!-- Personal & Productivity -->
+              <div class="agent-category">
+                <h4>🎯 Personal & Productivity</h4>
+                <div class="agent-links">
+                  <a href="/taskmaster" class="agent-link">
+                    <span class="agent-emoji">⚡</span>
+                    <span class="agent-name">TaskMaster</span>
+                    <small>Task Management</small>
+                  </a>
+                  <a href="/memora" class="agent-link">
+                    <span class="agent-emoji">🧠</span>
+                    <span class="agent-name">Memora</span>
+                    <small>Memory Assistant</small>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pages Dropdown -->
+      <div class="nav-item dropdown">
+        <button class="nav-link dropdown-toggle">
+          📄 Pages 
+          <span class="dropdown-arrow">▼</span>
+        </button>
+        <div class="dropdown-menu">
+          <a href="/pages/about" class="dropdown-item">About Us</a>
+          <a href="/pages/pricing" class="dropdown-item">Pricing</a>
+          <a href="/pages/documentation" class="dropdown-item">Documentation</a>
+          <a href="/pages/support" class="dropdown-item">Support</a>
+        </div>
+      </div>
+
+      <!-- Auth Links -->
+      <div class="nav-item auth-links">
+        <a href="/auth/login" class="nav-link btn-outline">Login</a>
+        <a href="/auth/signup" class="nav-link btn-primary">Sign Up</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<script>
+function toggleAgentsDropdown() {
+  const dropdown = document.getElementById('agentsDropdownMenu');
+  dropdown.classList.toggle('show');
+}
+
+// Close dropdown when clicking outside
+document.addEventListener('click', function(event) {
+  const dropdown = document.getElementById('agentsDropdown');
+  if (!dropdown.contains(event.target)) {
+    document.getElementById('agentsDropdownMenu').classList.remove('show');
+  }
+});
+</script>
