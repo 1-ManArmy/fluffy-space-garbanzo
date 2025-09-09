@@ -77,7 +77,7 @@ gem 'figaro', '~> 1.2'
 # =============================================================================
 
 # Database migration tools
-gem 'data_migrate', '~> 9.0'        # For data migrations separate from schema
+gem 'data_migrate', '~> 11.3'       # For data migrations separate from schema
 gem 'strong_migrations', '~> 1.6'   # For safe migrations
 gem 'activerecord-import', '~> 1.5' # For bulk data migration
 
