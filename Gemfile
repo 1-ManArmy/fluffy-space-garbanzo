@@ -185,7 +185,7 @@ group :development, :test do
   gem 'sqlite3', '~> 1.4'
   
   # Testing framework
-  gem 'factory_bot_rails', '~> 6.4'
+  gem 'factory_bot_rails', '~> 6.5'
   gem 'rspec-rails', '~> 7.1'
 
   # Test data generation
